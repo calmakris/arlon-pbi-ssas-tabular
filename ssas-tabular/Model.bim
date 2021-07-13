@@ -958,6 +958,24 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Absorption\\Sum"
+          },
+          {
+            "name": "Earned Labor & Setup Cost",
+            "expression": " [Earned Labor Cost] + [Earned Setup Cost]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Labor & Setup Hours",
+            "expression": " [Earned Labor Hours] + [Earned Setup Hours]",
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption\\Sum"
           }
         ]
       },
@@ -2440,6 +2458,12 @@
               },
               {
                 "name": "Earned Setup Hours"
+              },
+              {
+                "name": "Earned Labor & Setup Cost"
+              },
+              {
+                "name": "Earned Labor & Setup Hours"
               }
             ]
           },

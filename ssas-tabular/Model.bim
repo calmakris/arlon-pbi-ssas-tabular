@@ -740,6 +740,30 @@
             "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Hold Amount",
+            "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Hold Tags\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Hold Quantity",
+            "expression": " SUM('Hold Tag Documents'[Quantity])",
+            "formatString": "#,0.00",
+            "displayFolder": "Hold Tags\\Sum"
+          },
+          {
+            "name": "Hold Tag Count",
+            "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
+            "formatString": "#,0",
+            "displayFolder": "Hold Tags\\Count"
           }
         ]
       },
@@ -870,6 +894,82 @@
             }
           }
         ]
+      },
+      {
+        "name": "Hold Tag Documents",
+        "columns": [
+          {
+            "name": "Notification Number",
+            "dataType": "string",
+            "sourceColumn": "NotificationNoKey"
+          },
+          {
+            "name": "Notification Type",
+            "dataType": "string",
+            "sourceColumn": "NotificationType"
+          },
+          {
+            "name": "Notification Code",
+            "dataType": "string",
+            "sourceColumn": "NotificationCode"
+          },
+          {
+            "name": "Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "EnterDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Reference Number",
+            "dataType": "string",
+            "sourceColumn": "ReferenceNo"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNoKey"
+          },
+          {
+            "name": "Notification Text",
+            "dataType": "string",
+            "sourceColumn": "NotificationText"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "HoldQuantityValue",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "HoldValueUSD",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -941,6 +1041,20 @@
         "fromColumn": "CustomerOrgKey",
         "toTable": "Customer Master",
         "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "d104f71c-fb20-42c2-a158-df74a0040f19",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "1196625d-915c-4f90-8a7e-4a4e307c34c4",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "annotations": [

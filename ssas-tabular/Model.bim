@@ -16,7 +16,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -154,80 +153,6 @@
               ]
             }
           }
-        ],
-        "measures": [
-          {
-            "name": "Gross Sales",
-            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Net Sales",
-            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Cost of Goods",
-            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Gross Margin",
-            "expression": " [Gross Sales] - [Cost of Goods]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Margin",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Net Margin",
-            "expression": " [Net Sales] - [Cost of Goods]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Margin",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Gross Margin %",
-            "expression": " [Gross Margin] / [Gross Sales]",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": ". Measures\\Margin"
-          },
-          {
-            "name": "Net Margin %",
-            "expression": " [Net Margin] / [Net Sales]",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": ". Measures\\Margin"
-          }
         ]
       },
       {
@@ -292,161 +217,6 @@
                 "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_CUSTOMER_MASTER"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Material Classification",
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Brand",
-            "dataType": "string",
-            "sourceColumn": "Brand"
-          },
-          {
-            "name": "Color Number",
-            "dataType": "string",
-            "sourceColumn": "ColorNumber"
-          },
-          {
-            "name": "Commercialization Date",
-            "dataType": "dateTime",
-            "sourceColumn": "CommercializationDate"
-          },
-          {
-            "name": "Film Type",
-            "dataType": "string",
-            "sourceColumn": "FilmType"
-          },
-          {
-            "name": "Liner",
-            "dataType": "string",
-            "sourceColumn": "Liner"
-          },
-          {
-            "name": "Product Series",
-            "dataType": "string",
-            "sourceColumn": "ProductSeries"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_CLASSIFICATION = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_CLASSIFICATION\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_CLASSIFICATION"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Material Master",
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Description",
-            "dataType": "string",
-            "sourceColumn": "MaterialDescription"
-          },
-          {
-            "name": "Material Number - Description",
-            "dataType": "string",
-            "sourceColumn": "MaterialNoDescription"
-          },
-          {
-            "name": "Material Type",
-            "dataType": "string",
-            "sourceColumn": "MaterialType"
-          },
-          {
-            "name": "Material Group",
-            "dataType": "string",
-            "sourceColumn": "MaterialGroup"
-          },
-          {
-            "name": "X Distribution Status",
-            "dataType": "string",
-            "sourceColumn": "XDistributionStatus"
-          },
-          {
-            "name": "Unit of Measure",
-            "dataType": "string",
-            "sourceColumn": "UnitOfMeasure"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_MASTER"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Product Hierarchy",
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Product Hierarchy L1",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL1"
-          },
-          {
-            "name": "Product Hierarchy L2",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL2"
-          },
-          {
-            "name": "Product Hierarchy L3",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL3"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_PRODHIERARCHY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_PRODHIERARCHY\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_PRODHIERARCHY"
               ]
             }
           }
@@ -566,114 +336,6 @@
               ]
             }
           }
-        ],
-        "measures": [
-          {
-            "name": "Complaint Value",
-            "expression": " SUM('Complaint Documents'[Complaint Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Credit Issued",
-            "expression": " SUM('Complaint Documents'[Credit Issued Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Open Value",
-            "expression": " SUM('Complaint Documents'[Open Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Complaint Count",
-            "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] )",
-            "formatString": "#,0",
-            "isHidden": true,
-            "displayFolder": ". Measures\\Count"
-          },
-          {
-            "name": "PQ Complaint Count",
-            "expression": " CALCULATE( 'Complaint Documents'[Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
-            "formatString": "#,0",
-            "displayFolder": ". Measures\\Count"
-          },
-          {
-            "name": "PQ Complaint Value",
-            "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "PQ Credit Issued",
-            "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "PQ Open Value",
-            "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ". Measures\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Product Quality Index",
-            "expression": " DIVIDE( [PQ Complaint Value], [Gross Sales] )",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": ". Measures\\KPI"
-          },
-          {
-            "name": "Product Quality Index (Credited)",
-            "expression": " DIVIDE( [PQ Credit Issued], [Gross Sales] )",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": ". Measures\\KPI"
-          },
-          {
-            "name": "Product Quality Index (Open)",
-            "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": ". Measures\\KPI"
-          }
         ]
       },
       {
@@ -786,34 +448,367 @@
             }
           }
         ]
+      },
+      {
+        "name": "Material Classification",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Brand",
+            "dataType": "string",
+            "sourceColumn": "Brand"
+          },
+          {
+            "name": "Color Number",
+            "dataType": "string",
+            "sourceColumn": "ColorNumber"
+          },
+          {
+            "name": "Commercialization Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CommercializationDate"
+          },
+          {
+            "name": "Film Type",
+            "dataType": "string",
+            "sourceColumn": "FilmType"
+          },
+          {
+            "name": "Liner",
+            "dataType": "string",
+            "sourceColumn": "Liner"
+          },
+          {
+            "name": "Product Series",
+            "dataType": "string",
+            "sourceColumn": "ProductSeries"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_CLASSIFICATION = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_CLASSIFICATION\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_CLASSIFICATION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Material Master",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialDescription"
+          },
+          {
+            "name": "Material Number - Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoDescription"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "X Distribution Status",
+            "dataType": "string",
+            "sourceColumn": "XDistributionStatus"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product Hierarchy",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL1"
+          },
+          {
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL2"
+          },
+          {
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL3"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_PRODHIERARCHY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_PRODHIERARCHY\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_PRODHIERARCHY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "DAX Measures",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Measure Column",
+            "dataType": "int64",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "{1}"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Gross Sales",
+            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Sales",
+            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Cost of Goods",
+            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Gross Margin",
+            "expression": " [Gross Sales] - [Cost of Goods]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Margin",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Margin",
+            "expression": " [Net Sales] - [Cost of Goods]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Margin",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Gross Margin %",
+            "expression": " DIVIDE([Gross Margin], [Gross Sales])",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales\\Margin"
+          },
+          {
+            "name": "Net Margin %",
+            "expression": " DIVIDE( [Net Margin], [Net Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales\\Margin"
+          },
+          {
+            "name": "Complaint Value",
+            "expression": " SUM('Complaint Documents'[Complaint Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Credit Issued",
+            "expression": " SUM('Complaint Documents'[Credit Issued Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Open Value",
+            "expression": " SUM('Complaint Documents'[Open Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Complaint Count",
+            "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] )",
+            "formatString": "#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Count"
+          },
+          {
+            "name": "PQ Complaint Count",
+            "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Count"
+          },
+          {
+            "name": "PQ Complaint Value",
+            "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PQ Credit Issued",
+            "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PQ Open Value",
+            "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Product Quality Index",
+            "expression": " DIVIDE( [PQ Complaint Value], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Product Quality Index (Credited)",
+            "expression": " DIVIDE( [PQ Credit Issued], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Product Quality Index (Open)",
+            "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          }
+        ]
       }
     ],
     "relationships": [
-      {
-        "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "Material Number",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
-        "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
-        "fromCardinality": "one",
-        "fromTable": "Material Master",
-        "fromColumn": "Material Number",
-        "toTable": "Material Classification",
-        "toColumn": "Material Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "8dbdc264-a57e-48f4-8ccf-064f378c4788",
-        "fromCardinality": "one",
-        "fromTable": "Material Master",
-        "fromColumn": "Material Number",
-        "toTable": "Product Hierarchy",
-        "toColumn": "Material Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
       {
         "name": "7bc6c5a0-4655-407a-bc13-1cd3a65eca38",
         "fromTable": "Sales Invoice Documents",
@@ -851,6 +846,38 @@
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
+        "fromCardinality": "one",
+        "fromTable": "Material Master",
+        "fromColumn": "Material Number",
+        "toTable": "Material Classification",
+        "toColumn": "Material Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "8dbdc264-a57e-48f4-8ccf-064f378c4788",
+        "fromCardinality": "one",
+        "fromTable": "Material Master",
+        "fromColumn": "Material Number",
+        "toTable": "Product Hierarchy",
+        "toColumn": "Material Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "22d61dbe-0265-4bd3-b686-8d76e4f1d50f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
       }
     ],
     "annotations": [

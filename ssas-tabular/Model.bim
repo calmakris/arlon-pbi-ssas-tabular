@@ -29,126 +29,6 @@
     ],
     "tables": [
       {
-        "name": "Calendar",
-        "dataCategory": "Time",
-        "columns": [
-          {
-            "name": "Date",
-            "dataType": "dateTime",
-            "isKey": true,
-            "sourceColumn": "PK_Date",
-            "formatString": "MM/dd/yyyy",
-            "displayFolder": "Individual Attributes"
-          },
-          {
-            "name": "Calendar Year Number",
-            "dataType": "string",
-            "sourceColumn": "Year_Name",
-            "displayFolder": "Individual Attributes"
-          },
-          {
-            "name": "Calendar Month Number",
-            "dataType": "int64",
-            "sourceColumn": "Month_Of_Year",
-            "displayFolder": "Individual Attributes",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Calendar Quarter Name",
-            "dataType": "string",
-            "sourceColumn": "Quarter_Of_Year_Name",
-            "displayFolder": "Individual Attributes"
-          },
-          {
-            "name": "Fiscal Year Number",
-            "dataType": "string",
-            "sourceColumn": "Fiscal_Year_Name",
-            "displayFolder": "Individual Attributes"
-          },
-          {
-            "name": "Fiscal Period",
-            "dataType": "int64",
-            "sourceColumn": "Fiscal_Month_Of_Year",
-            "displayFolder": "Individual Attributes",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Fiscal Quarter Name",
-            "dataType": "string",
-            "sourceColumn": "Fiscal_Quarter_Of_Year_Name",
-            "displayFolder": "Individual Attributes"
-          },
-          {
-            "name": "Month Name",
-            "dataType": "string",
-            "sourceColumn": "Month_Name_Abbrev",
-            "sortByColumn": "Calendar Month Number",
-            "displayFolder": "Individual Attributes"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}})",
-                "in",
-                "    #\"Changed Type\""
-              ]
-            }
-          }
-        ],
-        "hierarchies": [
-          {
-            "name": "Simple Calendar",
-            "displayFolder": "Calendar Hierarchies",
-            "levels": [
-              {
-                "name": "Year",
-                "ordinal": 0,
-                "column": "Calendar Year Number"
-              },
-              {
-                "name": "Month",
-                "ordinal": 1,
-                "column": "Month Name"
-              },
-              {
-                "name": "Date",
-                "ordinal": 2,
-                "column": "Date"
-              }
-            ]
-          },
-          {
-            "name": "Simple Fiscal Calendar",
-            "displayFolder": "Fiscal Hierarchies",
-            "levels": [
-              {
-                "name": "Fiscal Year",
-                "ordinal": 0,
-                "column": "Fiscal Year Number"
-              },
-              {
-                "name": "Fiscal Period",
-                "ordinal": 1,
-                "column": "Fiscal Period"
-              },
-              {
-                "name": "Date",
-                "ordinal": 2,
-                "column": "Date"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "Sales Invoice Documents",
         "columns": [
           {
@@ -280,7 +160,7 @@
             "name": "Gross Sales",
             "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -292,7 +172,7 @@
             "name": "Net Sales",
             "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -304,7 +184,7 @@
             "name": "Cost of Goods",
             "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -316,7 +196,7 @@
             "name": "Gross Margin",
             "expression": " [Gross Sales] - [Cost of Goods]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Measures\\Margin",
+            "displayFolder": ". Measures\\Margin",
             "annotations": [
               {
                 "name": "Format",
@@ -328,7 +208,7 @@
             "name": "Net Margin",
             "expression": " [Net Sales] - [Cost of Goods]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Measures\\Margin",
+            "displayFolder": ". Measures\\Margin",
             "annotations": [
               {
                 "name": "Format",
@@ -340,13 +220,13 @@
             "name": "Gross Margin %",
             "expression": " [Gross Margin] / [Gross Sales]",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales Measures\\Margin"
+            "displayFolder": ". Measures\\Margin"
           },
           {
             "name": "Net Margin %",
             "expression": " [Net Margin] / [Net Sales]",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales Measures\\Margin"
+            "displayFolder": ". Measures\\Margin"
           }
         ]
       },
@@ -693,7 +573,7 @@
             "expression": " SUM('Complaint Documents'[Complaint Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaint Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -706,7 +586,7 @@
             "expression": " SUM('Complaint Documents'[Credit Issued Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaint Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -719,7 +599,7 @@
             "expression": " SUM('Complaint Documents'[Open Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaint Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -732,19 +612,19 @@
             "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] )",
             "formatString": "#,0",
             "isHidden": true,
-            "displayFolder": "Complaint Measures\\Count"
+            "displayFolder": ". Measures\\Count"
           },
           {
             "name": "PQ Complaint Count",
             "expression": " CALCULATE( 'Complaint Documents'[Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
             "formatString": "#,0",
-            "displayFolder": "Complaint Measures\\Count"
+            "displayFolder": ". Measures\\Count"
           },
           {
             "name": "PQ Complaint Value",
             "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaint Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -756,7 +636,7 @@
             "name": "PQ Credit Issued",
             "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaint Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -768,7 +648,7 @@
             "name": "PQ Open Value",
             "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaint Measures\\Sum",
+            "displayFolder": ". Measures\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -780,19 +660,19 @@
             "name": "Product Quality Index",
             "expression": " DIVIDE( [PQ Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaint Measures\\KPI"
+            "displayFolder": ". Measures\\KPI"
           },
           {
             "name": "Product Quality Index (Credited)",
             "expression": " DIVIDE( [PQ Credit Issued], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaint Measures\\KPI"
+            "displayFolder": ". Measures\\KPI"
           },
           {
             "name": "Product Quality Index (Open)",
             "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaint Measures\\KPI"
+            "displayFolder": ". Measures\\KPI"
           }
         ]
       },
@@ -833,6 +713,75 @@
                 "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
                 "in",
                 "    dbo_VW_REASON_CODE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "isKey": true,
+            "sourceColumn": "PK_Date",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Calendar Year Number",
+            "dataType": "string",
+            "sourceColumn": "Year_Name"
+          },
+          {
+            "name": "Calendar Month Number",
+            "dataType": "int64",
+            "sourceColumn": "Month_Of_Year",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Calendar Quarter Name",
+            "dataType": "string",
+            "sourceColumn": "Quarter_Of_Year_Name"
+          },
+          {
+            "name": "Fiscal Year Number",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Year_Name"
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "int64",
+            "sourceColumn": "Fiscal_Month_Of_Year",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Fiscal Quarter Name",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Quarter_Of_Year_Name"
+          },
+          {
+            "name": "Month Name",
+            "dataType": "string",
+            "sourceColumn": "Month_Name_Abbrev",
+            "sortByColumn": "Calendar Month Number"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each [PK_Date] <= Date.From(DateTime.LocalNow()))",
+                "in",
+                "    #\"Filtered Rows\""
               ]
             }
           }
@@ -890,14 +839,14 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "fc2b9cbd-1a8f-4365-8e65-8b8bae72e9e8",
+        "name": "7ad599af-e270-40c4-9adb-251c9dca4378",
         "fromTable": "Complaint Documents",
         "fromColumn": "Enter Date",
         "toTable": "Calendar",
         "toColumn": "Date"
       },
       {
-        "name": "fbbbc626-2f1b-4840-8d3f-74c1eb5cc3f2",
+        "name": "9aea2de3-d4c1-473e-bf03-55a3a8d409f5",
         "fromTable": "Sales Invoice Documents",
         "fromColumn": "Posting Date",
         "toTable": "Calendar",

@@ -1273,6 +1273,86 @@
             }
           }
         ]
+      },
+      {
+        "name": "Absorption",
+        "columns": [
+          {
+            "name": "Process Order",
+            "dataType": "string",
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "SuperiorMaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SuperiorMaterialNoKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "CostElementKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Transaction Type",
+            "dataType": "string",
+            "sourceColumn": "BusTransType"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey"
+          },
+          {
+            "name": "Hours",
+            "dataType": "double",
+            "sourceColumn": "QuantityValue",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Cost",
+            "dataType": "double",
+            "sourceColumn": "NetValue",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_ABSORPTION\"]}[Data]",
+                "in",
+                "    dbo_VW_ABSORPTION"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1385,6 +1465,20 @@
         "name": "3f9dd1f7-3ac5-4bce-b233-68a54ac9862f",
         "fromTable": "Blocked Inventory Snapshots",
         "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "22f5ffae-1a73-4d36-815b-33b46aefbcf9",
+        "fromTable": "Absorption",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "bf66fd75-c362-4675-abd4-420fb281ca3f",
+        "fromTable": "Absorption",
+        "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
       }

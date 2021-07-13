@@ -18,11 +18,10 @@
         },
         "options": {},
         "credential": {
-          "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
-          "Username": "DOMAIN\\kcalma",
-          "EncryptConnection": false
+          "AuthenticationKind": "UsernamePassword",
+          "Username": "sa",
+          "EncryptConnection": false,
+          "PrivacySetting": "Organizational"
         }
       }
     ],
@@ -32,11 +31,11 @@
         "dataCategory": "Time",
         "columns": [
           {
-            "name": "Full Date",
+            "name": "Date",
             "dataType": "dateTime",
             "isKey": true,
             "sourceColumn": "PK_Date",
-            "formatString": "M/dd/yyyy",
+            "formatString": "MM/dd/yyyy",
             "displayFolder": "Individual Attributes"
           },
           {
@@ -124,7 +123,7 @@
               {
                 "name": "Date",
                 "ordinal": 2,
-                "column": "Full Date"
+                "column": "Date"
               }
             ]
           },
@@ -145,7 +144,7 @@
               {
                 "name": "Date",
                 "ordinal": 2,
-                "column": "Full Date"
+                "column": "Date"
               }
             ]
           }
@@ -174,7 +173,7 @@
             "name": "Posting Date",
             "dataType": "dateTime",
             "sourceColumn": "PostingDateKey",
-            "formatString": "M/dd/yyyy"
+            "formatString": "MM/dd/yyyy"
           },
           {
             "name": "Material Number",
@@ -197,7 +196,8 @@
           {
             "name": "Quantity",
             "dataType": "double",
-            "sourceColumn": "QuantityValue"
+            "sourceColumn": "QuantityValue",
+            "formatString": "0.00"
           },
           {
             "name": "Gross Sales Amount",
@@ -551,7 +551,7 @@
         "fromTable": "Sales Invoice Documents",
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
-        "toColumn": "Full Date",
+        "toColumn": "Date",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
       },

@@ -1204,9 +1204,9 @@
           {
             "name": "SBlock Value",
             "dataType": "double",
-            "isHidden": true,
             "sourceColumn": "SBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -1217,9 +1217,9 @@
           {
             "name": "QBlock Value",
             "dataType": "double",
-            "isHidden": true,
             "sourceColumn": "QBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -1230,9 +1230,9 @@
           {
             "name": "Expired Value",
             "dataType": "double",
-            "isHidden": true,
             "sourceColumn": "ExpiredValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -1257,173 +1257,6 @@
                 "    #\"Removed Other Columns\""
               ]
             }
-          }
-        ],
-        "measures": [
-          {
-            "name": "Closing SBlock Value",
-            "expression": "LASTNONBLANKVALUE( 'Calendar'[Date], SUM('Blocked Inventory Snapshots'[SBlock Value]) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ".Measures\\Closing",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Closing QBlock Value",
-            "expression": "LASTNONBLANKVALUE( 'Calendar'[Date], SUM('Blocked Inventory Snapshots'[QBlock Value]) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ".Measures\\Closing",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Closing Expired Value",
-            "expression": "LASTNONBLANKVALUE( 'Calendar'[Date], SUM('Blocked Inventory Snapshots'[Expired Value]) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ".Measures\\Closing",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Past 5 Day Sum SBlock",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "\tSUM('Blocked Inventory Snapshots'[SBlock Value]),",
-              "\tDATESINPERIOD('Calendar'[Date],",
-              "\t\t            LASTDATE('Calendar'[Date]), -5, DAY)",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": ".Measures\\Moving Avg",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Moving 5 Day Avg SBlock",
-            "expression": [
-              "",
-              "DIVIDE(",
-              "\t[Past 5 Day Sum SBlock],",
-              "\tCALCULATE(DISTINCTCOUNT( 'Calendar'[Date] ),",
-              "\t    \t    DATESINPERIOD( 'Calendar'[Date],",
-              "\t    \t\t \t LASTDATE( 'Calendar'[Date]), -5, DAY ),",
-              "\t    \t    FILTER( 'Blocked Inventory Snapshots',",
-              "\t    \t    \t 'Blocked Inventory Snapshots'[SBlock Value] > 0)",
-              "\t)",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ".Measures\\Moving Avg",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Past 5 Day Sum QBlock",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "\tSUM('Blocked Inventory Snapshots'[QBlock Value]),",
-              "\tDATESINPERIOD('Calendar'[Date],",
-              "\t\t            LASTDATE('Calendar'[Date]), -5, DAY)",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": ".Measures\\Moving Avg",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Past 5 Day Sum Expired",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "\tSUM('Blocked Inventory Snapshots'[Expired Value]),",
-              "\tDATESINPERIOD('Calendar'[Date],",
-              "\t\t            LASTDATE('Calendar'[Date]), -5, DAY)",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": ".Measures\\Moving Avg",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Moving 5 Day Avg QBlock",
-            "expression": [
-              "",
-              "DIVIDE(",
-              "\t[Past 5 Day Sum QBlock],",
-              "\tCALCULATE(DISTINCTCOUNT( 'Calendar'[Date] ),",
-              "\t    \t    DATESINPERIOD( 'Calendar'[Date],",
-              "\t    \t\t \t LASTDATE( 'Calendar'[Date]), -5, DAY ),",
-              "\t    \t    FILTER( 'Blocked Inventory Snapshots',",
-              "\t    \t    \t 'Blocked Inventory Snapshots'[QBlock Value] > 0)",
-              "\t)",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ".Measures\\Moving Avg",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Moving 5 Day Avg Expired",
-            "expression": [
-              "",
-              "DIVIDE(",
-              "\t[Past 5 Day Sum Expired],",
-              "\tCALCULATE(DISTINCTCOUNT( 'Calendar'[Date] ),",
-              "\t    \t    DATESINPERIOD( 'Calendar'[Date],",
-              "\t    \t\t \t LASTDATE( 'Calendar'[Date]), -5, DAY ),",
-              "\t    \t    FILTER( 'Blocked Inventory Snapshots',",
-              "\t    \t    \t 'Blocked Inventory Snapshots'[Expired Value] > 0)",
-              "\t)",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": ".Measures\\Moving Avg",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
           }
         ]
       }

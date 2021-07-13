@@ -755,7 +755,7 @@
           },
           {
             "name": "Hold Quantity",
-            "expression": " SUM('Hold Tag Documents'[Quantity])",
+            "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
             "formatString": "#,0.00",
             "displayFolder": "Hold Tags\\Sum"
           },

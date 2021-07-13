@@ -692,6 +692,7 @@
             "name": "Complaint Value",
             "expression": " SUM('Complaint Documents'[Complaint Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
             "displayFolder": "Complaint Measures\\Sum",
             "annotations": [
               {
@@ -704,6 +705,7 @@
             "name": "Credit Issued",
             "expression": " SUM('Complaint Documents'[Credit Issued Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
             "displayFolder": "Complaint Measures\\Sum",
             "annotations": [
               {
@@ -716,6 +718,7 @@
             "name": "Open Value",
             "expression": " SUM('Complaint Documents'[Open Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
             "displayFolder": "Complaint Measures\\Sum",
             "annotations": [
               {
@@ -728,7 +731,110 @@
             "name": "Complaint Count",
             "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] )",
             "formatString": "#,0",
+            "isHidden": true,
             "displayFolder": "Complaint Measures\\Count"
+          },
+          {
+            "name": "PQ Complaint Count",
+            "expression": " CALCULATE( 'Complaint Documents'[Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
+            "formatString": "#,0",
+            "displayFolder": "Complaint Measures\\Count"
+          },
+          {
+            "name": "PQ Complaint Value",
+            "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaint Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PQ Credit Issued",
+            "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaint Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PQ Open Value",
+            "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaint Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Product Quality Index",
+            "expression": " DIVIDE( [PQ Complaint Value], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaint Measures\\KPI"
+          },
+          {
+            "name": "Product Quality Index (Credited)",
+            "expression": " DIVIDE( [PQ Credit Issued], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaint Measures\\KPI"
+          },
+          {
+            "name": "Product Quality Index (Open)",
+            "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaint Measures\\KPI"
+          }
+        ]
+      },
+      {
+        "name": "Reason Code",
+        "columns": [
+          {
+            "name": "ReasonCodeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ReasonCodeKey"
+          },
+          {
+            "name": "Reason Code Description",
+            "dataType": "string",
+            "sourceColumn": "ReasonCodeDescription"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Class",
+            "dataType": "string",
+            "sourceColumn": "Class"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
+                "in",
+                "    dbo_VW_REASON_CODE"
+              ]
+            }
           }
         ]
       }
@@ -790,6 +896,15 @@
         "toTable": "Customer Master",
         "toColumn": "CustomerOrgKey",
         "isActive": false
+      },
+      {
+        "name": "7a5e16ad-98c3-4fca-972e-81cd14cf4bdc",
+        "toCardinality": "many",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "ReasonCodeKey",
+        "toTable": "Reason Code",
+        "toColumn": "ReasonCodeKey",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "annotations": [

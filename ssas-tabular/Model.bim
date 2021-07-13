@@ -341,13 +341,18 @@
               },
               {
                 "name": "Month",
-                "ordinal": 1,
+                "ordinal": 2,
                 "column": "Month Name"
               },
               {
                 "name": "Date",
-                "ordinal": 2,
+                "ordinal": 3,
                 "column": "Date"
+              },
+              {
+                "name": "Quarter",
+                "ordinal": 1,
+                "column": "Calendar Quarter Name"
               }
             ]
           },
@@ -362,13 +367,18 @@
               },
               {
                 "name": "Fiscal Period",
-                "ordinal": 1,
+                "ordinal": 2,
                 "column": "Fiscal Period"
               },
               {
                 "name": "Date",
-                "ordinal": 2,
+                "ordinal": 3,
                 "column": "Date"
+              },
+              {
+                "name": "Fiscal Quarter",
+                "ordinal": 1,
+                "column": "Fiscal Quarter Name"
               }
             ]
           }

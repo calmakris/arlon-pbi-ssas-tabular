@@ -1239,6 +1239,20 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "type": "calculated",
+            "name": "Blocked Inv Value",
+            "dataType": "double",
+            "isDataTypeInferred": true,
+            "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [

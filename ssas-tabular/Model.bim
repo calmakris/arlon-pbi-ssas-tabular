@@ -54,7 +54,8 @@
           {
             "name": "Account Creation Date",
             "dataType": "dateTime",
-            "sourceColumn": "AcctCreateDate"
+            "sourceColumn": "AcctCreateDate",
+            "formatString": "MM/dd/yyyy"
           },
           {
             "name": "Sales Organization",
@@ -873,14 +874,6 @@
     ],
     "relationships": [
       {
-        "name": "008c5089-1c7b-4818-af0f-73415571df6f",
-        "fromTable": "Complaint Documents",
-        "fromColumn": "CustomerOrgKey",
-        "toTable": "Customer Master",
-        "toColumn": "CustomerOrgKey",
-        "isActive": false
-      },
-      {
         "name": "7a5e16ad-98c3-4fca-972e-81cd14cf4bdc",
         "toCardinality": "many",
         "fromTable": "Complaint Documents",
@@ -941,6 +934,13 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "90d80725-4955-4415-8778-f3b670ded05f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
       }
     ],
     "annotations": [

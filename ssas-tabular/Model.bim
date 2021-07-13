@@ -814,6 +814,150 @@
                 "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Earned Labor Cost",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Cost]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Labor\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Setup Cost",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Cost]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Setup\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Overhead Cost",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Cost]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Overhead\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Absorption Cost",
+            "expression": " [Earned Labor Cost] + [Earned Setup Cost] + [Earned Overhead Cost]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Labor Hours",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Hours]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Labor\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption\\Sum"
+          },
+          {
+            "name": "Earned Setup Hours",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Hours]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Setup\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption\\Sum"
+          },
+          {
+            "name": "Earned Overhead Hours",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Hours]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Overhead\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption\\Sum"
           }
         ]
       },
@@ -1353,6 +1497,108 @@
             }
           }
         ]
+      },
+      {
+        "name": "Cost Center Names",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Company Category",
+            "dataType": "string",
+            "sourceColumn": "CompanyCategory"
+          },
+          {
+            "name": "Operations Category",
+            "dataType": "string",
+            "sourceColumn": "OperationsCategory"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zCOST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"zCOST_CENTER_NAMES\"]}[Data]",
+                "in",
+                "    dbo_zCOST_CENTER_NAMES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Cost Element Names",
+        "columns": [
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "sourceColumn": "CostElement"
+          },
+          {
+            "name": "Company Category",
+            "dataType": "string",
+            "sourceColumn": "CompanyCategory"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "SubCategory",
+            "dataType": "string",
+            "sourceColumn": "SubCategory"
+          },
+          {
+            "name": "Category Renamed",
+            "dataType": "string",
+            "sourceColumn": "CatRenamed"
+          },
+          {
+            "name": "Is Controllable",
+            "dataType": "boolean",
+            "sourceColumn": "IsControllableExpense"
+          },
+          {
+            "name": "Is Labor",
+            "dataType": "boolean",
+            "sourceColumn": "IsLabor"
+          },
+          {
+            "name": "Is Supplies",
+            "dataType": "boolean",
+            "sourceColumn": "IsSupplies"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zCOST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"zCOST_ELEMENT_NAMES\"]}[Data]",
+                "in",
+                "    dbo_zCOST_ELEMENT_NAMES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1481,6 +1727,20 @@
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "bfb02065-3335-4b8c-86a7-e09a6308a25a",
+        "fromTable": "Absorption",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "93872bf8-434f-49a9-b7bb-a9a3e62bf0bb",
+        "fromTable": "Absorption",
+        "fromColumn": "CostElementKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
       }
     ],
     "perspectives": [
@@ -2089,6 +2349,166 @@
               },
               {
                 "name": "Quantity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Absorption Dashboard",
+        "tables": [
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Cost"
+              },
+              {
+                "name": "CostCenterKey"
+              },
+              {
+                "name": "CostElementKey"
+              },
+              {
+                "name": "Hours"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order"
+              },
+              {
+                "name": "SuperiorMaterialNoKey"
+              },
+              {
+                "name": "Transaction Type"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Department"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "SubCategory"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Absorption Cost"
+              },
+              {
+                "name": "Earned Labor Cost"
+              },
+              {
+                "name": "Earned Overhead Cost"
+              },
+              {
+                "name": "Earned Setup Cost"
+              },
+              {
+                "name": "Earned Labor Hours"
+              },
+              {
+                "name": "Earned Overhead Hours"
+              },
+              {
+                "name": "Earned Setup Hours"
+              }
+            ]
+          },
+          {
+            "name": "Material Classification",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Product Series"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Product Hierarchy",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
               }
             ]
           }

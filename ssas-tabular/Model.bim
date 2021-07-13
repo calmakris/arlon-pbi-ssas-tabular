@@ -1186,6 +1186,246 @@
             }
           }
         ]
+      },
+      {
+        "name": "Blocked Inventory Snapshots",
+        "columns": [
+          {
+            "name": "Snapshot Date",
+            "dataType": "dateTime",
+            "sourceColumn": "SnapshotDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "SBlock Value",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "SBlockValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "QBlock Value",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "QBlockValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Expired Value",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "ExpiredValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_DAILY_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"DAILY_INVENTORY_BLOCK\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_DAILY_INVENTORY_BLOCK,{{\"SnapshotDateKey\", type date}}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"SnapshotDateKey\", \"PlantNoKey\", \"SBlockValueUSD\", \"QBlockValueUSD\", \"ExpiredValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Closing SBlock Value",
+            "expression": "LASTNONBLANKVALUE( 'Calendar'[Date], SUM('Blocked Inventory Snapshots'[SBlock Value]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": ".Measures\\Closing",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Closing QBlock Value",
+            "expression": "LASTNONBLANKVALUE( 'Calendar'[Date], SUM('Blocked Inventory Snapshots'[QBlock Value]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": ".Measures\\Closing",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Closing Expired Value",
+            "expression": "LASTNONBLANKVALUE( 'Calendar'[Date], SUM('Blocked Inventory Snapshots'[Expired Value]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": ".Measures\\Closing",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Past 5 Day Sum SBlock",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "\tSUM('Blocked Inventory Snapshots'[SBlock Value]),",
+              "\tDATESINPERIOD('Calendar'[Date],",
+              "\t\t            LASTDATE('Calendar'[Date]), -5, DAY)",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": ".Measures\\Moving Avg",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Moving 5 Day Avg SBlock",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "\t[Past 5 Day Sum SBlock],",
+              "\tCALCULATE(DISTINCTCOUNT( 'Calendar'[Date] ),",
+              "\t    \t    DATESINPERIOD( 'Calendar'[Date],",
+              "\t    \t\t \t LASTDATE( 'Calendar'[Date]), -5, DAY ),",
+              "\t    \t    FILTER( 'Blocked Inventory Snapshots',",
+              "\t    \t    \t 'Blocked Inventory Snapshots'[SBlock Value] > 0)",
+              "\t)",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": ".Measures\\Moving Avg",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Past 5 Day Sum QBlock",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "\tSUM('Blocked Inventory Snapshots'[QBlock Value]),",
+              "\tDATESINPERIOD('Calendar'[Date],",
+              "\t\t            LASTDATE('Calendar'[Date]), -5, DAY)",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": ".Measures\\Moving Avg",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Past 5 Day Sum Expired",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "\tSUM('Blocked Inventory Snapshots'[Expired Value]),",
+              "\tDATESINPERIOD('Calendar'[Date],",
+              "\t\t            LASTDATE('Calendar'[Date]), -5, DAY)",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": ".Measures\\Moving Avg",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Moving 5 Day Avg QBlock",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "\t[Past 5 Day Sum QBlock],",
+              "\tCALCULATE(DISTINCTCOUNT( 'Calendar'[Date] ),",
+              "\t    \t    DATESINPERIOD( 'Calendar'[Date],",
+              "\t    \t\t \t LASTDATE( 'Calendar'[Date]), -5, DAY ),",
+              "\t    \t    FILTER( 'Blocked Inventory Snapshots',",
+              "\t    \t    \t 'Blocked Inventory Snapshots'[QBlock Value] > 0)",
+              "\t)",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": ".Measures\\Moving Avg",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Moving 5 Day Avg Expired",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "\t[Past 5 Day Sum Expired],",
+              "\tCALCULATE(DISTINCTCOUNT( 'Calendar'[Date] ),",
+              "\t    \t    DATESINPERIOD( 'Calendar'[Date],",
+              "\t    \t\t \t LASTDATE( 'Calendar'[Date]), -5, DAY ),",
+              "\t    \t    FILTER( 'Blocked Inventory Snapshots',",
+              "\t    \t    \t 'Blocked Inventory Snapshots'[Expired Value] > 0)",
+              "\t)",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": ".Measures\\Moving Avg",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1293,6 +1533,13 @@
         "toTable": "Hold Tag Documents",
         "toColumn": "Notification Number",
         "isActive": false
+      },
+      {
+        "name": "3f9dd1f7-3ac5-4bce-b233-68a54ac9862f",
+        "fromTable": "Blocked Inventory Snapshots",
+        "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "annotations": [

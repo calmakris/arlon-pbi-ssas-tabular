@@ -18,8 +18,10 @@
         },
         "options": {},
         "credential": {
-          "AuthenticationKind": "UsernamePassword",
-          "Username": "sa",
+          "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
+          "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
         }
@@ -48,7 +50,8 @@
             "name": "Calendar Month Number",
             "dataType": "int64",
             "sourceColumn": "Month_Of_Year",
-            "displayFolder": "Individual Attributes"
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
           },
           {
             "name": "Calendar Quarter Name",
@@ -66,13 +69,8 @@
             "name": "Fiscal Period",
             "dataType": "int64",
             "sourceColumn": "Fiscal_Month_Of_Year",
-            "displayFolder": "Individual Attributes"
-          },
-          {
-            "name": "Fiscal Quarter Number",
-            "dataType": "int64",
-            "sourceColumn": "Fiscal_Quarter_Of_Year",
-            "displayFolder": "Individual Attributes"
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
           },
           {
             "name": "Fiscal Quarter Name",
@@ -154,18 +152,12 @@
         "name": "Sales Invoice Documents",
         "columns": [
           {
-            "name": "SaleDocLineKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "SaleDocLineKey"
-          },
-          {
             "name": "Invoice Number",
             "dataType": "string",
             "sourceColumn": "SaleDocNoKey"
           },
           {
-            "name": "Line Number",
+            "name": "Invoice Line Number",
             "dataType": "string",
             "sourceColumn": "SaleLineNo"
           },
@@ -197,13 +189,15 @@
             "name": "Quantity",
             "dataType": "double",
             "sourceColumn": "QuantityValue",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "summarizeBy": "sum"
           },
           {
             "name": "Gross Sales Amount",
             "dataType": "double",
             "sourceColumn": "GrossSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -216,6 +210,7 @@
             "dataType": "double",
             "sourceColumn": "NetSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -228,6 +223,7 @@
             "dataType": "double",
             "sourceColumn": "CostValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -240,6 +236,7 @@
             "dataType": "double",
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -252,6 +249,7 @@
             "dataType": "double",
             "sourceColumn": "DiscountValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -281,32 +279,62 @@
           {
             "name": "Gross Sales",
             "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
-            "formatString": "$#,###0;-$#,###0;$0",
-            "displayFolder": "Sales Measures"
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           },
           {
             "name": "Net Sales",
             "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
-            "formatString": "$#,###0;-$#,###0;$0",
-            "displayFolder": "Sales Measures"
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           },
           {
             "name": "Cost of Goods",
             "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
-            "formatString": "$#,###0;-$#,###0;$0",
-            "displayFolder": "Sales Measures"
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           },
           {
             "name": "Gross Margin",
             "expression": " [Gross Sales] - [Cost of Goods]",
-            "formatString": "$#,###0;-$#,###0;$0",
-            "displayFolder": "Sales Measures"
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Measures\\Margin",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           },
           {
             "name": "Net Margin",
             "expression": " [Net Sales] - [Cost of Goods]",
-            "formatString": "$#,###0;-$#,###0;$0",
-            "displayFolder": "Sales Measures"
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Measures\\Margin",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           },
           {
             "name": "Gross Margin %",
@@ -543,6 +571,166 @@
             }
           }
         ]
+      },
+      {
+        "name": "Complaint Documents",
+        "columns": [
+          {
+            "name": "Complaint Number",
+            "dataType": "string",
+            "sourceColumn": "ComplaintNoKey"
+          },
+          {
+            "name": "Complaint Line Number",
+            "dataType": "string",
+            "sourceColumn": "ComplaintLineNo"
+          },
+          {
+            "name": "Complaint Type",
+            "dataType": "string",
+            "sourceColumn": "ComplaintType"
+          },
+          {
+            "name": "Billing Block Indicator",
+            "dataType": "string",
+            "sourceColumn": "BillingBlockIndicator"
+          },
+          {
+            "name": "Entered By",
+            "dataType": "string",
+            "sourceColumn": "EnteredBy"
+          },
+          {
+            "name": "Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "EnterDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "ReasonCodeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ReasonCodeKey"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerOrgKey"
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Complaint Amount",
+            "dataType": "double",
+            "sourceColumn": "ComplaintValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Credit Issued Amount",
+            "dataType": "double",
+            "sourceColumn": "CreditIssueValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Open Amount",
+            "dataType": "double",
+            "sourceColumn": "OpenValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COMPLAINTS = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Complaint Value",
+            "expression": " SUM('Complaint Documents'[Complaint Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaint Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Credit Issued",
+            "expression": " SUM('Complaint Documents'[Credit Issued Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaint Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Open Value",
+            "expression": " SUM('Complaint Documents'[Open Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaint Measures\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Complaint Count",
+            "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] )",
+            "formatString": "#,0",
+            "displayFolder": "Complaint Measures\\Count"
+          }
+        ]
       }
     ],
     "relationships": [
@@ -586,6 +774,22 @@
         "fromColumn": "CustomerOrgKey",
         "toTable": "Customer Master",
         "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "74383449-6017-4d2b-979a-08dccd8bc259",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "008c5089-1c7b-4818-af0f-73415571df6f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey",
+        "isActive": false
       }
     ],
     "annotations": [

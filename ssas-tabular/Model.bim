@@ -1282,6 +1282,14 @@
         "fromColumn": "MaterialNoKey",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "NotificationNoKey",
+        "toTable": "Hold Tag Documents",
+        "toColumn": "Notification Number",
+        "isActive": false
       }
     ],
     "annotations": [

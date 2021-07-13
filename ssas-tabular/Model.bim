@@ -2511,6 +2511,43 @@
                 "name": "Product Hierarchy L3"
               }
             ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Month Name"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar"
+              },
+              {
+                "name": "Fiscal Calendar"
+              }
+            ]
           }
         ]
       }

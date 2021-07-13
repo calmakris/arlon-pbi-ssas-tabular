@@ -39,6 +39,7 @@
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "CustomerOrgKey"
           },
           {
@@ -448,6 +449,7 @@
           {
             "name": "Material Number",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "MaterialNoKey"
           },
           {
@@ -949,6 +951,7 @@
           {
             "name": "Notification Number",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "NotificationNoKey"
           },
           {

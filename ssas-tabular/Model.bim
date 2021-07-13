@@ -764,6 +764,54 @@
             "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
             "formatString": "#,0",
             "displayFolder": "Hold Tags\\Count"
+          },
+          {
+            "name": "Current S-Block Value",
+            "expression": " SUM('Blocked Inventory'[SBlock Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Q-Block Value",
+            "expression": " SUM('Blocked Inventory'[QBlock Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Expired Value",
+            "expression": " SUM('Expired Inventory'[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Blocked Inv Value",
+            "expression": " [Current S-Block Value] + [Current Q-Block Value] + [Current Expired Value]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ]
       },
@@ -970,6 +1018,171 @@
             }
           }
         ]
+      },
+      {
+        "name": "Blocked Inventory",
+        "columns": [
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNoKey"
+          },
+          {
+            "name": "NotificationNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "NotificationNoKey"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "SBlock Quantity",
+            "dataType": "double",
+            "sourceColumn": "SBlockQuantityValue",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "SBlock Amount",
+            "dataType": "double",
+            "sourceColumn": "SBlockAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "QBlock Quantity",
+            "dataType": "double",
+            "sourceColumn": "QBlockQuantityValue",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "QBlock Amount",
+            "dataType": "double",
+            "sourceColumn": "QBlockAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BLOCK\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_BLOCK,{\"MaterialNoKey\", \"BatchNoKey\", \"NotificationNoKey\", \"PlantNo\", \"StorageLoc\", \"SBlockQuantityValue\", \"SBlockAmountUSD\", \"QBlockQuantityValue\", \"QBlockAmountUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Expired Inventory",
+        "columns": [
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Manufacturing Date",
+            "dataType": "dateTime",
+            "sourceColumn": "MfgDate",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Goods Receipt Date",
+            "dataType": "dateTime",
+            "sourceColumn": "GoodsReceiptDate",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Expiration Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ExpirationDate",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "ExpiredQuantityValue",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "ExpiredAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_EXPIRED = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_EXPIRED\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_EXPIRED,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"ExpiredQuantityValue\", \"StockAmountUSD\", \"ExpiredAmountUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1055,6 +1268,20 @@
         "fromColumn": "Enter Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "75f7059e-5891-4145-8c3b-08cf13009c2f",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
       }
     ],
     "annotations": [

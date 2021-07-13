@@ -28,134 +28,6 @@
     ],
     "tables": [
       {
-        "name": "Sales Invoice Documents",
-        "columns": [
-          {
-            "name": "Invoice Number",
-            "dataType": "string",
-            "sourceColumn": "SaleDocNoKey"
-          },
-          {
-            "name": "Invoice Line Number",
-            "dataType": "string",
-            "sourceColumn": "SaleLineNo"
-          },
-          {
-            "name": "Posting Date",
-            "dataType": "dateTime",
-            "sourceColumn": "PostingDateKey",
-            "formatString": "MM/dd/yyyy"
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Customer Number",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
-          },
-          {
-            "name": "CustomerOrgKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CustomerOrgKey"
-          },
-          {
-            "name": "Quantity",
-            "dataType": "double",
-            "sourceColumn": "QuantityValue",
-            "formatString": "0.00",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "Gross Sales Amount",
-            "dataType": "double",
-            "sourceColumn": "GrossSalesValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Net Sales Amount",
-            "dataType": "double",
-            "sourceColumn": "NetSalesValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Overall Cost Amount",
-            "dataType": "double",
-            "sourceColumn": "CostValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Material Cost Amount",
-            "dataType": "double",
-            "sourceColumn": "MaterialExtPriceUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Discount Amount",
-            "dataType": "double",
-            "sourceColumn": "DiscountValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_VW_SALES,{\"MANDT\"})",
-                "in",
-                "    #\"Removed Columns\""
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Customer Master",
         "columns": [
           {
@@ -389,45 +261,54 @@
             "dataType": "dateTime",
             "isKey": true,
             "sourceColumn": "PK_Date",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Individual Attributes"
           },
           {
             "name": "Calendar Year Number",
             "dataType": "string",
-            "sourceColumn": "Year_Name"
+            "sourceColumn": "Year_Name",
+            "displayFolder": "Individual Attributes"
           },
           {
             "name": "Calendar Month Number",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "Month_Of_Year",
+            "displayFolder": "Individual Attributes",
             "summarizeBy": "none"
           },
           {
             "name": "Calendar Quarter Name",
             "dataType": "string",
-            "sourceColumn": "Quarter_Of_Year_Name"
+            "sourceColumn": "Quarter_Of_Year_Name",
+            "displayFolder": "Individual Attributes"
           },
           {
             "name": "Fiscal Year Number",
             "dataType": "string",
-            "sourceColumn": "Fiscal_Year_Name"
+            "sourceColumn": "Fiscal_Year_Name",
+            "displayFolder": "Individual Attributes"
           },
           {
             "name": "Fiscal Period",
             "dataType": "int64",
             "sourceColumn": "Fiscal_Month_Of_Year",
+            "displayFolder": "Individual Attributes",
             "summarizeBy": "none"
           },
           {
             "name": "Fiscal Quarter Name",
             "dataType": "string",
-            "sourceColumn": "Fiscal_Quarter_Of_Year_Name"
+            "sourceColumn": "Fiscal_Quarter_Of_Year_Name",
+            "displayFolder": "Individual Attributes"
           },
           {
             "name": "Month Name",
             "dataType": "string",
             "sourceColumn": "Month_Name_Abbrev",
-            "sortByColumn": "Calendar Month Number"
+            "sortByColumn": "Calendar Month Number",
+            "displayFolder": "Individual Attributes"
           }
         ],
         "partitions": [
@@ -446,6 +327,50 @@
                 "    #\"Filtered Rows\""
               ]
             }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Calendar",
+            "displayFolder": "Hierarchies",
+            "levels": [
+              {
+                "name": "Year",
+                "ordinal": 0,
+                "column": "Calendar Year Number"
+              },
+              {
+                "name": "Month",
+                "ordinal": 1,
+                "column": "Month Name"
+              },
+              {
+                "name": "Date",
+                "ordinal": 2,
+                "column": "Date"
+              }
+            ]
+          },
+          {
+            "name": "Fiscal Calendar",
+            "displayFolder": "Hierarchies",
+            "levels": [
+              {
+                "name": "Fiscal Year",
+                "ordinal": 0,
+                "column": "Fiscal Year Number"
+              },
+              {
+                "name": "Fiscal Period",
+                "ordinal": 1,
+                "column": "Fiscal Period"
+              },
+              {
+                "name": "Date",
+                "ordinal": 2,
+                "column": "Date"
+              }
+            ]
           }
         ]
       },
@@ -629,7 +554,7 @@
         "measures": [
           {
             "name": "Gross Sales",
-            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
+            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales\\Sum",
             "annotations": [
@@ -641,7 +566,7 @@
           },
           {
             "name": "Net Sales",
-            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
+            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales\\Sum",
             "annotations": [
@@ -653,7 +578,7 @@
           },
           {
             "name": "Cost of Goods",
-            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
+            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales\\Sum",
             "annotations": [
@@ -701,7 +626,7 @@
           },
           {
             "name": "Complaint Value",
-            "expression": " SUM('Complaint Documents'[Complaint Amount])",
+            "expression": " SUM('Complaint Documents'[Complaint Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
             "displayFolder": "Complaints\\Sum",
@@ -714,7 +639,7 @@
           },
           {
             "name": "Credit Issued",
-            "expression": " SUM('Complaint Documents'[Credit Issued Amount])",
+            "expression": " SUM('Complaint Documents'[Credit Issued Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
             "displayFolder": "Complaints\\Sum",
@@ -727,7 +652,7 @@
           },
           {
             "name": "Open Value",
-            "expression": " SUM('Complaint Documents'[Open Amount])",
+            "expression": " SUM('Complaint Documents'[Open Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
             "displayFolder": "Complaints\\Sum",
@@ -740,7 +665,7 @@
           },
           {
             "name": "Complaint Count",
-            "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] )",
+            "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] ) + 0",
             "formatString": "#,0",
             "isHidden": true,
             "displayFolder": "Complaints\\Count"
@@ -806,16 +731,137 @@
             "displayFolder": "Complaints\\KPI"
           }
         ]
+      },
+      {
+        "name": "Sales Invoice Documents",
+        "columns": [
+          {
+            "name": "Invoice Number",
+            "dataType": "string",
+            "sourceColumn": "SaleDocNoKey"
+          },
+          {
+            "name": "Invoice Line Number",
+            "dataType": "string",
+            "sourceColumn": "SaleLineNo"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerOrgKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "QuantityValue",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Gross Sales Amount",
+            "dataType": "double",
+            "sourceColumn": "GrossSalesValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Sales Amount",
+            "dataType": "double",
+            "sourceColumn": "NetSalesValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Overall Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "CostValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Material Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "MaterialExtPriceUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Discount Amount",
+            "dataType": "double",
+            "sourceColumn": "DiscountValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_VW_SALES,{\"MANDT\"})",
+                "in",
+                "    #\"Removed Columns\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
-      {
-        "name": "7bc6c5a0-4655-407a-bc13-1cd3a65eca38",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "CustomerOrgKey",
-        "toTable": "Customer Master",
-        "toColumn": "CustomerOrgKey"
-      },
       {
         "name": "008c5089-1c7b-4818-af0f-73415571df6f",
         "fromTable": "Complaint Documents",
@@ -841,20 +887,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "9aea2de3-d4c1-473e-bf03-55a3a8d409f5",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "Posting Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
-        "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "Material Number",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
         "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
         "fromCardinality": "one",
         "fromTable": "Material Master",
@@ -876,6 +908,27 @@
         "name": "22d61dbe-0265-4bd3-b686-8d76e4f1d50f",
         "fromTable": "Complaint Documents",
         "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "7bc6c5a0-4655-407a-bc13-1cd3a65eca38",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "9aea2de3-d4c1-473e-bf03-55a3a8d409f5",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
       }

@@ -2004,6 +2004,26 @@
                 "name": "Department"
               }
             ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
           }
         ]
       }

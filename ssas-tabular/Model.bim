@@ -311,6 +311,46 @@
             "sourceColumn": "Month_Name_Abbrev",
             "sortByColumn": "Calendar Month Number",
             "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Quarter_Of_Year",
+            "dataType": "int64",
+            "sourceColumn": "Quarter_Of_Year"
+          },
+          {
+            "name": "Month_Name",
+            "dataType": "string",
+            "sourceColumn": "Month_Name"
+          },
+          {
+            "name": "Fiscal_Quarter_Of_Year",
+            "dataType": "int64",
+            "sourceColumn": "Fiscal_Quarter_Of_Year"
+          },
+          {
+            "name": "Fiscal_Year_Month_Name",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Year_Month_Name"
+          },
+          {
+            "name": "Is_Current_Month",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Current_Month"
+          },
+          {
+            "name": "Is_Mtd",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Mtd"
+          },
+          {
+            "name": "Is_Calendar_Ytd",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Calendar_Ytd"
+          },
+          {
+            "name": "Is_Fiscal_Ytd",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Fiscal_Ytd"
           }
         ],
         "partitions": [
@@ -323,10 +363,9 @@
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each [PK_Date] <= Date.From(DateTime.LocalNow()))",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}})",
                 "in",
-                "    #\"Filtered Rows\""
+                "    #\"Changed Type\""
               ]
             }
           }
@@ -383,162 +422,6 @@
                 "column": "Fiscal Quarter Name"
               }
             ]
-          }
-        ]
-      },
-      {
-        "name": "Material Classification",
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Brand",
-            "dataType": "string",
-            "sourceColumn": "Brand"
-          },
-          {
-            "name": "Color Number",
-            "dataType": "string",
-            "sourceColumn": "ColorNumber"
-          },
-          {
-            "name": "Commercialization Date",
-            "dataType": "dateTime",
-            "sourceColumn": "CommercializationDate"
-          },
-          {
-            "name": "Film Type",
-            "dataType": "string",
-            "sourceColumn": "FilmType"
-          },
-          {
-            "name": "Liner",
-            "dataType": "string",
-            "sourceColumn": "Liner"
-          },
-          {
-            "name": "Product Series",
-            "dataType": "string",
-            "sourceColumn": "ProductSeries"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_CLASSIFICATION = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_CLASSIFICATION\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_CLASSIFICATION"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Material Master",
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isKey": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Material Description",
-            "dataType": "string",
-            "sourceColumn": "MaterialDescription"
-          },
-          {
-            "name": "Material Number - Description",
-            "dataType": "string",
-            "sourceColumn": "MaterialNoDescription"
-          },
-          {
-            "name": "Material Type",
-            "dataType": "string",
-            "sourceColumn": "MaterialType"
-          },
-          {
-            "name": "Material Group",
-            "dataType": "string",
-            "sourceColumn": "MaterialGroup"
-          },
-          {
-            "name": "X Distribution Status",
-            "dataType": "string",
-            "sourceColumn": "XDistributionStatus"
-          },
-          {
-            "name": "Unit of Measure",
-            "dataType": "string",
-            "sourceColumn": "UnitOfMeasure"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_MASTER"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Product Hierarchy",
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Product Hierarchy L1",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL1"
-          },
-          {
-            "name": "Product Hierarchy L2",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL2"
-          },
-          {
-            "name": "Product Hierarchy L3",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL3"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_PRODHIERARCHY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_PRODHIERARCHY\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_PRODHIERARCHY"
-              ]
-            }
           }
         ]
       },
@@ -1476,7 +1359,8 @@
           {
             "name": "Posting Date",
             "dataType": "dateTime",
-            "sourceColumn": "PostingDateKey"
+            "sourceColumn": "PostingDateKey",
+            "formatString": "MM/dd/yyyy"
           },
           {
             "name": "Hours",
@@ -1617,6 +1501,162 @@
             }
           }
         ]
+      },
+      {
+        "name": "Material Classification",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Brand",
+            "dataType": "string",
+            "sourceColumn": "Brand"
+          },
+          {
+            "name": "Color Number",
+            "dataType": "string",
+            "sourceColumn": "ColorNumber"
+          },
+          {
+            "name": "Commercialization Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CommercializationDate"
+          },
+          {
+            "name": "Film Type",
+            "dataType": "string",
+            "sourceColumn": "FilmType"
+          },
+          {
+            "name": "Liner",
+            "dataType": "string",
+            "sourceColumn": "Liner"
+          },
+          {
+            "name": "Product Series",
+            "dataType": "string",
+            "sourceColumn": "ProductSeries"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_CLASSIFICATION = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_CLASSIFICATION\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_CLASSIFICATION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Material Master",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isKey": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialDescription"
+          },
+          {
+            "name": "Material Number - Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoDescription"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "X Distribution Status",
+            "dataType": "string",
+            "sourceColumn": "XDistributionStatus"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product Hierarchy",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL1"
+          },
+          {
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL2"
+          },
+          {
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL3"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_PRODHIERARCHY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_PRODHIERARCHY\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_PRODHIERARCHY"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1635,6 +1675,70 @@
         "fromColumn": "Enter Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "7bc6c5a0-4655-407a-bc13-1cd3a65eca38",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "9aea2de3-d4c1-473e-bf03-55a3a8d409f5",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "90d80725-4955-4415-8778-f3b670ded05f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "1196625d-915c-4f90-8a7e-4a4e307c34c4",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "NotificationNoKey",
+        "toTable": "Hold Tag Documents",
+        "toColumn": "Notification Number",
+        "isActive": false
+      },
+      {
+        "name": "3f9dd1f7-3ac5-4bce-b233-68a54ac9862f",
+        "fromTable": "Blocked Inventory Snapshots",
+        "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "bf66fd75-c362-4675-abd4-420fb281ca3f",
+        "fromTable": "Absorption",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "bfb02065-3335-4b8c-86a7-e09a6308a25a",
+        "fromTable": "Absorption",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "93872bf8-434f-49a9-b7bb-a9a3e62bf0bb",
+        "fromTable": "Absorption",
+        "fromColumn": "CostElementKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
       },
       {
         "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
@@ -1662,20 +1766,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "7bc6c5a0-4655-407a-bc13-1cd3a65eca38",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "CustomerOrgKey",
-        "toTable": "Customer Master",
-        "toColumn": "CustomerOrgKey"
-      },
-      {
-        "name": "9aea2de3-d4c1-473e-bf03-55a3a8d409f5",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "Posting Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
         "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
         "fromTable": "Sales Invoice Documents",
         "fromColumn": "Material Number",
@@ -1683,25 +1773,11 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "90d80725-4955-4415-8778-f3b670ded05f",
-        "fromTable": "Complaint Documents",
-        "fromColumn": "CustomerOrgKey",
-        "toTable": "Customer Master",
-        "toColumn": "CustomerOrgKey"
-      },
-      {
         "name": "d104f71c-fb20-42c2-a158-df74a0040f19",
         "fromTable": "Hold Tag Documents",
         "fromColumn": "MaterialNoKey",
         "toTable": "Material Master",
         "toColumn": "Material Number"
-      },
-      {
-        "name": "1196625d-915c-4f90-8a7e-4a4e307c34c4",
-        "fromTable": "Hold Tag Documents",
-        "fromColumn": "Enter Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
       },
       {
         "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
@@ -1718,47 +1794,11 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "NotificationNoKey",
-        "toTable": "Hold Tag Documents",
-        "toColumn": "Notification Number",
-        "isActive": false
-      },
-      {
-        "name": "3f9dd1f7-3ac5-4bce-b233-68a54ac9862f",
-        "fromTable": "Blocked Inventory Snapshots",
-        "fromColumn": "Snapshot Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
         "name": "22f5ffae-1a73-4d36-815b-33b46aefbcf9",
         "fromTable": "Absorption",
         "fromColumn": "MaterialNoKey",
         "toTable": "Material Master",
         "toColumn": "Material Number"
-      },
-      {
-        "name": "bf66fd75-c362-4675-abd4-420fb281ca3f",
-        "fromTable": "Absorption",
-        "fromColumn": "Posting Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
-        "name": "bfb02065-3335-4b8c-86a7-e09a6308a25a",
-        "fromTable": "Absorption",
-        "fromColumn": "CostCenterKey",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center"
-      },
-      {
-        "name": "93872bf8-434f-49a9-b7bb-a9a3e62bf0bb",
-        "fromTable": "Absorption",
-        "fromColumn": "CostElementKey",
-        "toTable": "Cost Element Names",
-        "toColumn": "Cost Element"
       }
     ],
     "perspectives": [
@@ -1808,6 +1848,47 @@
               },
               {
                 "name": "Net Sales"
+              }
+            ]
+          },
+          {
+            "name": "Sales Invoice Documents",
+            "columns": [
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Discount Amount"
+              },
+              {
+                "name": "Gross Sales Amount"
+              },
+              {
+                "name": "Invoice Line Number"
+              },
+              {
+                "name": "Invoice Number"
+              },
+              {
+                "name": "Material Cost Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Sales Amount"
+              },
+              {
+                "name": "Overall Cost Amount"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Quantity"
               }
             ]
           },
@@ -1877,47 +1958,6 @@
               },
               {
                 "name": "Product Hierarchy L3"
-              }
-            ]
-          },
-          {
-            "name": "Sales Invoice Documents",
-            "columns": [
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Discount Amount"
-              },
-              {
-                "name": "Gross Sales Amount"
-              },
-              {
-                "name": "Invoice Line Number"
-              },
-              {
-                "name": "Invoice Number"
-              },
-              {
-                "name": "Material Cost Amount"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Net Sales Amount"
-              },
-              {
-                "name": "Overall Cost Amount"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Quantity"
               }
             ]
           }
@@ -2007,6 +2047,30 @@
               },
               {
                 "name": "Month Name"
+              },
+              {
+                "name": "Quarter_Of_Year"
+              },
+              {
+                "name": "Month_Name"
+              },
+              {
+                "name": "Fiscal_Quarter_Of_Year"
+              },
+              {
+                "name": "Fiscal_Year_Month_Name"
+              },
+              {
+                "name": "Is_Current_Month"
+              },
+              {
+                "name": "Is_Mtd"
+              },
+              {
+                "name": "Is_Calendar_Ytd"
+              },
+              {
+                "name": "Is_Fiscal_Ytd"
               }
             ],
             "hierarchies": [
@@ -2244,6 +2308,64 @@
             ]
           },
           {
+            "name": "Reason Code",
+            "columns": [
+              {
+                "name": "Class"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Reason Code Description"
+              },
+              {
+                "name": "ReasonCodeKey"
+              }
+            ]
+          },
+          {
+            "name": "Sales Invoice Documents",
+            "columns": [
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Discount Amount"
+              },
+              {
+                "name": "Gross Sales Amount"
+              },
+              {
+                "name": "Invoice Line Number"
+              },
+              {
+                "name": "Invoice Number"
+              },
+              {
+                "name": "Material Cost Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Sales Amount"
+              },
+              {
+                "name": "Overall Cost Amount"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          },
+          {
             "name": "Material Classification",
             "columns": [
               {
@@ -2309,64 +2431,6 @@
               },
               {
                 "name": "Product Hierarchy L3"
-              }
-            ]
-          },
-          {
-            "name": "Reason Code",
-            "columns": [
-              {
-                "name": "Class"
-              },
-              {
-                "name": "Department"
-              },
-              {
-                "name": "Reason Code Description"
-              },
-              {
-                "name": "ReasonCodeKey"
-              }
-            ]
-          },
-          {
-            "name": "Sales Invoice Documents",
-            "columns": [
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Discount Amount"
-              },
-              {
-                "name": "Gross Sales Amount"
-              },
-              {
-                "name": "Invoice Line Number"
-              },
-              {
-                "name": "Invoice Number"
-              },
-              {
-                "name": "Material Cost Amount"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Net Sales Amount"
-              },
-              {
-                "name": "Overall Cost Amount"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Quantity"
               }
             ]
           }
@@ -2468,6 +2532,67 @@
             ]
           },
           {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Quarter_Of_Year"
+              },
+              {
+                "name": "Month_Name"
+              },
+              {
+                "name": "Fiscal_Quarter_Of_Year"
+              },
+              {
+                "name": "Fiscal_Year_Month_Name"
+              },
+              {
+                "name": "Is_Current_Month"
+              },
+              {
+                "name": "Is_Mtd"
+              },
+              {
+                "name": "Is_Calendar_Ytd"
+              },
+              {
+                "name": "Is_Fiscal_Ytd"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar"
+              },
+              {
+                "name": "Fiscal Calendar"
+              }
+            ]
+          },
+          {
             "name": "Material Classification",
             "columns": [
               {
@@ -2533,43 +2658,6 @@
               },
               {
                 "name": "Product Hierarchy L3"
-              }
-            ]
-          },
-          {
-            "name": "Calendar",
-            "columns": [
-              {
-                "name": "Calendar Month Number"
-              },
-              {
-                "name": "Calendar Quarter Name"
-              },
-              {
-                "name": "Calendar Year Number"
-              },
-              {
-                "name": "Date"
-              },
-              {
-                "name": "Fiscal Period"
-              },
-              {
-                "name": "Fiscal Quarter Name"
-              },
-              {
-                "name": "Fiscal Year Number"
-              },
-              {
-                "name": "Month Name"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Calendar"
-              },
-              {
-                "name": "Fiscal Calendar"
               }
             ]
           }

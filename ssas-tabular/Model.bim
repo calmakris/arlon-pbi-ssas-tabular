@@ -1555,6 +1555,52 @@
             }
           }
         ]
+      },
+      {
+        "name": "Cost Center Names",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Cost Center Name",
+            "dataType": "string",
+            "sourceColumn": "CostCenterName"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Company Category",
+            "dataType": "string",
+            "sourceColumn": "CompanyCategory"
+          },
+          {
+            "name": "Operations Category",
+            "dataType": "string",
+            "sourceColumn": "OperationsCategory"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_CENTER_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_COST_CENTER_NAMES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1683,6 +1729,13 @@
         "fromColumn": "MaterialNoKey",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "48c5cf15-f0eb-40f5-94a2-1dc0d8170fe9",
+        "fromTable": "Absorption",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
       }
     ],
     "perspectives": [

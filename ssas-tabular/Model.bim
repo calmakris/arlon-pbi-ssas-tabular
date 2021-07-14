@@ -708,32 +708,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Labor\"",
-              "    )",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Absorption\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Earned Setup Cost",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM(Absorption[Cost]) + 0,",
-              "    FILTER(",
-              "        Absorption,",
-              "        Absorption[Transaction Type] = \"RKL\"",
-              "    ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Setup\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && ('Cost Element Names'[Sub Category] = \"Labor\" || 'Cost Element Names'[Sub Category] = \"Setup\")",
               "    )",
               ")"
             ],
@@ -773,7 +748,7 @@
           },
           {
             "name": "Absorption Cost",
-            "expression": " [Earned Labor Cost] + [Earned Setup Cost] + [Earned Overhead Cost]",
+            "expression": " [Earned Labor Cost] + [Earned Overhead Cost]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Absorption\\Sum",
             "annotations": [
@@ -795,26 +770,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Labor\"",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0.00",
-            "displayFolder": "Absorption\\Sum"
-          },
-          {
-            "name": "Earned Setup Hours",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM(Absorption[Hours]) + 0,",
-              "    FILTER(",
-              "        Absorption,",
-              "        Absorption[Transaction Type] = \"RKL\"",
-              "    ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Setup\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && ('Cost Element Names'[Sub Category] = \"Labor\" || 'Cost Element Names'[Sub Category] = \"Setup\")",
               "    )",
               ")"
             ],
@@ -841,10 +797,10 @@
             "displayFolder": "Absorption\\Sum"
           },
           {
-            "name": "Earned Labor & Setup Cost",
-            "expression": " [Earned Labor Cost] + [Earned Setup Cost]",
+            "name": "MTD Absorption Cost",
+            "expression": " [MTD Earned Labor Cost] + [MTD Earned Overhead Cost]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Absorption\\Sum",
+            "displayFolder": "Absorption\\Time Intelligence",
             "annotations": [
               {
                 "name": "Format",
@@ -853,10 +809,67 @@
             ]
           },
           {
-            "name": "Earned Labor & Setup Hours",
-            "expression": " [Earned Labor Hours] + [Earned Setup Hours]",
-            "formatString": "#,0.00",
-            "displayFolder": "Absorption\\Sum"
+            "name": "MTD Prior Year Absorption Cost",
+            "expression": " [MTD Prior Year Earned Labor Cost] + [MTD Prior Year Earned Overhead Cost]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MTD Earned Labor Cost",
+            "expression": " TOTALMTD( [Earned Labor Cost], 'Calendar'[Date] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MTD Prior Year Earned Labor Cost",
+            "expression": " TOTALMTD( [Earned Labor Cost], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MTD Earned Overhead Cost",
+            "expression": " TOTALMTD( [Earned Overhead Cost], 'Calendar'[Date] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MTD Prior Year Earned Overhead Cost",
+            "expression": [
+              " TOTALMTD( [Earned Overhead Cost], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+              ""
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ]
       },
@@ -1858,22 +1871,28 @@
                 "name": "Earned Overhead Cost"
               },
               {
-                "name": "Earned Setup Cost"
-              },
-              {
                 "name": "Earned Labor Hours"
               },
               {
                 "name": "Earned Overhead Hours"
               },
               {
-                "name": "Earned Setup Hours"
+                "name": "MTD Absorption Cost"
               },
               {
-                "name": "Earned Labor & Setup Cost"
+                "name": "MTD Earned Labor Cost"
               },
               {
-                "name": "Earned Labor & Setup Hours"
+                "name": "MTD Earned Overhead Cost"
+              },
+              {
+                "name": "MTD Prior Year Absorption Cost"
+              },
+              {
+                "name": "MTD Prior Year Earned Labor Cost"
+              },
+              {
+                "name": "MTD Prior Year Earned Overhead Cost"
               }
             ]
           },

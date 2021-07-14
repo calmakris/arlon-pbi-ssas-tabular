@@ -695,7 +695,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Labor\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Labor\"",
               "    )",
               ")"
             ],
@@ -720,7 +720,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Setup\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Setup\"",
               "    )",
               ")"
             ],
@@ -745,7 +745,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Overhead\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Overhead\"",
               "    )",
               ")"
             ],
@@ -782,7 +782,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Labor\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Labor\"",
               "    )",
               ")"
             ],
@@ -801,7 +801,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Setup\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Setup\"",
               "    )",
               ")"
             ],
@@ -820,7 +820,7 @@
               "    ),",
               "    FILTER(",
               "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[SubCategory] = \"Overhead\"",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Overhead\"",
               "    )",
               ")"
             ],
@@ -1586,6 +1586,67 @@
             }
           }
         ]
+      },
+      {
+        "name": "Cost Element Names",
+        "columns": [
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "sourceColumn": "CostElement"
+          },
+          {
+            "name": "Company Category",
+            "dataType": "string",
+            "sourceColumn": "CompanyCategory"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Sub Category",
+            "dataType": "string",
+            "sourceColumn": "SubCategory"
+          },
+          {
+            "name": "Category Renamed",
+            "dataType": "string",
+            "sourceColumn": "CatRenamed"
+          },
+          {
+            "name": "Is Controllable Expense",
+            "dataType": "boolean",
+            "sourceColumn": "IsControllableExpense"
+          },
+          {
+            "name": "Is Labor",
+            "dataType": "boolean",
+            "sourceColumn": "IsLabor"
+          },
+          {
+            "name": "Is Supplies",
+            "dataType": "boolean",
+            "sourceColumn": "IsSupplies"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_COST_ELEMENT_NAMES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1721,6 +1782,13 @@
         "fromColumn": "CostCenterKey",
         "toTable": "Cost Center Names",
         "toColumn": "Cost Center"
+      },
+      {
+        "name": "ee91563a-f093-480b-b5c9-79419b8fcce9",
+        "fromTable": "Absorption",
+        "fromColumn": "CostElementKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
       }
     ],
     "perspectives": [
@@ -2528,6 +2596,20 @@
               },
               {
                 "name": "Product Hierarchy L3"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
               }
             ]
           }

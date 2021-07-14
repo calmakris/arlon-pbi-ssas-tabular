@@ -1401,108 +1401,6 @@
         ]
       },
       {
-        "name": "Cost Center Names",
-        "columns": [
-          {
-            "name": "Cost Center",
-            "dataType": "string",
-            "sourceColumn": "CostCenter"
-          },
-          {
-            "name": "Department",
-            "dataType": "string",
-            "sourceColumn": "Department"
-          },
-          {
-            "name": "Company Category",
-            "dataType": "string",
-            "sourceColumn": "CompanyCategory"
-          },
-          {
-            "name": "Operations Category",
-            "dataType": "string",
-            "sourceColumn": "OperationsCategory"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_zCOST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"zCOST_CENTER_NAMES\"]}[Data]",
-                "in",
-                "    dbo_zCOST_CENTER_NAMES"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Cost Element Names",
-        "columns": [
-          {
-            "name": "Cost Element",
-            "dataType": "string",
-            "sourceColumn": "CostElement"
-          },
-          {
-            "name": "Company Category",
-            "dataType": "string",
-            "sourceColumn": "CompanyCategory"
-          },
-          {
-            "name": "Category",
-            "dataType": "string",
-            "sourceColumn": "Category"
-          },
-          {
-            "name": "SubCategory",
-            "dataType": "string",
-            "sourceColumn": "SubCategory"
-          },
-          {
-            "name": "Category Renamed",
-            "dataType": "string",
-            "sourceColumn": "CatRenamed"
-          },
-          {
-            "name": "Is Controllable",
-            "dataType": "boolean",
-            "sourceColumn": "IsControllableExpense"
-          },
-          {
-            "name": "Is Labor",
-            "dataType": "boolean",
-            "sourceColumn": "IsLabor"
-          },
-          {
-            "name": "Is Supplies",
-            "dataType": "boolean",
-            "sourceColumn": "IsSupplies"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_zCOST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"zCOST_ELEMENT_NAMES\"]}[Data]",
-                "in",
-                "    dbo_zCOST_ELEMENT_NAMES"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Material Classification",
         "columns": [
           {
@@ -1725,20 +1623,6 @@
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
-      },
-      {
-        "name": "bfb02065-3335-4b8c-86a7-e09a6308a25a",
-        "fromTable": "Absorption",
-        "fromColumn": "CostCenterKey",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center"
-      },
-      {
-        "name": "93872bf8-434f-49a9-b7bb-a9a3e62bf0bb",
-        "fromTable": "Absorption",
-        "fromColumn": "CostElementKey",
-        "toTable": "Cost Element Names",
-        "toColumn": "Cost Element"
       },
       {
         "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
@@ -2468,34 +2352,6 @@
               },
               {
                 "name": "Transaction Type"
-              }
-            ]
-          },
-          {
-            "name": "Cost Center Names",
-            "columns": [
-              {
-                "name": "Company Category"
-              },
-              {
-                "name": "Cost Center"
-              },
-              {
-                "name": "Department"
-              }
-            ]
-          },
-          {
-            "name": "Cost Element Names",
-            "columns": [
-              {
-                "name": "Company Category"
-              },
-              {
-                "name": "Cost Element"
-              },
-              {
-                "name": "SubCategory"
               }
             ]
           },

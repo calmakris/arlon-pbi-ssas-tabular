@@ -313,44 +313,28 @@
             "displayFolder": "Individual Attributes"
           },
           {
-            "name": "Quarter_Of_Year",
-            "dataType": "int64",
-            "sourceColumn": "Quarter_Of_Year"
-          },
-          {
-            "name": "Month_Name",
-            "dataType": "string",
-            "sourceColumn": "Month_Name"
-          },
-          {
-            "name": "Fiscal_Quarter_Of_Year",
-            "dataType": "int64",
-            "sourceColumn": "Fiscal_Quarter_Of_Year"
-          },
-          {
-            "name": "Fiscal_Year_Month_Name",
-            "dataType": "string",
-            "sourceColumn": "Fiscal_Year_Month_Name"
-          },
-          {
-            "name": "Is_Current_Month",
+            "name": "Is Current Month",
             "dataType": "boolean",
-            "sourceColumn": "Is_Current_Month"
+            "sourceColumn": "Is_Current_Month",
+            "displayFolder": "Helper Attributes"
           },
           {
-            "name": "Is_Mtd",
+            "name": "Is MTD",
             "dataType": "boolean",
-            "sourceColumn": "Is_Mtd"
+            "sourceColumn": "Is_Mtd",
+            "displayFolder": "Helper Attributes"
           },
           {
-            "name": "Is_Calendar_Ytd",
+            "name": "Is Calendar YTD",
             "dataType": "boolean",
-            "sourceColumn": "Is_Calendar_Ytd"
+            "sourceColumn": "Is_Calendar_Ytd",
+            "displayFolder": "Helper Attributes"
           },
           {
-            "name": "Is_Fiscal_Ytd",
+            "name": "Is Fiscal YTD",
             "dataType": "boolean",
-            "sourceColumn": "Is_Fiscal_Ytd"
+            "sourceColumn": "Is_Fiscal_Ytd",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -363,9 +347,10 @@
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\"})",
                 "in",
-                "    #\"Changed Type\""
+                "    #\"Removed Other Columns\""
               ]
             }
           }
@@ -1986,28 +1971,16 @@
                 "name": "Month Name"
               },
               {
-                "name": "Quarter_Of_Year"
+                "name": "Is Current Month"
               },
               {
-                "name": "Month_Name"
+                "name": "Is MTD"
               },
               {
-                "name": "Fiscal_Quarter_Of_Year"
+                "name": "Is Calendar YTD"
               },
               {
-                "name": "Fiscal_Year_Month_Name"
-              },
-              {
-                "name": "Is_Current_Month"
-              },
-              {
-                "name": "Is_Mtd"
-              },
-              {
-                "name": "Is_Calendar_Ytd"
-              },
-              {
-                "name": "Is_Fiscal_Ytd"
+                "name": "Is Fiscal YTD"
               }
             ],
             "hierarchies": [
@@ -2468,28 +2441,16 @@
                 "name": "Month Name"
               },
               {
-                "name": "Quarter_Of_Year"
+                "name": "Is Current Month"
               },
               {
-                "name": "Month_Name"
+                "name": "Is MTD"
               },
               {
-                "name": "Fiscal_Quarter_Of_Year"
+                "name": "Is Calendar YTD"
               },
               {
-                "name": "Fiscal_Year_Month_Name"
-              },
-              {
-                "name": "Is_Current_Month"
-              },
-              {
-                "name": "Is_Mtd"
-              },
-              {
-                "name": "Is_Calendar_Ytd"
-              },
-              {
-                "name": "Is_Fiscal_Ytd"
+                "name": "Is Fiscal YTD"
               }
             ],
             "hierarchies": [

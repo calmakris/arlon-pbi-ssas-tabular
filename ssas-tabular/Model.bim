@@ -261,6 +261,7 @@
           {
             "name": "Date",
             "dataType": "dateTime",
+            "isHidden": true,
             "isKey": true,
             "sourceColumn": "PK_Date",
             "formatString": "MM/dd/yyyy",
@@ -269,6 +270,7 @@
           {
             "name": "Calendar Year Number",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Year_Name",
             "displayFolder": "Individual Attributes"
           },
@@ -283,18 +285,21 @@
           {
             "name": "Calendar Quarter Name",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Quarter_Of_Year_Name",
             "displayFolder": "Individual Attributes"
           },
           {
             "name": "Fiscal Year Number",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Fiscal_Year_Name",
             "displayFolder": "Individual Attributes"
           },
           {
             "name": "Fiscal Period",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "Fiscal_Month_Of_Year",
             "displayFolder": "Individual Attributes",
             "summarizeBy": "none"
@@ -302,14 +307,16 @@
           {
             "name": "Fiscal Quarter Name",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Fiscal_Quarter_Of_Year_Name",
             "displayFolder": "Individual Attributes"
           },
           {
             "name": "Month Name",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Month_Name_Abbrev",
-            "sortByColumn": "Calendar Month Number",
+            "sortByColumn": "Year_Month_Sort_Key",
             "displayFolder": "Individual Attributes"
           },
           {
@@ -335,6 +342,12 @@
             "dataType": "boolean",
             "sourceColumn": "Is_Fiscal_Ytd",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Year_Month_Sort_Key",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Year_Month_Sort_Key"
           }
         ],
         "partitions": [
@@ -348,7 +361,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -357,13 +370,17 @@
         ],
         "hierarchies": [
           {
-            "name": "Calendar",
-            "displayFolder": "Hierarchies",
+            "name": "Calendar Hierarchy",
             "levels": [
               {
                 "name": "Year",
                 "ordinal": 0,
                 "column": "Calendar Year Number"
+              },
+              {
+                "name": "Quarter",
+                "ordinal": 1,
+                "column": "Calendar Quarter Name"
               },
               {
                 "name": "Month",
@@ -374,37 +391,31 @@
                 "name": "Date",
                 "ordinal": 3,
                 "column": "Date"
-              },
-              {
-                "name": "Quarter",
-                "ordinal": 1,
-                "column": "Calendar Quarter Name"
               }
             ]
           },
           {
-            "name": "Fiscal Calendar",
-            "displayFolder": "Hierarchies",
+            "name": "Fiscal Hierarchy",
             "levels": [
+              {
+                "name": "Fiscal Quarter",
+                "ordinal": 1,
+                "column": "Fiscal Quarter Name"
+              },
               {
                 "name": "Fiscal Year",
                 "ordinal": 0,
                 "column": "Fiscal Year Number"
               },
               {
-                "name": "Fiscal Period",
+                "name": "Month",
                 "ordinal": 2,
-                "column": "Fiscal Period"
+                "column": "Month Name"
               },
               {
                 "name": "Date",
                 "ordinal": 3,
                 "column": "Date"
-              },
-              {
-                "name": "Fiscal Quarter",
-                "ordinal": 1,
-                "column": "Fiscal Quarter Name"
               }
             ]
           }
@@ -1793,628 +1804,6 @@
     ],
     "perspectives": [
       {
-        "name": "Sales",
-        "tables": [
-          {
-            "name": "Customer Master",
-            "columns": [
-              {
-                "name": "Customer Name"
-              },
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Sales Organization"
-              },
-              {
-                "name": "Sales Region"
-              },
-              {
-                "name": "Sales Territory"
-              }
-            ]
-          },
-          {
-            "name": "DAX Measures",
-            "measures": [
-              {
-                "name": "Gross Margin"
-              },
-              {
-                "name": "Gross Margin %"
-              },
-              {
-                "name": "Gross Sales"
-              },
-              {
-                "name": "Net Margin"
-              },
-              {
-                "name": "Net Margin %"
-              },
-              {
-                "name": "Net Sales"
-              }
-            ]
-          },
-          {
-            "name": "Sales Invoice Documents",
-            "columns": [
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Discount Amount"
-              },
-              {
-                "name": "Gross Sales Amount"
-              },
-              {
-                "name": "Invoice Line Number"
-              },
-              {
-                "name": "Invoice Number"
-              },
-              {
-                "name": "Material Cost Amount"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Net Sales Amount"
-              },
-              {
-                "name": "Overall Cost Amount"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Quantity"
-              }
-            ]
-          },
-          {
-            "name": "Material Classification",
-            "columns": [
-              {
-                "name": "Brand"
-              },
-              {
-                "name": "Color Number"
-              },
-              {
-                "name": "Commercialization Date"
-              },
-              {
-                "name": "Film Type"
-              },
-              {
-                "name": "Liner"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Product Series"
-              }
-            ]
-          },
-          {
-            "name": "Material Master",
-            "columns": [
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Material Number - Description"
-              },
-              {
-                "name": "Material Type"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "X Distribution Status"
-              }
-            ]
-          },
-          {
-            "name": "Product Hierarchy",
-            "columns": [
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Product Hierarchy L1"
-              },
-              {
-                "name": "Product Hierarchy L2"
-              },
-              {
-                "name": "Product Hierarchy L3"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "QA Dashboard",
-        "tables": [
-          {
-            "name": "Blocked Inventory",
-            "columns": [
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "NotificationNoKey"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "QBlock Amount"
-              },
-              {
-                "name": "QBlock Quantity"
-              },
-              {
-                "name": "SBlock Amount"
-              },
-              {
-                "name": "SBlock Quantity"
-              },
-              {
-                "name": "Storage Location"
-              }
-            ]
-          },
-          {
-            "name": "Blocked Inventory Snapshots",
-            "columns": [
-              {
-                "name": "Blocked Inv Value"
-              },
-              {
-                "name": "Expired Value"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "QBlock Value"
-              },
-              {
-                "name": "SBlock Value"
-              },
-              {
-                "name": "Snapshot Date"
-              }
-            ]
-          },
-          {
-            "name": "Calendar",
-            "columns": [
-              {
-                "name": "Calendar Month Number"
-              },
-              {
-                "name": "Calendar Quarter Name"
-              },
-              {
-                "name": "Calendar Year Number"
-              },
-              {
-                "name": "Date"
-              },
-              {
-                "name": "Fiscal Period"
-              },
-              {
-                "name": "Fiscal Quarter Name"
-              },
-              {
-                "name": "Fiscal Year Number"
-              },
-              {
-                "name": "Month Name"
-              },
-              {
-                "name": "Is Current Month"
-              },
-              {
-                "name": "Is MTD"
-              },
-              {
-                "name": "Is Calendar YTD"
-              },
-              {
-                "name": "Is Fiscal YTD"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Calendar"
-              },
-              {
-                "name": "Fiscal Calendar"
-              }
-            ]
-          },
-          {
-            "name": "Complaint Documents",
-            "columns": [
-              {
-                "name": "Billing Block Indicator"
-              },
-              {
-                "name": "Complaint Amount"
-              },
-              {
-                "name": "Complaint Line Number"
-              },
-              {
-                "name": "Complaint Number"
-              },
-              {
-                "name": "Complaint Type"
-              },
-              {
-                "name": "Credit Issued Amount"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Enter Date"
-              },
-              {
-                "name": "Entered By"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "Open Amount"
-              },
-              {
-                "name": "PlantNoKey"
-              },
-              {
-                "name": "ReasonCodeKey"
-              }
-            ]
-          },
-          {
-            "name": "Customer Master",
-            "columns": [
-              {
-                "name": "Account Creation Date"
-              },
-              {
-                "name": "Country"
-              },
-              {
-                "name": "Customer Name"
-              },
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Default Ship Plant"
-              },
-              {
-                "name": "Sales Organization"
-              },
-              {
-                "name": "Sales Region"
-              },
-              {
-                "name": "Sales Territory"
-              }
-            ]
-          },
-          {
-            "name": "DAX Measures",
-            "columns": [
-              {
-                "name": "Measure Column"
-              }
-            ],
-            "measures": [
-              {
-                "name": "Complaint Count"
-              },
-              {
-                "name": "Complaint Value"
-              },
-              {
-                "name": "Cost of Goods"
-              },
-              {
-                "name": "Credit Issued"
-              },
-              {
-                "name": "Current Blocked Inv Value"
-              },
-              {
-                "name": "Current Expired Value"
-              },
-              {
-                "name": "Current Q-Block Value"
-              },
-              {
-                "name": "Current S-Block Value"
-              },
-              {
-                "name": "Gross Margin"
-              },
-              {
-                "name": "Gross Margin %"
-              },
-              {
-                "name": "Gross Sales"
-              },
-              {
-                "name": "Hold Amount"
-              },
-              {
-                "name": "Hold Quantity"
-              },
-              {
-                "name": "Hold Tag Count"
-              },
-              {
-                "name": "Net Margin"
-              },
-              {
-                "name": "Net Margin %"
-              },
-              {
-                "name": "Net Sales"
-              },
-              {
-                "name": "Open Value"
-              },
-              {
-                "name": "PQ Complaint Count"
-              },
-              {
-                "name": "PQ Complaint Value"
-              },
-              {
-                "name": "PQ Credit Issued"
-              },
-              {
-                "name": "PQ Open Value"
-              },
-              {
-                "name": "Product Quality Index"
-              },
-              {
-                "name": "Product Quality Index (Credited)"
-              },
-              {
-                "name": "Product Quality Index (Open)"
-              }
-            ]
-          },
-          {
-            "name": "Expired Inventory",
-            "columns": [
-              {
-                "name": "Amount"
-              },
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "Expiration Date"
-              },
-              {
-                "name": "Goods Receipt Date"
-              },
-              {
-                "name": "Manufacturing Date"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "Quantity"
-              }
-            ]
-          },
-          {
-            "name": "Hold Tag Documents",
-            "columns": [
-              {
-                "name": "Amount"
-              },
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "Enter Date"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "Notification Code"
-              },
-              {
-                "name": "Notification Number"
-              },
-              {
-                "name": "Notification Text"
-              },
-              {
-                "name": "Notification Type"
-              },
-              {
-                "name": "Quantity"
-              },
-              {
-                "name": "Reference Number"
-              }
-            ]
-          },
-          {
-            "name": "Reason Code",
-            "columns": [
-              {
-                "name": "Class"
-              },
-              {
-                "name": "Department"
-              },
-              {
-                "name": "Reason Code Description"
-              },
-              {
-                "name": "ReasonCodeKey"
-              }
-            ]
-          },
-          {
-            "name": "Sales Invoice Documents",
-            "columns": [
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Discount Amount"
-              },
-              {
-                "name": "Gross Sales Amount"
-              },
-              {
-                "name": "Invoice Line Number"
-              },
-              {
-                "name": "Invoice Number"
-              },
-              {
-                "name": "Material Cost Amount"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Net Sales Amount"
-              },
-              {
-                "name": "Overall Cost Amount"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Quantity"
-              }
-            ]
-          },
-          {
-            "name": "Material Classification",
-            "columns": [
-              {
-                "name": "Brand"
-              },
-              {
-                "name": "Color Number"
-              },
-              {
-                "name": "Commercialization Date"
-              },
-              {
-                "name": "Film Type"
-              },
-              {
-                "name": "Liner"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Product Series"
-              }
-            ]
-          },
-          {
-            "name": "Material Master",
-            "columns": [
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Material Number - Description"
-              },
-              {
-                "name": "Material Type"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "X Distribution Status"
-              }
-            ]
-          },
-          {
-            "name": "Product Hierarchy",
-            "columns": [
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Product Hierarchy L1"
-              },
-              {
-                "name": "Product Hierarchy L2"
-              },
-              {
-                "name": "Product Hierarchy L3"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "Absorption Dashboard",
         "tables": [
           {
@@ -2519,14 +1908,17 @@
               },
               {
                 "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
               }
             ],
             "hierarchies": [
               {
-                "name": "Calendar"
+                "name": "Calendar Hierarchy"
               },
               {
-                "name": "Fiscal Calendar"
+                "name": "Fiscal Hierarchy"
               }
             ]
           },

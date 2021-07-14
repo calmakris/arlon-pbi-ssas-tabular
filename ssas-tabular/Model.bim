@@ -39,6 +39,7 @@
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
+            "isUnique": true,
             "isKey": true,
             "sourceColumn": "CustomerOrgKey"
           },
@@ -262,6 +263,7 @@
             "name": "Date",
             "dataType": "dateTime",
             "isHidden": true,
+            "isUnique": true,
             "isKey": true,
             "sourceColumn": "PK_Date",
             "formatString": "MM/dd/yyyy",
@@ -1403,6 +1405,7 @@
             "name": "Material Number",
             "dataType": "string",
             "isHidden": true,
+            "isUnique": true,
             "sourceColumn": "MaterialNoKey"
           },
           {
@@ -1459,6 +1462,7 @@
           {
             "name": "Material Number",
             "dataType": "string",
+            "isUnique": true,
             "isKey": true,
             "sourceColumn": "MaterialNoKey"
           },
@@ -1517,6 +1521,7 @@
             "name": "Material Number",
             "dataType": "string",
             "isHidden": true,
+            "isUnique": true,
             "sourceColumn": "MaterialNoKey"
           },
           {
@@ -1558,6 +1563,7 @@
           {
             "name": "Cost Center",
             "dataType": "string",
+            "isUnique": true,
             "sourceColumn": "CostCenter"
           },
           {
@@ -1604,6 +1610,7 @@
           {
             "name": "Cost Element",
             "dataType": "string",
+            "isUnique": true,
             "sourceColumn": "CostElement"
           },
           {

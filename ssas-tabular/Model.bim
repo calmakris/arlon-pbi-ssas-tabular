@@ -1460,6 +1460,7 @@
       },
       {
         "name": "Material Classification",
+        "isHidden": true,
         "columns": [
           {
             "name": "Material Number",
@@ -1524,37 +1525,117 @@
             "dataType": "string",
             "isUnique": true,
             "isKey": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "displayFolder": "Master"
           },
           {
             "name": "Material Description",
             "dataType": "string",
-            "sourceColumn": "MaterialDescription"
+            "sourceColumn": "MaterialDescription",
+            "displayFolder": "Master"
           },
           {
             "name": "Material Number - Description",
             "dataType": "string",
-            "sourceColumn": "MaterialNoDescription"
+            "sourceColumn": "MaterialNoDescription",
+            "displayFolder": "Master"
           },
           {
             "name": "Material Type",
             "dataType": "string",
-            "sourceColumn": "MaterialType"
+            "sourceColumn": "MaterialType",
+            "displayFolder": "Master"
           },
           {
             "name": "Material Group",
             "dataType": "string",
-            "sourceColumn": "MaterialGroup"
+            "sourceColumn": "MaterialGroup",
+            "displayFolder": "Master"
           },
           {
             "name": "X Distribution Status",
             "dataType": "string",
-            "sourceColumn": "XDistributionStatus"
+            "sourceColumn": "XDistributionStatus",
+            "displayFolder": "Master"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
-            "sourceColumn": "UnitOfMeasure"
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "Master"
+          },
+          {
+            "type": "calculated",
+            "name": "Brand",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED( 'Material Classification'[Brand] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Color Number",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED( 'Material Classification'[Color Number] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Film Type",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Film Type] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Liner",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Liner] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Series",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Product Series] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Commercialization Date",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Commercialization Date] )",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L1] )",
+            "displayFolder": "Product Hierarchy"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L2] )",
+            "displayFolder": "Product Hierarchy"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L3] )",
+            "displayFolder": "Product Hierarchy"
           }
         ],
         "partitions": [
@@ -1576,6 +1657,7 @@
       },
       {
         "name": "Product Hierarchy",
+        "isHidden": true,
         "columns": [
           {
             "name": "Material Number",

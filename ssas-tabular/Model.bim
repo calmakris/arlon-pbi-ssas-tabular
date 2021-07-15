@@ -779,7 +779,7 @@
               "    )",
               ")"
             ],
-            "formatString": "#,0.00",
+            "formatString": "#,0",
             "displayFolder": "Absorption\\Sum"
           },
           {
@@ -798,7 +798,7 @@
               "    )",
               ")"
             ],
-            "formatString": "#,0.00",
+            "formatString": "#,0",
             "displayFolder": "Absorption\\Sum"
           },
           {
@@ -875,6 +875,18 @@
                 "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "MTD Earned Labor Hours",
+            "expression": " TOTALMTD( [Earned Labor Hours], 'Calendar'[Date] )",
+            "formatString": "#,0",
+            "displayFolder": "Absorption\\Time Intelligence"
+          },
+          {
+            "name": "MTD Prior Year Earned Labor Hours",
+            "expression": " TOTALMTD( [Earned Labor Hours], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "displayFolder": "Absorption\\Time Intelligence"
           }
         ]
       },
@@ -1911,6 +1923,12 @@
               },
               {
                 "name": "MTD Prior Year Earned Overhead Cost"
+              },
+              {
+                "name": "MTD Earned Labor Hours"
+              },
+              {
+                "name": "MTD Prior Year Earned Labor Hours"
               }
             ]
           },

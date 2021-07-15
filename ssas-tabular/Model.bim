@@ -887,6 +887,36 @@
             "expression": " TOTALMTD( [Earned Labor Hours], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
             "formatString": "#,0",
             "displayFolder": "Absorption\\Time Intelligence"
+          },
+          {
+            "name": "YTD FY Earned Overhead Cost",
+            "expression": [
+              "",
+              "TOTALYTD( [Earned Overhead Cost], 'Calendar'[Date], ALL('Calendar'), \"09/30\" )"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "YTD FY Prior Year Earned Overhead Cost",
+            "expression": [
+              "",
+              "TOTALYTD( [Earned Overhead Cost], SAMEPERIODLASTYEAR( 'Calendar'[Date]), ALL('Calendar'), \"09/30\" )"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ]
       },
@@ -1929,6 +1959,12 @@
               },
               {
                 "name": "MTD Prior Year Earned Labor Hours"
+              },
+              {
+                "name": "YTD FY Earned Overhead Cost"
+              },
+              {
+                "name": "YTD FY Prior Year Earned Overhead Cost"
               }
             ]
           },

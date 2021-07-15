@@ -1592,7 +1592,8 @@
           {
             "name": "Department",
             "dataType": "string",
-            "sourceColumn": "Department"
+            "sourceColumn": "Department",
+            "sortByColumn": "DepartmentSortKey"
           },
           {
             "name": "Company Category",
@@ -1603,6 +1604,12 @@
             "name": "Operations Category",
             "dataType": "string",
             "sourceColumn": "OperationsCategory"
+          },
+          {
+            "name": "DepartmentSortKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "DepartmentSortKey"
           }
         ],
         "partitions": [
@@ -1614,9 +1621,15 @@
               "expression": [
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_COST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_CENTER_NAMES\"]}[Data]",
+                "    dbo_VW_COST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_CENTER_NAMES\"]}[Data],",
+                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_CENTER_NAMES, \"DepartmentSortKey\", each if [Department] = \"COMP\" then 0",
+                "else if [Department] = \"CAST\" then 1",
+                "else if [Department] = \"PC\" then 2",
+                "else if [Department] = \"COAT\" then 3",
+                "else if [Department] = \"CONV\" then 4",
+                "else 999)",
                 "in",
-                "    dbo_VW_COST_CENTER_NAMES"
+                "    #\"Added Custom\""
               ]
             }
           }

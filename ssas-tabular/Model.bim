@@ -2144,16 +2144,7 @@
                 "name": "Material Number"
               },
               {
-                "name": "Material Number - Description"
-              },
-              {
                 "name": "Material Type"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "X Distribution Status"
               }
             ]
           },

@@ -1858,9 +1858,9 @@
               "expression": [
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_USERSECURITY_DEPARTMENT = Source{[Schema=\"dbo\",Item=\"USERSECURITY_DEPARTMENT\"]}[Data]",
+                "    dbo_RLS_DEPARTMENT = Source{[Schema=\"dbo\",Item=\"RLS_DEPARTMENT\"]}[Data]",
                 "in",
-                "    dbo_USERSECURITY_DEPARTMENT"
+                "    dbo_RLS_DEPARTMENT"
               ]
             }
           }
@@ -1893,6 +1893,61 @@
                 "    dbo_zDEPARTMENTS = Source{[Schema=\"dbo\",Item=\"zDEPARTMENTS\"]}[Data]",
                 "in",
                 "    dbo_zDEPARTMENTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Domain Users",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "EmployeeKey",
+            "dataType": "string",
+            "sourceColumn": "EmployeeKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "SupervisorKey",
+            "dataType": "string",
+            "sourceColumn": "SupervisorKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "EmailAddress",
+            "dataType": "string",
+            "sourceColumn": "EmailAddress"
+          },
+          {
+            "type": "calculated",
+            "name": "Path",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "PATH('Domain Users'[EmployeeKey], 'Domain Users'[SupervisorKey])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_USERLIST_DOMAIN = Source{[Schema=\"dbo\",Item=\"USERLIST_DOMAIN\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_USERLIST_DOMAIN,{\"EmployeeKey\", \"CostCenterKey\", \"SupervisorKey\", \"DomainName\", \"EmailAddress\"})",
+                "in",
+                "    #\"Removed Other Columns\""
               ]
             }
           }
@@ -2053,6 +2108,15 @@
         "fromColumn": "Department",
         "toTable": "Departments",
         "toColumn": "DepartmentKey",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "1552e3ba-aae8-4a48-83cb-8a599e07cfd5",
+        "fromTable": "Domain Users",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
       }
@@ -2341,6 +2405,34 @@
           {
             "name": "RLS_Departments",
             "filterExpression": "RLS_Departments[UserName]=USERNAME()"
+          }
+        ]
+      },
+      {
+        "name": "HierarchyRole",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\jmody",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
+          },
+          {
+            "memberName": "DOMAIN\\jsandoval",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3249"
+          },
+          {
+            "memberName": "DOMAIN\\GArguello",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4929"
+          },
+          {
+            "memberName": "DOMAIN\\aboal",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8718"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "Domain Users",
+            "filterExpression": "PATHCONTAINS( 'Domain Users'[Path], MAXX(FILTER('Domain Users', 'Domain Users'[DomainName] = USERNAME()), 'Domain Users'[EmployeeKey]))"
           }
         ]
       }

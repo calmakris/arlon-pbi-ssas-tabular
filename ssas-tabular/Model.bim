@@ -691,18 +691,6 @@
             ]
           },
           {
-            "name": "Current Expired Value",
-            "expression": " SUM('Expired Inventory'[Amount]) + 0",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
             "name": "Current Blocked Inv Value",
             "expression": " [Current S-Block Value] + [Current Q-Block Value] + [Current Expired Value]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -924,6 +912,30 @@
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Absorption\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Expired Value",
+            "expression": " SUM('Expired Inventory'[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current S-Block Value with Hold Tags",
+            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -2647,9 +2659,6 @@
                 "name": "Current Blocked Inv Value"
               },
               {
-                "name": "Current Expired Value"
-              },
-              {
                 "name": "Current Q-Block Value"
               },
               {
@@ -2690,6 +2699,12 @@
               },
               {
                 "name": "Product Quality Index (Open)"
+              },
+              {
+                "name": "Current Expired Value"
+              },
+              {
+                "name": "Current S-Block Value with Hold Tags"
               }
             ]
           },

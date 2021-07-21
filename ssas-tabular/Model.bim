@@ -347,7 +347,7 @@
           },
           {
             "name": "Year_Month_Sort_Key",
-            "dataType": "int64",
+            "dataType": "string",
             "isHidden": true,
             "sourceColumn": "Year_Month_Sort_Key"
           },
@@ -356,6 +356,18 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "Week_Of_Year"
+          },
+          {
+            "name": "Is Last 2 Fiscal Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last2_Fiscal_Years",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Last 13 Months",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last13_Months",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -369,7 +381,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -2301,6 +2313,12 @@
               },
               {
                 "name": "Calendar Week Number"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 13 Months"
               }
             ],
             "hierarchies": [

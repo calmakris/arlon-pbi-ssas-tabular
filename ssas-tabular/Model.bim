@@ -1123,13 +1123,21 @@
             "name": "Quantity",
             "dataType": "double",
             "sourceColumn": "HoldQuantityValue",
+            "formatString": "#,0.00",
             "summarizeBy": "sum"
           },
           {
             "name": "Amount",
             "dataType": "double",
             "sourceColumn": "HoldValueUSD",
-            "summarizeBy": "sum"
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [

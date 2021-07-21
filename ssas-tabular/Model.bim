@@ -354,20 +354,7 @@
           {
             "name": "Week_Of_Year",
             "dataType": "int64",
-            "isHidden": true,
             "sourceColumn": "Week_Of_Year"
-          },
-          {
-            "name": "Is Last 2 Fiscal Years",
-            "dataType": "boolean",
-            "sourceColumn": "Is_Last2_Fiscal_Years",
-            "displayFolder": "Helper Attributes"
-          },
-          {
-            "name": "Is Last 13 Months",
-            "dataType": "boolean",
-            "sourceColumn": "Is_Last13_Months",
-            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -381,7 +368,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -1833,6 +1820,125 @@
             }
           }
         ]
+      },
+      {
+        "name": "RLS_Departments",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_RLS_DEPARTMENT = Source{[Schema=\"dbo\",Item=\"RLS_DEPARTMENT\"]}[Data]",
+                "in",
+                "    dbo_RLS_DEPARTMENT"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Departments",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "DepartmentKey",
+            "dataType": "string",
+            "sourceColumn": "DepartmentKey"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zDEPARTMENTS = Source{[Schema=\"dbo\",Item=\"zDEPARTMENTS\"]}[Data]",
+                "in",
+                "    dbo_zDEPARTMENTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Domain Users",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "EmployeeKey",
+            "dataType": "string",
+            "sourceColumn": "EmployeeKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "SupervisorKey",
+            "dataType": "string",
+            "sourceColumn": "SupervisorKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "EmailAddress",
+            "dataType": "string",
+            "sourceColumn": "EmailAddress"
+          },
+          {
+            "type": "calculated",
+            "name": "Path",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "PATH('Domain Users'[EmployeeKey], 'Domain Users'[SupervisorKey])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_USERLIST_DOMAIN = Source{[Schema=\"dbo\",Item=\"USERLIST_DOMAIN\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_USERLIST_DOMAIN,{\"EmployeeKey\", \"CostCenterKey\", \"SupervisorKey\", \"DomainName\", \"EmailAddress\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -1975,6 +2081,31 @@
         "fromColumn": "CostElementKey",
         "toTable": "Cost Element Names",
         "toColumn": "Cost Element"
+      },
+      {
+        "name": "d066ae9e-c823-4e02-a04e-d7efc467199e",
+        "fromTable": "Cost Center Names",
+        "fromColumn": "Department",
+        "toTable": "Departments",
+        "toColumn": "DepartmentKey"
+      },
+      {
+        "name": "640c6b8d-8fc6-40db-ba05-4fb811f6bcc8",
+        "fromTable": "RLS_Departments",
+        "fromColumn": "Department",
+        "toTable": "Departments",
+        "toColumn": "DepartmentKey",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "1552e3ba-aae8-4a48-83cb-8a599e07cfd5",
+        "fromTable": "Domain Users",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -2107,12 +2238,6 @@
               },
               {
                 "name": "Week_Of_Year"
-              },
-              {
-                "name": "Is Last 2 Fiscal Years"
-              },
-              {
-                "name": "Is Last 13 Months"
               }
             ],
             "hierarchies": [
@@ -2217,6 +2342,78 @@
                 "name": "Sub Category"
               }
             ]
+          },
+          {
+            "name": "RLS_Departments",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "DomainName"
+              }
+            ]
+          },
+          {
+            "name": "Departments",
+            "columns": [
+              {
+                "name": "DepartmentKey"
+              },
+              {
+                "name": "Name"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "roles": [
+      {
+        "name": "TestRole",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest2",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20422"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Departments",
+            "filterExpression": "RLS_Departments[UserName]=USERNAME()"
+          }
+        ]
+      },
+      {
+        "name": "HierarchyRole",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\jmody",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
+          },
+          {
+            "memberName": "DOMAIN\\jsandoval",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3249"
+          },
+          {
+            "memberName": "DOMAIN\\GArguello",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4929"
+          },
+          {
+            "memberName": "DOMAIN\\aboal",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8718"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "Domain Users",
+            "filterExpression": "PATHCONTAINS( 'Domain Users'[Path], MAXX(FILTER('Domain Users', 'Domain Users'[DomainName] = USERNAME()), 'Domain Users'[EmployeeKey]))"
           }
         ]
       },

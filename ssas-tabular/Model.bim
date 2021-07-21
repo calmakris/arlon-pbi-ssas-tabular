@@ -1148,6 +1148,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNo"
           },
           {
@@ -1231,6 +1232,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNo"
           },
           {
@@ -1302,6 +1304,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -1939,6 +1942,37 @@
             }
           }
         ]
+      },
+      {
+        "name": "Plant",
+        "columns": [
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "sourceColumn": "PlantDescription"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_PLANT = Source{[Schema=\"dbo\",Item=\"VW_PLANT\"]}[Data]",
+                "in",
+                "    dbo_VW_PLANT"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -2106,6 +2140,34 @@
         "toColumn": "Cost Center",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "64d69090-8c95-4cfd-bae5-098fdca2fd7c",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "82e0b1e4-2025-48e8-ade7-938129650e46",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "392923c6-b921-4da9-a0eb-847df9a9ca69",
+        "fromTable": "Blocked Inventory Snapshots",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [

@@ -2020,6 +2020,45 @@
             }
           }
         ]
+      },
+      {
+        "name": "Pending Specification Documents",
+        "columns": [
+          {
+            "name": "Approver Name",
+            "dataType": "string",
+            "sourceColumn": "ApproverName"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Pending Count",
+            "dataType": "int64",
+            "sourceColumn": "PendingCount",
+            "formatString": "0",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SPECAPPROVAL_PENDING = Source{[Schema=\"dbo\",Item=\"VW_SPECAPPROVAL_PENDING\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SPECAPPROVAL_PENDING,{\"ApproverName\", \"Department\", \"PendingCount\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -2842,6 +2881,20 @@
               },
               {
                 "name": "ReasonCodeKey"
+              }
+            ]
+          },
+          {
+            "name": "Pending Specification Documents",
+            "columns": [
+              {
+                "name": "Approver Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Pending Count"
               }
             ]
           }

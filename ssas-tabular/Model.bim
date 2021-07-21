@@ -2428,6 +2428,327 @@
             ]
           }
         ]
+      },
+      {
+        "name": "QA Dashboard",
+        "tables": [
+          {
+            "name": "Blocked Inventory",
+            "columns": [
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "NotificationNoKey"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "QBlock Amount"
+              },
+              {
+                "name": "QBlock Quantity"
+              },
+              {
+                "name": "SBlock Amount"
+              },
+              {
+                "name": "SBlock Quantity"
+              },
+              {
+                "name": "Storage Location"
+              }
+            ]
+          },
+          {
+            "name": "Blocked Inventory Snapshots",
+            "columns": [
+              {
+                "name": "Blocked Inv Value"
+              },
+              {
+                "name": "Expired Value"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "QBlock Value"
+              },
+              {
+                "name": "SBlock Value"
+              },
+              {
+                "name": "Snapshot Date"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Complaint Documents",
+            "columns": [
+              {
+                "name": "Billing Block Indicator"
+              },
+              {
+                "name": "Complaint Amount"
+              },
+              {
+                "name": "Complaint Line Number"
+              },
+              {
+                "name": "Complaint Number"
+              },
+              {
+                "name": "Complaint Type"
+              },
+              {
+                "name": "Credit Issued Amount"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "PlantNoKey"
+              },
+              {
+                "name": "ReasonCodeKey"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              }
+            ]
+          },
+          {
+            "name": "Hold Tag Documents",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Type"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reference Number"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "Reason Code",
+            "columns": [
+              {
+                "name": "Class"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Reason Code Description"
+              },
+              {
+                "name": "ReasonCodeKey"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Complaint Count"
+              },
+              {
+                "name": "Complaint Value"
+              },
+              {
+                "name": "Credit Issued"
+              },
+              {
+                "name": "Current Blocked Inv Value"
+              },
+              {
+                "name": "Current Expired Value"
+              },
+              {
+                "name": "Current Q-Block Value"
+              },
+              {
+                "name": "Current S-Block Value"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "Hold Amount"
+              },
+              {
+                "name": "Hold Quantity"
+              },
+              {
+                "name": "Hold Tag Count"
+              },
+              {
+                "name": "Open Value"
+              },
+              {
+                "name": "PQ Complaint Count"
+              },
+              {
+                "name": "PQ Complaint Value"
+              },
+              {
+                "name": "PQ Credit Issued"
+              },
+              {
+                "name": "PQ Open Value"
+              },
+              {
+                "name": "Product Quality Index"
+              },
+              {
+                "name": "Product Quality Index (Credited)"
+              },
+              {
+                "name": "Product Quality Index (Open)"
+              }
+            ]
+          }
+        ]
       }
     ],
     "roles": [

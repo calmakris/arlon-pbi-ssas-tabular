@@ -942,6 +942,12 @@
                 "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Product Quality Index (Target)",
+            "expression": "AVERAGE(Target_PQI[TargetValue])",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
           }
         ]
       },
@@ -2059,6 +2065,40 @@
             }
           }
         ]
+      },
+      {
+        "name": "Target_PQI",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "CalendarTimeKey",
+            "dataType": "string",
+            "sourceColumn": "CalendarTimeKey"
+          },
+          {
+            "name": "TargetValue",
+            "dataType": "double",
+            "sourceColumn": "TargetValue",
+            "summarizeBy": "average"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_KPITARGET_PQI = Source{[Schema=\"dbo\",Item=\"VW_KPITARGET_PQI\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_KPITARGET_PQI,{{\"CalendarTimeKey\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -2254,6 +2294,14 @@
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "04b0a60f-707b-449b-a2cd-587ae883ce11",
+        "fromTable": "Calendar",
+        "fromColumn": "Year_Month_Sort_Key",
+        "toTable": "Target_PQI",
+        "toColumn": "CalendarTimeKey",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -2772,6 +2820,9 @@
               },
               {
                 "name": "Current S-Block Value with Hold Tags"
+              },
+              {
+                "name": "Product Quality Index (Target)"
               }
             ]
           },

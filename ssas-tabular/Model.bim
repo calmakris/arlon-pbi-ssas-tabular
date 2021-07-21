@@ -354,6 +354,7 @@
           {
             "name": "Calendar Week Number",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "Week_Of_Year"
           }
         ],

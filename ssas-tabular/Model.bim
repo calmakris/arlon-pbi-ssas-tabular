@@ -352,7 +352,7 @@
             "sourceColumn": "Year_Month_Sort_Key"
           },
           {
-            "name": "Week_Of_Year",
+            "name": "Calendar Week Number",
             "dataType": "int64",
             "sourceColumn": "Week_Of_Year"
           }
@@ -2237,7 +2237,7 @@
                 "name": "Year_Month_Sort_Key"
               },
               {
-                "name": "Week_Of_Year"
+                "name": "Calendar Week Number"
               }
             ],
             "hierarchies": [
@@ -2385,7 +2385,7 @@
         "tablePermissions": [
           {
             "name": "RLS_Departments",
-            "filterExpression": "RLS_Departments[UserName]=USERNAME()"
+            "filterExpression": "RLS_Departments[DomainName]=USERNAME()"
           }
         ]
       },

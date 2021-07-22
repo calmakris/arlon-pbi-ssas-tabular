@@ -193,6 +193,20 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Last Credit Date",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "LastCreditDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "type": "calculated",
+            "name": "Cycle Time",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF([Last Credit Date], DATEDIFF('Complaint Documents'[Enter Date], [Last Credit Date], DAY), BLANK())"
           }
         ],
         "partitions": [
@@ -205,7 +219,7 @@
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_COMPLAINTS = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"LastCreditDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -948,6 +962,22 @@
             "expression": "AVERAGE(Target_PQI[TargetValue])",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "PQ Complaint Cycle Time",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Complaint Documents'[Cycle Time] ),",
+              "    FILTER(",
+              "        'Reason Code',",
+              "        'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\"",
+              "    ),",
+              "    USERELATIONSHIP('Calendar'[Date], 'Complaint Documents'[Last Credit Date])",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Average"
           }
         ]
       },
@@ -2302,6 +2332,14 @@
         "toTable": "Target_PQI",
         "toColumn": "CalendarTimeKey",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "ec941efc-23a0-4e1e-8fee-379eafa01610",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "Last Credit Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
       }
     ],
     "perspectives": [
@@ -2735,6 +2773,9 @@
               },
               {
                 "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Last Credit Date"
               }
             ]
           },
@@ -2823,6 +2864,9 @@
               },
               {
                 "name": "Product Quality Index (Target)"
+              },
+              {
+                "name": "PQ Complaint Cycle Time"
               }
             ]
           },

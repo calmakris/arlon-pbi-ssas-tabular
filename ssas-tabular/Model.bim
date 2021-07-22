@@ -948,6 +948,25 @@
             "expression": "AVERAGE(Target_PQI[TargetValue])",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "CD PQ Complaint Count",
+            "expression": " CALCULATE( [PQ Complaint Count], LASTDATE('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Time Intelligence"
+          },
+          {
+            "name": "PD PQ Complaint Count",
+            "expression": " CALCULATE( [PQ Complaint Count], PREVIOUSDAY('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Time Intelligence"
+          },
+          {
+            "name": "PD Variance PQ Complaint Count",
+            "expression": " [CD PQ Complaint Count] - [PD PQ Complaint Count]",
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Time Intelligence"
           }
         ]
       },
@@ -2823,6 +2842,15 @@
               },
               {
                 "name": "Product Quality Index (Target)"
+              },
+              {
+                "name": "CD PQ Complaint Count"
+              },
+              {
+                "name": "PD PQ Complaint Count"
+              },
+              {
+                "name": "PD Variance PQ Complaint Count"
               }
             ]
           },

@@ -1792,6 +1792,7 @@
             "name": "Cost Center",
             "dataType": "string",
             "isUnique": true,
+            "isKey": true,
             "sourceColumn": "CostCenter"
           },
           {
@@ -1849,12 +1850,6 @@
         "name": "Cost Element Names",
         "columns": [
           {
-            "name": "Cost Element",
-            "dataType": "string",
-            "isUnique": true,
-            "sourceColumn": "CostElement"
-          },
-          {
             "name": "Company Category",
             "dataType": "string",
             "sourceColumn": "CompanyCategory"
@@ -1888,6 +1883,18 @@
             "name": "Is Supplies",
             "dataType": "boolean",
             "sourceColumn": "IsSupplies"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Cost Element Name",
+            "dataType": "string",
+            "sourceColumn": "CostElementName"
           }
         ],
         "partitions": [
@@ -2129,6 +2136,183 @@
             }
           }
         ]
+      },
+      {
+        "name": "Expenses",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "sourceColumn": "DocumentType"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Creation Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CreateDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DocumentDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Entered By",
+            "dataType": "string",
+            "sourceColumn": "UserName"
+          },
+          {
+            "name": "OffsetAcctNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OffsetAcctNoKey"
+          },
+          {
+            "name": "OffsetAcctType",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OffsetAcctType"
+          },
+          {
+            "name": "Document Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentNo"
+          },
+          {
+            "name": "Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentLineNo"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Referenced Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocLineNo"
+          },
+          {
+            "name": "Is Reversal Document",
+            "dataType": "string",
+            "sourceColumn": "IsRvrslDoc"
+          },
+          {
+            "name": "Reversal Referenced Document Number",
+            "dataType": "string",
+            "sourceColumn": "RvrslRefDocNo"
+          },
+          {
+            "name": "Is Reversed",
+            "dataType": "string",
+            "sourceColumn": "IsReversed"
+          },
+          {
+            "name": "PurchaseDocLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseDocLineKey"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Document Header Text",
+            "dataType": "string",
+            "sourceColumn": "DocHeaderText"
+          },
+          {
+            "name": "Document Item Text",
+            "dataType": "string",
+            "sourceColumn": "ItemText"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_EXPENSES = Source{[Schema=\"dbo\",Item=\"VW_EXPENSES\"]}[Data]",
+                "in",
+                "    dbo_VW_EXPENSES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -2266,13 +2450,6 @@
         "toColumn": "Cost Center"
       },
       {
-        "name": "ee91563a-f093-480b-b5c9-79419b8fcce9",
-        "fromTable": "Absorption",
-        "fromColumn": "CostElementKey",
-        "toTable": "Cost Element Names",
-        "toColumn": "Cost Element"
-      },
-      {
         "name": "d066ae9e-c823-4e02-a04e-d7efc467199e",
         "fromTable": "Cost Center Names",
         "fromColumn": "Department",
@@ -2340,6 +2517,41 @@
         "toTable": "Calendar",
         "toColumn": "Date",
         "isActive": false
+      },
+      {
+        "name": "d5fde41f-6d8d-49a1-b78d-1db50db9cab6",
+        "fromTable": "Expenses",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "5caa4e78-184b-4b81-8308-65501c7e23e7",
+        "fromTable": "Absorption",
+        "fromColumn": "CostElementKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "e23eac90-b677-4be3-8b2e-bdaa9a94dc93",
+        "fromTable": "Expenses",
+        "fromColumn": "Cost Element",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "43dc6699-1755-45fc-989b-be3676e258f3",
+        "fromTable": "Expenses",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "8dd87143-9d38-46ac-920d-6517fe79d0ed",
+        "fromTable": "Expenses",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -2574,9 +2786,6 @@
               },
               {
                 "name": "Company Category"
-              },
-              {
-                "name": "Cost Element"
               },
               {
                 "name": "Sub Category"
@@ -2990,6 +3199,191 @@
               },
               {
                 "name": "Pending Count"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Expenses",
+        "tables": [
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Expenses",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Creation Date"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Header Text"
+              },
+              {
+                "name": "Document Item Text"
+              },
+              {
+                "name": "Document Line Number"
+              },
+              {
+                "name": "Document Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Is Reversal Document"
+              },
+              {
+                "name": "Is Reversed"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "OffsetAcctNoKey"
+              },
+              {
+                "name": "OffsetAcctType"
+              },
+              {
+                "name": "PlantNoKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "PurchaseDocLineKey"
+              },
+              {
+                "name": "Referenced Document Line Number"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Reversal Referenced Document Number"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Is Controllable Expense"
+              },
+              {
+                "name": "Category"
               }
             ]
           }

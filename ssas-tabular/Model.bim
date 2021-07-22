@@ -382,6 +382,11 @@
             "dataType": "boolean",
             "sourceColumn": "Is_Last13_Months",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is_Current_Fiscal_Year",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Current_Fiscal_Year"
           }
         ],
         "partitions": [
@@ -395,7 +400,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -978,6 +983,31 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Complaints\\Average"
+          },
+          {
+            "name": "Expenses Amount",
+            "expression": " SUM(Expenses[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Expenses\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "YTD FY Expenses",
+            "expression": " TOTALYTD( [Expenses Amount], 'Calendar'[Date] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Expenses\\Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ]
       },
@@ -1979,61 +2009,6 @@
         ]
       },
       {
-        "name": "Domain Users",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "EmployeeKey",
-            "dataType": "string",
-            "sourceColumn": "EmployeeKey"
-          },
-          {
-            "name": "CostCenterKey",
-            "dataType": "string",
-            "sourceColumn": "CostCenterKey"
-          },
-          {
-            "name": "SupervisorKey",
-            "dataType": "string",
-            "sourceColumn": "SupervisorKey"
-          },
-          {
-            "name": "DomainName",
-            "dataType": "string",
-            "sourceColumn": "DomainName"
-          },
-          {
-            "name": "EmailAddress",
-            "dataType": "string",
-            "sourceColumn": "EmailAddress"
-          },
-          {
-            "type": "calculated",
-            "name": "Path",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": "PATH('Domain Users'[EmployeeKey], 'Domain Users'[SupervisorKey])"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_USERLIST_DOMAIN = Source{[Schema=\"dbo\",Item=\"USERLIST_DOMAIN\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_USERLIST_DOMAIN,{\"EmployeeKey\", \"CostCenterKey\", \"SupervisorKey\", \"DomainName\", \"EmailAddress\"})",
-                "in",
-                "    #\"Removed Other Columns\""
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Plant",
         "columns": [
           {
@@ -2466,15 +2441,6 @@
         "securityFilteringBehavior": "bothDirections"
       },
       {
-        "name": "1552e3ba-aae8-4a48-83cb-8a599e07cfd5",
-        "fromTable": "Domain Users",
-        "fromColumn": "CostCenterKey",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center",
-        "crossFilteringBehavior": "bothDirections",
-        "securityFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "64d69090-8c95-4cfd-bae5-098fdca2fd7c",
         "fromTable": "Complaint Documents",
         "fromColumn": "PlantNoKey",
@@ -2690,6 +2656,9 @@
               },
               {
                 "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is_Current_Fiscal_Year"
               }
             ],
             "hierarchies": [
@@ -2930,6 +2899,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is_Current_Fiscal_Year"
               }
             ],
             "hierarchies": [
@@ -3257,6 +3229,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is_Current_Fiscal_Year"
               }
             ],
             "hierarchies": [
@@ -3386,6 +3361,14 @@
                 "name": "Category"
               }
             ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "YTD FY Expenses"
+              }
+            ]
           }
         ]
       }
@@ -3408,34 +3391,6 @@
           {
             "name": "RLS_Departments",
             "filterExpression": "RLS_Departments[DomainName]=USERNAME()"
-          }
-        ]
-      },
-      {
-        "name": "HierarchyRole",
-        "modelPermission": "read",
-        "members": [
-          {
-            "memberName": "DOMAIN\\jmody",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
-          },
-          {
-            "memberName": "DOMAIN\\jsandoval",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3249"
-          },
-          {
-            "memberName": "DOMAIN\\GArguello",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4929"
-          },
-          {
-            "memberName": "DOMAIN\\aboal",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8718"
-          }
-        ],
-        "tablePermissions": [
-          {
-            "name": "Domain Users",
-            "filterExpression": "PATHCONTAINS( 'Domain Users'[Path], MAXX(FILTER('Domain Users', 'Domain Users'[DomainName] = USERNAME()), 'Domain Users'[EmployeeKey]))"
           }
         ]
       }

@@ -1270,14 +1270,14 @@
             "name": "Notification Text",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": "LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )"
+            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))"
           },
           {
             "type": "calculated",
             "name": "Notification Code",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )"
+            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))"
           }
         ],
         "partitions": [

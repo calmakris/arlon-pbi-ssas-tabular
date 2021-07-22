@@ -2301,6 +2301,113 @@
             }
           }
         ]
+      },
+      {
+        "name": "Purchase Orders",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderNoKey"
+          },
+          {
+            "name": "Purchase Line Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DocumentDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "VendorNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialText"
+          },
+          {
+            "name": "Req Track Number",
+            "dataType": "string",
+            "sourceColumn": "RequisitionTrackNo"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "double",
+            "sourceColumn": "UnitPrice"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_PURCHASE_ORDERS\"]}[Data]",
+                "in",
+                "    dbo_VW_PURCHASE_ORDERS"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -2531,6 +2638,20 @@
         "fromColumn": "PlantNoKey",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "e64c99ce-a3ae-4e92-a4d4-b827a2df4050",
+        "fromTable": "Expenses",
+        "fromColumn": "PurchaseDocLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "d8be19f9-8a2d-4705-87ba-97ce6a35808d",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
       }
     ],
     "perspectives": [
@@ -3386,6 +3507,26 @@
               },
               {
                 "name": "PY Variance Expenses Amount"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Req Track Number"
               }
             ]
           }

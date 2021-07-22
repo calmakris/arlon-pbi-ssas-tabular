@@ -384,9 +384,10 @@
             "displayFolder": "Helper Attributes"
           },
           {
-            "name": "Is_Current_Fiscal_Year",
+            "name": "Is Current Fiscal Year",
             "dataType": "boolean",
-            "sourceColumn": "Is_Current_Fiscal_Year"
+            "sourceColumn": "Is_Current_Fiscal_Year",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -988,8 +989,7 @@
             "name": "Expenses Amount",
             "expression": " SUM(Expenses[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": "Expenses\\Sum",
+            "displayFolder": "Expenses",
             "annotations": [
               {
                 "name": "Format",
@@ -998,10 +998,23 @@
             ]
           },
           {
-            "name": "YTD FY Expenses",
-            "expression": " TOTALYTD( [Expenses Amount], 'Calendar'[Date] )",
+            "name": "PY Expenses Amount",
+            "expression": " CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Expenses\\Time Intelligence",
+            "isHidden": true,
+            "displayFolder": "Expenses",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PY Variance Expenses Amount",
+            "expression": " IF( [PY Expenses Amount], [Expenses Amount] - [PY Expenses Amount], BLANK() )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Expenses",
             "annotations": [
               {
                 "name": "Format",
@@ -2658,7 +2671,7 @@
                 "name": "Is Last 13 Months"
               },
               {
-                "name": "Is_Current_Fiscal_Year"
+                "name": "Is Current Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -2901,7 +2914,7 @@
                 "name": "Year_Month_Sort_Key"
               },
               {
-                "name": "Is_Current_Fiscal_Year"
+                "name": "Is Current Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -3231,7 +3244,7 @@
                 "name": "Year_Month_Sort_Key"
               },
               {
-                "name": "Is_Current_Fiscal_Year"
+                "name": "Is Current Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -3366,7 +3379,13 @@
             "name": "DAX Measures",
             "measures": [
               {
-                "name": "YTD FY Expenses"
+                "name": "PY Expenses Amount"
+              },
+              {
+                "name": "Expenses Amount"
+              },
+              {
+                "name": "PY Variance Expenses Amount"
               }
             ]
           }

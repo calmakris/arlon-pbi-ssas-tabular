@@ -2283,6 +2283,21 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "type": "calculated",
+            "name": "Offset Account Name",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              " ",
+              "SWITCH(",
+              "    Expenses[OffsetAcctType],",
+              "    \"D\", LOOKUPVALUE( 'Customer Master'[Customer Name], 'Customer Master'[Customer Number], Expenses[OffsetAcctNoKey]),",
+              "    \"K\", LOOKUPVALUE( 'Vendor Master'[Vendor Name], 'Vendor Master'[Vendor Number], Expenses[OffsetAcctNoKey] ),",
+              "    LOOKUPVALUE( 'Cost Element Names'[Cost Element Name], 'Cost Element Names'[Cost Element], Expenses[OffsetAcctNoKey] )",
+              ")"
+            ]
           }
         ],
         "partitions": [
@@ -2404,6 +2419,37 @@
                 "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_PURCHASE_ORDERS\"]}[Data]",
                 "in",
                 "    dbo_VW_PURCHASE_ORDERS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Vendor Master",
+        "columns": [
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Vendor Name",
+            "dataType": "string",
+            "sourceColumn": "VendorName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_VENDOR_MASTER"
               ]
             }
           }
@@ -2652,6 +2698,30 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "8ab1ab25-2eea-4cb2-bdbc-d284b69ca4d3",
+        "fromTable": "Expenses",
+        "fromColumn": "OffsetAcctNoKey",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
+      },
+      {
+        "name": "85b9a9fc-50b4-4f03-9cf4-66cbe9c81525",
+        "toCardinality": "many",
+        "fromTable": "Expenses",
+        "fromColumn": "OffsetAcctNoKey",
+        "toTable": "Customer Master",
+        "toColumn": "Customer Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "43edf758-b6c5-4d49-8e6b-a2410ec02ef0",
+        "fromTable": "Expenses",
+        "fromColumn": "OffsetAcctNoKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element",
+        "isActive": false
       }
     ],
     "perspectives": [
@@ -3451,6 +3521,9 @@
               },
               {
                 "name": "Reversal Referenced Document Number"
+              },
+              {
+                "name": "Offset Account Name"
               }
             ]
           },

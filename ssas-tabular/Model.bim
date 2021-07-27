@@ -208,6 +208,13 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "expression": " IF([Last Credit Date], DATEDIFF('Complaint Documents'[Enter Date], [Last Credit Date], DAY), BLANK())"
+          },
+          {
+            "type": "calculated",
+            "name": "Category",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF( LOOKUPVALUE('Material Master'[Material Type], 'Material Classification'[Material Number], 'Complaint Documents'[MaterialNoKey]) = \"HAWA\", \"Buyout\", LOOKUPVALUE('Reason Code'[Class], 'Reason Code'[ReasonCodeKey], 'Complaint Documents'[ReasonCodeKey]) )"
           }
         ],
         "partitions": [
@@ -250,6 +257,7 @@
           {
             "name": "Class",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Class"
           }
         ],
@@ -2495,24 +2503,6 @@
                 "    BLANK()",
                 ")"
               ]
-            },
-            {
-              "name": "YOY%",
-              "expression": [
-                "DIVIDE(",
-                "    CALCULATE(",
-                "        SELECTEDMEASURE(),",
-                "        '_Time Intelligence'[Time Calculation] = \"YOY\"",
-                "    ),",
-                "    CALCULATE(",
-                "        SELECTEDMEASURE(),",
-                "        '_Time Intelligence'[Time Calculation] = \"PY\"",
-                "    )",
-                ")"
-              ],
-              "formatStringDefinition": {
-                "expression": "\"0.00%;-0.00%;0.00%\""
-              }
             }
           ]
         },
@@ -3247,6 +3237,9 @@
               },
               {
                 "name": "Last Credit Date"
+              },
+              {
+                "name": "Category"
               }
             ]
           },

@@ -280,6 +280,7 @@
       },
       {
         "name": "Calendar",
+        "description": "Calendar table used to filter or group multiple fact tables",
         "dataCategory": "Time",
         "columns": [
           {
@@ -999,6 +1000,17 @@
             "expression": " SUM(Expenses[Amount]) + 0",
             "formatString": "$#,##0;($#,##0);\"-\"",
             "displayFolder": "Expenses"
+          },
+          {
+            "name": "Last Refresh Date",
+            "expression": " MAX('Process Date'[ProcessDatetime])",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
           }
         ]
       },
@@ -1808,6 +1820,7 @@
       },
       {
         "name": "Cost Center Names",
+        "description": "List of cost centers in SAP with custom categories manually in a Sharepoint List",
         "columns": [
           {
             "name": "Cost Center",
@@ -1869,6 +1882,7 @@
       },
       {
         "name": "Cost Element Names",
+        "description": "List of cost elements (G/L accounts) with custom categories and indicators manually assigned in a Sharepoint list",
         "columns": [
           {
             "name": "Company Category",
@@ -2001,6 +2015,7 @@
       },
       {
         "name": "Plant",
+        "description": "List of warehouse numbers in SAP (best used for filtering/grouping by plant across multiple fact tables)",
         "columns": [
           {
             "name": "Plant",
@@ -2105,6 +2120,7 @@
       },
       {
         "name": "Expenses",
+        "description": "Controlling document line items posted in expenses related G/L accounts in the current and last fiscal year",
         "columns": [
           {
             "name": "Cost Center",
@@ -2436,6 +2452,7 @@
       {
         "name": "_Time Intelligence",
         "calculationGroup": {
+          "description": "Used for analyzing measures in multiple time intelligence modes such as MTD, YTD, FYTD, etc.",
           "calculationItems": [
             {
               "name": "Current",
@@ -2510,6 +2527,79 @@
           {
             "name": "Time Calculation",
             "dataType": "string",
+            "sourceColumn": "Name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculationGroup 1",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Process Date",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "ReportNameKey",
+            "dataType": "string",
+            "sourceColumn": "ReportNameKey"
+          },
+          {
+            "name": "ProcessDatetime",
+            "dataType": "dateTime",
+            "sourceColumn": "ProcessDatetime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zPROCESSDATE_REPORTS = Source{[Schema=\"dbo\",Item=\"zPROCESSDATE_REPORTS\"]}[Data]",
+                "in",
+                "    dbo_zPROCESSDATE_REPORTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Refresh Date",
+        "calculationGroup": {
+          "description": "Contains when the data behind the reports are updated",
+          "precedence": 1,
+          "calculationItems": [
+            {
+              "name": "Expenses",
+              "expression": "CALCULATE( [Last Refresh Date], 'Process Date'[ReportNameKey] = \"Expenses\" )"
+            },
+            {
+              "name": "QA Dashboard",
+              "expression": "CALCULATE( [Last Refresh Date], 'Process Date'[ReportNameKey] = \"QA Dashboard\" )"
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "Report Name",
+            "dataType": "string",
+            "description": "Filter this column with the current report's name",
             "sourceColumn": "Name"
           }
         ],
@@ -3062,6 +3152,14 @@
                 "name": "Time Calculation"
               }
             ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              }
+            ]
           }
         ]
       },
@@ -3453,6 +3551,14 @@
                 "name": "Pending Count"
               }
             ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              }
+            ]
           }
         ]
       },
@@ -3678,6 +3784,14 @@
             "columns": [
               {
                 "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
               }
             ]
           }

@@ -1011,6 +1011,41 @@
                 "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
               }
             ]
+          },
+          {
+            "name": "Expenses Plan",
+            "expression": [
+              "",
+              "IF( NOT(ISFILTERED('Calendar'[Date])),",
+              "    CALCULATE(",
+              "        SUM( Target_Expenses[TargetValue]) + 0,",
+              "        FILTER(",
+              "            ALL( Target_Expenses[CalendarTimeKey] ),",
+              "            CONTAINS(",
+              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "                'Calendar'[Year_Month_Sort_Key], Target_Expenses[CalendarTimeKey]",
+              "            )",
+              "        ),",
+              "        FILTER(",
+              "            ALL( Target_Expenses[CostCenterKey] ),",
+              "            CONTAINS(",
+              "                VALUES( 'Cost Center Names'[Cost Center] ),",
+              "                'Cost Center Names'[Cost Center], Target_Expenses[CostCenterKey]",
+              "            )",
+              "        ),",
+              "        FILTER(",
+              "            ALL( Target_Expenses[CostElementKey] ),",
+              "            CONTAINS(",
+              "                VALUES( 'Cost Element Names'[Cost Element] ),",
+              "                'Cost Element Names'[Cost Element], Target_Expenses[CostElementKey]",
+              "            )",
+              "        )",
+              "    ),",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Expenses"
           }
         ]
       },
@@ -2612,6 +2647,48 @@
             }
           }
         ]
+      },
+      {
+        "name": "Target_Expenses",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "CalendarTimeKey",
+            "dataType": "string",
+            "sourceColumn": "CalendarTimeKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "CostElementKey",
+            "dataType": "string",
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "TargetValue",
+            "dataType": "double",
+            "sourceColumn": "TargetValue"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zTARGETS_EXPENSES = Source{[Schema=\"dbo\",Item=\"zTARGETS_EXPENSES\"]}[Data]",
+                "in",
+                "    dbo_zTARGETS_EXPENSES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -3752,14 +3829,6 @@
             ]
           },
           {
-            "name": "DAX Measures",
-            "measures": [
-              {
-                "name": "Expenses Amount"
-              }
-            ]
-          },
-          {
             "name": "Purchase Orders",
             "columns": [
               {
@@ -3780,6 +3849,14 @@
             ]
           },
           {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
             "name": "_Time Intelligence",
             "columns": [
               {
@@ -3788,10 +3865,13 @@
             ]
           },
           {
-            "name": "_Refresh Date",
-            "columns": [
+            "name": "DAX Measures",
+            "measures": [
               {
-                "name": "Report Name"
+                "name": "Expenses Amount"
+              },
+              {
+                "name": "Expenses Plan"
               }
             ]
           }

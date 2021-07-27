@@ -3,6 +3,7 @@
   "compatibilityLevel": 1500,
   "model": {
     "culture": "en-US",
+    "discourageImplicitMeasures": true,
     "dataSources": [
       {
         "type": "structured",
@@ -988,39 +989,8 @@
           {
             "name": "Expenses Amount",
             "expression": " SUM(Expenses[Amount]) + 0",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Expenses",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "PY Expenses Amount",
-            "expression": " CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isHidden": true,
-            "displayFolder": "Expenses",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "PY Variance Expenses Amount",
-            "expression": " IF( [PY Expenses Amount], [Expenses Amount] - [PY Expenses Amount], BLANK() )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Expenses",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Expenses"
           }
         ]
       },
@@ -2454,6 +2424,114 @@
             }
           }
         ]
+      },
+      {
+        "name": "_Time Intelligence",
+        "calculationGroup": {
+          "calculationItems": [
+            {
+              "name": "Current",
+              "expression": "SELECTEDMEASURE()"
+            },
+            {
+              "name": "MTD",
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )"
+            },
+            {
+              "name": "YTD",
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )"
+            },
+            {
+              "name": "PY",
+              "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )"
+            },
+            {
+              "name": "PY YTD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+                "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
+                ")"
+              ]
+            },
+            {
+              "name": "PY MTD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+                "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                ")"
+              ]
+            },
+            {
+              "name": "FYTD",
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )"
+            },
+            {
+              "name": "PY FTYD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+                "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
+                ")"
+              ]
+            },
+            {
+              "name": "YOY",
+              "expression": [
+                "IF(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+                "    ),",
+                "    SELECTEDMEASURE() - ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+                "    ),",
+                "    BLANK()",
+                ")"
+              ]
+            },
+            {
+              "name": "YOY%",
+              "expression": [
+                "DIVIDE(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"YOY\"",
+                "    ),",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+                "    )",
+                ")"
+              ],
+              "formatStringDefinition": {
+                "expression": "\"0.00%;-0.00%;0.00%\""
+              }
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "Time Calculation",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculationGroup 1",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -2984,6 +3062,14 @@
               },
               {
                 "name": "Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
               }
             ]
           }
@@ -3573,13 +3659,7 @@
             "name": "DAX Measures",
             "measures": [
               {
-                "name": "PY Expenses Amount"
-              },
-              {
                 "name": "Expenses Amount"
-              },
-              {
-                "name": "PY Variance Expenses Amount"
               }
             ]
           },
@@ -3600,6 +3680,14 @@
               },
               {
                 "name": "Req Track Number"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
               }
             ]
           }

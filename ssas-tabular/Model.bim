@@ -1045,6 +1045,7 @@
               ")"
             ],
             "formatString": "$#,##0;($#,##0);\"-\"",
+            "isHidden": true,
             "displayFolder": "Expenses"
           }
         ]
@@ -2689,6 +2690,91 @@
             }
           }
         ]
+      },
+      {
+        "name": "_Expenses Mode",
+        "calculationGroup": {
+          "precedence": 2,
+          "calculationItems": [
+            {
+              "name": "Actual",
+              "expression": [
+                "IF(",
+                "    ISSELECTEDMEASURE( [Expenses Amount] ),",
+                "    SELECTEDMEASURE(),",
+                "    BLANK()",
+                ")"
+              ],
+              "ordinal": 0
+            },
+            {
+              "name": "PY",
+              "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+              "ordinal": 1
+            },
+            {
+              "name": "PY Var",
+              "expression": [
+                "VAR CurrentPeriod = SELECTEDMEASURE()",
+                "VAR PreviousPeriod = ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Expenses Mode'[Mode] = \"PY\"",
+                "    )",
+                "VAR Result = ",
+                "    IF (",
+                "        NOT ISBLANK( CurrentPeriod )",
+                "            && NOT ISBLANK( PreviousPeriod ),",
+                "        CurrentPeriod - PreviousPeriod",
+                "    )",
+                "RETURN",
+                "    Result"
+              ],
+              "ordinal": 2
+            },
+            {
+              "name": "AOP",
+              "expression": "[Expenses Plan]",
+              "ordinal": 3
+            },
+            {
+              "name": "AOP Var",
+              "expression": [
+                "VAR CurrentPeriod = SELECTEDMEASURE()",
+                "VAR AOP = ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Expenses Mode'[Mode] = \"AOP\"",
+                "    )",
+                "VAR Result = ",
+                "    IF (",
+                "        NOT ISBLANK( CurrentPeriod )",
+                "            && NOT ISBLANK( AOP ),",
+                "        CurrentPeriod - AOP",
+                "    )",
+                "RETURN",
+                "    Result"
+              ],
+              "ordinal": 4
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "Mode",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculationGroup 1",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -3857,10 +3943,10 @@
             ]
           },
           {
-            "name": "_Time Intelligence",
+            "name": "_Expenses Mode",
             "columns": [
               {
-                "name": "Time Calculation"
+                "name": "Mode"
               }
             ]
           },

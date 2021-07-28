@@ -833,6 +833,102 @@
             "displayFolder": "Absorption\\Sum"
           },
           {
+            "name": "Current Expired Value",
+            "expression": " SUM('Expired Inventory'[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current S-Block Value with Hold Tags",
+            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Product Quality Index (Target)",
+            "expression": "AVERAGE(Target_PQI[TargetValue])",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "PQ Complaint Cycle Time",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Complaint Documents'[Cycle Time] ),",
+              "    FILTER(",
+              "        'Reason Code',",
+              "        'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\"",
+              "    ),",
+              "    USERELATIONSHIP('Calendar'[Date], 'Complaint Documents'[Last Credit Date])",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Average"
+          },
+          {
+            "name": "Expenses Amount",
+            "expression": " SUM(Expenses[Amount]) + 0",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Expenses"
+          },
+          {
+            "name": "Last Refresh Date",
+            "expression": " MAX('Process Date'[ProcessDatetime])",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Expenses Plan",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( Target_Expenses[TargetValue]) + 0,",
+              "    FILTER(",
+              "        ALL( Target_Expenses[CalendarTimeKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            'Calendar'[Year_Month_Sort_Key], Target_Expenses[CalendarTimeKey]",
+              "        )",
+              "    ),",
+              "    FILTER(",
+              "        ALL( Target_Expenses[CostCenterKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Cost Center Names'[Cost Center] ),",
+              "            'Cost Center Names'[Cost Center], Target_Expenses[CostCenterKey]",
+              "        )",
+              "    ),",
+              "    FILTER(",
+              "        ALL( Target_Expenses[CostElementKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Cost Element Names'[Cost Element] ),",
+              "            'Cost Element Names'[Cost Element], Target_Expenses[CostElementKey]",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "isHidden": true,
+            "displayFolder": "Expenses"
+          },
+          {
             "name": "MTD Absorption Cost",
             "expression": " [MTD Earned Labor Cost] + [MTD Earned Overhead Cost]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -948,105 +1044,6 @@
                 "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
-          },
-          {
-            "name": "Current Expired Value",
-            "expression": " SUM('Expired Inventory'[Amount]) + 0",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Current S-Block Value with Hold Tags",
-            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Product Quality Index (Target)",
-            "expression": "AVERAGE(Target_PQI[TargetValue])",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
-          },
-          {
-            "name": "PQ Complaint Cycle Time",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    AVERAGE( 'Complaint Documents'[Cycle Time] ),",
-              "    FILTER(",
-              "        'Reason Code',",
-              "        'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\"",
-              "    ),",
-              "    USERELATIONSHIP('Calendar'[Date], 'Complaint Documents'[Last Credit Date])",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Complaints\\Average"
-          },
-          {
-            "name": "Expenses Amount",
-            "expression": " SUM(Expenses[Amount]) + 0",
-            "formatString": "$#,##0;($#,##0);\"-\"",
-            "displayFolder": "Expenses"
-          },
-          {
-            "name": "Last Refresh Date",
-            "expression": " MAX('Process Date'[ProcessDatetime])",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Expenses Plan",
-            "expression": [
-              "",
-              "IF( NOT(ISFILTERED('Calendar'[Date])),",
-              "    CALCULATE(",
-              "        SUM( Target_Expenses[TargetValue]) + 0,",
-              "        FILTER(",
-              "            ALL( Target_Expenses[CalendarTimeKey] ),",
-              "            CONTAINS(",
-              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "                'Calendar'[Year_Month_Sort_Key], Target_Expenses[CalendarTimeKey]",
-              "            )",
-              "        ),",
-              "        FILTER(",
-              "            ALL( Target_Expenses[CostCenterKey] ),",
-              "            CONTAINS(",
-              "                VALUES( 'Cost Center Names'[Cost Center] ),",
-              "                'Cost Center Names'[Cost Center], Target_Expenses[CostCenterKey]",
-              "            )",
-              "        ),",
-              "        FILTER(",
-              "            ALL( Target_Expenses[CostElementKey] ),",
-              "            CONTAINS(",
-              "                VALUES( 'Cost Element Names'[Cost Element] ),",
-              "                'Cost Element Names'[Cost Element], Target_Expenses[CostElementKey]",
-              "            )",
-              "        )",
-              "    ),",
-              "    BLANK()",
-              ")"
-            ],
-            "formatString": "$#,##0;($#,##0);\"-\"",
-            "isHidden": true,
-            "displayFolder": "Expenses"
           }
         ]
       },

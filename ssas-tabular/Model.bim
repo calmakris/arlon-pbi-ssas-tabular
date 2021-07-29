@@ -885,17 +885,6 @@
             "displayFolder": "Expenses"
           },
           {
-            "name": "Last Refresh Date",
-            "expression": " MAX('Process Date'[ProcessDatetime])",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
             "name": "Expenses Plan",
             "expression": [
               "",
@@ -2369,6 +2358,7 @@
         "name": "_Time Intelligence",
         "calculationGroup": {
           "description": "Used for analyzing measures in multiple time intelligence modes such as MTD, YTD, FYTD, etc.",
+          "precedence": 1,
           "calculationItems": [
             {
               "name": "Current",
@@ -2457,17 +2447,19 @@
         ]
       },
       {
-        "name": "Process Date",
+        "name": "_Refresh Date",
         "isHidden": true,
         "columns": [
           {
-            "name": "ReportNameKey",
+            "name": "Report Name",
             "dataType": "string",
+            "description": "Filter this column using a slicer with the name of this report/dashboard",
             "sourceColumn": "ReportNameKey"
           },
           {
-            "name": "ProcessDatetime",
+            "name": "Timestamp",
             "dataType": "dateTime",
+            "isHidden": true,
             "sourceColumn": "ProcessDatetime",
             "formatString": "MM/dd/yyyy HH:mm",
             "annotations": [
@@ -2493,39 +2485,18 @@
               ]
             }
           }
-        ]
-      },
-      {
-        "name": "_Refresh Date",
-        "calculationGroup": {
-          "description": "Contains when the data behind the reports are updated",
-          "precedence": 1,
-          "calculationItems": [
-            {
-              "name": "Expenses",
-              "expression": "CALCULATE( [Last Refresh Date], 'Process Date'[ReportNameKey] = \"Expenses\" )"
-            },
-            {
-              "name": "QA Dashboard",
-              "expression": "CALCULATE( [Last Refresh Date], 'Process Date'[ReportNameKey] = \"QA Dashboard\" )"
-            }
-          ]
-        },
-        "columns": [
-          {
-            "name": "Report Name",
-            "dataType": "string",
-            "description": "Filter this column with the current report's name",
-            "sourceColumn": "Name"
-          }
         ],
-        "partitions": [
+        "measures": [
           {
-            "name": "CalculationGroup 1",
-            "mode": "import",
-            "source": {
-              "type": "calculationGroup"
-            }
+            "name": "Last Refresh Date",
+            "expression": " CALCULATE( MAX('_Refresh Date'[Timestamp]), ALL('_Refresh Date') )",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
           }
         ]
       },
@@ -3171,6 +3142,14 @@
             "columns": [
               {
                 "name": "Report Name"
+              },
+              {
+                "name": "Timestamp"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Last Refresh Date"
               }
             ]
           }
@@ -3570,6 +3549,14 @@
             "columns": [
               {
                 "name": "Report Name"
+              },
+              {
+                "name": "Timestamp"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Last Refresh Date"
               }
             ]
           }
@@ -3785,14 +3772,6 @@
             ]
           },
           {
-            "name": "_Refresh Date",
-            "columns": [
-              {
-                "name": "Report Name"
-              }
-            ]
-          },
-          {
             "name": "_Expenses Mode",
             "columns": [
               {
@@ -3808,6 +3787,22 @@
               },
               {
                 "name": "Expenses Plan"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              },
+              {
+                "name": "Timestamp"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Last Refresh Date"
               }
             ]
           }

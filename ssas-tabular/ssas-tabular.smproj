@@ -12,8 +12,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Development' ">
     <OutputPath>bin\</OutputPath>
-    <DeploymentServerName>ARLPBIPRD\SSAS_TAB</DeploymentServerName>
-    <DeploymentServerEdition>Enterprise</DeploymentServerEdition>
+    <DeploymentServerName>ARLPBIDEV\SSAS_TAB</DeploymentServerName>
+    <DeploymentServerEdition>Developer</DeploymentServerEdition>
     <DeploymentServerVersion>Unknown</DeploymentServerVersion>
     <DeploymentServerDatabase>PBI-Tabular</DeploymentServerDatabase>
     <DeploymentServerCubeName>Model</DeploymentServerCubeName>

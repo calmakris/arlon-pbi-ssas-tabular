@@ -2448,7 +2448,6 @@
       },
       {
         "name": "_Refresh Date",
-        "isHidden": true,
         "columns": [
           {
             "name": "Report Name",
@@ -2457,9 +2456,8 @@
             "sourceColumn": "ReportNameKey"
           },
           {
-            "name": "Timestamp",
+            "name": "Refresh Date",
             "dataType": "dateTime",
-            "isHidden": true,
             "sourceColumn": "ProcessDatetime",
             "formatString": "MM/dd/yyyy HH:mm",
             "annotations": [
@@ -2484,19 +2482,6 @@
                 "    dbo_zPROCESSDATE_REPORTS"
               ]
             }
-          }
-        ],
-        "measures": [
-          {
-            "name": "Last Refresh Date",
-            "expression": " CALCULATE( MAX('_Refresh Date'[Timestamp]), ALL('_Refresh Date') )",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
           }
         ]
       },
@@ -2549,37 +2534,22 @@
           "calculationItems": [
             {
               "name": "Actual",
-              "expression": [
-                "IF(",
-                "    ISSELECTEDMEASURE( [Expenses Amount] ),",
-                "    SELECTEDMEASURE(),",
-                "    BLANK()",
-                ")"
-              ],
+              "expression": "[Expenses Amount]",
               "ordinal": 0
             },
             {
               "name": "PY",
-              "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+              "expression": "CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
               "ordinal": 1
             },
             {
               "name": "PY Var",
               "expression": [
-                "VAR CurrentPeriod = SELECTEDMEASURE()",
-                "VAR PreviousPeriod = ",
-                "    CALCULATE(",
-                "        SELECTEDMEASURE(),",
-                "        '_Expenses Mode'[Mode] = \"PY\"",
-                "    )",
-                "VAR Result = ",
-                "    IF (",
-                "        NOT ISBLANK( CurrentPeriod )",
-                "            && NOT ISBLANK( PreviousPeriod ),",
-                "        CurrentPeriod - PreviousPeriod",
-                "    )",
-                "RETURN",
-                "    Result"
+                "IF (",
+                "    NOT ISBLANK( [Expenses Amount] )",
+                "        && NOT ISBLANK( [Expenses Plan] ),",
+                "    [Expenses Amount] - [Expenses Plan]",
+                ")"
               ],
               "ordinal": 2
             },
@@ -2591,20 +2561,11 @@
             {
               "name": "AOP Var",
               "expression": [
-                "VAR CurrentPeriod = SELECTEDMEASURE()",
-                "VAR AOP = ",
-                "    CALCULATE(",
-                "        SELECTEDMEASURE(),",
-                "        '_Expenses Mode'[Mode] = \"AOP\"",
-                "    )",
-                "VAR Result = ",
-                "    IF (",
-                "        NOT ISBLANK( CurrentPeriod )",
-                "            && NOT ISBLANK( AOP ),",
-                "        CurrentPeriod - AOP",
-                "    )",
-                "RETURN",
-                "    Result"
+                "IF (",
+                "    NOT ISBLANK( [Expenses Amount] )",
+                "        && NOT ISBLANK( [Expenses Plan] ),",
+                "    [Expenses Amount] - [Expenses Plan]",
+                ")"
               ],
               "ordinal": 4
             }
@@ -3144,12 +3105,7 @@
                 "name": "Report Name"
               },
               {
-                "name": "Timestamp"
-              }
-            ],
-            "measures": [
-              {
-                "name": "Last Refresh Date"
+                "name": "Refresh Date"
               }
             ]
           }
@@ -3551,12 +3507,7 @@
                 "name": "Report Name"
               },
               {
-                "name": "Timestamp"
-              }
-            ],
-            "measures": [
-              {
-                "name": "Last Refresh Date"
+                "name": "Refresh Date"
               }
             ]
           }
@@ -3797,12 +3748,7 @@
                 "name": "Report Name"
               },
               {
-                "name": "Timestamp"
-              }
-            ],
-            "measures": [
-              {
-                "name": "Last Refresh Date"
+                "name": "Refresh Date"
               }
             ]
           }

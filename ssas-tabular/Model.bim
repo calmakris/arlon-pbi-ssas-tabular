@@ -2545,11 +2545,13 @@
             {
               "name": "PY Var",
               "expression": [
-                "IF (",
-                "    NOT ISBLANK( [Expenses Amount] )",
-                "        && NOT ISBLANK( [Expenses Plan] ),",
-                "    [Expenses Amount] - [Expenses Plan]",
-                ")"
+                "VAR PreviousPeriod = CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+                "RETURN",
+                "    IF (",
+                "        NOT ISBLANK( [Expenses Amount] )",
+                "            && NOT ISBLANK( PreviousPeriod ),",
+                "        [Expenses Amount] - PreviousPeriod",
+                "    )"
               ],
               "ordinal": 2
             },

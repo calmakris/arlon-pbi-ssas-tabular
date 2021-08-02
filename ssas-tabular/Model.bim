@@ -3512,6 +3512,14 @@
                 "name": "Refresh Date"
               }
             ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
           }
         ]
       },

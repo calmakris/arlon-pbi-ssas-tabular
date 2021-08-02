@@ -21,7 +21,7 @@
           "AuthenticationKind": "Windows",
           "kind": "SQL",
           "path": "arlpbidev;ARLPBI_STAGE",
-          "Username": "DOMAIN\\PBI-ETL",
+          "Username": "DOMAIN\\kcalma",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
         }
@@ -198,7 +198,6 @@
           {
             "name": "Last Credit Date",
             "dataType": "dateTime",
-            "isHidden": true,
             "sourceColumn": "LastCreditDateKey",
             "formatString": "MM/dd/yyyy"
           },
@@ -214,7 +213,16 @@
             "name": "Category",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF( LOOKUPVALUE('Material Master'[Material Type], 'Material Classification'[Material Number], 'Complaint Documents'[MaterialNoKey]) = \"HAWA\", \"Buyout\", LOOKUPVALUE('Reason Code'[Class], 'Reason Code'[ReasonCodeKey], 'Complaint Documents'[ReasonCodeKey]) )"
+            "expression": [
+              " IF(",
+              "    AND(",
+              "        RELATED( 'Reason Code'[Department] ) = \"Q\",",
+              "        RELATED( 'Material Master'[Material Type] ) = \"HAWA\"",
+              "    ),",
+              "    \"Buyout\",",
+              "    RELATED( 'Reason Code'[Class] )",
+              ")"
+            ]
           }
         ],
         "partitions": [
@@ -230,49 +238,6 @@
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"LastCreditDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Reason Code",
-        "columns": [
-          {
-            "name": "ReasonCodeKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ReasonCodeKey"
-          },
-          {
-            "name": "Reason Code Description",
-            "dataType": "string",
-            "sourceColumn": "ReasonCodeDescription"
-          },
-          {
-            "name": "Department",
-            "dataType": "string",
-            "sourceColumn": "Department"
-          },
-          {
-            "name": "Class",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "Class"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
-                "in",
-                "    dbo_VW_REASON_CODE"
               ]
             }
           }
@@ -2589,18 +2554,66 @@
             }
           }
         ]
+      },
+      {
+        "name": "Reason Code",
+        "columns": [
+          {
+            "name": "ReasonCodeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "ReasonCodeKey"
+          },
+          {
+            "name": "Reason Code Description",
+            "dataType": "string",
+            "sourceColumn": "ReasonCodeDescription"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Class",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Class"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition - Copy",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data],",
+                "    #\"Removed Duplicates\" = Table.Distinct(dbo_VW_REASON_CODE, {\"ReasonCodeKey\"})",
+                "in",
+                "    #\"Removed Duplicates\""
+              ]
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization",
+                "value": [
+                  "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>let",
+                  "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                  "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
+                  "in",
+                  "    dbo_VW_REASON_CODE</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                ]
+              }
+            ]
+          }
+        ]
       }
     ],
     "relationships": [
-      {
-        "name": "7a5e16ad-98c3-4fca-972e-81cd14cf4bdc",
-        "toCardinality": "many",
-        "fromTable": "Complaint Documents",
-        "fromColumn": "ReasonCodeKey",
-        "toTable": "Reason Code",
-        "toColumn": "ReasonCodeKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
       {
         "name": "7ad599af-e270-40c4-9adb-251c9dca4378",
         "fromTable": "Complaint Documents",
@@ -2857,6 +2870,13 @@
         "toTable": "Cost Element Names",
         "toColumn": "Cost Element",
         "isActive": false
+      },
+      {
+        "name": "7c3dbb62-0337-4cc5-9e9c-df847491f72f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "ReasonCodeKey",
+        "toTable": "Reason Code",
+        "toColumn": "ReasonCodeKey"
       }
     ],
     "perspectives": [
@@ -3472,23 +3492,6 @@
             ]
           },
           {
-            "name": "Reason Code",
-            "columns": [
-              {
-                "name": "Class"
-              },
-              {
-                "name": "Department"
-              },
-              {
-                "name": "Reason Code Description"
-              },
-              {
-                "name": "ReasonCodeKey"
-              }
-            ]
-          },
-          {
             "name": "Pending Specification Documents",
             "columns": [
               {
@@ -3518,6 +3521,23 @@
             "columns": [
               {
                 "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Reason Code",
+            "columns": [
+              {
+                "name": "Class"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Reason Code Description"
+              },
+              {
+                "name": "ReasonCodeKey"
               }
             ]
           }

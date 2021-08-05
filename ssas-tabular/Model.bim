@@ -1953,17 +1953,20 @@
             "name": "Department",
             "dataType": "string",
             "sourceColumn": "Department",
-            "sortByColumn": "DepartmentSortKey"
+            "sortByColumn": "DepartmentSortKey",
+            "displayFolder": "Categories"
           },
           {
             "name": "Company Category",
             "dataType": "string",
-            "sourceColumn": "CompanyCategory"
+            "sourceColumn": "CompanyCategory",
+            "displayFolder": "Categories"
           },
           {
             "name": "Operations Category",
             "dataType": "string",
-            "sourceColumn": "OperationsCategory"
+            "sourceColumn": "OperationsCategory",
+            "displayFolder": "Categories"
           },
           {
             "name": "DepartmentSortKey",
@@ -2002,37 +2005,44 @@
           {
             "name": "Company Category",
             "dataType": "string",
-            "sourceColumn": "CompanyCategory"
+            "sourceColumn": "CompanyCategory",
+            "displayFolder": "Categories"
           },
           {
             "name": "Category",
             "dataType": "string",
-            "sourceColumn": "Category"
+            "sourceColumn": "Category",
+            "displayFolder": "Categories"
           },
           {
             "name": "Sub Category",
             "dataType": "string",
-            "sourceColumn": "SubCategory"
+            "sourceColumn": "SubCategory",
+            "displayFolder": "Categories"
           },
           {
             "name": "Category Renamed",
             "dataType": "string",
-            "sourceColumn": "CatRenamed"
+            "sourceColumn": "CatRenamed",
+            "displayFolder": "Categories"
           },
           {
             "name": "Is Controllable Expense",
             "dataType": "boolean",
-            "sourceColumn": "IsControllableExpense"
+            "sourceColumn": "IsControllableExpense",
+            "displayFolder": "Indicators"
           },
           {
             "name": "Is Labor",
             "dataType": "boolean",
-            "sourceColumn": "IsLabor"
+            "sourceColumn": "IsLabor",
+            "displayFolder": "Indicators"
           },
           {
             "name": "Is Supplies",
             "dataType": "boolean",
-            "sourceColumn": "IsSupplies"
+            "sourceColumn": "IsSupplies",
+            "displayFolder": "Indicators"
           },
           {
             "name": "Cost Element",

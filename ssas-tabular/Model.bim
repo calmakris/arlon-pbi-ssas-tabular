@@ -96,6 +96,12 @@
             "expression": " 'Customer Master'[Account Creation Date] >= [Date 12 Months Ago]",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
             "displayFolder": "Master"
+          },
+          {
+            "name": "Sales Person",
+            "dataType": "string",
+            "sourceColumn": "SalesPerson",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -1110,6 +1116,120 @@
             "expression": " DISTINCTCOUNT(  'Sales Order Documents'[Order Number] )",
             "formatString": "#,0",
             "displayFolder": "Sales Orders\\Count"
+          },
+          {
+            "name": "Gross Sales %Grand",
+            "description": "Gross sales as percent of grand total by customer master and material master",
+            "expression": [
+              " ",
+              "DIVIDE(",
+              "    [Gross Sales],",
+              "    CALCULATE(",
+              "        [Gross Sales],",
+              "        ALL( 'Material Master'),",
+              "        ALL( 'Customer Master' )",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "0%;-0%;0%",
+            "displayFolder": "Sales\\Sum"
+          },
+          {
+            "name": "MTD Gross Sales",
+            "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales",
+            "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Margin",
+            "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Margin",
+            "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales",
+            "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Sales",
+            "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Margin",
+            "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Margin%",
+            "expression": " CALCULATE( [Gross Margin %], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Margin%",
+            "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales %Grand",
+            "expression": " CALCULATE( [Gross Sales %Grand], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales %Grand",
+            "expression": " CALCULATE( [Gross Sales %Grand], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Margin%",
+            "expression": " CALCULATE( [MTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Margin%",
+            "expression": " CALCULATE( [FYTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales %Grand",
+            "expression": " CALCULATE( [MTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Sales %Grand",
+            "expression": " CALCULATE( [FYTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Margin",
+            "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -1953,20 +2073,17 @@
             "name": "Department",
             "dataType": "string",
             "sourceColumn": "Department",
-            "sortByColumn": "DepartmentSortKey",
-            "displayFolder": "Categories"
+            "sortByColumn": "DepartmentSortKey"
           },
           {
             "name": "Company Category",
             "dataType": "string",
-            "sourceColumn": "CompanyCategory",
-            "displayFolder": "Categories"
+            "sourceColumn": "CompanyCategory"
           },
           {
             "name": "Operations Category",
             "dataType": "string",
-            "sourceColumn": "OperationsCategory",
-            "displayFolder": "Categories"
+            "sourceColumn": "OperationsCategory"
           },
           {
             "name": "DepartmentSortKey",
@@ -2005,44 +2122,37 @@
           {
             "name": "Company Category",
             "dataType": "string",
-            "sourceColumn": "CompanyCategory",
-            "displayFolder": "Categories"
+            "sourceColumn": "CompanyCategory"
           },
           {
             "name": "Category",
             "dataType": "string",
-            "sourceColumn": "Category",
-            "displayFolder": "Categories"
+            "sourceColumn": "Category"
           },
           {
             "name": "Sub Category",
             "dataType": "string",
-            "sourceColumn": "SubCategory",
-            "displayFolder": "Categories"
+            "sourceColumn": "SubCategory"
           },
           {
             "name": "Category Renamed",
             "dataType": "string",
-            "sourceColumn": "CatRenamed",
-            "displayFolder": "Categories"
+            "sourceColumn": "CatRenamed"
           },
           {
             "name": "Is Controllable Expense",
             "dataType": "boolean",
-            "sourceColumn": "IsControllableExpense",
-            "displayFolder": "Indicators"
+            "sourceColumn": "IsControllableExpense"
           },
           {
             "name": "Is Labor",
             "dataType": "boolean",
-            "sourceColumn": "IsLabor",
-            "displayFolder": "Indicators"
+            "sourceColumn": "IsLabor"
           },
           {
             "name": "Is Supplies",
             "dataType": "boolean",
-            "sourceColumn": "IsSupplies",
-            "displayFolder": "Indicators"
+            "sourceColumn": "IsSupplies"
           },
           {
             "name": "Cost Element",
@@ -2499,12 +2609,12 @@
             {
               "name": "YTD",
               "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
-              "ordinal": 5
+              "ordinal": 7
             },
             {
               "name": "PY",
               "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
-              "ordinal": 7
+              "ordinal": 12
             },
             {
               "name": "PY YTD",
@@ -2515,7 +2625,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
                 ")"
               ],
-              "ordinal": 9
+              "ordinal": 8
             },
             {
               "name": "PY MTD",
@@ -2526,15 +2636,15 @@
                 "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
                 ")"
               ],
-              "ordinal": 8
+              "ordinal": 5
             },
             {
               "name": "FYTD",
               "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
-              "ordinal": 6
+              "ordinal": 9
             },
             {
-              "name": "PY FTYD",
+              "name": "PY FYTD",
               "expression": [
                 "CALCULATE(",
                 "    SELECTEDMEASURE(),",
@@ -2560,7 +2670,7 @@
                 "    BLANK()",
                 ")"
               ],
-              "ordinal": 11
+              "ordinal": 13
             },
             {
               "name": "CD",
@@ -2581,6 +2691,48 @@
                 ")"
               ],
               "ordinal": 3
+            },
+            {
+              "name": "MTD PY Var",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                ") - ",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                ")"
+              ],
+              "ordinal": 6
+            },
+            {
+              "name": "YTD PY Var",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
+                ") - ",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
+                ")"
+              ],
+              "ordinal": 8
+            },
+            {
+              "name": "FTYD PY Var",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
+                ") - ",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
+                ")"
+              ],
+              "ordinal": 11
             }
           ]
         },
@@ -2588,7 +2740,14 @@
           {
             "name": "Time Calculation",
             "dataType": "string",
-            "sourceColumn": "Name"
+            "sourceColumn": "Name",
+            "sortByColumn": "Ordinal"
+          },
+          {
+            "name": "Ordinal",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Ordinal"
           }
         ],
         "partitions": [
@@ -3144,6 +3303,193 @@
             }
           }
         ]
+      },
+      {
+        "name": "Sales Region",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Sales Region",
+            "dataType": "string",
+            "sourceColumn": "SalesDistrictKey"
+          },
+          {
+            "name": "Sales Region Name",
+            "dataType": "string",
+            "sourceColumn": "SalesDistrictName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SALES_REGION = Source{[Schema=\"dbo\",Item=\"VW_SALES_REGION\"]}[Data]",
+                "in",
+                "    dbo_VW_SALES_REGION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Territory",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Sales Territory",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryKey"
+          },
+          {
+            "name": "Sales Territory Name",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SALES_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_SALES_TERRITORY\"]}[Data]",
+                "in",
+                "    dbo_VW_SALES_TERRITORY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_Territory",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesTerritoryKey",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_RLS_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_RLS_TERRITORY\"]}[Data]",
+                "in",
+                "    dbo_VW_RLS_TERRITORY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_Region",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesRegionKey",
+            "dataType": "string",
+            "sourceColumn": "SalesRegionKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_RLS_REGION = Source{[Schema=\"dbo\",Item=\"VW_RLS_REGION\"]}[Data]",
+                "in",
+                "    dbo_VW_RLS_REGION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_CostCenter",
+        "columns": [
+          {
+            "name": "EmployeeKey",
+            "dataType": "string",
+            "sourceColumn": "EmployeeKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "SupervisorKey",
+            "dataType": "string",
+            "sourceColumn": "SupervisorKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "type": "calculated",
+            "name": "Path",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " PATH( RLS_CostCenter[EmployeeKey], RLS_CostCenter[SupervisorKey] )"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_USERLIST_DOMAIN = Source{[Schema=\"dbo\",Item=\"USERLIST_DOMAIN\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_USERLIST_DOMAIN,{\"EmployeeKey\", \"DomainName\", \"SupervisorKey\", \"CostCenterKey\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -3451,6 +3797,47 @@
         "fromColumn": "ShipToAddrKey",
         "toTable": "Addresses",
         "toColumn": "AddressNoKey"
+      },
+      {
+        "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Region",
+        "toTable": "Sales Region",
+        "toColumn": "Sales Region"
+      },
+      {
+        "name": "0133610b-f474-47c4-a3e2-612f4360d565",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Territory",
+        "toTable": "Sales Territory",
+        "toColumn": "Sales Territory"
+      },
+      {
+        "name": "b8c16a52-5847-4775-8abd-8bb356d4b1e3",
+        "fromTable": "RLS_Region",
+        "fromColumn": "SalesRegionKey",
+        "toTable": "Sales Region",
+        "toColumn": "Sales Region",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "6c7f5d85-c9b6-4d16-b9d9-96554aad9745",
+        "fromTable": "RLS_Territory",
+        "fromColumn": "SalesTerritoryKey",
+        "toTable": "Sales Territory",
+        "toColumn": "Sales Territory",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "cb2ce42e-968d-45fa-886d-71683cc4e3d3",
+        "fromTable": "RLS_CostCenter",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -4631,20 +5018,483 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Product Sales Report",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Person"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD Gross Margin%"
+              },
+              {
+                "name": "MTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales"
+              },
+              {
+                "name": "FYTD Gross Sales %Grand"
+              },
+              {
+                "name": "FYTD PY Gross Margin"
+              },
+              {
+                "name": "FYTD PY Gross Margin%"
+              },
+              {
+                "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Sales %Grand"
+              },
+              {
+                "name": "MTD Gross Sales %Grand"
+              },
+              {
+                "name": "MTD PY Gross Margin%"
+              },
+              {
+                "name": "MTD PY Gross Sales"
+              },
+              {
+                "name": "MTD PY Gross Sales %Grand"
+              },
+              {
+                "name": "MTD PY Gross Margin"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          }
+        ]
       }
     ],
     "roles": [
       {
-        "name": "TestRole",
+        "name": "All Data",
+        "description": "Can read all data in the model",
         "modelPermission": "read",
         "members": [
           {
-            "memberName": "DOMAIN\\pbitest1",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
+            "memberName": "DOMAIN\\LBabilo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1731"
           },
           {
-            "memberName": "DOMAIN\\pbitest2",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20422"
+            "memberName": "DOMAIN\\JSipkovich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1457"
+          },
+          {
+            "memberName": "DOMAIN\\rfaust",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
+          },
+          {
+            "memberName": "DOMAIN\\jmilliken",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8848"
+          },
+          {
+            "memberName": "DOMAIN\\ahuddlestone",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7281"
+          },
+          {
+            "memberName": "DOMAIN\\amcneill",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7269"
+          },
+          {
+            "memberName": "DOMAIN\\CRussell",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1426"
+          },
+          {
+            "memberName": "DOMAIN\\abratter",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8513"
+          },
+          {
+            "memberName": "DOMAIN\\mebin",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8453"
+          },
+          {
+            "memberName": "DOMAIN\\jmody",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
+          }
+        ]
+      },
+      {
+        "name": "By Sales Region",
+        "description": "Reads data by sales region",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\bgraiff",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7297"
+          },
+          {
+            "memberName": "DOMAIN\\cjames",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8752"
+          },
+          {
+            "memberName": "DOMAIN\\DCastro",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1777"
+          },
+          {
+            "memberName": "DOMAIN\\DDuncan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1424"
+          },
+          {
+            "memberName": "DOMAIN\\dpiechocki",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8767"
+          },
+          {
+            "memberName": "DOMAIN\\GDebes",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1711"
+          },
+          {
+            "memberName": "DOMAIN\\jsmith",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8622"
+          },
+          {
+            "memberName": "DOMAIN\\lcalma",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-6987"
+          },
+          {
+            "memberName": "DOMAIN\\mbraswell",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8601"
+          },
+          {
+            "memberName": "DOMAIN\\mjaffre",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8526"
+          },
+          {
+            "memberName": "DOMAIN\\mpopovich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7298"
+          },
+          {
+            "memberName": "DOMAIN\\ngomez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8600"
+          },
+          {
+            "memberName": "DOMAIN\\pcinski",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7213"
+          },
+          {
+            "memberName": "DOMAIN\\RDaize",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1678"
+          },
+          {
+            "memberName": "DOMAIN\\sterenzi",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8498"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Region",
+            "filterExpression": "RLS_Region[DomainName]=USERNAME() && RLS_Region[InactiveDate] < TODAY()",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_Territory",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CostCenter",
+            "metadataPermission": "none"
+          }
+        ]
+      },
+      {
+        "name": "By Sales Territory",
+        "description": "Reads data by sales region",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\aedrei",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4956"
+          },
+          {
+            "memberName": "DOMAIN\\aflores",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7300"
+          },
+          {
+            "memberName": "DOMAIN\\arodriguez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8655"
+          },
+          {
+            "memberName": "DOMAIN\\cdicillo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8571"
+          },
+          {
+            "memberName": "DOMAIN\\DOrtega",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1408"
+          },
+          {
+            "memberName": "DOMAIN\\gwiant",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8443"
+          },
+          {
+            "memberName": "DOMAIN\\jventola",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8549"
+          },
+          {
+            "memberName": "DOMAIN\\LBurke",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3178"
+          },
+          {
+            "memberName": "DOMAIN\\maybinder",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7141"
+          },
+          {
+            "memberName": "DOMAIN\\tswartout",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Territory",
+            "filterExpression": "RLS_Territory[DomainName]=USERNAME() && RLS_Territory[InactiveDate] < TODAY()",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_Region",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CostCenter",
+            "metadataPermission": "none"
+          }
+        ]
+      },
+      {
+        "name": "By Cost Center",
+        "description": "Reads data by cost center hierarchy",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\amendes",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8652"
+          },
+          {
+            "memberName": "DOMAIN\\aboal",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8718"
+          },
+          {
+            "memberName": "DOMAIN\\CDagher",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1274"
+          },
+          {
+            "memberName": "DOMAIN\\LTorres",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
+          },
+          {
+            "memberName": "DOMAIN\\lurias",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7278"
+          },
+          {
+            "memberName": "DOMAIN\\moconnor",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8550"
+          },
+          {
+            "memberName": "DOMAIN\\RNicholson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1369"
+          },
+          {
+            "memberName": "DOMAIN\\SabineS",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1423"
+          },
+          {
+            "memberName": "DOMAIN\\sshishani",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8496"
+          },
+          {
+            "memberName": "DOMAIN\\skline",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2799"
+          },
+          {
+            "memberName": "DOMAIN\\tlaunay",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8525"
+          },
+          {
+            "memberName": "DOMAIN\\WSaadat",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1091"
+          },
+          {
+            "memberName": "DOMAIN\\rchen",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8758"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Territory",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_Region",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CostCenter",
+            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
+            "metadataPermission": "none"
           }
         ]
       }

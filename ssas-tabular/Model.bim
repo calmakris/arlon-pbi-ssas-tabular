@@ -508,7 +508,7 @@
         "measures": [
           {
             "name": "Gross Sales",
-            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount]) + 0",
+            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales\\Sum",
             "annotations": [
@@ -520,7 +520,7 @@
           },
           {
             "name": "Net Sales",
-            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount]) + 0",
+            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales\\Sum",
             "annotations": [
@@ -532,7 +532,7 @@
           },
           {
             "name": "Cost of Goods",
-            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount]) + 0",
+            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales\\Sum",
             "annotations": [
@@ -546,7 +546,7 @@
             "name": "Gross Margin",
             "expression": " [Gross Sales] - [Cost of Goods]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales\\Margin",
+            "displayFolder": "Sales\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -558,7 +558,7 @@
             "name": "Net Margin",
             "expression": " [Net Sales] - [Cost of Goods]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales\\Margin",
+            "displayFolder": "Sales\\Sum",
             "annotations": [
               {
                 "name": "Format",
@@ -570,13 +570,13 @@
             "name": "Gross Margin %",
             "expression": " DIVIDE([Gross Margin], [Gross Sales])",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales\\Margin"
+            "displayFolder": "Sales\\Sum"
           },
           {
             "name": "Net Margin %",
             "expression": " DIVIDE( [Net Margin], [Net Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales\\Margin"
+            "displayFolder": "Sales\\Sum"
           },
           {
             "name": "Complaint Value",
@@ -1228,6 +1228,12 @@
           {
             "name": "MTD PY Gross Margin",
             "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var Gross Sales",
+            "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
             "formatString": "$#,##0;($#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           }
@@ -5226,6 +5232,267 @@
               },
               {
                 "name": "X Distribution Status"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Sales and Margin",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "FYTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Margin"
+              },
+              {
+                "name": "FYTD PY Gross Margin%"
+              },
+              {
+                "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "Gross Margin"
+              },
+              {
+                "name": "Gross Margin %"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "MTD Gross Margin"
+              },
+              {
+                "name": "MTD Gross Margin%"
+              },
+              {
+                "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD PY Gross Margin"
+              },
+              {
+                "name": "MTD PY Gross Margin%"
+              },
+              {
+                "name": "MTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var Gross Sales"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Sales Invoice Documents",
+            "columns": [
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Discount Amount"
+              },
+              {
+                "name": "Gross Sales Amount"
+              },
+              {
+                "name": "Invoice Line Number"
+              },
+              {
+                "name": "Invoice Number"
+              },
+              {
+                "name": "Material Cost Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Sales Amount"
+              },
+              {
+                "name": "Overall Cost Amount"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Quantity"
               }
             ]
           }

@@ -12,7 +12,19 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Development' ">
     <OutputPath>bin\</OutputPath>
-    <DeploymentServerName>localhost</DeploymentServerName>
+    <DeploymentServerName>ARLPBIDEV\SSAS_TAB</DeploymentServerName>
+    <DeploymentServerEdition>Developer</DeploymentServerEdition>
+    <DeploymentServerVersion>Unknown</DeploymentServerVersion>
+    <DeploymentServerDatabase>PBI-Tabular</DeploymentServerDatabase>
+    <DeploymentServerCubeName>Model</DeploymentServerCubeName>
+    <DeploymentOptionProcessing>Default</DeploymentOptionProcessing>
+    <DeploymentOptionTransactionalDeployment>False</DeploymentOptionTransactionalDeployment>
+    <DeploymentOptionADALCache>Default</DeploymentOptionADALCache>
+    <DeploymentOptionDirectQueryMode>InMemory</DeploymentOptionDirectQueryMode>
+    <DeploymentOptionQueryImpersonation>Default</DeploymentOptionQueryImpersonation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == '' ">
+    <DeploymentServerName>ARLPBIDEV\SSAS_TAB</DeploymentServerName>
     <DeploymentServerEdition>Developer</DeploymentServerEdition>
     <DeploymentServerVersion>Unknown</DeploymentServerVersion>
     <DeploymentServerDatabase>ssas-tabular</DeploymentServerDatabase>
@@ -23,17 +35,18 @@
     <DeploymentOptionDirectQueryMode>InMemory</DeploymentOptionDirectQueryMode>
     <DeploymentOptionQueryImpersonation>Default</DeploymentOptionQueryImpersonation>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == '' ">
-    <DeploymentServerName>localhost</DeploymentServerName>
-    <DeploymentServerEdition>Developer</DeploymentServerEdition>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Production' ">
+    <DeploymentServerName>ARLPBIPRD\SSAS_TAB</DeploymentServerName>
+    <DeploymentServerEdition>EnterpriseCore</DeploymentServerEdition>
     <DeploymentServerVersion>Unknown</DeploymentServerVersion>
-    <DeploymentServerDatabase>ssas-tabular</DeploymentServerDatabase>
+    <DeploymentServerDatabase>PBI-Tabular</DeploymentServerDatabase>
     <DeploymentServerCubeName>Model</DeploymentServerCubeName>
     <DeploymentOptionProcessing>Default</DeploymentOptionProcessing>
     <DeploymentOptionTransactionalDeployment>False</DeploymentOptionTransactionalDeployment>
     <DeploymentOptionADALCache>Default</DeploymentOptionADALCache>
     <DeploymentOptionDirectQueryMode>InMemory</DeploymentOptionDirectQueryMode>
     <DeploymentOptionQueryImpersonation>Default</DeploymentOptionQueryImpersonation>
+    <OutputPath>bin\Production\</OutputPath>
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>

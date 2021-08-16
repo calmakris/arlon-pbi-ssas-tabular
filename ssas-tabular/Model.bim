@@ -3,6 +3,5769 @@
   "compatibilityLevel": 1500,
   "model": {
     "culture": "en-US",
+    "discourageImplicitMeasures": true,
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/ARLPBIDEV;ARLPBI_STAGE",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "ARLPBIDEV",
+            "database": "ARLPBI_STAGE"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "credential": {
+          "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
+          "Username": "DOMAIN\\PBI-ETL",
+          "EncryptConnection": false,
+          "PrivacySetting": "Organizational"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "Customer Master",
+        "columns": [
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "sourceColumn": "CustomerNoKey",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "CustomerOrgKey"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Customer Name",
+            "dataType": "string",
+            "sourceColumn": "CustomerName",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Account Creation Date",
+            "dataType": "dateTime",
+            "sourceColumn": "AcctCreateDate",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Sales Organization",
+            "dataType": "string",
+            "sourceColumn": "SalesOrganization",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Default Ship Plant",
+            "dataType": "string",
+            "sourceColumn": "DefaultPlant",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Sales Region",
+            "dataType": "string",
+            "sourceColumn": "SalesDistrict",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Sales Territory",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritory",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "type": "calculated",
+            "name": "Is New Customer",
+            "dataType": "boolean",
+            "isDataTypeInferred": true,
+            "expression": " 'Customer Master'[Account Creation Date] >= [Date 12 Months Ago]",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Sales Person",
+            "dataType": "string",
+            "sourceColumn": "SalesPerson",
+            "displayFolder": "Sales Related"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_CUSTOMER_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Complaint Documents",
+        "columns": [
+          {
+            "name": "Complaint Number",
+            "dataType": "string",
+            "sourceColumn": "ComplaintNoKey"
+          },
+          {
+            "name": "Complaint Line Number",
+            "dataType": "string",
+            "sourceColumn": "ComplaintLineNo"
+          },
+          {
+            "name": "Complaint Type",
+            "dataType": "string",
+            "sourceColumn": "ComplaintType"
+          },
+          {
+            "name": "Billing Block Indicator",
+            "dataType": "string",
+            "sourceColumn": "BillingBlockIndicator"
+          },
+          {
+            "name": "Entered By",
+            "dataType": "string",
+            "sourceColumn": "EnteredBy"
+          },
+          {
+            "name": "Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "EnterDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "ReasonCodeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ReasonCodeKey"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerOrgKey"
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Complaint Amount",
+            "dataType": "double",
+            "sourceColumn": "ComplaintValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Credit Issued Amount",
+            "dataType": "double",
+            "sourceColumn": "CreditIssueValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Open Amount",
+            "dataType": "double",
+            "sourceColumn": "OpenValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Credit Date",
+            "dataType": "dateTime",
+            "sourceColumn": "LastCreditDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "type": "calculated",
+            "name": "Cycle Time",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF([Last Credit Date], DATEDIFF('Complaint Documents'[Enter Date], [Last Credit Date], DAY), BLANK())"
+          },
+          {
+            "type": "calculated",
+            "name": "Category",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              " IF(",
+              "    AND(",
+              "        RELATED( 'Reason Code'[Department] ) = \"Q\",",
+              "        RELATED( 'Material Master'[Material Type] ) = \"HAWA\"",
+              "    ),",
+              "    \"Buyout\",",
+              "    RELATED( 'Reason Code'[Class] )",
+              ")"
+            ],
+            "displayFolder": "Reason Code"
+          },
+          {
+            "name": "ComplaintLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ComplaintLineKey"
+          },
+          {
+            "type": "calculated",
+            "name": "Reason Code Description",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Reason Code'[Reason Code Description] )",
+            "displayFolder": "Reason Code"
+          },
+          {
+            "type": "calculated",
+            "name": "Department",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Reason Code'[Department] )",
+            "displayFolder": "Reason Code"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COMPLAINTS = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintLineKey\", \"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"LastCreditDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "description": "Calendar table used to filter or group multiple fact tables",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "PK_Date",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Calendar Year Number",
+            "dataType": "string",
+            "sourceColumn": "Year_Name",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Calendar Month Number",
+            "dataType": "int64",
+            "sourceColumn": "Month_Of_Year",
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Calendar Quarter Name",
+            "dataType": "string",
+            "sourceColumn": "Quarter_Of_Year_Name",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Fiscal Year Number",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Year_Name",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "int64",
+            "sourceColumn": "Fiscal_Month_Of_Year",
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Fiscal Quarter Name",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Quarter_Of_Year_Name",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Month Name",
+            "dataType": "string",
+            "sourceColumn": "Month_Name_Abbrev",
+            "sortByColumn": "Year_Month_Sort_Key",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Is Current Month",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Current_Month",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is MTD",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Mtd",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Calendar YTD",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Calendar_Ytd",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Fiscal YTD",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Fiscal_Ytd",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Year_Month_Sort_Key",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Year_Month_Sort_Key"
+          },
+          {
+            "name": "Calendar Week Number",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Week_Of_Year"
+          },
+          {
+            "name": "Is Last 2 Fiscal Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last2_Fiscal_Years",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Last 13 Months",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last13_Months",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Current Fiscal Year",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Current_Fiscal_Year",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Day",
+            "dataType": "int64",
+            "sourceColumn": "Day_Of_Month",
+            "displayFolder": "Individual Attributes"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Calendar Hierarchy",
+            "levels": [
+              {
+                "name": "Year",
+                "ordinal": 0,
+                "column": "Calendar Year Number"
+              },
+              {
+                "name": "Quarter",
+                "ordinal": 1,
+                "column": "Calendar Quarter Name"
+              },
+              {
+                "name": "Month",
+                "ordinal": 2,
+                "column": "Month Name"
+              },
+              {
+                "name": "Date",
+                "ordinal": 3,
+                "column": "Date"
+              }
+            ]
+          },
+          {
+            "name": "Fiscal Hierarchy",
+            "levels": [
+              {
+                "name": "Fiscal Quarter",
+                "ordinal": 1,
+                "column": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year",
+                "ordinal": 0,
+                "column": "Fiscal Year Number"
+              },
+              {
+                "name": "Month",
+                "ordinal": 2,
+                "column": "Month Name"
+              },
+              {
+                "name": "Date",
+                "ordinal": 3,
+                "column": "Date"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DAX Measures",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Measure Column",
+            "dataType": "int64",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "{1}"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Gross Sales",
+            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Sales",
+            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Cost of Goods",
+            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Gross Margin",
+            "expression": " [Gross Sales] - [Cost of Goods]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Margin",
+            "expression": " [Net Sales] - [Cost of Goods]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Gross Margin %",
+            "expression": " DIVIDE([Gross Margin], [Gross Sales])",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales\\Sum"
+          },
+          {
+            "name": "Net Margin %",
+            "expression": " DIVIDE( [Net Margin], [Net Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales\\Sum"
+          },
+          {
+            "name": "Complaint Value",
+            "expression": " SUM('Complaint Documents'[Complaint Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Credit Issued",
+            "expression": " SUM('Complaint Documents'[Credit Issued Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Open Value",
+            "expression": " SUM('Complaint Documents'[Open Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Complaint Count",
+            "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] ) + 0",
+            "formatString": "#,0",
+            "isHidden": true,
+            "displayFolder": "Complaints\\Count"
+          },
+          {
+            "name": "PQ Complaint Count",
+            "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Count"
+          },
+          {
+            "name": "PQ Complaint Value",
+            "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PQ Credit Issued",
+            "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PQ Open Value",
+            "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Product Quality Index",
+            "expression": " DIVIDE( [PQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Product Quality Index (Credited)",
+            "expression": " DIVIDE( [PQ Credit Issued], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Product Quality Index (Open)",
+            "expression": " DIVIDE( [PQ Open Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Hold Amount",
+            "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Hold Tags\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Hold Quantity",
+            "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
+            "formatString": "#,0.00",
+            "displayFolder": "Hold Tags\\Sum"
+          },
+          {
+            "name": "Hold Tag Count",
+            "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
+            "formatString": "#,0",
+            "displayFolder": "Hold Tags\\Count"
+          },
+          {
+            "name": "Current S-Block Value",
+            "expression": " SUM('Blocked Inventory'[SBlock Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Q-Block Value",
+            "expression": " SUM('Blocked Inventory'[QBlock Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Blocked Inv Value",
+            "expression": " [Current S-Block Value] + [Current Q-Block Value] + [Current Expired Value]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Labor Cost",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Cost]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && ('Cost Element Names'[Sub Category] = \"Labor\" || 'Cost Element Names'[Sub Category] = \"Setup\")",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Overhead Cost",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Cost]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Overhead\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Absorption Cost",
+            "expression": " [Earned Labor Cost] + [Earned Overhead Cost]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Absorption\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Earned Labor Hours",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Hours]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && ('Cost Element Names'[Sub Category] = \"Labor\" || 'Cost Element Names'[Sub Category] = \"Setup\")",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption\\Sum"
+          },
+          {
+            "name": "Earned Overhead Hours",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM(Absorption[Hours]) + 0,",
+              "    FILTER(",
+              "        Absorption,",
+              "        Absorption[Transaction Type] = \"RKL\"",
+              "    ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Overhead\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption\\Sum"
+          },
+          {
+            "name": "Current Expired Value",
+            "expression": " SUM('Expired Inventory'[Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current S-Block Value with Hold Tags",
+            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Blocked Inv\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Product Quality Index (Target)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( Target_KPI[TargetValue] ),",
+              "    Target_KPI[KpiKey] = \"PQI\",",
+              "    FILTER(",
+              "        ALL( Target_KPI[CalendarTimeKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "PQ Complaint Cycle Time",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Complaint Documents'[Cycle Time] ),",
+              "    FILTER(",
+              "        'Reason Code',",
+              "        'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\"",
+              "    ),",
+              "    USERELATIONSHIP('Calendar'[Date], 'Complaint Documents'[Last Credit Date])",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Average"
+          },
+          {
+            "name": "Expenses Amount",
+            "expression": " SUM(Expenses[Amount]) + 0",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Expenses"
+          },
+          {
+            "name": "Expenses Plan",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( Target_Expenses[TargetValue]) + 0,",
+              "    FILTER(",
+              "        ALL( Target_Expenses[CalendarTimeKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            'Calendar'[Year_Month_Sort_Key], Target_Expenses[CalendarTimeKey]",
+              "        )",
+              "    ),",
+              "    FILTER(",
+              "        ALL( Target_Expenses[CostCenterKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Cost Center Names'[Cost Center] ),",
+              "            'Cost Center Names'[Cost Center], Target_Expenses[CostCenterKey]",
+              "        )",
+              "    ),",
+              "    FILTER(",
+              "        ALL( Target_Expenses[CostElementKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Cost Element Names'[Cost Element] ),",
+              "            'Cost Element Names'[Cost Element], Target_Expenses[CostElementKey]",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "isHidden": true,
+            "displayFolder": "Expenses"
+          },
+          {
+            "name": "SQ Complaint Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Complaint Count], ",
+              "    FILTER(",
+              "        'Reason Code', ",
+              "        'Reason Code'[Department] = \"S\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Count"
+          },
+          {
+            "name": "SQ Complaint Value",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Complaint Documents - Credited'[Credit Issued Amount] ) + 0,",
+              "    'Complaint Documents'[Billing Block Indicator] = \"\",",
+              "    FILTER(",
+              "        'Reason Code',",
+              "        'Reason Code'[Department] = \"S\"",
+              "    ),",
+              "    USERELATIONSHIP(",
+              "        'Calendar'[Date],",
+              "        'Complaint Documents - Credited'[Credit Issued Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "CA Complaint Value",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Complaint Documents - Credited'[Credit Issued Amount] ) + 0,",
+              "    'Complaint Documents'[Billing Block Indicator] = \"\",",
+              "    FILTER(",
+              "        'Reason Code',",
+              "        'Reason Code'[Department] = \"S1\"",
+              "    ),",
+              "    USERELATIONSHIP(",
+              "        'Calendar'[Date],",
+              "        'Complaint Documents - Credited'[Credit Issued Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Complaints\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "CA Complaint Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Complaint Count], ",
+              "    FILTER(",
+              "        'Reason Code', ",
+              "        'Reason Code'[Department] = \"S1\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Complaints\\Count"
+          },
+          {
+            "name": "Service Quality Index",
+            "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Customer Accommodation Index",
+            "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Service Quality Index (Target)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( Target_KPI[TargetValue] ),",
+              "    Target_KPI[KpiKey] = \"SQI\",",
+              "    FILTER(",
+              "        ALL( Target_KPI[CalendarTimeKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Customer Accommodation Index (Target)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( Target_KPI[TargetValue] ),",
+              "    Target_KPI[KpiKey] = \"CAI\",",
+              "    FILTER(",
+              "        ALL( Target_KPI[CalendarTimeKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Complaints\\KPI"
+          },
+          {
+            "name": "Sales Order Amount",
+            "expression": " SUM( 'Sales Order Documents'[Order Amount]) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Orders\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Cost Amount",
+            "expression": " SUM( 'Sales Order Documents'[Cost Amount] ) + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales Orders\\Sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Date 12 Months Ago",
+            "expression": " EOMONTH( EDATE( TODAY() - 1, -12), -1) + 1",
+            "formatString": "MM/dd/yyyy",
+            "isHidden": true,
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Count",
+            "expression": " DISTINCTCOUNT(  'Sales Order Documents'[Order Number] )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders\\Count"
+          },
+          {
+            "name": "Gross Sales %Grand",
+            "description": "Gross sales as percent of grand total by customer master and material master",
+            "expression": [
+              " ",
+              "DIVIDE(",
+              "    [Gross Sales],",
+              "    CALCULATE(",
+              "        [Gross Sales],",
+              "        ALL( 'Material Master'),",
+              "        ALL( 'Customer Master' )",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "0%;-0%;0%",
+            "displayFolder": "Sales\\Sum"
+          },
+          {
+            "name": "MTD Gross Sales",
+            "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales",
+            "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Margin",
+            "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Margin",
+            "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales",
+            "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Sales",
+            "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Margin",
+            "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Margin%",
+            "expression": " CALCULATE( [Gross Margin %], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Margin%",
+            "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales %Grand",
+            "expression": " CALCULATE( [Gross Sales %Grand], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales %Grand",
+            "expression": " CALCULATE( [Gross Sales %Grand], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Margin%",
+            "expression": " CALCULATE( [MTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Margin%",
+            "expression": " CALCULATE( [FYTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales %Grand",
+            "expression": " CALCULATE( [MTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Gross Sales %Grand",
+            "expression": " CALCULATE( [FYTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0%;-0%;\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Margin",
+            "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var Gross Sales",
+            "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
+            "formatString": "$#,##0;($#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          }
+        ]
+      },
+      {
+        "name": "Sales Invoice Documents",
+        "columns": [
+          {
+            "name": "Invoice Number",
+            "dataType": "string",
+            "sourceColumn": "SaleDocNoKey"
+          },
+          {
+            "name": "Invoice Line Number",
+            "dataType": "string",
+            "sourceColumn": "SaleLineNo"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerOrgKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "QuantityValue",
+            "formatString": "0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Gross Sales Amount",
+            "dataType": "double",
+            "sourceColumn": "GrossSalesValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Sales Amount",
+            "dataType": "double",
+            "sourceColumn": "NetSalesValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Overall Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "CostValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Material Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "MaterialExtPriceUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Discount Amount",
+            "dataType": "double",
+            "sourceColumn": "DiscountValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_VW_SALES,{\"MANDT\"})",
+                "in",
+                "    #\"Removed Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Hold Tag Documents",
+        "columns": [
+          {
+            "name": "Notification Number",
+            "dataType": "string",
+            "isKey": true,
+            "sourceColumn": "NotificationNoKey"
+          },
+          {
+            "name": "Notification Type",
+            "dataType": "string",
+            "sourceColumn": "NotificationType"
+          },
+          {
+            "name": "Notification Code",
+            "dataType": "string",
+            "sourceColumn": "NotificationCode"
+          },
+          {
+            "name": "Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "EnterDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Reference Number",
+            "dataType": "string",
+            "sourceColumn": "ReferenceNo"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNoKey"
+          },
+          {
+            "name": "Notification Text",
+            "dataType": "string",
+            "sourceColumn": "NotificationText"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "HoldQuantityValue",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "HoldValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Blocked Inventory",
+        "columns": [
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNoKey"
+          },
+          {
+            "name": "NotificationNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "NotificationNoKey"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "SBlock Quantity",
+            "dataType": "double",
+            "sourceColumn": "SBlockQuantityValue",
+            "formatString": "0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "SBlock Amount",
+            "dataType": "double",
+            "sourceColumn": "SBlockAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "QBlock Quantity",
+            "dataType": "double",
+            "sourceColumn": "QBlockQuantityValue",
+            "formatString": "0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "QBlock Amount",
+            "dataType": "double",
+            "sourceColumn": "QBlockAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Notification Text",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))",
+            "displayFolder": "Hold Tag Related"
+          },
+          {
+            "type": "calculated",
+            "name": "Notification Code",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))",
+            "displayFolder": "Hold Tag Related"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BLOCK\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_BLOCK,{\"MaterialNoKey\", \"BatchNoKey\", \"NotificationNoKey\", \"PlantNo\", \"StorageLoc\", \"SBlockQuantityValue\", \"SBlockAmountUSD\", \"QBlockQuantityValue\", \"QBlockAmountUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Expired Inventory",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Manufacturing Date",
+            "dataType": "dateTime",
+            "sourceColumn": "MfgDate",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Goods Receipt Date",
+            "dataType": "dateTime",
+            "sourceColumn": "GoodsReceiptDate",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Expiration Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ExpirationDate",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "ExpiredQuantityValue",
+            "formatString": "0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "ExpiredAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_EXPIRED = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_EXPIRED\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_EXPIRED,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"ExpiredQuantityValue\", \"StockAmountUSD\", \"ExpiredAmountUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Blocked Inventory Snapshots",
+        "columns": [
+          {
+            "name": "Snapshot Date",
+            "dataType": "dateTime",
+            "sourceColumn": "SnapshotDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "SBlock Value",
+            "dataType": "double",
+            "sourceColumn": "SBlockValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "QBlock Value",
+            "dataType": "double",
+            "sourceColumn": "QBlockValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Expired Value",
+            "dataType": "double",
+            "sourceColumn": "ExpiredValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Blocked Inv Value",
+            "dataType": "double",
+            "isDataTypeInferred": true,
+            "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_DAILY_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"DAILY_INVENTORY_BLOCK\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_DAILY_INVENTORY_BLOCK,{{\"SnapshotDateKey\", type date}}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"SnapshotDateKey\", \"PlantNoKey\", \"SBlockValueUSD\", \"QBlockValueUSD\", \"ExpiredValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Absorption",
+        "columns": [
+          {
+            "name": "Process Order",
+            "dataType": "string",
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "SuperiorMaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SuperiorMaterialNoKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "CostElementKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Transaction Type",
+            "dataType": "string",
+            "sourceColumn": "BusTransType"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "MM/dd/yyyy"
+          },
+          {
+            "name": "Hours",
+            "dataType": "double",
+            "sourceColumn": "QuantityValue",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Cost",
+            "dataType": "double",
+            "sourceColumn": "NetValue",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_ABSORPTION\"]}[Data]",
+                "in",
+                "    dbo_VW_ABSORPTION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Material Classification",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Brand",
+            "dataType": "string",
+            "sourceColumn": "Brand"
+          },
+          {
+            "name": "Color Number",
+            "dataType": "string",
+            "sourceColumn": "ColorNumber"
+          },
+          {
+            "name": "Commercialization Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CommercializationDate"
+          },
+          {
+            "name": "Film Type",
+            "dataType": "string",
+            "sourceColumn": "FilmType"
+          },
+          {
+            "name": "Liner",
+            "dataType": "string",
+            "sourceColumn": "Liner"
+          },
+          {
+            "name": "Product Series",
+            "dataType": "string",
+            "sourceColumn": "ProductSeries"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_CLASSIFICATION = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_CLASSIFICATION\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_CLASSIFICATION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Material Master",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "MaterialNoKey",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialDescription",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Number - Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoDescription",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "X Distribution Status",
+            "dataType": "string",
+            "sourceColumn": "XDistributionStatus",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "Master"
+          },
+          {
+            "type": "calculated",
+            "name": "Brand",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED( 'Material Classification'[Brand] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Color Number",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED( 'Material Classification'[Color Number] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Film Type",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Film Type] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Liner",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Liner] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Series",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Product Series] )",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Commercialization Date",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Material Classification'[Commercialization Date] )",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Classification"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L1] )",
+            "displayFolder": "Product Hierarchy"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L2] )",
+            "displayFolder": "Product Hierarchy"
+          },
+          {
+            "type": "calculated",
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L3] )",
+            "displayFolder": "Product Hierarchy"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product Hierarchy",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL1"
+          },
+          {
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL2"
+          },
+          {
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL3"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_MATERIAL_PRODHIERARCHY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_PRODHIERARCHY\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_PRODHIERARCHY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Cost Center Names",
+        "description": "List of cost centers in SAP with custom categories manually in a Sharepoint List",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Cost Center Name",
+            "dataType": "string",
+            "sourceColumn": "CostCenterName"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department",
+            "sortByColumn": "DepartmentSortKey"
+          },
+          {
+            "name": "Company Category",
+            "dataType": "string",
+            "sourceColumn": "CompanyCategory"
+          },
+          {
+            "name": "Operations Category",
+            "dataType": "string",
+            "sourceColumn": "OperationsCategory"
+          },
+          {
+            "name": "DepartmentSortKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "DepartmentSortKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_CENTER_NAMES\"]}[Data],",
+                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_CENTER_NAMES, \"DepartmentSortKey\", each if [Department] = \"COMP\" then 0",
+                "else if [Department] = \"CAST\" then 1",
+                "else if [Department] = \"PC\" then 2",
+                "else if [Department] = \"COAT\" then 3",
+                "else if [Department] = \"CONV\" then 4",
+                "else 999)",
+                "in",
+                "    #\"Added Custom\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Cost Element Names",
+        "description": "List of cost elements (G/L accounts) with custom categories and indicators manually assigned in a Sharepoint list",
+        "columns": [
+          {
+            "name": "Company Category",
+            "dataType": "string",
+            "sourceColumn": "CompanyCategory"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Sub Category",
+            "dataType": "string",
+            "sourceColumn": "SubCategory"
+          },
+          {
+            "name": "Category Renamed",
+            "dataType": "string",
+            "sourceColumn": "CatRenamed"
+          },
+          {
+            "name": "Is Controllable Expense",
+            "dataType": "boolean",
+            "sourceColumn": "IsControllableExpense"
+          },
+          {
+            "name": "Is Labor",
+            "dataType": "boolean",
+            "sourceColumn": "IsLabor"
+          },
+          {
+            "name": "Is Supplies",
+            "dataType": "boolean",
+            "sourceColumn": "IsSupplies"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Cost Element Name",
+            "dataType": "string",
+            "sourceColumn": "CostElementName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_COST_ELEMENT_NAMES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Plant",
+        "description": "List of warehouse numbers in SAP (best used for filtering/grouping by plant across multiple fact tables)",
+        "columns": [
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "sourceColumn": "PlantDescription"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_PLANT = Source{[Schema=\"dbo\",Item=\"VW_PLANT\"]}[Data]",
+                "in",
+                "    dbo_VW_PLANT"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Pending Specification Documents",
+        "columns": [
+          {
+            "name": "Approver Name",
+            "dataType": "string",
+            "sourceColumn": "ApproverName"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Pending Count",
+            "dataType": "int64",
+            "sourceColumn": "PendingCount",
+            "formatString": "0",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SPECAPPROVAL_PENDING = Source{[Schema=\"dbo\",Item=\"VW_SPECAPPROVAL_PENDING\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SPECAPPROVAL_PENDING,{\"ApproverName\", \"Department\", \"PendingCount\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Expenses",
+        "description": "Controlling document line items posted in expenses related G/L accounts in the current and last fiscal year",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "sourceColumn": "DocumentType"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Creation Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CreateDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DocumentDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Entered By",
+            "dataType": "string",
+            "sourceColumn": "UserName"
+          },
+          {
+            "name": "OffsetAcctNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OffsetAcctNoKey"
+          },
+          {
+            "name": "OffsetAcctType",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OffsetAcctType"
+          },
+          {
+            "name": "Document Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentNo"
+          },
+          {
+            "name": "Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentLineNo"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Referenced Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocLineNo"
+          },
+          {
+            "name": "Is Reversal Document",
+            "dataType": "string",
+            "sourceColumn": "IsRvrslDoc"
+          },
+          {
+            "name": "Reversal Referenced Document Number",
+            "dataType": "string",
+            "sourceColumn": "RvrslRefDocNo"
+          },
+          {
+            "name": "Is Reversed",
+            "dataType": "string",
+            "sourceColumn": "IsReversed"
+          },
+          {
+            "name": "PurchaseDocLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseDocLineKey"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Document Header Text",
+            "dataType": "string",
+            "sourceColumn": "DocHeaderText"
+          },
+          {
+            "name": "Document Item Text",
+            "dataType": "string",
+            "sourceColumn": "ItemText"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Offset Account Name",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              " ",
+              "SWITCH(",
+              "    Expenses[OffsetAcctType],",
+              "    \"D\", LOOKUPVALUE( 'Customer Master'[Customer Name], 'Customer Master'[Customer Number], Expenses[OffsetAcctNoKey]),",
+              "    \"K\", LOOKUPVALUE( 'Vendor Master'[Vendor Name], 'Vendor Master'[Vendor Number], Expenses[OffsetAcctNoKey] ),",
+              "    LOOKUPVALUE( 'Cost Element Names'[Cost Element Name], 'Cost Element Names'[Cost Element], Expenses[OffsetAcctNoKey] )",
+              ")"
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_EXPENSES = Source{[Schema=\"dbo\",Item=\"VW_EXPENSES\"]}[Data]",
+                "in",
+                "    dbo_VW_EXPENSES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Orders",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderNoKey"
+          },
+          {
+            "name": "Purchase Line Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DocumentDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "VendorNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialText"
+          },
+          {
+            "name": "Req Track Number",
+            "dataType": "string",
+            "sourceColumn": "RequisitionTrackNo"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "double",
+            "sourceColumn": "UnitPrice"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_PURCHASE_ORDERS\"]}[Data]",
+                "in",
+                "    dbo_VW_PURCHASE_ORDERS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Vendor Master",
+        "columns": [
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Vendor Name",
+            "dataType": "string",
+            "sourceColumn": "VendorName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_VENDOR_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Time Intelligence",
+        "calculationGroup": {
+          "description": "Used for analyzing measures in multiple time intelligence modes such as MTD, YTD, FYTD, etc.",
+          "precedence": 1,
+          "calculationItems": [
+            {
+              "name": "Current",
+              "expression": "SELECTEDMEASURE()",
+              "ordinal": 1
+            },
+            {
+              "name": "MTD",
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )",
+              "ordinal": 4
+            },
+            {
+              "name": "YTD",
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
+              "ordinal": 7
+            },
+            {
+              "name": "PY",
+              "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+              "ordinal": 12
+            },
+            {
+              "name": "PY YTD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+                "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
+                ")"
+              ],
+              "ordinal": 8
+            },
+            {
+              "name": "PY MTD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+                "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                ")"
+              ],
+              "ordinal": 5
+            },
+            {
+              "name": "FYTD",
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
+              "ordinal": 9
+            },
+            {
+              "name": "PY FYTD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+                "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
+                ")"
+              ],
+              "ordinal": 10
+            },
+            {
+              "name": "YOY",
+              "expression": [
+                "IF(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+                "    ),",
+                "    SELECTEDMEASURE() - ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+                "    ),",
+                "    BLANK()",
+                ")"
+              ],
+              "ordinal": 13
+            },
+            {
+              "name": "CD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    LASTDATE( 'Calendar'[Date] )",
+                ")"
+              ],
+              "ordinal": 2
+            },
+            {
+              "name": "PD",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    PREVIOUSDAY( 'Calendar'[Date] )",
+                ")"
+              ],
+              "ordinal": 3
+            },
+            {
+              "name": "MTD PY Var",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                ") - ",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                ")"
+              ],
+              "ordinal": 6
+            },
+            {
+              "name": "YTD PY Var",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
+                ") - ",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
+                ")"
+              ],
+              "ordinal": 8
+            },
+            {
+              "name": "FTYD PY Var",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
+                ") - ",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
+                ")"
+              ],
+              "ordinal": 11
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "Time Calculation",
+            "dataType": "string",
+            "sourceColumn": "Name",
+            "sortByColumn": "Ordinal"
+          },
+          {
+            "name": "Ordinal",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Ordinal"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculationGroup 1",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Refresh Date",
+        "columns": [
+          {
+            "name": "Report Name",
+            "dataType": "string",
+            "description": "Filter this column using a slicer with the name of this report/dashboard",
+            "sourceColumn": "ReportNameKey"
+          },
+          {
+            "name": "Refresh Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ProcessDatetime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zPROCESSDATE_REPORTS = Source{[Schema=\"dbo\",Item=\"zPROCESSDATE_REPORTS\"]}[Data]",
+                "in",
+                "    dbo_zPROCESSDATE_REPORTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Target_Expenses",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "CalendarTimeKey",
+            "dataType": "string",
+            "sourceColumn": "CalendarTimeKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "CostElementKey",
+            "dataType": "string",
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "TargetValue",
+            "dataType": "double",
+            "sourceColumn": "TargetValue"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zTARGETS_EXPENSES = Source{[Schema=\"dbo\",Item=\"zTARGETS_EXPENSES\"]}[Data]",
+                "in",
+                "    dbo_zTARGETS_EXPENSES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Expenses Mode",
+        "calculationGroup": {
+          "precedence": 2,
+          "calculationItems": [
+            {
+              "name": "Actual",
+              "expression": "[Expenses Amount]",
+              "ordinal": 0
+            },
+            {
+              "name": "PY",
+              "expression": "CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+              "ordinal": 1
+            },
+            {
+              "name": "PY Var",
+              "expression": [
+                "VAR PreviousPeriod = CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+                "RETURN",
+                "    IF (",
+                "        NOT ISBLANK( [Expenses Amount] )",
+                "            && NOT ISBLANK( PreviousPeriod ),",
+                "        [Expenses Amount] - PreviousPeriod",
+                "    )"
+              ],
+              "ordinal": 2
+            },
+            {
+              "name": "AOP",
+              "expression": "[Expenses Plan]",
+              "ordinal": 3
+            },
+            {
+              "name": "AOP Var",
+              "expression": [
+                "IF (",
+                "    NOT ISBLANK( [Expenses Amount] )",
+                "        && NOT ISBLANK( [Expenses Plan] ),",
+                "    [Expenses Amount] - [Expenses Plan]",
+                ")"
+              ],
+              "ordinal": 4
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "Mode",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculationGroup 1",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Reason Code",
+        "columns": [
+          {
+            "name": "ReasonCodeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "ReasonCodeKey"
+          },
+          {
+            "name": "Reason Code Description",
+            "dataType": "string",
+            "sourceColumn": "ReasonCodeDescription"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Class",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Class"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition - Copy",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data],",
+                "    #\"Removed Duplicates\" = Table.Distinct(dbo_VW_REASON_CODE, {\"ReasonCodeKey\"})",
+                "in",
+                "    #\"Removed Duplicates\""
+              ]
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization",
+                "value": [
+                  "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>let",
+                  "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                  "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
+                  "in",
+                  "    dbo_VW_REASON_CODE</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Complaint Documents - Credited",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "ComplaintLineKey",
+            "dataType": "string",
+            "sourceColumn": "ComplaintLineKey"
+          },
+          {
+            "name": "Credit Issued Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CreditDateKey"
+          },
+          {
+            "name": "Credit Issued Amount",
+            "dataType": "double",
+            "sourceColumn": "CreditIssueValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_COMPLAINTS_CREDITED = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS_CREDITED\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS_CREDITED,{\"ComplaintLineKey\", \"CreditDateKey\", \"CreditIssueValueUSD\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Target_KPI",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "KpiKey",
+            "dataType": "string",
+            "sourceColumn": "KpiKey"
+          },
+          {
+            "name": "CalendarTimeKey",
+            "dataType": "string",
+            "sourceColumn": "CalendarTimeKey"
+          },
+          {
+            "name": "TargetValue",
+            "dataType": "double",
+            "sourceColumn": "TargetValue"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zTARGETS_KPI = Source{[Schema=\"dbo\",Item=\"zTARGETS_KPI\"]}[Data]",
+                "in",
+                "    dbo_zTARGETS_KPI"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Order Documents",
+        "columns": [
+          {
+            "name": "OrderNoLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OrderNoLineKey"
+          },
+          {
+            "name": "Order Number",
+            "dataType": "string",
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Order Line Number",
+            "dataType": "string",
+            "sourceColumn": "OrderLineNo"
+          },
+          {
+            "name": "Order Type",
+            "dataType": "string",
+            "sourceColumn": "OrderType"
+          },
+          {
+            "name": "Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "EnterDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "First Delivery Date",
+            "dataType": "dateTime",
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last PGI Date",
+            "dataType": "dateTime",
+            "description": "If the values is 12/31/9999, then there is no PGI date for the sales order item",
+            "sourceColumn": "LastPgiDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Entered By",
+            "dataType": "string",
+            "sourceColumn": "EnteredBy"
+          },
+          {
+            "name": "Organization",
+            "dataType": "string",
+            "sourceColumn": "OrgNoKey"
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerOrgKey"
+          },
+          {
+            "name": "CustomerNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "ShipToAddrKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ShipToAddrKey"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialText"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "ReasonCodeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ReasonCodeKey"
+          },
+          {
+            "name": "Credit Block",
+            "dataType": "string",
+            "sourceColumn": "CreditBlock"
+          },
+          {
+            "name": "Overall Block",
+            "dataType": "string",
+            "sourceColumn": "OverallBlock"
+          },
+          {
+            "name": "Route Type",
+            "dataType": "string",
+            "sourceColumn": "RouteType"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "OrderUoM"
+          },
+          {
+            "name": "Order Quantity",
+            "dataType": "double",
+            "sourceColumn": "OrderQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Delivered Quantity",
+            "dataType": "double",
+            "sourceColumn": "DeliveredQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "On Time Delivered Quantity",
+            "dataType": "double",
+            "sourceColumn": "OnTimeDeliveredQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Order Currency",
+            "dataType": "string",
+            "sourceColumn": "OrderCurrency"
+          },
+          {
+            "name": "Order Amount",
+            "dataType": "double",
+            "sourceColumn": "OrderAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "CostAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Ship To Name",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( Addresses[Name] )"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_ORDER_SALES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_SALES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Addresses",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "AddressNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "AddressNoKey"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          },
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City"
+          },
+          {
+            "name": "Street",
+            "dataType": "string",
+            "sourceColumn": "Street"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_ADDRESS_INFO = Source{[Schema=\"dbo\",Item=\"VW_ADDRESS_INFO\"]}[Data]",
+                "in",
+                "    dbo_VW_ADDRESS_INFO"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Region",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Sales Region",
+            "dataType": "string",
+            "sourceColumn": "SalesDistrictKey"
+          },
+          {
+            "name": "Sales Region Name",
+            "dataType": "string",
+            "sourceColumn": "SalesDistrictName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SALES_REGION = Source{[Schema=\"dbo\",Item=\"VW_SALES_REGION\"]}[Data]",
+                "in",
+                "    dbo_VW_SALES_REGION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Territory",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Sales Territory",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryKey"
+          },
+          {
+            "name": "Sales Territory Name",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_SALES_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_SALES_TERRITORY\"]}[Data]",
+                "in",
+                "    dbo_VW_SALES_TERRITORY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_Territory",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesTerritoryKey",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_RLS_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_RLS_TERRITORY\"]}[Data]",
+                "in",
+                "    dbo_VW_RLS_TERRITORY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_Region",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesRegionKey",
+            "dataType": "string",
+            "sourceColumn": "SalesRegionKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_RLS_REGION = Source{[Schema=\"dbo\",Item=\"VW_RLS_REGION\"]}[Data]",
+                "in",
+                "    dbo_VW_RLS_REGION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_CostCenter",
+        "columns": [
+          {
+            "name": "EmployeeKey",
+            "dataType": "string",
+            "sourceColumn": "EmployeeKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "SupervisorKey",
+            "dataType": "string",
+            "sourceColumn": "SupervisorKey"
+          },
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "type": "calculated",
+            "name": "Path",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " PATH( RLS_CostCenter[EmployeeKey], RLS_CostCenter[SupervisorKey] )"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_USERLIST_DOMAIN = Source{[Schema=\"dbo\",Item=\"USERLIST_DOMAIN\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_USERLIST_DOMAIN,{\"EmployeeKey\", \"DomainName\", \"SupervisorKey\", \"CostCenterKey\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "7ad599af-e270-40c4-9adb-251c9dca4378",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7bc6c5a0-4655-407a-bc13-1cd3a65eca38",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "9aea2de3-d4c1-473e-bf03-55a3a8d409f5",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "90d80725-4955-4415-8778-f3b670ded05f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "1196625d-915c-4f90-8a7e-4a4e307c34c4",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "NotificationNoKey",
+        "toTable": "Hold Tag Documents",
+        "toColumn": "Notification Number",
+        "isActive": false
+      },
+      {
+        "name": "3f9dd1f7-3ac5-4bce-b233-68a54ac9862f",
+        "fromTable": "Blocked Inventory Snapshots",
+        "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "bf66fd75-c362-4675-abd4-420fb281ca3f",
+        "fromTable": "Absorption",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
+        "fromCardinality": "one",
+        "fromTable": "Material Master",
+        "fromColumn": "Material Number",
+        "toTable": "Material Classification",
+        "toColumn": "Material Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "8dbdc264-a57e-48f4-8ccf-064f378c4788",
+        "fromCardinality": "one",
+        "fromTable": "Material Master",
+        "fromColumn": "Material Number",
+        "toTable": "Product Hierarchy",
+        "toColumn": "Material Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "22d61dbe-0265-4bd3-b686-8d76e4f1d50f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "d104f71c-fb20-42c2-a158-df74a0040f19",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "75f7059e-5891-4145-8c3b-08cf13009c2f",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "22f5ffae-1a73-4d36-815b-33b46aefbcf9",
+        "fromTable": "Absorption",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "48c5cf15-f0eb-40f5-94a2-1dc0d8170fe9",
+        "fromTable": "Absorption",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "64d69090-8c95-4cfd-bae5-098fdca2fd7c",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "82e0b1e4-2025-48e8-ade7-938129650e46",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "392923c6-b921-4da9-a0eb-847df9a9ca69",
+        "fromTable": "Blocked Inventory Snapshots",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "ec941efc-23a0-4e1e-8fee-379eafa01610",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "Last Credit Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "d5fde41f-6d8d-49a1-b78d-1db50db9cab6",
+        "fromTable": "Expenses",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "5caa4e78-184b-4b81-8308-65501c7e23e7",
+        "fromTable": "Absorption",
+        "fromColumn": "CostElementKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "e23eac90-b677-4be3-8b2e-bdaa9a94dc93",
+        "fromTable": "Expenses",
+        "fromColumn": "Cost Element",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "43dc6699-1755-45fc-989b-be3676e258f3",
+        "fromTable": "Expenses",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "8dd87143-9d38-46ac-920d-6517fe79d0ed",
+        "fromTable": "Expenses",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "e64c99ce-a3ae-4e92-a4d4-b827a2df4050",
+        "fromTable": "Expenses",
+        "fromColumn": "PurchaseDocLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "d8be19f9-8a2d-4705-87ba-97ce6a35808d",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "8ab1ab25-2eea-4cb2-bdbc-d284b69ca4d3",
+        "fromTable": "Expenses",
+        "fromColumn": "OffsetAcctNoKey",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
+      },
+      {
+        "name": "85b9a9fc-50b4-4f03-9cf4-66cbe9c81525",
+        "toCardinality": "many",
+        "fromTable": "Expenses",
+        "fromColumn": "OffsetAcctNoKey",
+        "toTable": "Customer Master",
+        "toColumn": "Customer Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "43edf758-b6c5-4d49-8e6b-a2410ec02ef0",
+        "fromTable": "Expenses",
+        "fromColumn": "OffsetAcctNoKey",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element",
+        "isActive": false
+      },
+      {
+        "name": "7c3dbb62-0337-4cc5-9e9c-df847491f72f",
+        "fromTable": "Complaint Documents",
+        "fromColumn": "ReasonCodeKey",
+        "toTable": "Reason Code",
+        "toColumn": "ReasonCodeKey"
+      },
+      {
+        "name": "ae51b0d3-b4c7-4f09-a508-4760ecf542bc",
+        "fromTable": "Complaint Documents - Credited",
+        "fromColumn": "ComplaintLineKey",
+        "toTable": "Complaint Documents",
+        "toColumn": "ComplaintLineKey"
+      },
+      {
+        "name": "bb994812-edd5-4866-b953-2c6a4947a747",
+        "fromTable": "Complaint Documents - Credited",
+        "fromColumn": "Credit Issued Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "6f4a4e75-689a-4bd1-8fe0-321e1b128db2",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "ReasonCodeKey",
+        "toTable": "Reason Code",
+        "toColumn": "ReasonCodeKey"
+      },
+      {
+        "name": "4c4cdf75-2716-4c3e-b281-b08eaee90a8b",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "24ac2122-cadb-486a-a099-9ca4d9472ced",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "First Delivery Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "35adc316-4142-445e-9e6c-d6faae1e1044",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "96748ba5-0181-442a-ba6d-75fdceb33428",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "f23c3ae6-b1e2-4fca-a245-be1f42e00e2b",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "40ca119b-9828-4473-b85e-59b864abd5da",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "ShipToAddrKey",
+        "toTable": "Addresses",
+        "toColumn": "AddressNoKey"
+      },
+      {
+        "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Region",
+        "toTable": "Sales Region",
+        "toColumn": "Sales Region"
+      },
+      {
+        "name": "0133610b-f474-47c4-a3e2-612f4360d565",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Territory",
+        "toTable": "Sales Territory",
+        "toColumn": "Sales Territory"
+      },
+      {
+        "name": "b8c16a52-5847-4775-8abd-8bb356d4b1e3",
+        "fromTable": "RLS_Region",
+        "fromColumn": "SalesRegionKey",
+        "toTable": "Sales Region",
+        "toColumn": "Sales Region",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "6c7f5d85-c9b6-4d16-b9d9-96554aad9745",
+        "fromTable": "RLS_Territory",
+        "fromColumn": "SalesTerritoryKey",
+        "toTable": "Sales Territory",
+        "toColumn": "Sales Territory",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "cb2ce42e-968d-45fa-886d-71683cc4e3d3",
+        "fromTable": "RLS_CostCenter",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      }
+    ],
+    "perspectives": [
+      {
+        "name": "Absorption Dashboard",
+        "tables": [
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Cost"
+              },
+              {
+                "name": "CostCenterKey"
+              },
+              {
+                "name": "CostElementKey"
+              },
+              {
+                "name": "Hours"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order"
+              },
+              {
+                "name": "SuperiorMaterialNoKey"
+              },
+              {
+                "name": "Transaction Type"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Absorption Cost"
+              },
+              {
+                "name": "Earned Labor Cost"
+              },
+              {
+                "name": "Earned Overhead Cost"
+              },
+              {
+                "name": "Earned Labor Hours"
+              },
+              {
+                "name": "Earned Overhead Hours"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Day"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Material Classification",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Product Series"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              }
+            ]
+          },
+          {
+            "name": "Product Hierarchy",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              },
+              {
+                "name": "Refresh Date"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "QA Dashboard",
+        "tables": [
+          {
+            "name": "Blocked Inventory",
+            "columns": [
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "QBlock Amount"
+              },
+              {
+                "name": "QBlock Quantity"
+              },
+              {
+                "name": "SBlock Amount"
+              },
+              {
+                "name": "SBlock Quantity"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Text"
+              }
+            ]
+          },
+          {
+            "name": "Blocked Inventory Snapshots",
+            "columns": [
+              {
+                "name": "Blocked Inv Value"
+              },
+              {
+                "name": "Expired Value"
+              },
+              {
+                "name": "QBlock Value"
+              },
+              {
+                "name": "SBlock Value"
+              },
+              {
+                "name": "Snapshot Date"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Day"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Complaint Documents",
+            "columns": [
+              {
+                "name": "Billing Block Indicator"
+              },
+              {
+                "name": "Complaint Amount"
+              },
+              {
+                "name": "Complaint Line Number"
+              },
+              {
+                "name": "Complaint Number"
+              },
+              {
+                "name": "Complaint Type"
+              },
+              {
+                "name": "Credit Issued Amount"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Last Credit Date"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Reason Code Description"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Complaint Count"
+              },
+              {
+                "name": "Complaint Value"
+              },
+              {
+                "name": "Credit Issued"
+              },
+              {
+                "name": "Current Blocked Inv Value"
+              },
+              {
+                "name": "Current Q-Block Value"
+              },
+              {
+                "name": "Current S-Block Value"
+              },
+              {
+                "name": "Hold Amount"
+              },
+              {
+                "name": "Hold Quantity"
+              },
+              {
+                "name": "Hold Tag Count"
+              },
+              {
+                "name": "Open Value"
+              },
+              {
+                "name": "PQ Complaint Count"
+              },
+              {
+                "name": "PQ Complaint Value"
+              },
+              {
+                "name": "PQ Credit Issued"
+              },
+              {
+                "name": "PQ Open Value"
+              },
+              {
+                "name": "Product Quality Index"
+              },
+              {
+                "name": "Product Quality Index (Credited)"
+              },
+              {
+                "name": "Product Quality Index (Open)"
+              },
+              {
+                "name": "Current Expired Value"
+              },
+              {
+                "name": "Current S-Block Value with Hold Tags"
+              },
+              {
+                "name": "Product Quality Index (Target)"
+              },
+              {
+                "name": "PQ Complaint Cycle Time"
+              }
+            ]
+          },
+          {
+            "name": "Expired Inventory",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Expiration Date"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Manufacturing Date"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Hold Tag Documents",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Type"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reference Number"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "Pending Specification Documents",
+            "columns": [
+              {
+                "name": "Approver Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Pending Count"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              },
+              {
+                "name": "Refresh Date"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Expenses",
+        "tables": [
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Day"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Expenses",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Creation Date"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Header Text"
+              },
+              {
+                "name": "Document Item Text"
+              },
+              {
+                "name": "Document Line Number"
+              },
+              {
+                "name": "Document Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Is Reversal Document"
+              },
+              {
+                "name": "Is Reversed"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "OffsetAcctNoKey"
+              },
+              {
+                "name": "OffsetAcctType"
+              },
+              {
+                "name": "PlantNoKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "PurchaseDocLineKey"
+              },
+              {
+                "name": "Referenced Document Line Number"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Reversal Referenced Document Number"
+              },
+              {
+                "name": "Offset Account Name"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Is Controllable Expense"
+              },
+              {
+                "name": "Category"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Req Track Number"
+              }
+            ]
+          },
+          {
+            "name": "_Expenses Mode",
+            "columns": [
+              {
+                "name": "Mode"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Expenses Amount"
+              },
+              {
+                "name": "Expenses Plan"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              },
+              {
+                "name": "Refresh Date"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "CS Dashboard",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Day"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Complaint Documents",
+            "columns": [
+              {
+                "name": "Billing Block Indicator"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Complaint Amount"
+              },
+              {
+                "name": "Complaint Line Number"
+              },
+              {
+                "name": "Complaint Number"
+              },
+              {
+                "name": "Complaint Type"
+              },
+              {
+                "name": "Credit Issued Amount"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Last Credit Date"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Reason Code Description"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "CA Complaint Count"
+              },
+              {
+                "name": "CA Complaint Value"
+              },
+              {
+                "name": "Customer Accommodation Index"
+              },
+              {
+                "name": "Service Quality Index"
+              },
+              {
+                "name": "SQ Complaint Count"
+              },
+              {
+                "name": "SQ Complaint Value"
+              },
+              {
+                "name": "Customer Accommodation Index (Target)"
+              },
+              {
+                "name": "Service Quality Index (Target)"
+              },
+              {
+                "name": "Sales Order Cost Amount"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Sales Order Count"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Ship To Name"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Product Sales Report",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Person"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD Gross Margin%"
+              },
+              {
+                "name": "MTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales"
+              },
+              {
+                "name": "FYTD Gross Sales %Grand"
+              },
+              {
+                "name": "FYTD PY Gross Margin"
+              },
+              {
+                "name": "FYTD PY Gross Margin%"
+              },
+              {
+                "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Sales %Grand"
+              },
+              {
+                "name": "MTD Gross Sales %Grand"
+              },
+              {
+                "name": "MTD PY Gross Margin%"
+              },
+              {
+                "name": "MTD PY Gross Sales"
+              },
+              {
+                "name": "MTD PY Gross Sales %Grand"
+              },
+              {
+                "name": "MTD PY Gross Margin"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Sales and Margin",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "FYTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Margin"
+              },
+              {
+                "name": "FYTD PY Gross Margin%"
+              },
+              {
+                "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "Gross Margin"
+              },
+              {
+                "name": "Gross Margin %"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "MTD Gross Margin"
+              },
+              {
+                "name": "MTD Gross Margin%"
+              },
+              {
+                "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD PY Gross Margin"
+              },
+              {
+                "name": "MTD PY Gross Margin%"
+              },
+              {
+                "name": "MTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var Gross Sales"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Sales Invoice Documents",
+            "columns": [
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Discount Amount"
+              },
+              {
+                "name": "Gross Sales Amount"
+              },
+              {
+                "name": "Invoice Line Number"
+              },
+              {
+                "name": "Invoice Number"
+              },
+              {
+                "name": "Material Cost Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Sales Amount"
+              },
+              {
+                "name": "Overall Cost Amount"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "roles": [
+      {
+        "name": "All Data",
+        "description": "Can read all data in the model",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\LBabilo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1731"
+          },
+          {
+            "memberName": "DOMAIN\\JSipkovich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1457"
+          },
+          {
+            "memberName": "DOMAIN\\rfaust",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
+          },
+          {
+            "memberName": "DOMAIN\\jmilliken",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8848"
+          },
+          {
+            "memberName": "DOMAIN\\ahuddlestone",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7281"
+          },
+          {
+            "memberName": "DOMAIN\\amcneill",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7269"
+          },
+          {
+            "memberName": "DOMAIN\\CRussell",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1426"
+          },
+          {
+            "memberName": "DOMAIN\\abratter",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8513"
+          },
+          {
+            "memberName": "DOMAIN\\mebin",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8453"
+          },
+          {
+            "memberName": "DOMAIN\\jmody",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
+          }
+        ]
+      },
+      {
+        "name": "By Sales Region",
+        "description": "Reads data by sales region",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\bgraiff",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7297"
+          },
+          {
+            "memberName": "DOMAIN\\cjames",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8752"
+          },
+          {
+            "memberName": "DOMAIN\\DCastro",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1777"
+          },
+          {
+            "memberName": "DOMAIN\\DDuncan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1424"
+          },
+          {
+            "memberName": "DOMAIN\\dpiechocki",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8767"
+          },
+          {
+            "memberName": "DOMAIN\\GDebes",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1711"
+          },
+          {
+            "memberName": "DOMAIN\\jsmith",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8622"
+          },
+          {
+            "memberName": "DOMAIN\\lcalma",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-6987"
+          },
+          {
+            "memberName": "DOMAIN\\mbraswell",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8601"
+          },
+          {
+            "memberName": "DOMAIN\\mjaffre",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8526"
+          },
+          {
+            "memberName": "DOMAIN\\mpopovich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7298"
+          },
+          {
+            "memberName": "DOMAIN\\ngomez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8600"
+          },
+          {
+            "memberName": "DOMAIN\\pcinski",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7213"
+          },
+          {
+            "memberName": "DOMAIN\\RDaize",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1678"
+          },
+          {
+            "memberName": "DOMAIN\\sterenzi",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8498"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Region",
+            "filterExpression": "RLS_Region[DomainName]=USERNAME() && RLS_Region[InactiveDate] < TODAY()",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_Territory",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CostCenter",
+            "metadataPermission": "none"
+          }
+        ]
+      },
+      {
+        "name": "By Sales Territory",
+        "description": "Reads data by sales region",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\aedrei",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4956"
+          },
+          {
+            "memberName": "DOMAIN\\aflores",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7300"
+          },
+          {
+            "memberName": "DOMAIN\\arodriguez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8655"
+          },
+          {
+            "memberName": "DOMAIN\\cdicillo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8571"
+          },
+          {
+            "memberName": "DOMAIN\\DOrtega",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1408"
+          },
+          {
+            "memberName": "DOMAIN\\gwiant",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8443"
+          },
+          {
+            "memberName": "DOMAIN\\jventola",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8549"
+          },
+          {
+            "memberName": "DOMAIN\\LBurke",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3178"
+          },
+          {
+            "memberName": "DOMAIN\\maybinder",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7141"
+          },
+          {
+            "memberName": "DOMAIN\\tswartout",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Territory",
+            "filterExpression": "RLS_Territory[DomainName]=USERNAME() && RLS_Territory[InactiveDate] < TODAY()",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_Region",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CostCenter",
+            "metadataPermission": "none"
+          }
+        ]
+      },
+      {
+        "name": "By Cost Center",
+        "description": "Reads data by cost center hierarchy",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\amendes",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8652"
+          },
+          {
+            "memberName": "DOMAIN\\aboal",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8718"
+          },
+          {
+            "memberName": "DOMAIN\\CDagher",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1274"
+          },
+          {
+            "memberName": "DOMAIN\\LTorres",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
+          },
+          {
+            "memberName": "DOMAIN\\lurias",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7278"
+          },
+          {
+            "memberName": "DOMAIN\\moconnor",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8550"
+          },
+          {
+            "memberName": "DOMAIN\\RNicholson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1369"
+          },
+          {
+            "memberName": "DOMAIN\\SabineS",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1423"
+          },
+          {
+            "memberName": "DOMAIN\\sshishani",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8496"
+          },
+          {
+            "memberName": "DOMAIN\\skline",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2799"
+          },
+          {
+            "memberName": "DOMAIN\\tlaunay",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8525"
+          },
+          {
+            "memberName": "DOMAIN\\WSaadat",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1091"
+          },
+          {
+            "memberName": "DOMAIN\\rchen",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8758"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_Territory",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_Region",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CostCenter",
+            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
+            "metadataPermission": "none"
+          }
+        ]
+      }
+    ],
     "annotations": [
       {
         "name": "ClientCompatibilityLevel",

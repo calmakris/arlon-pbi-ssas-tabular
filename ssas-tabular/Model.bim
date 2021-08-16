@@ -103,6 +103,14 @@
             "dataType": "string",
             "sourceColumn": "SalesPerson",
             "displayFolder": "Sales Related"
+          },
+          {
+            "type": "calculated",
+            "name": "Sales Territory Name",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -4998,6 +5006,15 @@
               },
               {
                 "name": "Sales Territory"
+              },
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Sales Territory Name"
               }
             ]
           },

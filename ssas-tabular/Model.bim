@@ -3848,240 +3848,6 @@
     ],
     "perspectives": [
       {
-        "name": "Absorption Dashboard",
-        "tables": [
-          {
-            "name": "Absorption",
-            "columns": [
-              {
-                "name": "Cost"
-              },
-              {
-                "name": "CostCenterKey"
-              },
-              {
-                "name": "CostElementKey"
-              },
-              {
-                "name": "Hours"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Process Order"
-              },
-              {
-                "name": "SuperiorMaterialNoKey"
-              },
-              {
-                "name": "Transaction Type"
-              }
-            ]
-          },
-          {
-            "name": "DAX Measures",
-            "measures": [
-              {
-                "name": "Absorption Cost"
-              },
-              {
-                "name": "Earned Labor Cost"
-              },
-              {
-                "name": "Earned Overhead Cost"
-              },
-              {
-                "name": "Earned Labor Hours"
-              },
-              {
-                "name": "Earned Overhead Hours"
-              }
-            ]
-          },
-          {
-            "name": "Calendar",
-            "columns": [
-              {
-                "name": "Calendar Month Number"
-              },
-              {
-                "name": "Calendar Quarter Name"
-              },
-              {
-                "name": "Calendar Year Number"
-              },
-              {
-                "name": "Date"
-              },
-              {
-                "name": "Fiscal Period"
-              },
-              {
-                "name": "Fiscal Quarter Name"
-              },
-              {
-                "name": "Fiscal Year Number"
-              },
-              {
-                "name": "Month Name"
-              },
-              {
-                "name": "Is Current Month"
-              },
-              {
-                "name": "Is MTD"
-              },
-              {
-                "name": "Is Calendar YTD"
-              },
-              {
-                "name": "Is Fiscal YTD"
-              },
-              {
-                "name": "Year_Month_Sort_Key"
-              },
-              {
-                "name": "Calendar Week Number"
-              },
-              {
-                "name": "Is Last 2 Fiscal Years"
-              },
-              {
-                "name": "Is Last 13 Months"
-              },
-              {
-                "name": "Is Current Fiscal Year"
-              },
-              {
-                "name": "Day"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Calendar Hierarchy"
-              },
-              {
-                "name": "Fiscal Hierarchy"
-              }
-            ]
-          },
-          {
-            "name": "Material Classification",
-            "columns": [
-              {
-                "name": "Brand"
-              },
-              {
-                "name": "Color Number"
-              },
-              {
-                "name": "Commercialization Date"
-              },
-              {
-                "name": "Film Type"
-              },
-              {
-                "name": "Liner"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Product Series"
-              }
-            ]
-          },
-          {
-            "name": "Material Master",
-            "columns": [
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Material Type"
-              }
-            ]
-          },
-          {
-            "name": "Product Hierarchy",
-            "columns": [
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Product Hierarchy L1"
-              },
-              {
-                "name": "Product Hierarchy L2"
-              },
-              {
-                "name": "Product Hierarchy L3"
-              }
-            ]
-          },
-          {
-            "name": "Cost Center Names",
-            "columns": [
-              {
-                "name": "Cost Center"
-              },
-              {
-                "name": "Cost Center Name"
-              },
-              {
-                "name": "Department"
-              }
-            ]
-          },
-          {
-            "name": "Cost Element Names",
-            "columns": [
-              {
-                "name": "Category"
-              },
-              {
-                "name": "Category Renamed"
-              },
-              {
-                "name": "Company Category"
-              },
-              {
-                "name": "Sub Category"
-              }
-            ]
-          },
-          {
-            "name": "_Time Intelligence",
-            "columns": [
-              {
-                "name": "Time Calculation"
-              }
-            ]
-          },
-          {
-            "name": "_Refresh Date",
-            "columns": [
-              {
-                "name": "Report Name"
-              },
-              {
-                "name": "Refresh Date"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "QA Dashboard",
         "tables": [
           {
@@ -5026,6 +4792,240 @@
         ]
       },
       {
+        "name": "Absorption Dashboard",
+        "tables": [
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Cost"
+              },
+              {
+                "name": "CostCenterKey"
+              },
+              {
+                "name": "CostElementKey"
+              },
+              {
+                "name": "Hours"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order"
+              },
+              {
+                "name": "SuperiorMaterialNoKey"
+              },
+              {
+                "name": "Transaction Type"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Absorption Cost"
+              },
+              {
+                "name": "Earned Labor Cost"
+              },
+              {
+                "name": "Earned Overhead Cost"
+              },
+              {
+                "name": "Earned Labor Hours"
+              },
+              {
+                "name": "Earned Overhead Hours"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Day"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Material Classification",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Product Series"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              }
+            ]
+          },
+          {
+            "name": "Product Hierarchy",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Report Name"
+              },
+              {
+                "name": "Refresh Date"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "Product Sales Report",
         "tables": [
           {
@@ -5625,6 +5625,7 @@
           },
           {
             "name": "RLS_CostCenter",
+            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
             "metadataPermission": "none"
           }
         ]
@@ -5687,13 +5688,14 @@
           },
           {
             "name": "RLS_CostCenter",
+            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
             "metadataPermission": "none"
           }
         ]
       },
       {
-        "name": "By Cost Center",
-        "description": "Reads data by cost center hierarchy",
+        "name": "Default",
+        "description": "Default; Reads data by cost center hierarchy (mainly for expenses data)",
         "modelPermission": "read",
         "members": [
           {
@@ -5747,6 +5749,34 @@
           {
             "memberName": "DOMAIN\\rchen",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8758"
+          },
+          {
+            "memberName": "DOMAIN\\bnovotny",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8604"
+          },
+          {
+            "memberName": "DOMAIN\\edeleon",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-6984"
+          },
+          {
+            "memberName": "DOMAIN\\JPerez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1053"
+          },
+          {
+            "memberName": "DOMAIN\\maustria",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-6989"
+          },
+          {
+            "memberName": "DOMAIN\\iabarca",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8573"
+          },
+          {
+            "memberName": "DOMAIN\\jcarrizal",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8663"
+          },
+          {
+            "memberName": "DOMAIN\\BDiaz",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3188"
           }
         ],
         "tablePermissions": [

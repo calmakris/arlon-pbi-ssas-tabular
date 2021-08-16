@@ -2625,7 +2625,7 @@
             {
               "name": "PY",
               "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
-              "ordinal": 12
+              "ordinal": 13
             },
             {
               "name": "PY YTD",
@@ -2652,7 +2652,7 @@
             {
               "name": "FYTD",
               "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
-              "ordinal": 9
+              "ordinal": 10
             },
             {
               "name": "PY FYTD",
@@ -2663,7 +2663,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
                 ")"
               ],
-              "ordinal": 10
+              "ordinal": 11
             },
             {
               "name": "YOY",
@@ -2681,7 +2681,7 @@
                 "    BLANK()",
                 ")"
               ],
-              "ordinal": 13
+              "ordinal": 14
             },
             {
               "name": "CD",
@@ -2729,7 +2729,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
                 ")"
               ],
-              "ordinal": 8
+              "ordinal": 9
             },
             {
               "name": "FTYD PY Var",
@@ -2743,7 +2743,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
                 ")"
               ],
-              "ordinal": 11
+              "ordinal": 12
             }
           ]
         },

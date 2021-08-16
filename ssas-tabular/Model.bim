@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -94,6 +92,7 @@
             "name": "Is New Customer",
             "dataType": "boolean",
             "isDataTypeInferred": true,
+            "description": "A customer is new if the account is created in the last 12 months",
             "expression": " 'Customer Master'[Account Creation Date] >= [Date 12 Months Ago]",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
             "displayFolder": "Master"

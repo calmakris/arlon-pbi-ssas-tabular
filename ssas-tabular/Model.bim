@@ -11,13 +11,12 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIDEV",
+            "server": "ARLPBIPRD",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "Username": "DOMAIN\\PBI-ETL",
@@ -5044,222 +5043,7 @@
         ]
       },
       {
-        "name": "Product Sales Report",
-        "tables": [
-          {
-            "name": "_Refresh Date",
-            "columns": [
-              {
-                "name": "Refresh Date"
-              },
-              {
-                "name": "Report Name"
-              }
-            ]
-          },
-          {
-            "name": "Calendar",
-            "columns": [
-              {
-                "name": "Calendar Month Number"
-              },
-              {
-                "name": "Calendar Quarter Name"
-              },
-              {
-                "name": "Calendar Week Number"
-              },
-              {
-                "name": "Calendar Year Number"
-              },
-              {
-                "name": "Date"
-              },
-              {
-                "name": "Day"
-              },
-              {
-                "name": "Fiscal Period"
-              },
-              {
-                "name": "Fiscal Quarter Name"
-              },
-              {
-                "name": "Fiscal Year Number"
-              },
-              {
-                "name": "Is Calendar YTD"
-              },
-              {
-                "name": "Is Current Fiscal Year"
-              },
-              {
-                "name": "Is Current Month"
-              },
-              {
-                "name": "Is Fiscal YTD"
-              },
-              {
-                "name": "Is Last 13 Months"
-              },
-              {
-                "name": "Is Last 2 Fiscal Years"
-              },
-              {
-                "name": "Is MTD"
-              },
-              {
-                "name": "Month Name"
-              },
-              {
-                "name": "Year_Month_Sort_Key"
-              },
-              {
-                "name": "Is Weekday"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Calendar Hierarchy"
-              },
-              {
-                "name": "Fiscal Hierarchy"
-              }
-            ]
-          },
-          {
-            "name": "Customer Master",
-            "columns": [
-              {
-                "name": "Customer Name"
-              },
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "Sales Organization"
-              },
-              {
-                "name": "Sales Region"
-              },
-              {
-                "name": "Sales Territory"
-              },
-              {
-                "name": "Sales Person"
-              }
-            ]
-          },
-          {
-            "name": "DAX Measures",
-            "measures": [
-              {
-                "name": "MTD Gross Sales"
-              },
-              {
-                "name": "MTD Gross Margin%"
-              },
-              {
-                "name": "MTD Gross Margin"
-              },
-              {
-                "name": "FYTD Gross Margin"
-              },
-              {
-                "name": "FYTD Gross Margin%"
-              },
-              {
-                "name": "FYTD Gross Sales"
-              },
-              {
-                "name": "FYTD Gross Sales %Grand"
-              },
-              {
-                "name": "FYTD PY Gross Margin"
-              },
-              {
-                "name": "FYTD PY Gross Margin%"
-              },
-              {
-                "name": "FYTD PY Gross Sales"
-              },
-              {
-                "name": "FYTD PY Gross Sales %Grand"
-              },
-              {
-                "name": "MTD Gross Sales %Grand"
-              },
-              {
-                "name": "MTD PY Gross Margin%"
-              },
-              {
-                "name": "MTD PY Gross Sales"
-              },
-              {
-                "name": "MTD PY Gross Sales %Grand"
-              },
-              {
-                "name": "MTD PY Gross Margin"
-              }
-            ]
-          },
-          {
-            "name": "Material Master",
-            "columns": [
-              {
-                "name": "Brand"
-              },
-              {
-                "name": "Color Number"
-              },
-              {
-                "name": "Commercialization Date"
-              },
-              {
-                "name": "Film Type"
-              },
-              {
-                "name": "Liner"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Material Number - Description"
-              },
-              {
-                "name": "Material Type"
-              },
-              {
-                "name": "Product Hierarchy L1"
-              },
-              {
-                "name": "Product Hierarchy L2"
-              },
-              {
-                "name": "Product Hierarchy L3"
-              },
-              {
-                "name": "Product Series"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "X Distribution Status"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Sales and Margin",
+        "name": "Generic Sales",
         "tables": [
           {
             "name": "_Refresh Date",
@@ -5275,6 +5059,9 @@
           {
             "name": "_Time Intelligence",
             "columns": [
+              {
+                "name": "Ordinal"
+              },
               {
                 "name": "Time Calculation"
               }
@@ -5332,13 +5119,13 @@
                 "name": "Is MTD"
               },
               {
+                "name": "Is Weekday"
+              },
+              {
                 "name": "Month Name"
               },
               {
                 "name": "Year_Month_Sort_Key"
-              },
-              {
-                "name": "Is Weekday"
               }
             ],
             "hierarchies": [
@@ -5354,10 +5141,19 @@
             "name": "Customer Master",
             "columns": [
               {
+                "name": "Country"
+              },
+              {
                 "name": "Customer Name"
               },
               {
                 "name": "Customer Number"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
               },
               {
                 "name": "Sales Organization"
@@ -5386,6 +5182,9 @@
                 "name": "FYTD Gross Sales"
               },
               {
+                "name": "FYTD Gross Sales %Grand"
+              },
+              {
                 "name": "FYTD PY Gross Margin"
               },
               {
@@ -5393,6 +5192,12 @@
               },
               {
                 "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Sales %Grand"
+              },
+              {
+                "name": "FYTD PY Var Gross Sales"
               },
               {
                 "name": "Gross Margin"
@@ -5404,6 +5209,9 @@
                 "name": "Gross Sales"
               },
               {
+                "name": "Gross Sales %Grand"
+              },
+              {
                 "name": "MTD Gross Margin"
               },
               {
@@ -5411,6 +5219,9 @@
               },
               {
                 "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD Gross Sales %Grand"
               },
               {
                 "name": "MTD PY Gross Margin"
@@ -5422,7 +5233,16 @@
                 "name": "MTD PY Gross Sales"
               },
               {
-                "name": "FYTD PY Var Gross Sales"
+                "name": "MTD PY Gross Sales %Grand"
+              },
+              {
+                "name": "Net Margin"
+              },
+              {
+                "name": "Net Margin %"
+              },
+              {
+                "name": "Net Sales"
               }
             ]
           },

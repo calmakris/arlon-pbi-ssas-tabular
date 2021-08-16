@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -410,6 +409,12 @@
             "dataType": "int64",
             "sourceColumn": "Day_Of_Month",
             "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Is Weekday",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Weekday",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -423,7 +428,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -3956,6 +3961,9 @@
               },
               {
                 "name": "Day"
+              },
+              {
+                "name": "Is Weekday"
               }
             ],
             "hierarchies": [
@@ -4279,6 +4287,9 @@
               },
               {
                 "name": "Day"
+              },
+              {
+                "name": "Is Weekday"
               }
             ],
             "hierarchies": [
@@ -4542,6 +4553,9 @@
               },
               {
                 "name": "Day"
+              },
+              {
+                "name": "Is Weekday"
               }
             ],
             "hierarchies": [
@@ -4903,6 +4917,9 @@
               },
               {
                 "name": "Day"
+              },
+              {
+                "name": "Is Weekday"
               }
             ],
             "hierarchies": [
@@ -5096,6 +5113,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is Weekday"
               }
             ],
             "hierarchies": [
@@ -5316,6 +5336,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is Weekday"
               }
             ],
             "hierarchies": [

@@ -3450,6 +3450,7 @@
       },
       {
         "name": "RLS_CostCenter",
+        "isHidden": true,
         "columns": [
           {
             "name": "EmployeeKey",
@@ -5777,6 +5778,14 @@
           {
             "memberName": "DOMAIN\\BDiaz",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3188"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest2",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20422"
           }
         ],
         "tablePermissions": [

@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1893,65 +1891,6 @@
         ]
       },
       {
-        "name": "Material Classification",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "isUnique": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Brand",
-            "dataType": "string",
-            "sourceColumn": "Brand"
-          },
-          {
-            "name": "Color Number",
-            "dataType": "string",
-            "sourceColumn": "ColorNumber"
-          },
-          {
-            "name": "Commercialization Date",
-            "dataType": "dateTime",
-            "sourceColumn": "CommercializationDate"
-          },
-          {
-            "name": "Film Type",
-            "dataType": "string",
-            "sourceColumn": "FilmType"
-          },
-          {
-            "name": "Liner",
-            "dataType": "string",
-            "sourceColumn": "Liner"
-          },
-          {
-            "name": "Product Series",
-            "dataType": "string",
-            "sourceColumn": "ProductSeries"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_CLASSIFICATION = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_CLASSIFICATION\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_CLASSIFICATION"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Material Master",
         "columns": [
           {
@@ -1999,76 +1938,57 @@
             "displayFolder": "Master"
           },
           {
-            "type": "calculated",
             "name": "Brand",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": "RELATED( 'Material Classification'[Brand] )",
+            "sourceColumn": "Brand",
             "displayFolder": "Classification"
           },
           {
-            "type": "calculated",
             "name": "Color Number",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": "RELATED( 'Material Classification'[Color Number] )",
+            "sourceColumn": "ColorNumber",
             "displayFolder": "Classification"
           },
           {
-            "type": "calculated",
-            "name": "Film Type",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Material Classification'[Film Type] )",
-            "displayFolder": "Classification"
-          },
-          {
-            "type": "calculated",
-            "name": "Liner",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Material Classification'[Liner] )",
-            "displayFolder": "Classification"
-          },
-          {
-            "type": "calculated",
-            "name": "Product Series",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Material Classification'[Product Series] )",
-            "displayFolder": "Classification"
-          },
-          {
-            "type": "calculated",
             "name": "Commercialization Date",
             "dataType": "dateTime",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Material Classification'[Commercialization Date] )",
-            "formatString": "MM/dd/yyyy",
+            "sourceColumn": "CommercializationDate",
             "displayFolder": "Classification"
           },
           {
-            "type": "calculated",
+            "name": "Film Type",
+            "dataType": "string",
+            "sourceColumn": "FilmType",
+            "displayFolder": "Classification"
+          },
+          {
+            "name": "Liner",
+            "dataType": "string",
+            "sourceColumn": "Liner",
+            "displayFolder": "Classification"
+          },
+          {
+            "name": "Product Series",
+            "dataType": "string",
+            "sourceColumn": "ProductSeries",
+            "displayFolder": "Classification"
+          },
+          {
             "name": "Product Hierarchy L1",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L1] )",
+            "sourceColumn": "ProductHierarchyDescriptionL1",
             "displayFolder": "Product Hierarchy"
           },
           {
-            "type": "calculated",
             "name": "Product Hierarchy L2",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L2] )",
+            "sourceColumn": "ProductHierarchyDescriptionL2",
             "displayFolder": "Product Hierarchy"
           },
           {
-            "type": "calculated",
             "name": "Product Hierarchy L3",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( 'Product Hierarchy'[Product Hierarchy L3] )",
+            "sourceColumn": "ProductHierarchyDescriptionL3",
             "displayFolder": "Product Hierarchy"
           }
         ],
@@ -2084,50 +2004,6 @@
                 "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_MATERIAL_MASTER"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Product Hierarchy",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "isHidden": true,
-            "isUnique": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Product Hierarchy L1",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL1"
-          },
-          {
-            "name": "Product Hierarchy L2",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL2"
-          },
-          {
-            "name": "Product Hierarchy L3",
-            "dataType": "string",
-            "sourceColumn": "ProductHierarchyDescriptionL3"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_MATERIAL_PRODHIERARCHY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_PRODHIERARCHY\"]}[Data]",
-                "in",
-                "    dbo_VW_MATERIAL_PRODHIERARCHY"
               ]
             }
           }
@@ -3640,24 +3516,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "637bbb79-1df9-41df-9f01-6327cb2e1ca5",
-        "fromCardinality": "one",
-        "fromTable": "Material Master",
-        "fromColumn": "Material Number",
-        "toTable": "Material Classification",
-        "toColumn": "Material Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "8dbdc264-a57e-48f4-8ccf-064f378c4788",
-        "fromCardinality": "one",
-        "fromTable": "Material Master",
-        "fromColumn": "Material Number",
-        "toTable": "Product Hierarchy",
-        "toColumn": "Material Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "22d61dbe-0265-4bd3-b686-8d76e4f1d50f",
         "fromTable": "Complaint Documents",
         "fromColumn": "MaterialNoKey",
@@ -4702,21 +4560,6 @@
             "name": "Material Master",
             "columns": [
               {
-                "name": "Brand"
-              },
-              {
-                "name": "Color Number"
-              },
-              {
-                "name": "Commercialization Date"
-              },
-              {
-                "name": "Film Type"
-              },
-              {
-                "name": "Liner"
-              },
-              {
                 "name": "Material Description"
               },
               {
@@ -4732,6 +4575,30 @@
                 "name": "Material Type"
               },
               {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              },
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
                 "name": "Product Hierarchy L1"
               },
               {
@@ -4739,15 +4606,6 @@
               },
               {
                 "name": "Product Hierarchy L3"
-              },
-              {
-                "name": "Product Series"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "X Distribution Status"
               }
             ]
           },
@@ -5110,21 +4968,6 @@
             "name": "Material Master",
             "columns": [
               {
-                "name": "Brand"
-              },
-              {
-                "name": "Color Number"
-              },
-              {
-                "name": "Commercialization Date"
-              },
-              {
-                "name": "Film Type"
-              },
-              {
-                "name": "Liner"
-              },
-              {
                 "name": "Material Description"
               },
               {
@@ -5140,6 +4983,30 @@
                 "name": "Material Type"
               },
               {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              },
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
                 "name": "Product Hierarchy L1"
               },
               {
@@ -5147,15 +5014,6 @@
               },
               {
                 "name": "Product Hierarchy L3"
-              },
-              {
-                "name": "Product Series"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "X Distribution Status"
               }
             ]
           },

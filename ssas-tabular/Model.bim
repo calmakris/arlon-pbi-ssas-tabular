@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -5019,6 +5021,10 @@
           {
             "memberName": "DOMAIN\\jmody",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
+          },
+          {
+            "memberName": "DOMAIN\\jmcmanus",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
           }
         ]
       },

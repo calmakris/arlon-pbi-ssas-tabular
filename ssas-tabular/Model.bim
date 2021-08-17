@@ -1808,89 +1808,6 @@
         ]
       },
       {
-        "name": "Absorption",
-        "columns": [
-          {
-            "name": "Process Order",
-            "dataType": "string",
-            "sourceColumn": "OrderNoKey"
-          },
-          {
-            "name": "MaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "SuperiorMaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "SuperiorMaterialNoKey"
-          },
-          {
-            "name": "CostCenterKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CostCenterKey"
-          },
-          {
-            "name": "CostElementKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CostElementKey"
-          },
-          {
-            "name": "Transaction Type",
-            "dataType": "string",
-            "sourceColumn": "BusTransType"
-          },
-          {
-            "name": "Posting Date",
-            "dataType": "dateTime",
-            "sourceColumn": "PostingDateKey",
-            "formatString": "MM/dd/yyyy"
-          },
-          {
-            "name": "Hours",
-            "dataType": "double",
-            "sourceColumn": "QuantityValue",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "Cost",
-            "dataType": "double",
-            "sourceColumn": "NetValue",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_ABSORPTION\"]}[Data]",
-                "in",
-                "    dbo_VW_ABSORPTION"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Material Master",
         "columns": [
           {
@@ -3509,13 +3426,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "bf66fd75-c362-4675-abd4-420fb281ca3f",
-        "fromTable": "Absorption",
-        "fromColumn": "Posting Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
         "name": "22d61dbe-0265-4bd3-b686-8d76e4f1d50f",
         "fromTable": "Complaint Documents",
         "fromColumn": "MaterialNoKey",
@@ -3549,20 +3459,6 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
-      },
-      {
-        "name": "22f5ffae-1a73-4d36-815b-33b46aefbcf9",
-        "fromTable": "Absorption",
-        "fromColumn": "MaterialNoKey",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
-        "name": "48c5cf15-f0eb-40f5-94a2-1dc0d8170fe9",
-        "fromTable": "Absorption",
-        "fromColumn": "CostCenterKey",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center"
       },
       {
         "name": "64d69090-8c95-4cfd-bae5-098fdca2fd7c",
@@ -3606,13 +3502,6 @@
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
-      },
-      {
-        "name": "5caa4e78-184b-4b81-8308-65501c7e23e7",
-        "fromTable": "Absorption",
-        "fromColumn": "CostElementKey",
-        "toTable": "Cost Element Names",
-        "toColumn": "Cost Element"
       },
       {
         "name": "e23eac90-b677-4be3-8b2e-bdaa9a94dc93",

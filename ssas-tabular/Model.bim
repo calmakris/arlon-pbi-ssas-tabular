@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -2485,6 +2487,7 @@
           {
             "name": "Amount",
             "dataType": "double",
+            "description": "Expenses amount are in company currency while Open POs are already converted to USD",
             "sourceColumn": "Amount",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "sum",
@@ -2509,6 +2512,12 @@
               "    LOOKUPVALUE( 'Cost Element Names'[Cost Element Name], 'Cost Element Names'[Cost Element], Expenses[OffsetAcctNoKey] )",
               ")"
             ]
+          },
+          {
+            "name": "Expense Type",
+            "dataType": "string",
+            "description": "Expense are line items posted by Accounting; Open PO are open purchase orders",
+            "sourceColumn": "ExpenseType"
           }
         ],
         "partitions": [
@@ -4453,6 +4462,9 @@
               },
               {
                 "name": "Offset Account Name"
+              },
+              {
+                "name": "Expense Type"
               }
             ]
           },

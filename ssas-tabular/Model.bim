@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -759,106 +757,6 @@
                 "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
-          },
-          {
-            "name": "Earned Labor Cost",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM(Absorption[Cost]) + 0,",
-              "    FILTER(",
-              "        Absorption,",
-              "        Absorption[Transaction Type] = \"RKL\"",
-              "    ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && ('Cost Element Names'[Sub Category] = \"Labor\" || 'Cost Element Names'[Sub Category] = \"Setup\")",
-              "    )",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Absorption\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Earned Overhead Cost",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM(Absorption[Cost]) + 0,",
-              "    FILTER(",
-              "        Absorption,",
-              "        Absorption[Transaction Type] = \"RKL\"",
-              "    ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Overhead\"",
-              "    )",
-              ")"
-            ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Absorption\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Absorption Cost",
-            "expression": " [Earned Labor Cost] + [Earned Overhead Cost]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Absorption\\Sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Earned Labor Hours",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM(Absorption[Hours]) + 0,",
-              "    FILTER(",
-              "        Absorption,",
-              "        Absorption[Transaction Type] = \"RKL\"",
-              "    ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && ('Cost Element Names'[Sub Category] = \"Labor\" || 'Cost Element Names'[Sub Category] = \"Setup\")",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Absorption\\Sum"
-          },
-          {
-            "name": "Earned Overhead Hours",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM(Absorption[Hours]) + 0,",
-              "    FILTER(",
-              "        Absorption,",
-              "        Absorption[Transaction Type] = \"RKL\"",
-              "    ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Company Category] = \"Absorption\" && 'Cost Element Names'[Sub Category] = \"Overhead\"",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Absorption\\Sum"
           },
           {
             "name": "Current Expired Value",
@@ -2259,12 +2157,6 @@
             "sourceColumn": "PurchaseDocLineKey"
           },
           {
-            "name": "MaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
             "name": "Document Header Text",
             "dataType": "string",
             "sourceColumn": "DocHeaderText"
@@ -2294,25 +2186,25 @@
             ]
           },
           {
-            "type": "calculated",
-            "name": "Offset Account Name",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": [
-              " ",
-              "SWITCH(",
-              "    Expenses[OffsetAcctType],",
-              "    \"D\", LOOKUPVALUE( 'Customer Master'[Customer Name], 'Customer Master'[Customer Number], Expenses[OffsetAcctNoKey]),",
-              "    \"K\", LOOKUPVALUE( 'Vendor Master'[Vendor Name], 'Vendor Master'[Vendor Number], Expenses[OffsetAcctNoKey] ),",
-              "    LOOKUPVALUE( 'Cost Element Names'[Cost Element Name], 'Cost Element Names'[Cost Element], Expenses[OffsetAcctNoKey] )",
-              ")"
-            ]
-          },
-          {
             "name": "Expense Type",
             "dataType": "string",
             "description": "Expense are line items posted by Accounting; Open PO are open purchase orders",
             "sourceColumn": "ExpenseType"
+          },
+          {
+            "name": "Offset Account Name",
+            "dataType": "string",
+            "sourceColumn": "OffsetAcctName"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialName"
           }
         ],
         "partitions": [
@@ -2436,37 +2328,6 @@
                 "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_PURCHASE_ORDERS\"]}[Data]",
                 "in",
                 "    dbo_VW_PURCHASE_ORDERS"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Vendor Master",
-        "columns": [
-          {
-            "name": "Vendor Number",
-            "dataType": "string",
-            "sourceColumn": "VendorNoKey"
-          },
-          {
-            "name": "Vendor Name",
-            "dataType": "string",
-            "sourceColumn": "VendorName"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
-                "in",
-                "    dbo_VW_VENDOR_MASTER"
               ]
             }
           }
@@ -3541,30 +3402,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "8ab1ab25-2eea-4cb2-bdbc-d284b69ca4d3",
-        "fromTable": "Expenses",
-        "fromColumn": "OffsetAcctNoKey",
-        "toTable": "Vendor Master",
-        "toColumn": "Vendor Number"
-      },
-      {
-        "name": "85b9a9fc-50b4-4f03-9cf4-66cbe9c81525",
-        "toCardinality": "many",
-        "fromTable": "Expenses",
-        "fromColumn": "OffsetAcctNoKey",
-        "toTable": "Customer Master",
-        "toColumn": "Customer Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "43edf758-b6c5-4d49-8e6b-a2410ec02ef0",
-        "fromTable": "Expenses",
-        "fromColumn": "OffsetAcctNoKey",
-        "toTable": "Cost Element Names",
-        "toColumn": "Cost Element",
-        "isActive": false
-      },
-      {
         "name": "7c3dbb62-0337-4cc5-9e9c-df847491f72f",
         "fromTable": "Complaint Documents",
         "fromColumn": "ReasonCodeKey",
@@ -3637,20 +3474,6 @@
         "toColumn": "AddressNoKey"
       },
       {
-        "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
-        "fromTable": "Customer Master",
-        "fromColumn": "Sales Region",
-        "toTable": "Sales Region",
-        "toColumn": "Sales Region"
-      },
-      {
-        "name": "0133610b-f474-47c4-a3e2-612f4360d565",
-        "fromTable": "Customer Master",
-        "fromColumn": "Sales Territory",
-        "toTable": "Sales Territory",
-        "toColumn": "Sales Territory"
-      },
-      {
         "name": "b8c16a52-5847-4775-8abd-8bb356d4b1e3",
         "fromTable": "RLS_Region",
         "fromColumn": "SalesRegionKey",
@@ -3683,6 +3506,20 @@
         "fromColumn": "ShipToAddrKey",
         "toTable": "Addresses",
         "toColumn": "AddressNoKey"
+      },
+      {
+        "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Region",
+        "toTable": "Sales Region",
+        "toColumn": "Sales Region"
+      },
+      {
+        "name": "0133610b-f474-47c4-a3e2-612f4360d565",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Territory",
+        "toTable": "Sales Territory",
+        "toColumn": "Sales Territory"
       }
     ],
     "perspectives": [
@@ -4183,9 +4020,6 @@
                 "name": "Is Reversed"
               },
               {
-                "name": "MaterialNoKey"
-              },
-              {
                 "name": "OffsetAcctNoKey"
               },
               {
@@ -4210,10 +4044,16 @@
                 "name": "Reversal Referenced Document Number"
               },
               {
+                "name": "Expense Type"
+              },
+              {
                 "name": "Offset Account Name"
               },
               {
-                "name": "Expense Type"
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
               }
             ]
           },

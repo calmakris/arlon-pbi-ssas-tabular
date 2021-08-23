@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -109,6 +111,7 @@
             "dataType": "string",
             "isDataTypeInferred": true,
             "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
+            "sortByColumn": "Sales Territory",
             "displayFolder": "Sales Related"
           }
         ],
@@ -522,61 +525,98 @@
         "measures": [
           {
             "name": "Gross Sales",
-            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] / 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Gross Sales Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
+              ")"
+            ],
+            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
             "displayFolder": "Sales",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
           {
             "name": "Net Sales",
-            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "description": "Net of gross sales and discounts",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Net Sales Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Net Sales Amount] / 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Net Sales Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
+              ")"
+            ],
+            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
             "displayFolder": "Sales",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
           {
             "name": "Cost of Goods",
-            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Overall Cost Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overall Cost Amount] / 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Overall Cost Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
+              ")"
+            ],
+            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
             "displayFolder": "Sales",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
           {
             "name": "Gross Margin",
             "expression": " [Gross Sales] - [Cost of Goods]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
             "displayFolder": "Sales",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
           {
             "name": "Net Margin",
             "expression": " [Net Sales] - [Cost of Goods]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
             "displayFolder": "Sales",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
@@ -1052,43 +1092,43 @@
           {
             "name": "MTD Gross Sales",
             "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales",
             "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin",
             "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin",
             "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Sales",
             "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Sales",
             "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin",
             "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1142,14 +1182,80 @@
           {
             "name": "MTD PY Gross Margin",
             "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Gross Sales",
             "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Gross Sales Budget",
+            "description": "Budget numbers submitted by Sales to IT",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Targets_Sales[GrossSales] ),",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Territory] ),",
+              "        Targets_Sales[SalesTerritoryKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Targets_Sales[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Gross Margin % Budget",
+            "description": "Budget numbers submitted by Sales to IT",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( Targets_Sales[GrossMarginMTD] ),",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Territory] ),",
+              "        Targets_Sales[SalesTerritoryKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Targets_Sales[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "Gross Margin % YTD Budget",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( Targets_Sales[GrossMarginYTD] ),",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Territory] ),",
+              "        Targets_Sales[SalesTerritoryKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Targets_Sales[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Sales"
           }
         ]
       },
@@ -1325,6 +1431,31 @@
             "dataType": "string",
             "isDataTypeInferred": true,
             "expression": " RELATED( Addresses[Name] )"
+          },
+          {
+            "name": "HiddenCurrency",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Currency"
+          },
+          {
+            "type": "calculated",
+            "name": "Currency",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", \"USD\",",
+              "        \"Local\", 'Sales Invoice Documents'[HiddenCurrency],",
+              "        \"USD\"",
+              "    ),",
+              "    \"USD\"",
+              ")"
+            ]
           }
         ],
         "partitions": [
@@ -1337,7 +1468,7 @@
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -2352,7 +2483,13 @@
             },
             {
               "name": "YTD",
-              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
+              "expression": [
+                "IF(",
+                "    ISSELECTEDMEASURE(  [Gross Margin % Budget] ),",
+                "    CALCULATE( [Gross Margin % YTD Budget], DATESMTD('Calendar'[Date]) ),",
+                "    CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
+                ")"
+              ],
               "ordinal": 7
             },
             {
@@ -2384,7 +2521,13 @@
             },
             {
               "name": "FYTD",
-              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
+              "expression": [
+                "IF(",
+                "    ISSELECTEDMEASURE(  [Gross Margin % Budget] ),",
+                "    CALCULATE( [Gross Margin % YTD Budget], DATESMTD('Calendar'[Date]) ),",
+                "    CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
+                ")"
+              ],
               "ordinal": 10
             },
             {
@@ -3232,6 +3375,84 @@
                 "in",
                 "    #\"Removed Other Columns\""
               ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Targets_Sales",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesTerritoryKey",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritoryKey"
+          },
+          {
+            "name": "CalendarTimeKey",
+            "dataType": "string",
+            "sourceColumn": "CalendarTimeKey"
+          },
+          {
+            "name": "GrossSales",
+            "dataType": "double",
+            "sourceColumn": "GrossSales",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "GrossMarginMTD",
+            "dataType": "double",
+            "sourceColumn": "GrossMarginMTD",
+            "formatString": "0.00%;-0.00%;0.00%"
+          },
+          {
+            "name": "GrossMarginYTD",
+            "dataType": "double",
+            "sourceColumn": "GrossMarginYTD",
+            "formatString": "0.00%;-0.00%;0.00%"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_zTARGETS_SALES = Source{[Schema=\"dbo\",Item=\"zTARGETS_SALES\"]}[Data]",
+                "in",
+                "    dbo_zTARGETS_SALES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Currency to Use",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Currency",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": " { \"USD\", \"Local\" }"
             }
           }
         ]
@@ -4692,6 +4913,12 @@
               },
               {
                 "name": "Net Sales"
+              },
+              {
+                "name": "Gross Sales Budget"
+              },
+              {
+                "name": "Gross Margin % Budget"
               }
             ]
           },
@@ -4810,6 +5037,20 @@
               },
               {
                 "name": "Ship To Name"
+              },
+              {
+                "name": "HiddenCurrency"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
               }
             ]
           }

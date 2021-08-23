@@ -1433,29 +1433,9 @@
             "expression": " RELATED( Addresses[Name] )"
           },
           {
-            "name": "HiddenCurrency",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "Currency"
-          },
-          {
-            "type": "calculated",
             "name": "Currency",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": [
-              "",
-              "IF(",
-              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "    SWITCH(",
-              "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", \"USD\",",
-              "        \"Local\", 'Sales Invoice Documents'[HiddenCurrency],",
-              "        \"USD\"",
-              "    ),",
-              "    \"USD\"",
-              ")"
-            ]
+            "sourceColumn": "Currency"
           }
         ],
         "partitions": [
@@ -5037,9 +5017,6 @@
               },
               {
                 "name": "Ship To Name"
-              },
-              {
-                "name": "HiddenCurrency"
               },
               {
                 "name": "Currency"

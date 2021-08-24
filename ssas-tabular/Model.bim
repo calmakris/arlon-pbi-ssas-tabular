@@ -1080,24 +1080,6 @@
             "displayFolder": "Sales Orders"
           },
           {
-            "name": "Gross Sales %Grand",
-            "description": "Gross sales as percent of grand total by customer master and material master",
-            "expression": [
-              " ",
-              "DIVIDE(",
-              "    [Gross Sales],",
-              "    CALCULATE(",
-              "        [Gross Sales],",
-              "        ALL( 'Material Master'),",
-              "        ALL( 'Customer Master' )",
-              "    )",
-              ")",
-              ""
-            ],
-            "formatString": "0%;-0%;0%",
-            "displayFolder": "Sales"
-          },
-          {
             "name": "MTD Gross Sales",
             "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
@@ -1152,18 +1134,6 @@
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "MTD Gross Sales %Grand",
-            "expression": " CALCULATE( [Gross Sales %Grand], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "FYTD Gross Sales %Grand",
-            "expression": " CALCULATE( [Gross Sales %Grand], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
             "name": "MTD PY Gross Margin%",
             "expression": " CALCULATE( [MTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
@@ -1172,18 +1142,6 @@
           {
             "name": "FYTD PY Gross Margin%",
             "expression": " CALCULATE( [FYTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "MTD PY Gross Sales %Grand",
-            "expression": " CALCULATE( [MTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "FYTD PY Gross Sales %Grand",
-            "expression": " CALCULATE( [FYTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
@@ -1370,6 +1328,18 @@
             "name": "FYTD PY Var% Gross Sales",
             "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Quantity Sold",
+            "expression": " CALCULATE( [Quantity Sold], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Quantity Sold",
+            "expression": " CALCULATE( [Quantity Sold], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           }
         ]
@@ -3668,6 +3638,7 @@
       },
       {
         "name": "_Currency to Use",
+        "description": "This table is mainly used as a slicer to dynamically switch the calculation of measures from USD to local currency. Not all measures are applicable.",
         "columns": [
           {
             "type": "calculatedTableColumn",
@@ -5155,9 +5126,6 @@
                 "name": "FYTD Gross Sales"
               },
               {
-                "name": "FYTD Gross Sales %Grand"
-              },
-              {
                 "name": "FYTD PY Gross Margin"
               },
               {
@@ -5165,9 +5133,6 @@
               },
               {
                 "name": "FYTD PY Gross Sales"
-              },
-              {
-                "name": "FYTD PY Gross Sales %Grand"
               },
               {
                 "name": "FYTD PY Var Gross Sales"
@@ -5179,9 +5144,6 @@
                 "name": "Gross Margin %"
               },
               {
-                "name": "Gross Sales %Grand"
-              },
-              {
                 "name": "MTD Gross Margin"
               },
               {
@@ -5191,9 +5153,6 @@
                 "name": "MTD Gross Sales"
               },
               {
-                "name": "MTD Gross Sales %Grand"
-              },
-              {
                 "name": "MTD PY Gross Margin"
               },
               {
@@ -5201,9 +5160,6 @@
               },
               {
                 "name": "MTD PY Gross Sales"
-              },
-              {
-                "name": "MTD PY Gross Sales %Grand"
               },
               {
                 "name": "Gross Sales Budget"
@@ -5252,6 +5208,12 @@
               },
               {
                 "name": "MTD PY Var% Gross Sales"
+              },
+              {
+                "name": "FYTD Quantity Sold"
+              },
+              {
+                "name": "MTD Quantity Sold"
               }
             ]
           },

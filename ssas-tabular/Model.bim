@@ -427,6 +427,12 @@
             "dataType": "boolean",
             "sourceColumn": "Is_Weekday",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Last 2 Calendar Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last2_Calendar_Years",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -440,7 +446,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -525,6 +531,7 @@
         "measures": [
           {
             "name": "Gross Sales",
+            "description": "(SAP Source: Sum of CE110US.ERLOS)",
             "expression": [
               "",
               "IF(",
@@ -532,7 +539,7 @@
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
               "        \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] / 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', DIVIDE( 'Sales Invoice Documents'[Gross Sales Amount], 'Sales Invoice Documents'[Exchange Rate] ) ),",
               "        SUM('Sales Invoice Documents'[Gross Sales Amount] )",
               "    ),",
               "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
@@ -557,7 +564,7 @@
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
               "        \"USD\", SUM( 'Sales Invoice Documents'[Net Sales Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Net Sales Amount] / 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', DIVIDE( 'Sales Invoice Documents'[Net Sales Amount], 'Sales Invoice Documents'[Exchange Rate] ) ),",
               "        SUM('Sales Invoice Documents'[Net Sales Amount] )",
               "    ),",
               "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
@@ -581,7 +588,7 @@
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
               "        \"USD\", SUM( 'Sales Invoice Documents'[Overall Cost Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overall Cost Amount] / 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', DIVIDE( 'Sales Invoice Documents'[Overall Cost Amount], 'Sales Invoice Documents'[Exchange Rate] ) ),",
               "        SUM('Sales Invoice Documents'[Overall Cost Amount] )",
               "    ),",
               "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
@@ -598,6 +605,7 @@
           },
           {
             "name": "Gross Margin",
+            "description": "Net of gross sales and overall cost",
             "expression": " [Gross Sales] - [Cost of Goods]",
             "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
             "displayFolder": "Sales",
@@ -637,7 +645,7 @@
             "expression": " SUM('Complaint Documents'[Complaint Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -650,7 +658,7 @@
             "expression": " SUM('Complaint Documents'[Credit Issued Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -663,7 +671,7 @@
             "expression": " SUM('Complaint Documents'[Open Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -676,19 +684,19 @@
             "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] ) + 0",
             "formatString": "#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Count",
             "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Value",
             "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -700,7 +708,7 @@
             "name": "PQ Credit Issued",
             "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -712,7 +720,7 @@
             "name": "PQ Open Value",
             "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -742,7 +750,7 @@
             "name": "Hold Amount",
             "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Hold Tags\\Sum",
+            "displayFolder": "Hold Tags",
             "annotations": [
               {
                 "name": "Format",
@@ -754,19 +762,19 @@
             "name": "Hold Quantity",
             "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
             "formatString": "#,0.00",
-            "displayFolder": "Hold Tags\\Sum"
+            "displayFolder": "Hold Tags"
           },
           {
             "name": "Hold Tag Count",
             "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
             "formatString": "#,0",
-            "displayFolder": "Hold Tags\\Count"
+            "displayFolder": "Hold Tags"
           },
           {
             "name": "Current S-Block Value",
             "expression": " SUM('Blocked Inventory'[SBlock Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -778,7 +786,7 @@
             "name": "Current Q-Block Value",
             "expression": " SUM('Blocked Inventory'[QBlock Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -790,7 +798,7 @@
             "name": "Current Blocked Inv Value",
             "expression": " [Current S-Block Value] + [Current Q-Block Value] + [Current Expired Value]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -802,7 +810,7 @@
             "name": "Current Expired Value",
             "expression": " SUM('Expired Inventory'[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -814,7 +822,7 @@
             "name": "Current S-Block Value with Hold Tags",
             "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -839,7 +847,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Cycle Time",
@@ -855,7 +863,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Average"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Expenses Amount",
@@ -909,7 +917,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "SQ Complaint Value",
@@ -929,7 +937,7 @@
               ")"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -955,7 +963,7 @@
               ")"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -976,19 +984,19 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Service Quality Index",
             "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index",
             "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Service Quality Index (Target)",
@@ -1032,7 +1040,7 @@
             "name": "Sales Order Amount",
             "expression": " SUM( 'Sales Order Documents'[Order Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders\\Sum",
+            "displayFolder": "Sales Orders",
             "annotations": [
               {
                 "name": "Format",
@@ -1044,7 +1052,7 @@
             "name": "Sales Order Cost Amount",
             "expression": " SUM( 'Sales Order Documents'[Cost Amount] ) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders\\Sum",
+            "displayFolder": "Sales Orders",
             "annotations": [
               {
                 "name": "Format",
@@ -1069,7 +1077,7 @@
             "name": "Sales Order Count",
             "expression": " DISTINCTCOUNT(  'Sales Order Documents'[Order Number] )",
             "formatString": "#,0",
-            "displayFolder": "Sales Orders\\Count"
+            "displayFolder": "Sales Orders"
           },
           {
             "name": "Gross Sales %Grand",
@@ -1223,7 +1231,8 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( Targets_Sales[GrossMarginMTD] ),",
+              "    AVERAGE( Targets_Sales[GrossMarginMTD] ),",
+              "    FILTER( Targets_Sales, Targets_Sales[GrossMarginMTD] <> 0 ),",
               "    TREATAS(",
               "        VALUES( 'Customer Master'[Sales Territory] ),",
               "        Targets_Sales[SalesTerritoryKey]",
@@ -1242,7 +1251,8 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( Targets_Sales[GrossMarginYTD] ),",
+              "    AVERAGE( Targets_Sales[GrossMarginYTD] ),",
+              "    FILTER( Targets_Sales, Targets_Sales[GrossMarginYTD] <> 0 ),",
               "    TREATAS(",
               "        VALUES( 'Customer Master'[Sales Territory] ),",
               "        Targets_Sales[SalesTerritoryKey]",
@@ -1256,6 +1266,111 @@
             "formatString": "0.00%;-0.00%;0.00%",
             "isHidden": true,
             "displayFolder": "Sales"
+          },
+          {
+            "name": "Backorder Amount",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) with non-complete overall block and first delivery dates on or before this month",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Internal Open Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Internal Open Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Internal Open Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Internal Open Amount] )   ",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[First Delivery Date] <= EOMONTH(TODAY(), 0)",
+              "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Gross Sales and Backorder Amount",
+            "expression": " [Gross Sales] + [Backorder Amount]",
+            "formatString": "#,0",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "Sales Order Margin",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Order Documents'[Margin Amount] ),",
+              "        \"Local\", SUM( 'Sales Order Documents'[Margin Amount Local] ),",
+              "        SUM( 'Sales Order Documents'[Margin Amount] )",
+              "    ),",
+              "    SUM( 'Sales Order Documents'[Margin Amount] )  ",
+              ") + 0"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Backorder Margin",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Margin],",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[First Delivery Date] <= EOMONTH(TODAY(), 0)",
+              "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Gross Sales and Backorder Margin",
+            "expression": " [Gross Margin] + [Backorder Margin]",
+            "formatString": "#,0",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "Gross Sales and Backorder Margin %",
+            "expression": " DIVIDE( [Gross Sales and Backorder Margin], [Gross Sales and Backorder Amount] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "Quantity Sold",
+            "expression": " SUM( 'Sales Invoice Documents'[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD PY Var Gross Sales",
+            "expression": " IF( NOT( OR(ISBLANK([MTD Gross Sales]), ISBLANK([MTD PY Gross Sales]) ) ), [MTD Gross Sales] - [MTD PY Gross Sales], BLANK() )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Var% Gross Sales",
+            "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var% Gross Sales",
+            "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -2982,9 +3097,8 @@
             "sourceColumn": "OrgNoKey"
           },
           {
-            "name": "PlantNoKey",
+            "name": "Plant",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -3051,21 +3165,8 @@
             "dataType": "double",
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Delivered Quantity",
-            "dataType": "double",
-            "sourceColumn": "DeliveredQuantity",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "On Time Delivered Quantity",
-            "dataType": "double",
-            "sourceColumn": "OnTimeDeliveredQuantity",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
           },
           {
             "name": "Order Currency",
@@ -3077,7 +3178,8 @@
             "dataType": "double",
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -3090,7 +3192,8 @@
             "dataType": "double",
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -3104,6 +3207,154 @@
             "dataType": "string",
             "isDataTypeInferred": true,
             "expression": " RELATED( Addresses[Name] )"
+          },
+          {
+            "name": "Billing Status",
+            "dataType": "string",
+            "sourceColumn": "BillingStatBlock"
+          },
+          {
+            "name": "Allocated Quantity",
+            "dataType": "double",
+            "description": "Total quantity in delivery notes issued without an actual PGI date yet",
+            "sourceColumn": "AllocatedQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shipped Quantity",
+            "dataType": "double",
+            "description": "Total quantity in delivery notes issued with actual PGI date set",
+            "sourceColumn": "ShippedQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shipped On Time Quantity",
+            "dataType": "double",
+            "description": "Total quantity in delivery notes issued with PGI date on or before the first schedule delivery date",
+            "sourceColumn": "OnTimeShippedQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Internal Open Quantity",
+            "dataType": "double",
+            "description": "Order quantity minus allocated and shipped quantity",
+            "sourceColumn": "InternalOpenQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Customer Open Quantity",
+            "dataType": "double",
+            "description": "Order quantity minus shipped quantity",
+            "sourceColumn": "CustomerOpenQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "double",
+            "sourceColumn": "UnitPrice"
+          },
+          {
+            "name": "Exchange Rate",
+            "dataType": "double",
+            "description": "Exchange rate to USD",
+            "sourceColumn": "ExchangeRate",
+            "formatString": "0.0000"
+          },
+          {
+            "name": "Cost Amount Local",
+            "dataType": "double",
+            "sourceColumn": "CostAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Order Amount Local",
+            "dataType": "double",
+            "sourceColumn": "OrderAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Internal Open Amount Local",
+            "dataType": "double",
+            "description": "Total value of internal open quantity",
+            "sourceColumn": "InternalOpenAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Internal Open Amount",
+            "dataType": "double",
+            "description": "Total value of internal open quantity",
+            "sourceColumn": "InternalOpenAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Customer Open Amount Local",
+            "dataType": "double",
+            "sourceColumn": "CustomerOpenAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Customer Open Amount",
+            "dataType": "double",
+            "sourceColumn": "CustomerOpenAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Margin Amount Local",
+            "dataType": "double",
+            "description": "Net of order and cost amount",
+            "sourceColumn": "MarginAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Margin Amount",
+            "dataType": "double",
+            "description": "Net of order and cost amount",
+            "sourceColumn": "MarginAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -3649,7 +3900,7 @@
       {
         "name": "35adc316-4142-445e-9e6c-d6faae1e1044",
         "fromTable": "Sales Order Documents",
-        "fromColumn": "PlantNoKey",
+        "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
       },
@@ -3835,6 +4086,9 @@
               },
               {
                 "name": "Is Weekday"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4161,6 +4415,9 @@
               },
               {
                 "name": "Is Weekday"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4433,6 +4690,9 @@
               },
               {
                 "name": "Is Weekday"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4600,9 +4860,6 @@
                 "name": "Credit Block"
               },
               {
-                "name": "Delivered Quantity"
-              },
-              {
                 "name": "Enter Date"
               },
               {
@@ -4652,6 +4909,69 @@
               },
               {
                 "name": "Ship To Name"
+              },
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "ShipToAddrKey"
+              },
+              {
+                "name": "Unit Price"
               }
             ]
           },
@@ -4767,6 +5087,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4856,9 +5179,6 @@
                 "name": "Gross Margin %"
               },
               {
-                "name": "Gross Sales"
-              },
-              {
                 "name": "Gross Sales %Grand"
               },
               {
@@ -4886,19 +5206,52 @@
                 "name": "MTD PY Gross Sales %Grand"
               },
               {
-                "name": "Net Margin"
-              },
-              {
-                "name": "Net Margin %"
-              },
-              {
-                "name": "Net Sales"
-              },
-              {
                 "name": "Gross Sales Budget"
               },
               {
                 "name": "Gross Margin % Budget"
+              },
+              {
+                "name": "Backorder Amount"
+              },
+              {
+                "name": "Gross Sales and Backorder Amount"
+              },
+              {
+                "name": "Backorder Margin"
+              },
+              {
+                "name": "Gross Sales and Backorder Margin"
+              },
+              {
+                "name": "Gross Sales and Backorder Margin %"
+              },
+              {
+                "name": "Sales Order Cost Amount"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Quantity Sold"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "Sales Order Count"
+              },
+              {
+                "name": "Sales Order Margin"
+              },
+              {
+                "name": "MTD PY Var Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var% Gross Sales"
+              },
+              {
+                "name": "MTD PY Var% Gross Sales"
               }
             ]
           },
@@ -5028,6 +5381,137 @@
             "columns": [
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "ShipToAddrKey"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
               }
             ]
           }
@@ -5332,6 +5816,18 @@
           {
             "memberName": "DOMAIN\\ausandoval",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21488"
+          },
+          {
+            "memberName": "DOMAIN\\efung",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8884"
+          },
+          {
+            "memberName": "DOMAIN\\lmartinez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8901"
+          },
+          {
+            "memberName": "DOMAIN\\JPaciotta",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1641"
           }
         ],
         "tablePermissions": [

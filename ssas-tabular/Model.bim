@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIDEV",
+            "server": "ARLPBIPRD",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -21,7 +21,7 @@
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
+          "path": "arlpbiprd;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -35,6 +35,7 @@
           {
             "name": "Customer Number",
             "dataType": "string",
+            "description": "SAP Source: KNA1.KUNNR",
             "sourceColumn": "CustomerNoKey",
             "displayFolder": "Master"
           },
@@ -49,18 +50,21 @@
           {
             "name": "Country",
             "dataType": "string",
+            "description": "SAP Source: KNA1.LAND1",
             "sourceColumn": "Country",
             "displayFolder": "Master"
           },
           {
             "name": "Customer Name",
             "dataType": "string",
+            "description": "SAP Source: KNA1.NAME1",
             "sourceColumn": "CustomerName",
             "displayFolder": "Master"
           },
           {
             "name": "Account Creation Date",
             "dataType": "dateTime",
+            "description": "SAP Source: KNA1.ERDAT",
             "sourceColumn": "AcctCreateDate",
             "formatString": "MM/dd/yyyy",
             "displayFolder": "Master"
@@ -68,24 +72,28 @@
           {
             "name": "Sales Organization",
             "dataType": "string",
+            "description": "SAP Source: KNVV.VKORG",
             "sourceColumn": "SalesOrganization",
             "displayFolder": "Sales Related"
           },
           {
             "name": "Default Ship Plant",
             "dataType": "string",
+            "description": "SAP Source: KNVV.VWERK",
             "sourceColumn": "DefaultPlant",
             "displayFolder": "Master"
           },
           {
             "name": "Sales Region",
             "dataType": "string",
+            "description": "SAP Source: KNVV.BZIRK; If the sales territory name contains \"Fleet\", this value is changed to \"FLEET\"",
             "sourceColumn": "SalesDistrict",
             "displayFolder": "Sales Related"
           },
           {
             "name": "Sales Territory",
             "dataType": "string",
+            "description": "SAP Source: KNVV.VKBUR",
             "sourceColumn": "SalesTerritory",
             "displayFolder": "Sales Related"
           },
@@ -102,6 +110,7 @@
           {
             "name": "Sales Person",
             "dataType": "string",
+            "description": "Assigned manually; Contact IT for more details",
             "sourceColumn": "SalesPerson",
             "displayFolder": "Sales Related"
           },
@@ -110,6 +119,7 @@
             "name": "Sales Territory Name",
             "dataType": "string",
             "isDataTypeInferred": true,
+            "description": "SAP Source: TVKBT.BEZEI",
             "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
             "sortByColumn": "Sales Territory",
             "displayFolder": "Sales Related"
@@ -1346,20 +1356,24 @@
       },
       {
         "name": "Sales Invoice Documents",
+        "description": "SAP Source: CE110US, VBRP, TVFKT; Active filters: PALEDGER = 01 & VRGAR = F & FKART not equal (IV, IVS) & RBELN starts with 009",
         "columns": [
           {
             "name": "Invoice Number",
             "dataType": "string",
+            "description": "SAP Source: CE110US.RBELN; Reference document number for CO-PA line item",
             "sourceColumn": "SaleDocNoKey"
           },
           {
             "name": "Invoice Line Number",
             "dataType": "string",
+            "description": "SAP Source: CE110US.RPOSN; Item number from reference document (CO-PA)",
             "sourceColumn": "SaleLineNo"
           },
           {
             "name": "Posting Date",
             "dataType": "dateTime",
+            "description": "SAP Source: CE110US.BUDAT ",
             "sourceColumn": "PostingDateKey",
             "formatString": "MM/dd/yyyy"
           },
@@ -1384,6 +1398,7 @@
           {
             "name": "Quantity",
             "dataType": "double",
+            "description": "SAP Source: CE110US.ABSMG",
             "sourceColumn": "QuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -1392,6 +1407,7 @@
           {
             "name": "Gross Sales Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.ERLOS",
             "sourceColumn": "GrossSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1406,6 +1422,7 @@
           {
             "name": "Net Sales Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
             "sourceColumn": "NetSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1420,6 +1437,7 @@
           {
             "name": "Overall Cost Amount",
             "dataType": "double",
+            "description": "SAP Source: VBRP.WAVWR",
             "sourceColumn": "CostValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1434,6 +1452,7 @@
           {
             "name": "Material Cost Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.VVMEP",
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1448,6 +1467,7 @@
           {
             "name": "Discount Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.KWKDRB",
             "sourceColumn": "DiscountValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1462,16 +1482,19 @@
           {
             "name": "Document Type",
             "dataType": "string",
+            "description": "SAP Source: CE110US.FKART",
             "sourceColumn": "DocType"
           },
           {
             "name": "Document Type Text",
             "dataType": "string",
+            "description": "SAP Source: TVFKT.VTEXT",
             "sourceColumn": "DocTypeText"
           },
           {
             "name": "Create Date",
             "dataType": "dateTime",
+            "description": "SAP Source: CE110US.HZDAT",
             "sourceColumn": "CreateDate",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -1484,6 +1507,7 @@
           {
             "name": "Invoice Date",
             "dataType": "dateTime",
+            "description": "SAP Source: CE110US.FADAT",
             "sourceColumn": "InvoiceDate",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -1502,11 +1526,13 @@
           {
             "name": "Quantity Unit",
             "dataType": "string",
+            "description": "SAP Source: CE110US.ABSMG_ME",
             "sourceColumn": "QuantityUoM"
           },
           {
             "name": "Exchange Rate",
             "dataType": "double",
+            "description": "SAP Source: CE110US.KURSF",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000"
           },
@@ -1515,11 +1541,13 @@
             "name": "Ship To Name",
             "dataType": "string",
             "isDataTypeInferred": true,
+            "description": "SAP Source: ADRC.NAME1",
             "expression": " RELATED( Addresses[Name] )"
           },
           {
             "name": "Currency",
             "dataType": "string",
+            "description": "SAP Source: CE110US.FRWAE",
             "sourceColumn": "Currency"
           }
         ],
@@ -1905,10 +1933,12 @@
       },
       {
         "name": "Material Master",
+        "description": "SAP Source: MARA, MAKT, and AUSP",
         "columns": [
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: MARA.MATNR",
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "MaterialNoKey",
@@ -1917,6 +1947,7 @@
           {
             "name": "Material Description",
             "dataType": "string",
+            "description": "SAP Source: MAKT.MAKTG",
             "sourceColumn": "MaterialDescription",
             "displayFolder": "Master"
           },
@@ -1929,78 +1960,91 @@
           {
             "name": "Material Type",
             "dataType": "string",
+            "description": "SAP Source: MARA.MTART",
             "sourceColumn": "MaterialType",
             "displayFolder": "Master"
           },
           {
             "name": "Material Group",
             "dataType": "string",
+            "description": "SAP Source: MARA.MATKL",
             "sourceColumn": "MaterialGroup",
             "displayFolder": "Master"
           },
           {
             "name": "X Distribution Status",
             "dataType": "string",
+            "description": "SAP Source: MARA.MSTAV",
             "sourceColumn": "XDistributionStatus",
             "displayFolder": "Master"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: MARA.MEINS",
             "sourceColumn": "UnitOfMeasure",
             "displayFolder": "Master"
           },
           {
             "name": "Brand",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "Brand",
             "displayFolder": "Classification"
           },
           {
             "name": "Color Number",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "ColorNumber",
             "displayFolder": "Classification"
           },
           {
             "name": "Commercialization Date",
             "dataType": "dateTime",
+            "description": "SAP Source: AUSP.ATFLV",
             "sourceColumn": "CommercializationDate",
             "displayFolder": "Classification"
           },
           {
             "name": "Film Type",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "FilmType",
             "displayFolder": "Classification"
           },
           {
             "name": "Liner",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "Liner",
             "displayFolder": "Classification"
           },
           {
             "name": "Product Series",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "ProductSeries",
             "displayFolder": "Classification"
           },
           {
             "name": "Product Hierarchy L1",
             "dataType": "string",
+            "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL1",
             "displayFolder": "Product Hierarchy"
           },
           {
             "name": "Product Hierarchy L2",
             "dataType": "string",
+            "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL2",
             "displayFolder": "Product Hierarchy"
           },
           {
             "name": "Product Hierarchy L3",
             "dataType": "string",
+            "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL3",
             "displayFolder": "Product Hierarchy"
           }
@@ -3007,21 +3051,25 @@
           {
             "name": "Order Number",
             "dataType": "string",
+            "description": "SAP Source: VBAK.VBELN",
             "sourceColumn": "OrderNoKey"
           },
           {
             "name": "Order Line Number",
             "dataType": "string",
+            "description": "SAP Source: VBAP.POSNR",
             "sourceColumn": "OrderLineNo"
           },
           {
             "name": "Order Type",
             "dataType": "string",
+            "description": "SAP Source: VBAK.AUART",
             "sourceColumn": "OrderType"
           },
           {
             "name": "Enter Date",
             "dataType": "dateTime",
+            "description": "SAP Source: VBAK.ERDAT",
             "sourceColumn": "EnterDateKey",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -3034,6 +3082,7 @@
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
+            "description": "SAP Source: VBEP.EDATU",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -3046,7 +3095,7 @@
           {
             "name": "Last PGI Date",
             "dataType": "dateTime",
-            "description": "If the values is 12/31/9999, then there is no PGI date for the sales order item",
+            "description": "SAP Source: LIKP.WADAT_IST; If the values is 12/31/9999, then there is no PGI date for the sales order item",
             "sourceColumn": "LastPgiDate",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -3059,16 +3108,19 @@
           {
             "name": "Entered By",
             "dataType": "string",
+            "description": "SAP Source: VBAK.ERNAM",
             "sourceColumn": "EnteredBy"
           },
           {
             "name": "Organization",
             "dataType": "string",
+            "description": "SAP Source: VBAK.VKORG",
             "sourceColumn": "OrgNoKey"
           },
           {
             "name": "Plant",
             "dataType": "string",
+            "description": "SAP Source: VBAP.WERKS",
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -3092,16 +3144,19 @@
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: VBAP.MATNR",
             "sourceColumn": "MaterialNoKey"
           },
           {
             "name": "Material Description",
             "dataType": "string",
+            "description": "SAP Source: VBAP.ARKTX",
             "sourceColumn": "MaterialText"
           },
           {
             "name": "Material Group",
             "dataType": "string",
+            "description": "SAP Source: VBAP.MATKL",
             "sourceColumn": "MaterialGroup"
           },
           {
@@ -3113,26 +3168,31 @@
           {
             "name": "Credit Block",
             "dataType": "string",
+            "description": "SAP Source: VBUP.CMGST",
             "sourceColumn": "CreditBlock"
           },
           {
             "name": "Overall Block",
             "dataType": "string",
+            "description": "SAP Source: VBUP.GBSTA",
             "sourceColumn": "OverallBlock"
           },
           {
             "name": "Route Type",
             "dataType": "string",
+            "description": "SAP Source: VBAP.ROUTE",
             "sourceColumn": "RouteType"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: VBAP.MEINS",
             "sourceColumn": "OrderUoM"
           },
           {
             "name": "Order Quantity",
             "dataType": "double",
+            "description": "SAP Source: VBAP.KWMENG",
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -3141,11 +3201,13 @@
           {
             "name": "Order Currency",
             "dataType": "string",
+            "description": "SAP Source: VBAP.WAERK",
             "sourceColumn": "OrderCurrency"
           },
           {
             "name": "Order Amount",
             "dataType": "double",
+            "description": "SAP Source: VBAP.NETWR; Converted to USD using the exchange rate",
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -3160,6 +3222,7 @@
           {
             "name": "Cost Amount",
             "dataType": "double",
+            "description": "SAP Source: VBAP.WAVWR; Converted to USD using the exchange rate",
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -3176,17 +3239,19 @@
             "name": "Ship To Name",
             "dataType": "string",
             "isDataTypeInferred": true,
+            "description": "SAP Source: ADRC.NAME1",
             "expression": " RELATED( Addresses[Name] )"
           },
           {
             "name": "Billing Status",
             "dataType": "string",
+            "description": "SAP Source: VBUP.FKSAA",
             "sourceColumn": "BillingStatBlock"
           },
           {
             "name": "Allocated Quantity",
             "dataType": "double",
-            "description": "Total quantity in delivery notes issued without an actual PGI date yet",
+            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued without an actual PGI date yet",
             "sourceColumn": "AllocatedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -3195,7 +3260,7 @@
           {
             "name": "Shipped Quantity",
             "dataType": "double",
-            "description": "Total quantity in delivery notes issued with actual PGI date set",
+            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with actual PGI date set",
             "sourceColumn": "ShippedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -3204,7 +3269,7 @@
           {
             "name": "Shipped On Time Quantity",
             "dataType": "double",
-            "description": "Total quantity in delivery notes issued with PGI date on or before the first schedule delivery date",
+            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with PGI date on or before the first schedule delivery date",
             "sourceColumn": "OnTimeShippedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -3231,18 +3296,20 @@
           {
             "name": "Unit Price",
             "dataType": "double",
+            "description": "SAP Source: VBAP.NETPR",
             "sourceColumn": "UnitPrice"
           },
           {
             "name": "Exchange Rate",
             "dataType": "double",
-            "description": "Exchange rate to USD",
+            "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000"
           },
           {
             "name": "Cost Amount Local",
             "dataType": "double",
+            "description": "SAP Source: WAVWR",
             "sourceColumn": "CostAmount",
             "formatString": "#,0",
             "displayFolder": "_Local Values",
@@ -3251,6 +3318,7 @@
           {
             "name": "Order Amount Local",
             "dataType": "double",
+            "description": "SAP Source: NETWR",
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
             "displayFolder": "_Local Values",

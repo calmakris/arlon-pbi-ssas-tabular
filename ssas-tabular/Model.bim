@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIPRD",
+            "server": "ARLPBIDEV",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbiprd;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3174,7 +3172,7 @@
           {
             "name": "Overall Block",
             "dataType": "string",
-            "description": "SAP Source: VBUP.GBSTA",
+            "description": "SAP Source: VBUK.GBSTA",
             "sourceColumn": "OverallBlock"
           },
           {

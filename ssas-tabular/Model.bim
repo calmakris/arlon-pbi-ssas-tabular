@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -553,14 +555,8 @@
               "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
               ")"
             ],
-            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Net Sales",
@@ -578,14 +574,8 @@
               "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
               ")"
             ],
-            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Cost of Goods",
@@ -602,39 +592,21 @@
               "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
               ")"
             ],
-            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin",
             "description": "Net of gross sales and overall cost",
             "expression": " [Gross Sales] - [Cost of Goods]",
-            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Net Margin",
             "expression": " [Net Sales] - [Cost of Goods]",
-            "formatString": "\"\"#,0;(\"\"#,0);\"\"#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"\" Symbol=\"\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin %",
@@ -1349,6 +1321,42 @@
             "expression": " CALCULATE( [Quantity Sold], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Yesterday",
+            "expression": " TODAY() - 1",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Beginning of Month",
+            "expression": " EOMONTH( [Yesterday], -1 ) + 1",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "End of Month",
+            "expression": " EOMONTH( [Yesterday], 0 )",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
           }
         ]
       },
@@ -5544,6 +5552,342 @@
             ]
           }
         ]
+      },
+      {
+        "name": "BI Morning Report",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "FYTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Margin"
+              },
+              {
+                "name": "FYTD PY Gross Margin%"
+              },
+              {
+                "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var% Gross Sales"
+              },
+              {
+                "name": "Gross Margin"
+              },
+              {
+                "name": "Gross Margin %"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "MTD Gross Margin"
+              },
+              {
+                "name": "MTD Gross Margin%"
+              },
+              {
+                "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD PY Gross Margin"
+              },
+              {
+                "name": "MTD PY Gross Margin%"
+              },
+              {
+                "name": "MTD PY Gross Sales"
+              },
+              {
+                "name": "MTD PY Var Gross Sales"
+              },
+              {
+                "name": "MTD PY Var% Gross Sales"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Beginning of Month"
+              },
+              {
+                "name": "End of Month"
+              },
+              {
+                "name": "Yesterday"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Sales Invoice Documents",
+            "columns": [
+              {
+                "name": "Create Date"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Discount Amount"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Document Type Text"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "Gross Sales Amount"
+              },
+              {
+                "name": "Invoice Date"
+              },
+              {
+                "name": "Invoice Line Number"
+              },
+              {
+                "name": "Invoice Number"
+              },
+              {
+                "name": "Material Cost Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Sales Amount"
+              },
+              {
+                "name": "Overall Cost Amount"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "ShipToAddrKey"
+              }
+            ]
+          }
+        ]
       }
     ],
     "roles": [
@@ -5856,6 +6200,18 @@
           {
             "memberName": "DOMAIN\\JPaciotta",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1641"
+          },
+          {
+            "memberName": "DOMAIN\\caguilar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21008"
+          },
+          {
+            "memberName": "DOMAIN\\eldiaz",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8700"
+          },
+          {
+            "memberName": "DOMAIN\\SCarino",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1134"
           }
         ],
         "tablePermissions": [

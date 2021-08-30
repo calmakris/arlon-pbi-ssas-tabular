@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -86,6 +88,7 @@
             "dataType": "string",
             "description": "SAP Source: KNVV.BZIRK; If the sales territory name contains \"Fleet\", this value is changed to \"FLEET\"",
             "sourceColumn": "SalesDistrict",
+            "sortByColumn": "SalesRegionSortKey",
             "displayFolder": "Sales Related"
           },
           {
@@ -121,6 +124,12 @@
             "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
             "sortByColumn": "Sales Territory",
             "displayFolder": "Sales Related"
+          },
+          {
+            "name": "SalesRegionSortKey",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "SalesRegionSortKey"
           }
         ],
         "partitions": [
@@ -132,9 +141,10 @@
               "expression": [
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data]",
+                "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data],",
+                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
                 "in",
-                "    dbo_VW_CUSTOMER_MASTER"
+                "    #\"Added Custom\""
               ]
             }
           }
@@ -547,7 +557,7 @@
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
               "        \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', DIVIDE( 'Sales Invoice Documents'[Gross Sales Amount], 'Sales Invoice Documents'[Exchange Rate] ) ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
               "        SUM('Sales Invoice Documents'[Gross Sales Amount] )",
               "    ),",
               "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
@@ -566,7 +576,7 @@
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
               "        \"USD\", SUM( 'Sales Invoice Documents'[Net Sales Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', DIVIDE( 'Sales Invoice Documents'[Net Sales Amount], 'Sales Invoice Documents'[Exchange Rate] ) ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents',  'Sales Invoice Documents'[Net Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
               "        SUM('Sales Invoice Documents'[Net Sales Amount] )",
               "    ),",
               "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
@@ -584,7 +594,7 @@
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
               "        \"USD\", SUM( 'Sales Invoice Documents'[Overall Cost Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', DIVIDE( 'Sales Invoice Documents'[Overall Cost Amount], 'Sales Invoice Documents'[Exchange Rate] ) ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overall Cost Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
               "        SUM('Sales Invoice Documents'[Overall Cost Amount] )",
               "    ),",
               "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
@@ -1355,6 +1365,74 @@
                 "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
               }
             ]
+          },
+          {
+            "name": "MTD Sales Order Amount",
+            "expression": " CALCULATE( [Sales Order Amount], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Sales Order Amount",
+            "expression": " CALCULATE( [MTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Var Sales Order Amount",
+            "expression": [
+              " ",
+              "IF( ",
+              "    AND( ",
+              "        NOT(ISBLANK([MTD Sales Order Amount])), ",
+              "        NOT(ISBLANK([MTD PY Sales Order Amount])) ",
+              "    ), ",
+              "    [MTD Sales Order Amount] - [MTD PY Sales Order Amount], ",
+              "    BLANK() ",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Var% Sales Order Amount",
+            "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD Sales Order Amount] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Sales Order Amount",
+            "expression": " CALCULATE( [Sales Order Amount], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Sales Order Amount",
+            "expression": " CALCULATE( [FYTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var Sales Order Amount",
+            "expression": [
+              " ",
+              "IF( ",
+              "    AND( ",
+              "        NOT(ISBLANK([FYTD Sales Order Amount])), ",
+              "        NOT(ISBLANK([FYTD PY Sales Order Amount])) ",
+              "    ), ",
+              "    [FYTD Sales Order Amount] - [FYTD PY Sales Order Amount], ",
+              "    BLANK() ",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var% Sales Order Amount",
+            "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD Sales Order Amount] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -5761,6 +5839,30 @@
               },
               {
                 "name": "Yesterday"
+              },
+              {
+                "name": "FYTD PY Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "FYTD Sales Order Amount"
+              },
+              {
+                "name": "MTD Sales Order Amount"
               }
             ]
           },
@@ -5882,6 +5984,137 @@
               },
               {
                 "name": "ShipToAddrKey"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "ShipToAddrKey"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
               }
             ]
           }

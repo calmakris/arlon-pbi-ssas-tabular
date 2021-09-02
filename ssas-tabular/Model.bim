@@ -1172,7 +1172,7 @@
             ]
           },
           {
-            "name": "Gross Margin % Budget",
+            "name": "Gross Margin % Budget Hidden",
             "description": "Budget numbers submitted by Sales to IT",
             "expression": [
               "",
@@ -1190,10 +1190,11 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
             "displayFolder": "Sales"
           },
           {
-            "name": "Gross Margin % YTD Budget",
+            "name": "Gross Margin % YTD Budget Hidden",
             "expression": [
               "",
               "CALCULATE(",
@@ -1219,33 +1220,21 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    IF(",
-              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "        SWITCH(",
-              "            VALUES( '_Currency to Use'[Currency] ),",
-              "            \"USD\", SUM( 'Sales Order Documents'[Internal Open Amount] ),",
-              "            \"Local\", SUM( 'Sales Order Documents'[Internal Open Amount Local] ),",
-              "            SUM( 'Sales Order Documents'[Internal Open Amount] )",
-              "        ),",
-              "        SUM( 'Sales Order Documents'[Internal Open Amount] )   ",
-              "    ),",
+              "    [SO Internal Open Amount],",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[First Delivery Date] <= EOMONTH(TODAY(), 0)",
-              "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
-              "    ),",
-              "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
+              "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "    )",
               ")",
               ""
             ],
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "Gross Sales and Backorder Amount",
             "expression": " [Gross Sales] + [Backorder Amount]",
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
           {
@@ -1263,7 +1252,7 @@
               "    SUM( 'Sales Order Documents'[Margin Amount] )  ",
               ") + 0"
             ],
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
           },
           {
@@ -1274,20 +1263,20 @@
               "    [Sales Order Margin],",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[First Delivery Date] <= EOMONTH(TODAY(), 0)",
+              "        'Sales Order Documents'[First Delivery Date] <= EOMONTH([Yesterday], 0)",
               "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    ),",
               "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
               ")"
             ],
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "Gross Sales and Backorder Margin",
             "expression": " [Gross Margin] + [Backorder Margin]",
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
           {
@@ -1371,13 +1360,13 @@
           {
             "name": "MTD Sales Order Amount",
             "expression": " CALCULATE( [Sales Order Amount], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Sales Order Amount",
             "expression": " CALCULATE( [MTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1393,7 +1382,7 @@
               "    BLANK() ",
               ")"
             ],
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1405,13 +1394,13 @@
           {
             "name": "FYTD Sales Order Amount",
             "expression": " CALCULATE( [Sales Order Amount], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Sales Order Amount",
             "expression": " CALCULATE( [FYTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1427,7 +1416,7 @@
               "    BLANK() ",
               ")"
             ],
-            "formatString": "#,0",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1438,25 +1427,13 @@
           },
           {
             "name": "SO Internal Open Quantity",
-            "expression": [
-              " ",
-              "CALCULATE(",
-              "    SUM( 'Sales Order Documents'[Internal Open Quantity] ),",
-              "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
-              ")"
-            ],
+            "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Customer Open Quantity",
-            "expression": [
-              " ",
-              "CALCULATE(",
-              "    SUM( 'Sales Order Documents'[Customer Open Quantity] ) + 0,",
-              "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
-              ")"
-            ],
+            "expression": "  SUM( 'Sales Order Documents'[Customer Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
@@ -1465,36 +1442,40 @@
             "expression": [
               " ",
               "CALCULATE(",
-              "    SUM( 'Sales Order Documents'[Internal Open Amount] ),",
-              "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Internal Open Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Internal Open Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Internal Open Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Internal Open Amount] )   ",
+              "    )",
               ")"
             ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Customer Open Amount",
             "expression": [
               " ",
               "CALCULATE(",
-              "    SUM( 'Sales Order Documents'[Customer Open Amount] ) + 0,",
-              "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Customer Open Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Customer Open Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Customer Open Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Customer Open Amount] )   ",
+              "    )",
               ")"
             ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Ordered Quantity",
@@ -1519,6 +1500,19 @@
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
             "expression": " IF(COUNTROWS( FILTER( 'Sales Order Documents', 'Sales Order Documents'[In Stock] = FALSE ) ) > 0, 0, 1)",
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Gross Margin % Budget",
+            "description": "Budget numbers submitted by Sales to IT",
+            "expression": " CALCULATE( [Gross Margin % Budget Hidden], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "Gross Margin % YTD Budget",
+            "expression": " CALCULATE( [Gross Margin % YTD Budget Hidden], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true
           }
         ]
       },
@@ -2794,15 +2788,25 @@
             },
             {
               "name": "MTD",
-              "expression": "CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )",
+              "expression": [
+                "IF(",
+                "    ISSELECTEDMEASURE( [Backorder Amount] )",
+                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Amount] )",
+                "    || ISSELECTEDMEASURE( [Backorder Margin] )",
+                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin] )",
+                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin %] ),",
+                "    SELECTEDMEASURE(),",
+                "    CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )",
+                ")"
+              ],
               "ordinal": 4
             },
             {
               "name": "YTD",
               "expression": [
                 "IF(",
-                "    ISSELECTEDMEASURE(  [Gross Margin % Budget] ),",
-                "    CALCULATE( [Gross Margin % YTD Budget], DATESMTD('Calendar'[Date]) ),",
+                "    ISSELECTEDMEASURE(  [Gross Margin % Budget Hidden] ),",
+                "    CALCULATE( [Gross Margin % YTD Budget Hidden], DATESMTD('Calendar'[Date]) ),",
                 "    CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
                 ")"
               ],
@@ -2839,9 +2843,17 @@
               "name": "FYTD",
               "expression": [
                 "IF(",
-                "    ISSELECTEDMEASURE(  [Gross Margin % Budget] ),",
-                "    CALCULATE( [Gross Margin % YTD Budget], DATESMTD('Calendar'[Date]) ),",
-                "    CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
+                "    ISSELECTEDMEASURE( [Backorder Amount] )",
+                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Amount] )",
+                "    || ISSELECTEDMEASURE( [Backorder Margin] )",
+                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin] )",
+                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin %] ),",
+                "    SELECTEDMEASURE(),",
+                "    IF(",
+                "        ISSELECTEDMEASURE(  [Gross Margin % Budget] ),",
+                "        [Gross Margin % YTD Budget],",
+                "        CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
+                "    )",
                 ")"
               ],
               "ordinal": 10
@@ -5440,9 +5452,6 @@
                 "name": "Gross Sales Budget"
               },
               {
-                "name": "Gross Margin % Budget"
-              },
-              {
                 "name": "Backorder Amount"
               },
               {
@@ -5470,9 +5479,6 @@
                 "name": "Gross Sales"
               },
               {
-                "name": "Sales Order Count"
-              },
-              {
                 "name": "Sales Order Margin"
               },
               {
@@ -5489,6 +5495,9 @@
               },
               {
                 "name": "MTD Quantity Sold"
+              },
+              {
+                "name": "Gross Margin % Budget"
               }
             ]
           },

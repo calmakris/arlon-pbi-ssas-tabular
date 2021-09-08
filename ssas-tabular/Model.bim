@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -529,12 +528,47 @@
         "columns": [
           {
             "type": "calculatedTableColumn",
-            "name": "Measure Column",
+            "name": "Date",
             "dataType": "int64",
             "isNameInferred": false,
             "isDataTypeInferred": true,
             "isHidden": true,
             "sourceColumn": "[Value]"
+          },
+          {
+            "type": "calculated",
+            "name": "Sales Invoice",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Complaints",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Inventory",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Expenses",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Sales Orders",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -1172,49 +1206,6 @@
             ]
           },
           {
-            "name": "Gross Margin % Budget Hidden",
-            "description": "Budget numbers submitted by Sales to IT",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    AVERAGE( Targets_Sales[GrossMarginMTD] ),",
-              "    FILTER( Targets_Sales, Targets_Sales[GrossMarginMTD] <> 0 ),",
-              "    TREATAS(",
-              "        VALUES( 'Customer Master'[Sales Territory] ),",
-              "        Targets_Sales[SalesTerritoryKey]",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "        Targets_Sales[CalendarTimeKey]",
-              "    )",
-              ")"
-            ],
-            "formatString": "0.00%;-0.00%;0.00%",
-            "isHidden": true,
-            "displayFolder": "Sales"
-          },
-          {
-            "name": "Gross Margin % YTD Budget Hidden",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    AVERAGE( Targets_Sales[GrossMarginYTD] ),",
-              "    FILTER( Targets_Sales, Targets_Sales[GrossMarginYTD] <> 0 ),",
-              "    TREATAS(",
-              "        VALUES( 'Customer Master'[Sales Territory] ),",
-              "        Targets_Sales[SalesTerritoryKey]",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "        Targets_Sales[CalendarTimeKey]",
-              "    )",
-              ")"
-            ],
-            "formatString": "0.00%;-0.00%;0.00%",
-            "isHidden": true,
-            "displayFolder": "Sales"
-          },
-          {
             "name": "Backorder Amount",
             "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) with non-complete overall block and first delivery dates on or before this month",
             "expression": [
@@ -1230,12 +1221,6 @@
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
-          },
-          {
-            "name": "Gross Sales and Backorder Amount",
-            "expression": " [Gross Sales] + [Backorder Amount]",
-            "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales"
           },
           {
             "name": "Sales Order Margin",
@@ -1263,27 +1248,14 @@
               "    [Sales Order Margin],",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[First Delivery Date] <= EOMONTH([Yesterday], 0)",
+              "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
               "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
-              "    ),",
-              "    USERELATIONSHIP( 'Sales Order Documents'[First Delivery Date], 'Calendar'[Date] )",
+              "    )",
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
-          },
-          {
-            "name": "Gross Sales and Backorder Margin",
-            "expression": " [Gross Margin] + [Backorder Margin]",
-            "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales"
-          },
-          {
-            "name": "Gross Sales and Backorder Margin %",
-            "expression": " DIVIDE( [Gross Sales and Backorder Margin], [Gross Sales and Backorder Amount] )",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales"
           },
           {
             "name": "Quantity Sold",
@@ -1498,21 +1470,115 @@
           {
             "name": "In Stock Measure",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
-            "expression": " IF(COUNTROWS( FILTER( 'Sales Order Documents', 'Sales Order Documents'[In Stock] = FALSE ) ) > 0, 0, 1)",
+            "expression": " PRODUCT( 'Sales Order Documents'[In Stock] )",
             "displayFolder": "Sales Orders"
           },
           {
-            "name": "Gross Margin % Budget",
+            "name": "MTD Gross Margin% Budget",
             "description": "Budget numbers submitted by Sales to IT",
-            "expression": " CALCULATE( [Gross Margin % Budget Hidden], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "\tCALCULATE(",
+              "        SUM( Targets_Sales[GrossMarginMTD] ),",
+              "        FILTER( Targets_Sales, Targets_Sales[GrossMarginMTD] <> 0 ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Territory] ),",
+              "            Targets_Sales[SalesTerritoryKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Targets_Sales[CalendarTimeKey]",
+              "        )",
+              "    ),",
+              "    DATESMTD( 'Calendar'[Date] )",
+              ")"
+            ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales"
+            "displayFolder": "Time Intelligence"
           },
           {
-            "name": "Gross Margin % YTD Budget",
-            "expression": " CALCULATE( [Gross Margin % YTD Budget Hidden], DATESMTD( 'Calendar'[Date] ) )",
+            "name": "FYTD Gross Margin% Budget",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        AVERAGE( Targets_Sales[GrossMarginYTD] ),",
+              "        FILTER( Targets_Sales, Targets_Sales[GrossMarginYTD] <> 0 ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Territory] ),",
+              "            Targets_Sales[SalesTerritoryKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Targets_Sales[CalendarTimeKey]",
+              "        )",
+              "    ),",
+              "    DATESMTD( 'Calendar'[Date] )",
+              ")"
+            ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "isHidden": true
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales & Backorder",
+            "expression": " [MTD Gross Sales] + [Backorder Amount]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales & Backorder Margin",
+            "expression": " [MTD Gross Margin] + [Backorder Margin]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales & Backorder Margin%",
+            "expression": " DIVIDE( [MTD Gross Sales & Backorder Margin], [MTD Gross Sales & Backorder] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales Budget",
+            "expression": " CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "FYTD Gross Sales Budget",
+            "expression": " CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "FYTD Gross Sales & Backorder",
+            "expression": " [FYTD Gross Sales] + [Backorder Amount]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales & Backorder Margin",
+            "expression": " [FYTD Gross Margin] + [Backorder Margin]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales & Backorder Margin%",
+            "expression": " DIVIDE( [FYTD Gross Sales & Backorder Margin], [FYTD Gross Sales & Backorder] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -2788,28 +2854,12 @@
             },
             {
               "name": "MTD",
-              "expression": [
-                "IF(",
-                "    ISSELECTEDMEASURE( [Backorder Amount] )",
-                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Amount] )",
-                "    || ISSELECTEDMEASURE( [Backorder Margin] )",
-                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin] )",
-                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin %] ),",
-                "    SELECTEDMEASURE(),",
-                "    CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )",
-                ")"
-              ],
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )",
               "ordinal": 4
             },
             {
               "name": "YTD",
-              "expression": [
-                "IF(",
-                "    ISSELECTEDMEASURE(  [Gross Margin % Budget Hidden] ),",
-                "    CALCULATE( [Gross Margin % YTD Budget Hidden], DATESMTD('Calendar'[Date]) ),",
-                "    CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
-                ")"
-              ],
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
               "ordinal": 7
             },
             {
@@ -2841,21 +2891,7 @@
             },
             {
               "name": "FYTD",
-              "expression": [
-                "IF(",
-                "    ISSELECTEDMEASURE( [Backorder Amount] )",
-                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Amount] )",
-                "    || ISSELECTEDMEASURE( [Backorder Margin] )",
-                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin] )",
-                "    || ISSELECTEDMEASURE( [Gross Sales and Backorder Margin %] ),",
-                "    SELECTEDMEASURE(),",
-                "    IF(",
-                "        ISSELECTEDMEASURE(  [Gross Margin % Budget] ),",
-                "        [Gross Margin % YTD Budget],",
-                "        CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
-                "    )",
-                ")"
-              ],
+              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
               "ordinal": 10
             },
             {
@@ -3626,7 +3662,7 @@
           },
           {
             "name": "In Stock",
-            "dataType": "boolean",
+            "dataType": "int64",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
             "sourceColumn": "InStockIndicator"
           }
@@ -3891,29 +3927,6 @@
         ]
       },
       {
-        "name": "_Currency to Use",
-        "description": "This table is mainly used as a slicer to dynamically switch the calculation of measures from USD to local currency. Not all measures are applicable.",
-        "columns": [
-          {
-            "type": "calculatedTableColumn",
-            "name": "Currency",
-            "dataType": "string",
-            "isNameInferred": false,
-            "isDataTypeInferred": true,
-            "sourceColumn": "[Value]"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "CalculatedTable 1",
-            "source": {
-              "type": "calculated",
-              "expression": " { \"USD\", \"Local\" }"
-            }
-          }
-        ]
-      },
-      {
         "name": "RLS_CostCenter",
         "isHidden": true,
         "columns": [
@@ -3946,6 +3959,29 @@
                 "in",
                 "    dbo_VW_RLS_COSTCENTER"
               ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Currency to Use",
+        "description": "This table is mainly used as a slicer to dynamically switch the calculation of measures from USD to local currency. Not all measures are applicable.",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Currency",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": " { \"USD\", \"Local\" }"
             }
           }
         ]
@@ -5455,16 +5491,7 @@
                 "name": "Backorder Amount"
               },
               {
-                "name": "Gross Sales and Backorder Amount"
-              },
-              {
                 "name": "Backorder Margin"
-              },
-              {
-                "name": "Gross Sales and Backorder Margin"
-              },
-              {
-                "name": "Gross Sales and Backorder Margin %"
               },
               {
                 "name": "Sales Order Cost Amount"
@@ -5497,7 +5524,34 @@
                 "name": "MTD Quantity Sold"
               },
               {
-                "name": "Gross Margin % Budget"
+                "name": "FYTD Gross Margin% Budget"
+              },
+              {
+                "name": "MTD Gross Margin% Budget"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder Margin"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales Budget"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder Margin"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "MTD Gross Sales Budget"
               }
             ]
           },
@@ -5617,14 +5671,6 @@
               {
                 "name": "Ship To Name"
               },
-              {
-                "name": "Currency"
-              }
-            ]
-          },
-          {
-            "name": "_Currency to Use",
-            "columns": [
               {
                 "name": "Currency"
               }
@@ -5761,6 +5807,14 @@
               },
               {
                 "name": "Ship To Name"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
               }
             ]
           }

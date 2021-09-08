@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -566,6 +567,13 @@
           {
             "type": "calculated",
             "name": "Sales Orders",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Purchase Orders",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -1579,6 +1587,42 @@
             "expression": " DIVIDE( [FYTD Gross Sales & Backorder Margin], [FYTD Gross Sales & Backorder] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PO Ordered Quantity",
+            "expression": " SUM( 'Purchase Orders'[Ordered Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Open Quantity",
+            "expression": " SUM( 'Purchase Orders'[Open Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Ordered Amount",
+            "expression": " SUM( 'Purchase Orders'[Ordered Amount] )",
+            "formatString": "#,0",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Open Amount",
+            "expression": " SUM( 'Purchase Orders'[Open Amount] )",
+            "formatString": "#,0",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Delivered Quantity",
+            "expression": " SUM( 'Stock Transfer Orders'[Delivered Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO In Transit Quantity",
+            "expression": " SUM( 'Stock Transfer Orders'[In Transit Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
           }
         ]
       },
@@ -2780,7 +2824,14 @@
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
-            "sourceColumn": "FirstDeliveryDateKey"
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
           },
           {
             "name": "Issuing Plant",
@@ -2805,22 +2856,26 @@
           {
             "name": "Ordered Quantity",
             "dataType": "double",
-            "sourceColumn": "OrderedQuantity"
+            "sourceColumn": "OrderedQuantity",
+            "displayFolder": "_Quantities"
           },
           {
             "name": "Ordered Amount",
             "dataType": "double",
-            "sourceColumn": "OrderedAmount"
+            "sourceColumn": "OrderedAmount",
+            "displayFolder": "_Values"
           },
           {
             "name": "Open Quantity",
             "dataType": "double",
-            "sourceColumn": "OpenQuantity"
+            "sourceColumn": "OpenQuantity",
+            "displayFolder": "_Quantities"
           },
           {
             "name": "Open Amount",
             "dataType": "double",
-            "sourceColumn": "OpenAmount"
+            "sourceColumn": "OpenAmount",
+            "displayFolder": "_Values"
           }
         ],
         "partitions": [
@@ -3985,6 +4040,124 @@
             }
           }
         ]
+      },
+      {
+        "name": "Stock Transfer Orders",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: EKKO.EBELN",
+            "sourceColumn": "PurchaseOrderNoKey"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "description": "SAP Source: EKPO.EBELP",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "description": "SAP Source: EKPO.MATNR",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Valuation Class",
+            "dataType": "string",
+            "description": "SAP Source: MBEW.BKLAS",
+            "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.CHARG",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Delivered Quantity",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'U'",
+            "sourceColumn": "DeliveredQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Goods Receipt Quantity",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'E'",
+            "sourceColumn": "GoodsReceiptQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "In Transit Quantity",
+            "dataType": "double",
+            "description": "Net of delivered and goods receipt",
+            "sourceColumn": "InTransitQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Delivered Amount",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'U'",
+            "sourceColumn": "DeliveredAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Goods Receipt Amount",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'E'",
+            "sourceColumn": "GoodsReceiptAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "In Transit Amount",
+            "dataType": "double",
+            "description": "Net of delivered and goods receipt",
+            "sourceColumn": "InTransitAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.XBLNR",
+            "sourceColumn": "ReferencedDocumentNo"
+          },
+          {
+            "name": "Shipment Document Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTP.TPNUM",
+            "sourceColumn": "ShipmentDocumentNo"
+          },
+          {
+            "name": "Shipment Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTP.TKNUM",
+            "sourceColumn": "ShipmentLineNo"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data]",
+                "in",
+                "    dbo_VW_INVENTORY_INTRANSIT"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -4263,6 +4436,13 @@
         "toColumn": "Cost Center",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "2dfef6b6-28fb-4b3a-aced-5bc2cb76c009",
+        "fromTable": "Stock Transfer Orders",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
       }
     ],
     "perspectives": [
@@ -6054,6 +6234,21 @@
               },
               {
                 "name": "MTD Sales Order Amount"
+              },
+              {
+                "name": "Backorder Amount"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder Margin%"
               }
             ]
           },
@@ -6398,6 +6593,24 @@
               },
               {
                 "name": "In Stock Measure"
+              },
+              {
+                "name": "PO Delivered Quantity"
+              },
+              {
+                "name": "PO In Transit Quantity"
+              },
+              {
+                "name": "PO Open Amount"
+              },
+              {
+                "name": "PO Open Quantity"
+              },
+              {
+                "name": "PO Ordered Amount"
+              },
+              {
+                "name": "PO Ordered Quantity"
               }
             ]
           },
@@ -6674,6 +6887,130 @@
                 "name": "Fiscal Hierarchy"
               }
             ]
+          },
+          {
+            "name": "Stock Transfer Orders",
+            "columns": [
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Delivered Amount"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "Goods Receipt Quantity"
+              },
+              {
+                "name": "In Transit Amount"
+              },
+              {
+                "name": "In Transit Quantity"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Shipment Document Number"
+              },
+              {
+                "name": "Shipment Document Line Number"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Is Complete Delivery"
+              },
+              {
+                "name": "Is Goods Receipt Required"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Open Quantity"
+              },
+              {
+                "name": "Ordered Amount"
+              },
+              {
+                "name": "Ordered Quantity"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "VendorNoKey"
+              }
+            ]
           }
         ]
       }
@@ -6794,6 +7131,10 @@
           {
             "memberName": "DOMAIN\\sterenzi",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8498"
+          },
+          {
+            "memberName": "DOMAIN\\pplessis",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2848"
           }
         ],
         "tablePermissions": [
@@ -6852,6 +7193,34 @@
           {
             "memberName": "DOMAIN\\tswartout",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
+          },
+          {
+            "memberName": "DOMAIN\\acourtois",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8499"
+          },
+          {
+            "memberName": "DOMAIN\\ajoki",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7308"
+          },
+          {
+            "memberName": "DOMAIN\\jnagel",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7261"
+          },
+          {
+            "memberName": "DOMAIN\\pvangelder",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8484"
+          },
+          {
+            "memberName": "DOMAIN\\rplenzich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7305"
+          },
+          {
+            "memberName": "DOMAIN\\redwards",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-19929"
+          },
+          {
+            "memberName": "DOMAIN\\jkozlowski",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7200"
           }
         ],
         "tablePermissions": [
@@ -7154,6 +7523,18 @@
           {
             "memberName": "DOMAIN\\YOrdiano",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1432"
+          },
+          {
+            "memberName": "DOMAIN\\mferraro",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8849"
+          },
+          {
+            "memberName": "DOMAIN\\jdasilva",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7293"
+          },
+          {
+            "memberName": "DOMAIN\\nmartino",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8641"
           }
         ],
         "tablePermissions": [

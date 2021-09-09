@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -376,8 +374,9 @@
           {
             "name": "Month Name",
             "dataType": "string",
+            "description": "Sorted by fiscal period",
             "sourceColumn": "Month_Name_Abbrev",
-            "sortByColumn": "Year_Month_Sort_Key",
+            "sortByColumn": "Fiscal Period",
             "displayFolder": "Individual Attributes"
           },
           {

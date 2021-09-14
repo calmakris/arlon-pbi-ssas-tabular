@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -647,7 +648,7 @@
           {
             "name": "Gross Margin",
             "description": "Net of gross sales and overall cost",
-            "expression": " [Gross Sales] - [Cost of Goods]",
+            "expression": " SUM( 'Sales Invoice Documents'[Gross Margin Amount] )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
@@ -1820,6 +1821,28 @@
             "dataType": "string",
             "description": "SAP Source: CE110US.FRWAE",
             "sourceColumn": "Currency"
+          },
+          {
+            "name": "Was New Product",
+            "dataType": "boolean",
+            "description": "Indicates whether the material is less than or equal to 3 years as of the invoice posting date from Commercialization Date",
+            "sourceColumn": "WasNewProduct",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+          },
+          {
+            "name": "Gross Margin Amount",
+            "dataType": "double",
+            "description": "Difference between gross sales and cost value",
+            "sourceColumn": "GrossMarginValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -1832,7 +1855,7 @@
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -2318,6 +2341,13 @@
             "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL3",
             "displayFolder": "Product Hierarchy"
+          },
+          {
+            "name": "Is New Product",
+            "dataType": "boolean",
+            "description": "Indicates whether the material is less than or equal to 3 years as of today from Commercialization Date",
+            "sourceColumn": "IsNewProduct",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
           }
         ],
         "partitions": [
@@ -5268,6 +5298,9 @@
               },
               {
                 "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Is New Product"
               }
             ]
           },
@@ -5784,6 +5817,9 @@
               },
               {
                 "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Is New Product"
               }
             ]
           },
@@ -5852,6 +5888,12 @@
               },
               {
                 "name": "Currency"
+              },
+              {
+                "name": "Gross Margin Amount"
+              },
+              {
+                "name": "Was New Product"
               }
             ]
           },
@@ -6301,6 +6343,9 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Is New Product"
               }
             ]
           },
@@ -6663,6 +6708,9 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Is New Product"
               }
             ]
           },

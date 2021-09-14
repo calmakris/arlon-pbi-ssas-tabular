@@ -577,6 +577,13 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "GRIR",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -1623,6 +1630,60 @@
             "expression": " SUM( 'Stock Transfer Orders'[In Transit Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "GRIR Amount (Document)",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Document)] )",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Amount (Local)",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local)] )",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Amount (Local2)",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local2)] )",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Quantity",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Quantity] )",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Open Amount (Local2)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GRIR Amount (Local2)],",
+              "    FILTER(",
+              "        'Goods and Invoice Receipts',",
+              "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Open Quantity",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GRIR Quantity],",
+              "    FILTER(",
+              "        'Goods and Invoice Receipts',",
+              "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
           }
         ]
       },
@@ -2347,7 +2408,8 @@
             "dataType": "boolean",
             "description": "Indicates whether the material is less than or equal to 3 years as of today from Commercialization Date",
             "sourceColumn": "IsNewProduct",
-            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "displayFolder": "Classification"
           }
         ],
         "partitions": [
@@ -4187,6 +4249,283 @@
             }
           }
         ]
+      },
+      {
+        "name": "Goods and Invoice Receipts",
+        "description": "; Granularity: One row per account document and line number",
+        "columns": [
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BUKRS",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "G/L Account",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.HKONT",
+            "sourceColumn": "GeneralLedgerAcctNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.WERKS",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.KOSTL",
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Accounting Document Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BELNR",
+            "sourceColumn": "DocumentNo"
+          },
+          {
+            "name": "Accounting Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BUZEI",
+            "sourceColumn": "DocumentLineNo"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BLART",
+            "sourceColumn": "DocumentType"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.BLDAT",
+            "sourceColumn": "DocumentDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.BUDAT",
+            "sourceColumn": "PostingDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.MONAT",
+            "sourceColumn": "FiscalPeriod"
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.GJAHR",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.MATNR",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "description": "SAP Source: ACCTIT.ERFMG",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.ERFME",
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Amount (Document)",
+            "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.WRBTR",
+            "sourceColumn": "AmountInDocCurrency",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Document Currency",
+            "dataType": "string",
+            "description": "SAP Source: BKPF.WAERS",
+            "sourceColumn": "DocCurrency",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount (Local)",
+            "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.DMBTR",
+            "sourceColumn": "AmountInLocalCurrency",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Local Currency",
+            "dataType": "string",
+            "description": "SAP Source: BKPF.HWAER",
+            "sourceColumn": "LocalCurrency",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount (Local2)",
+            "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.DMBE2",
+            "sourceColumn": "AmountInLocalCurrency2",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Local Currency 2",
+            "dataType": "string",
+            "description": "SAP Source: BKPF.HWAE2",
+            "sourceColumn": "LocalCurrency2",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Clearing Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.AUGDT",
+            "sourceColumn": "ClearingDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Clearing Document Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.AUGBL",
+            "sourceColumn": "ClearingDocNo"
+          },
+          {
+            "name": "Assignment Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.ZUONR",
+            "sourceColumn": "AssignmentNo"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.EBELN",
+            "sourceColumn": "PurchaseOrderNo"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.EBELP",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "description": "SAP Source: EKKO.LIFNR",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.KUNNR",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.AUFNR",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.XBLNR",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Item Text",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.SGTXT",
+            "sourceColumn": "ItemText"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS = Source{[Schema=\"dbo\",Item=\"VW_GOODS_AND_INVOICE_RECEIPTS\"]}[Data]",
+                "in",
+                "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Vendor Master",
+        "description": "SAP Source: LFA1",
+        "columns": [
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "description": "SAP Source: LFA1.LIFNR",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Vendor Name",
+            "dataType": "string",
+            "description": "SAP Source: LFA1.NAME1",
+            "sourceColumn": "VendorName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_VENDOR_MASTER"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -4472,6 +4811,29 @@
         "fromColumn": "PurchaseOrderLineKey",
         "toTable": "Purchase Orders",
         "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "e38466af-4233-4732-887b-b6a4c4671b28",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7c9d8869-5078-4666-9140-550303378a86",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "Vendor Number",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
+      },
+      {
+        "name": "483284e1-53a0-4e7d-98d2-b6ece196fc39",
+        "toCardinality": "many",
+        "fromTable": "Customer Master",
+        "fromColumn": "Customer Number",
+        "toTable": "Goods and Invoice Receipts",
+        "toColumn": "Customer Number",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -7056,6 +7418,318 @@
               },
               {
                 "name": "VendorNoKey"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Goods and Invoice Receipts",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
+              }
+            ]
+          },
+          {
+            "name": "Goods and Invoice Receipts",
+            "columns": [
+              {
+                "name": "Accounting Document Line Number"
+              },
+              {
+                "name": "Accounting Document Number"
+              },
+              {
+                "name": "Amount (Document)"
+              },
+              {
+                "name": "Amount (Local)"
+              },
+              {
+                "name": "Amount (Local2)"
+              },
+              {
+                "name": "Assignment Number"
+              },
+              {
+                "name": "Clearing Date"
+              },
+              {
+                "name": "Clearing Document Number"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Document Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "G/L Account"
+              },
+              {
+                "name": "Item Text"
+              },
+              {
+                "name": "Local Currency"
+              },
+              {
+                "name": "Local Currency 2"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "GRIR Amount (Document)"
+              },
+              {
+                "name": "GRIR Amount (Local)"
+              },
+              {
+                "name": "GRIR Amount (Local2)"
+              },
+              {
+                "name": "GRIR Open Amount (Local2)"
+              },
+              {
+                "name": "GRIR Open Quantity"
+              },
+              {
+                "name": "GRIR Quantity"
               }
             ]
           }

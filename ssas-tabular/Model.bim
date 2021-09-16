@@ -1656,11 +1656,21 @@
             "displayFolder": "GRIR"
           },
           {
-            "name": "GRIR Open Amount (Local2)",
+            "name": "GRIR Open Amount",
+            "description": "Can be toggled between USD and local currency when a filter on '_Currency to Use'.Currency field is active",
             "expression": [
               "",
               "CALCULATE(",
-              "    [GRIR Amount (Local2)],",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", [GRIR Amount (Local2)],",
+              "            \"Local\", [GRIR Amount (Local)],",
+              "            [GRIR Amount (Local2)]",
+              "        ),",
+              "        [GRIR Amount (Local2)]  ",
+              "    ),",
               "    FILTER(",
               "        'Goods and Invoice Receipts',",
               "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
@@ -4472,6 +4482,11 @@
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.SGTXT",
             "sourceColumn": "ItemText"
+          },
+          {
+            "name": "First GR Year",
+            "dataType": "string",
+            "sourceColumn": "FirstGRYear"
           }
         ],
         "partitions": [
@@ -4834,6 +4849,13 @@
         "toTable": "Goods and Invoice Receipts",
         "toColumn": "Customer Number",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "d8aaf331-20e8-4299-911d-7c2d684ac91b",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "VendorNoKey",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
       }
     ],
     "perspectives": [
@@ -7646,6 +7668,9 @@
               },
               {
                 "name": "Vendor Number"
+              },
+              {
+                "name": "First GR Year"
               }
             ]
           },
@@ -7723,13 +7748,21 @@
                 "name": "GRIR Amount (Local2)"
               },
               {
-                "name": "GRIR Open Amount (Local2)"
+                "name": "GRIR Open Amount"
               },
               {
                 "name": "GRIR Open Quantity"
               },
               {
                 "name": "GRIR Quantity"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -7785,6 +7818,10 @@
           {
             "memberName": "DOMAIN\\jmcmanus",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
+          },
+          {
+            "memberName": "DOMAIN\\jjing",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
           }
         ]
       },

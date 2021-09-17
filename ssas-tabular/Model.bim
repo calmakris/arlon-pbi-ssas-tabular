@@ -1632,13 +1632,13 @@
           },
           {
             "name": "GRIR Amount (Document)",
-            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Document)] )",
+            "expression": " SUM('Goods and Invoice Receipts'[Amount (Document)])",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local)",
-            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local)] )",
+            "expression": " SUM('Goods and Invoice Receipts'[Amount (Local)])",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
@@ -1656,7 +1656,6 @@
           },
           {
             "name": "GRIR Open Amount",
-            "description": "Can be toggled between USD and local currency when a filter on '_Currency to Use'.Currency field is active",
             "expression": [
               "",
               "CALCULATE(",
@@ -1668,7 +1667,7 @@
               "            \"Local\", [GRIR Amount (Local)],",
               "            [GRIR Amount (Local2)]",
               "        ),",
-              "        [GRIR Amount (Local2)]  ",
+              "        [GRIR Amount (Local2)]",
               "    ),",
               "    FILTER(",
               "        'Goods and Invoice Receipts',",
@@ -4828,32 +4827,16 @@
         "toColumn": "PurchaseOrderLineKey"
       },
       {
-        "name": "e38466af-4233-4732-887b-b6a4c4671b28",
+        "name": "8157dd03-c7e0-468a-b864-e8ab717607f1",
         "fromTable": "Goods and Invoice Receipts",
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
       },
       {
-        "name": "7c9d8869-5078-4666-9140-550303378a86",
+        "name": "fbae78f6-7c76-4020-8ea5-a7b4e3b3f4d8",
         "fromTable": "Goods and Invoice Receipts",
         "fromColumn": "Vendor Number",
-        "toTable": "Vendor Master",
-        "toColumn": "Vendor Number"
-      },
-      {
-        "name": "483284e1-53a0-4e7d-98d2-b6ece196fc39",
-        "toCardinality": "many",
-        "fromTable": "Customer Master",
-        "fromColumn": "Customer Number",
-        "toTable": "Goods and Invoice Receipts",
-        "toColumn": "Customer Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "d8aaf331-20e8-4299-911d-7c2d684ac91b",
-        "fromTable": "Purchase Orders",
-        "fromColumn": "VendorNoKey",
         "toTable": "Vendor Master",
         "toColumn": "Vendor Number"
       }
@@ -7449,6 +7432,14 @@
         "name": "Goods and Invoice Receipts",
         "tables": [
           {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
             "name": "_Refresh Date",
             "columns": [
               {
@@ -7533,50 +7524,6 @@
             ]
           },
           {
-            "name": "Customer Master",
-            "columns": [
-              {
-                "name": "Account Creation Date"
-              },
-              {
-                "name": "Country"
-              },
-              {
-                "name": "Customer Name"
-              },
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Default Ship Plant"
-              },
-              {
-                "name": "Is New Customer"
-              },
-              {
-                "name": "Sales Organization"
-              },
-              {
-                "name": "Sales Person"
-              },
-              {
-                "name": "Sales Region"
-              },
-              {
-                "name": "Sales Territory"
-              },
-              {
-                "name": "Sales Territory Name"
-              },
-              {
-                "name": "SalesRegionSortKey"
-              }
-            ]
-          },
-          {
             "name": "Goods and Invoice Receipts",
             "columns": [
               {
@@ -7610,9 +7557,6 @@
                 "name": "Cost Center"
               },
               {
-                "name": "Customer Number"
-              },
-              {
                 "name": "Document Currency"
               },
               {
@@ -7620,6 +7564,9 @@
               },
               {
                 "name": "Document Type"
+              },
+              {
+                "name": "First GR Year"
               },
               {
                 "name": "Fiscal Period"
@@ -7667,10 +7614,10 @@
                 "name": "Unit of Measure"
               },
               {
-                "name": "Vendor Number"
+                "name": "Customer Number"
               },
               {
-                "name": "First GR Year"
+                "name": "Vendor Number"
               }
             ]
           },
@@ -7721,6 +7668,12 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
               }
             ]
           },
@@ -7748,21 +7701,13 @@
                 "name": "GRIR Amount (Local2)"
               },
               {
+                "name": "GRIR Quantity"
+              },
+              {
                 "name": "GRIR Open Amount"
               },
               {
                 "name": "GRIR Open Quantity"
-              },
-              {
-                "name": "GRIR Quantity"
-              }
-            ]
-          },
-          {
-            "name": "_Currency to Use",
-            "columns": [
-              {
-                "name": "Currency"
               }
             ]
           }

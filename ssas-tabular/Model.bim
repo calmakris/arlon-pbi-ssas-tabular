@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1484,7 +1483,7 @@
           },
           {
             "name": "In Stock Measure",
-            "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
+            "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date); Note that this calculation is report-side which means the material is not actually allocated to the order in SAP",
             "expression": " PRODUCT( 'Sales Order Documents'[In Stock] )",
             "displayFolder": "Sales Orders"
           },
@@ -4486,6 +4485,7 @@
           {
             "name": "First GR Year",
             "dataType": "string",
+            "description": "First year of posted goods receipt based on assignment number",
             "sourceColumn": "FirstGRYear"
           }
         ],

@@ -7,7 +7,7 @@
     "dataSources": [
       {
         "type": "structured",
-        "name": "SQL/ARLPBIDEV;ARLPBI_STAGE",
+        "name": "ARLPBI_STAGE",
         "connectionDetails": {
           "protocol": "tds",
           "address": {

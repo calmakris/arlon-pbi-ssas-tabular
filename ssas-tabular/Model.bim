@@ -577,6 +577,13 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "GRIR",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -1623,6 +1630,69 @@
             "expression": " SUM( 'Stock Transfer Orders'[In Transit Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "GRIR Amount (Document)",
+            "expression": " SUM('Goods and Invoice Receipts'[Amount (Document)])",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Amount (Local)",
+            "expression": " SUM('Goods and Invoice Receipts'[Amount (Local)])",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Amount (Local2)",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local2)] )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Quantity",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Quantity] )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Open Amount",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", [GRIR Amount (Local2)],",
+              "            \"Local\", [GRIR Amount (Local)],",
+              "            [GRIR Amount (Local2)]",
+              "        ),",
+              "        [GRIR Amount (Local2)]",
+              "    ),",
+              "    FILTER(",
+              "        'Goods and Invoice Receipts',",
+              "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Open Quantity",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GRIR Quantity],",
+              "    FILTER(",
+              "        'Goods and Invoice Receipts',",
+              "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "GRIR"
           }
         ]
       },
@@ -4187,6 +4257,215 @@
             }
           }
         ]
+      },
+      {
+        "name": "Goods and Invoice Receipts",
+        "columns": [
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "G/L Account",
+            "dataType": "string",
+            "sourceColumn": "GeneralLedgerAcctNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Accounting Document Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentNo"
+          },
+          {
+            "name": "Accounting Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentLineNo"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "sourceColumn": "DocumentType"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DocumentDate"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDate"
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "string",
+            "sourceColumn": "FiscalPeriod"
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "First GR Year",
+            "dataType": "string",
+            "sourceColumn": "FirstGRYear"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Amount (Document)",
+            "dataType": "double",
+            "sourceColumn": "AmountInDocCurrency"
+          },
+          {
+            "name": "Document Currency",
+            "dataType": "string",
+            "sourceColumn": "DocCurrency"
+          },
+          {
+            "name": "Amount (Local)",
+            "dataType": "double",
+            "sourceColumn": "AmountInLocalCurrency"
+          },
+          {
+            "name": "Local Currency",
+            "dataType": "string",
+            "sourceColumn": "LocalCurrency"
+          },
+          {
+            "name": "Amount (Local2)",
+            "dataType": "double",
+            "sourceColumn": "AmountInLocalCurrency2"
+          },
+          {
+            "name": "Local Currency 2",
+            "dataType": "string",
+            "sourceColumn": "LocalCurrency2"
+          },
+          {
+            "name": "Clearing Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ClearingDate"
+          },
+          {
+            "name": "Clearing Document Number",
+            "dataType": "string",
+            "sourceColumn": "ClearingDocNo"
+          },
+          {
+            "name": "Assignment Number",
+            "dataType": "string",
+            "sourceColumn": "AssignmentNo"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderNo"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "VendorNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "CustomerNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Item Text",
+            "dataType": "string",
+            "sourceColumn": "ItemText"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS = Source{[Schema=\"dbo\",Item=\"VW_GOODS_AND_INVOICE_RECEIPTS\"]}[Data]",
+                "in",
+                "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Vendor Master",
+        "columns": [
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Vendor Name",
+            "dataType": "string",
+            "sourceColumn": "VendorName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_VENDOR_MASTER"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -4472,6 +4751,20 @@
         "fromColumn": "PurchaseOrderLineKey",
         "toTable": "Purchase Orders",
         "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "8157dd03-c7e0-468a-b864-e8ab717607f1",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "fbae78f6-7c76-4020-8ea5-a7b4e3b3f4d8",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "VendorNoKey",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
       }
     ],
     "perspectives": [
@@ -7056,6 +7349,291 @@
               },
               {
                 "name": "VendorNoKey"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Goods and Invoice Receipts",
+        "tables": [
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Goods and Invoice Receipts",
+            "columns": [
+              {
+                "name": "Accounting Document Line Number"
+              },
+              {
+                "name": "Accounting Document Number"
+              },
+              {
+                "name": "Amount (Document)"
+              },
+              {
+                "name": "Amount (Local)"
+              },
+              {
+                "name": "Amount (Local2)"
+              },
+              {
+                "name": "Assignment Number"
+              },
+              {
+                "name": "Clearing Date"
+              },
+              {
+                "name": "Clearing Document Number"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "Document Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First GR Year"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "G/L Account"
+              },
+              {
+                "name": "Item Text"
+              },
+              {
+                "name": "Local Currency"
+              },
+              {
+                "name": "Local Currency 2"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "VendorNoKey"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "GRIR Amount (Document)"
+              },
+              {
+                "name": "GRIR Amount (Local)"
+              },
+              {
+                "name": "GRIR Amount (Local2)"
+              },
+              {
+                "name": "GRIR Quantity"
+              },
+              {
+                "name": "GRIR Open Amount"
+              },
+              {
+                "name": "GRIR Open Quantity"
               }
             ]
           }

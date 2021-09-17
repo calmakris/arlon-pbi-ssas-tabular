@@ -4407,13 +4407,13 @@
             "sourceColumn": "ItemText"
           },
           {
-            "name": "VendorNoKey",
+            "name": "Vendor Number",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "VendorNoKey"
           },
           {
-            "name": "CustomerNoKey",
+            "name": "Customer Number",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "CustomerNoKey"
@@ -4762,7 +4762,7 @@
       {
         "name": "fbae78f6-7c76-4020-8ea5-a7b4e3b3f4d8",
         "fromTable": "Goods and Invoice Receipts",
-        "fromColumn": "VendorNoKey",
+        "fromColumn": "Vendor Number",
         "toTable": "Vendor Master",
         "toColumn": "Vendor Number"
       }
@@ -7540,10 +7540,10 @@
                 "name": "Unit of Measure"
               },
               {
-                "name": "CustomerNoKey"
+                "name": "Customer Number"
               },
               {
-                "name": "VendorNoKey"
+                "name": "Vendor Number"
               }
             ]
           },

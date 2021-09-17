@@ -1634,25 +1634,25 @@
           {
             "name": "GRIR Amount (Document)",
             "expression": " SUM('Goods and Invoice Receipts'[Amount (Document)])",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local)",
             "expression": " SUM('Goods and Invoice Receipts'[Amount (Local)])",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local2)",
             "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local2)] )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Quantity",
             "expression": " SUM( 'Goods and Invoice Receipts'[Quantity] )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
@@ -1676,7 +1676,7 @@
               "    )",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
@@ -1691,7 +1691,7 @@
               "    )",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           }
         ]
@@ -4392,18 +4392,6 @@
             "sourceColumn": "PurchaseOrderLineNo"
           },
           {
-            "name": "VendorNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "VendorNoKey"
-          },
-          {
-            "name": "CustomerNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
-          },
-          {
             "name": "Process Order Number",
             "dataType": "string",
             "sourceColumn": "ProcessOrderNo"
@@ -4417,6 +4405,18 @@
             "name": "Item Text",
             "dataType": "string",
             "sourceColumn": "ItemText"
+          },
+          {
+            "name": "VendorNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "CustomerNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
           }
         ],
         "partitions": [
@@ -7483,9 +7483,6 @@
                 "name": "Cost Center"
               },
               {
-                "name": "CustomerNoKey"
-              },
-              {
                 "name": "Document Currency"
               },
               {
@@ -7543,6 +7540,9 @@
                 "name": "Unit of Measure"
               },
               {
+                "name": "CustomerNoKey"
+              },
+              {
                 "name": "VendorNoKey"
               }
             ]
@@ -7575,12 +7575,6 @@
                 "name": "Material Group"
               },
               {
-                "name": "Material Number"
-              },
-              {
-                "name": "Material Number - Description"
-              },
-              {
                 "name": "Material Type"
               },
               {
@@ -7600,6 +7594,12 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
               }
             ]
           },

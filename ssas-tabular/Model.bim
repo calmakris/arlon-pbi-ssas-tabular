@@ -138,7 +138,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data],",
                 "    #\"Added Custom\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
                 "in",
@@ -309,7 +309,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COMPLAINTS = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintLineKey\", \"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"LastCreditDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
                 "in",
@@ -460,7 +460,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
@@ -1922,7 +1922,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
                 "in",
@@ -2009,7 +2009,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
                 "in",
@@ -2119,7 +2119,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BLOCK\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_BLOCK,{\"MaterialNoKey\", \"BatchNoKey\", \"NotificationNoKey\", \"PlantNo\", \"StorageLoc\", \"SBlockQuantityValue\", \"SBlockAmountUSD\", \"QBlockQuantityValue\", \"QBlockAmountUSD\"})",
                 "in",
@@ -2196,7 +2196,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_EXPIRED = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_EXPIRED\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_EXPIRED,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"ExpiredQuantityValue\", \"StockAmountUSD\", \"ExpiredAmountUSD\"})",
                 "in",
@@ -2283,7 +2283,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_DAILY_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"DAILY_INVENTORY_BLOCK\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_DAILY_INVENTORY_BLOCK,{{\"SnapshotDateKey\", type date}}),",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"SnapshotDateKey\", \"PlantNoKey\", \"SBlockValueUSD\", \"QBlockValueUSD\", \"ExpiredValueUSD\"})",
@@ -2428,7 +2428,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_MATERIAL_MASTER"
@@ -2484,7 +2484,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_CENTER_NAMES\"]}[Data],",
                 "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_CENTER_NAMES, \"DepartmentSortKey\", each if [Department] = \"COMP\" then 0",
                 "else if [Department] = \"CAST\" then 1",
@@ -2559,7 +2559,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data]",
                 "in",
                 "    dbo_VW_COST_ELEMENT_NAMES"
@@ -2594,7 +2594,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_PLANT = Source{[Schema=\"dbo\",Item=\"VW_PLANT\"]}[Data]",
                 "in",
                 "    dbo_VW_PLANT"
@@ -2632,7 +2632,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SPECAPPROVAL_PENDING = Source{[Schema=\"dbo\",Item=\"VW_SPECAPPROVAL_PENDING\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SPECAPPROVAL_PENDING,{\"ApproverName\", \"Department\", \"PendingCount\"})",
                 "in",
@@ -2827,7 +2827,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_EXPENSES = Source{[Schema=\"dbo\",Item=\"VW_EXPENSES\"]}[Data]",
                 "in",
                 "    dbo_VW_EXPENSES"
@@ -2985,7 +2985,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE\"]}[Data]",
                 "in",
                 "    dbo_VW_PURCHASE_ORDERS"
@@ -3195,7 +3195,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zPROCESSDATE_REPORTS = Source{[Schema=\"dbo\",Item=\"zPROCESSDATE_REPORTS\"]}[Data]",
                 "in",
                 "    dbo_zPROCESSDATE_REPORTS"
@@ -3237,7 +3237,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zTARGETS_EXPENSES = Source{[Schema=\"dbo\",Item=\"zTARGETS_EXPENSES\"]}[Data]",
                 "in",
                 "    dbo_zTARGETS_EXPENSES"
@@ -3344,7 +3344,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data],",
                 "    #\"Removed Duplicates\" = Table.Distinct(dbo_VW_REASON_CODE, {\"ReasonCodeKey\"})",
                 "in",
@@ -3356,7 +3356,7 @@
                 "name": "QueryEditorSerialization",
                 "value": [
                   "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>let",
-                  "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                  "    Source = #\"ARLPBI_STAGE\",",
                   "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
                   "in",
                   "    dbo_VW_REASON_CODE</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
@@ -3401,7 +3401,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COMPLAINTS_CREDITED = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS_CREDITED\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS_CREDITED,{\"ComplaintLineKey\", \"CreditDateKey\", \"CreditIssueValueUSD\"})",
                 "in",
@@ -3439,7 +3439,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zTARGETS_KPI = Source{[Schema=\"dbo\",Item=\"zTARGETS_KPI\"]}[Data]",
                 "in",
                 "    dbo_zTARGETS_KPI"
@@ -3829,7 +3829,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_ORDER_SALES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES\"]}[Data]",
                 "in",
                 "    dbo_VW_ORDER_SALES"
@@ -3877,7 +3877,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_ADDRESS_INFO = Source{[Schema=\"dbo\",Item=\"VW_ADDRESS_INFO\"]}[Data]",
                 "in",
                 "    dbo_VW_ADDRESS_INFO"
@@ -3909,7 +3909,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES_REGION = Source{[Schema=\"dbo\",Item=\"VW_SALES_REGION\"]}[Data]",
                 "in",
                 "    dbo_VW_SALES_REGION"
@@ -3941,7 +3941,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_SALES_TERRITORY\"]}[Data]",
                 "in",
                 "    dbo_VW_SALES_TERRITORY"
@@ -3978,7 +3978,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_RLS_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_RLS_TERRITORY\"]}[Data]",
                 "in",
                 "    dbo_VW_RLS_TERRITORY"
@@ -4015,7 +4015,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_RLS_REGION = Source{[Schema=\"dbo\",Item=\"VW_RLS_REGION\"]}[Data]",
                 "in",
                 "    dbo_VW_RLS_REGION"
@@ -4071,7 +4071,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zTARGETS_SALES = Source{[Schema=\"dbo\",Item=\"zTARGETS_SALES\"]}[Data]",
                 "in",
                 "    dbo_zTARGETS_SALES"
@@ -4108,7 +4108,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_RLS_COSTCENTER = Source{[Schema=\"dbo\",Item=\"VW_RLS_COSTCENTER\"]}[Data]",
                 "in",
                 "    dbo_VW_RLS_COSTCENTER"
@@ -4249,7 +4249,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data]",
                 "in",
                 "    dbo_VW_INVENTORY_INTRANSIT"
@@ -4496,7 +4496,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS = Source{[Schema=\"dbo\",Item=\"VW_GOODS_AND_INVOICE_RECEIPTS\"]}[Data]",
                 "in",
                 "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS"
@@ -4532,7 +4532,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_VENDOR_MASTER"

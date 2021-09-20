@@ -7,7 +7,7 @@
     "dataSources": [
       {
         "type": "structured",
-        "name": "SQL/ARLPBIDEV;ARLPBI_STAGE",
+        "name": "ARLPBI_STAGE",
         "connectionDetails": {
           "protocol": "tds",
           "address": {
@@ -33,6 +33,7 @@
           {
             "name": "Customer Number",
             "dataType": "string",
+            "description": "SAP Source: KNA1.KUNNR",
             "sourceColumn": "CustomerNoKey",
             "displayFolder": "Master"
           },
@@ -47,18 +48,21 @@
           {
             "name": "Country",
             "dataType": "string",
+            "description": "SAP Source: KNA1.LAND1",
             "sourceColumn": "Country",
             "displayFolder": "Master"
           },
           {
             "name": "Customer Name",
             "dataType": "string",
+            "description": "SAP Source: KNA1.NAME1",
             "sourceColumn": "CustomerName",
             "displayFolder": "Master"
           },
           {
             "name": "Account Creation Date",
             "dataType": "dateTime",
+            "description": "SAP Source: KNA1.ERDAT",
             "sourceColumn": "AcctCreateDate",
             "formatString": "MM/dd/yyyy",
             "displayFolder": "Master"
@@ -66,24 +70,29 @@
           {
             "name": "Sales Organization",
             "dataType": "string",
+            "description": "SAP Source: KNVV.VKORG",
             "sourceColumn": "SalesOrganization",
             "displayFolder": "Sales Related"
           },
           {
             "name": "Default Ship Plant",
             "dataType": "string",
+            "description": "SAP Source: KNVV.VWERK",
             "sourceColumn": "DefaultPlant",
             "displayFolder": "Master"
           },
           {
             "name": "Sales Region",
             "dataType": "string",
+            "description": "SAP Source: KNVV.BZIRK; If the sales territory name contains \"Fleet\", this value is changed to \"FLEET\"",
             "sourceColumn": "SalesDistrict",
+            "sortByColumn": "SalesRegionSortKey",
             "displayFolder": "Sales Related"
           },
           {
             "name": "Sales Territory",
             "dataType": "string",
+            "description": "SAP Source: KNVV.VKBUR",
             "sourceColumn": "SalesTerritory",
             "displayFolder": "Sales Related"
           },
@@ -100,6 +109,7 @@
           {
             "name": "Sales Person",
             "dataType": "string",
+            "description": "Assigned manually; Contact IT for more details",
             "sourceColumn": "SalesPerson",
             "displayFolder": "Sales Related"
           },
@@ -108,8 +118,16 @@
             "name": "Sales Territory Name",
             "dataType": "string",
             "isDataTypeInferred": true,
+            "description": "SAP Source: TVKBT.BEZEI",
             "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
+            "sortByColumn": "Sales Territory",
             "displayFolder": "Sales Related"
+          },
+          {
+            "name": "SalesRegionSortKey",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "SalesRegionSortKey"
           }
         ],
         "partitions": [
@@ -121,9 +139,10 @@
               "expression": [
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data]",
+                "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data],",
+                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
                 "in",
-                "    dbo_VW_CUSTOMER_MASTER"
+                "    #\"Added Custom\""
               ]
             }
           }
@@ -355,8 +374,9 @@
           {
             "name": "Month Name",
             "dataType": "string",
+            "description": "Sorted by fiscal period",
             "sourceColumn": "Month_Name_Abbrev",
-            "sortByColumn": "Year_Month_Sort_Key",
+            "sortByColumn": "Fiscal Period",
             "displayFolder": "Individual Attributes"
           },
           {
@@ -424,6 +444,12 @@
             "dataType": "boolean",
             "sourceColumn": "Is_Weekday",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Last 2 Calendar Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last2_Calendar_Years",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -437,7 +463,7 @@
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -502,12 +528,61 @@
         "columns": [
           {
             "type": "calculatedTableColumn",
-            "name": "Measure Column",
+            "name": "Date",
             "dataType": "int64",
             "isNameInferred": false,
             "isDataTypeInferred": true,
             "isHidden": true,
             "sourceColumn": "[Value]"
+          },
+          {
+            "type": "calculated",
+            "name": "Sales Invoice",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Complaints",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Inventory",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Expenses",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Sales Orders",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Purchase Orders",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "GRIR",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -522,63 +597,72 @@
         "measures": [
           {
             "name": "Gross Sales",
-            "expression": " SUM('Sales Invoice Documents'[Gross Sales Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "description": "(SAP Source: Sum of CE110US.ERLOS)",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Gross Sales Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Net Sales",
-            "expression": " SUM('Sales Invoice Documents'[Net Sales Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "description": "Net of gross sales and discounts",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Net Sales Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents',  'Sales Invoice Documents'[Net Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Net Sales Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Cost of Goods",
-            "expression": " SUM('Sales Invoice Documents'[Overall Cost Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Overall Cost Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overall Cost Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Overall Cost Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin",
-            "expression": " [Gross Sales] - [Cost of Goods]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "description": "Net of gross sales and overall cost",
+            "expression": " SUM( 'Sales Invoice Documents'[Gross Margin Amount] )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Net Margin",
             "expression": " [Net Sales] - [Cost of Goods]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin %",
@@ -597,7 +681,7 @@
             "expression": " SUM('Complaint Documents'[Complaint Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -610,7 +694,7 @@
             "expression": " SUM('Complaint Documents'[Credit Issued Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -623,7 +707,7 @@
             "expression": " SUM('Complaint Documents'[Open Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -636,19 +720,19 @@
             "expression": " DISTINCTCOUNT( 'Complaint Documents'[Complaint Number] ) + 0",
             "formatString": "#,0",
             "isHidden": true,
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Count",
             "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Value",
             "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -660,7 +744,7 @@
             "name": "PQ Credit Issued",
             "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -672,7 +756,7 @@
             "name": "PQ Open Value",
             "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -702,7 +786,7 @@
             "name": "Hold Amount",
             "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Hold Tags\\Sum",
+            "displayFolder": "Hold Tags",
             "annotations": [
               {
                 "name": "Format",
@@ -714,19 +798,19 @@
             "name": "Hold Quantity",
             "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
             "formatString": "#,0.00",
-            "displayFolder": "Hold Tags\\Sum"
+            "displayFolder": "Hold Tags"
           },
           {
             "name": "Hold Tag Count",
             "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
             "formatString": "#,0",
-            "displayFolder": "Hold Tags\\Count"
+            "displayFolder": "Hold Tags"
           },
           {
             "name": "Current S-Block Value",
             "expression": " SUM('Blocked Inventory'[SBlock Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -738,7 +822,7 @@
             "name": "Current Q-Block Value",
             "expression": " SUM('Blocked Inventory'[QBlock Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -750,7 +834,7 @@
             "name": "Current Blocked Inv Value",
             "expression": " [Current S-Block Value] + [Current Q-Block Value] + [Current Expired Value]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -762,7 +846,7 @@
             "name": "Current Expired Value",
             "expression": " SUM('Expired Inventory'[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -774,7 +858,7 @@
             "name": "Current S-Block Value with Hold Tags",
             "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Blocked Inv\\Sum",
+            "displayFolder": "Blocked Inv",
             "annotations": [
               {
                 "name": "Format",
@@ -799,7 +883,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Cycle Time",
@@ -815,7 +899,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Average"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Expenses Amount",
@@ -869,7 +953,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "SQ Complaint Value",
@@ -889,7 +973,7 @@
               ")"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -915,7 +999,7 @@
               ")"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Complaints\\Sum",
+            "displayFolder": "Complaints",
             "annotations": [
               {
                 "name": "Format",
@@ -936,19 +1020,19 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Complaints\\Count"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Service Quality Index",
             "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index",
             "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Service Quality Index (Target)",
@@ -992,7 +1076,7 @@
             "name": "Sales Order Amount",
             "expression": " SUM( 'Sales Order Documents'[Order Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders\\Sum",
+            "displayFolder": "Sales Orders",
             "annotations": [
               {
                 "name": "Format",
@@ -1004,7 +1088,7 @@
             "name": "Sales Order Cost Amount",
             "expression": " SUM( 'Sales Order Documents'[Cost Amount] ) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders\\Sum",
+            "displayFolder": "Sales Orders",
             "annotations": [
               {
                 "name": "Format",
@@ -1029,66 +1113,48 @@
             "name": "Sales Order Count",
             "expression": " DISTINCTCOUNT(  'Sales Order Documents'[Order Number] )",
             "formatString": "#,0",
-            "displayFolder": "Sales Orders\\Count"
-          },
-          {
-            "name": "Gross Sales %Grand",
-            "description": "Gross sales as percent of grand total by customer master and material master",
-            "expression": [
-              " ",
-              "DIVIDE(",
-              "    [Gross Sales],",
-              "    CALCULATE(",
-              "        [Gross Sales],",
-              "        ALL( 'Material Master'),",
-              "        ALL( 'Customer Master' )",
-              "    )",
-              ")",
-              ""
-            ],
-            "formatString": "0%;-0%;0%",
-            "displayFolder": "Sales"
+            "displayFolder": "Sales Orders"
           },
           {
             "name": "MTD Gross Sales",
             "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales",
             "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin",
             "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin",
             "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Sales",
             "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Sales",
             "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin",
             "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1100,18 +1166,6 @@
           {
             "name": "FYTD Gross Margin%",
             "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "MTD Gross Sales %Grand",
-            "expression": " CALCULATE( [Gross Sales %Grand], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "FYTD Gross Sales %Grand",
-            "expression": " CALCULATE( [Gross Sales %Grand], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
@@ -1128,47 +1182,539 @@
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "MTD PY Gross Sales %Grand",
-            "expression": " CALCULATE( [MTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "FYTD PY Gross Sales %Grand",
-            "expression": " CALCULATE( [FYTD Gross Sales %Grand], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "0%;-0%;\"-\"",
-            "displayFolder": "Time Intelligence"
-          },
-          {
             "name": "MTD PY Gross Margin",
             "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Gross Sales",
             "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Gross Sales Budget",
+            "description": "Budget numbers submitted by Sales to IT",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Targets_Sales[GrossSales] ),",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Territory] ),",
+              "        Targets_Sales[SalesTerritoryKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Targets_Sales[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Sales",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Amount",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) with non-complete overall block and first delivery dates on or before this month",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Internal Open Amount],",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Margin",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Order Documents'[Margin Amount] ),",
+              "        \"Local\", SUM( 'Sales Order Documents'[Margin Amount Local] ),",
+              "        SUM( 'Sales Order Documents'[Margin Amount] )",
+              "    ),",
+              "    SUM( 'Sales Order Documents'[Margin Amount] )  ",
+              ") + 0"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Backorder Margin",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Margin],",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Quantity Sold",
+            "expression": " SUM( 'Sales Invoice Documents'[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD PY Var Gross Sales",
+            "expression": " IF( NOT( OR(ISBLANK([MTD Gross Sales]), ISBLANK([MTD PY Gross Sales]) ) ), [MTD Gross Sales] - [MTD PY Gross Sales], BLANK() )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Var% Gross Sales",
+            "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var% Gross Sales",
+            "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Quantity Sold",
+            "expression": " CALCULATE( [Quantity Sold], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Quantity Sold",
+            "expression": " CALCULATE( [Quantity Sold], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Yesterday",
+            "expression": " TODAY() - 1",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Beginning of Month",
+            "expression": " EOMONTH( [Yesterday], -1 ) + 1",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "End of Month",
+            "expression": " EOMONTH( [Yesterday], 0 )",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MTD Sales Order Amount",
+            "expression": " CALCULATE( [Sales Order Amount], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Sales Order Amount",
+            "expression": " CALCULATE( [MTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Var Sales Order Amount",
+            "expression": [
+              " ",
+              "IF( ",
+              "    AND( ",
+              "        NOT(ISBLANK([MTD Sales Order Amount])), ",
+              "        NOT(ISBLANK([MTD PY Sales Order Amount])) ",
+              "    ), ",
+              "    [MTD Sales Order Amount] - [MTD PY Sales Order Amount], ",
+              "    BLANK() ",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Var% Sales Order Amount",
+            "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD Sales Order Amount] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Sales Order Amount",
+            "expression": " CALCULATE( [Sales Order Amount], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Sales Order Amount",
+            "expression": " CALCULATE( [FYTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var Sales Order Amount",
+            "expression": [
+              " ",
+              "IF( ",
+              "    AND( ",
+              "        NOT(ISBLANK([FYTD Sales Order Amount])), ",
+              "        NOT(ISBLANK([FYTD PY Sales Order Amount])) ",
+              "    ), ",
+              "    [FYTD Sales Order Amount] - [FYTD PY Sales Order Amount], ",
+              "    BLANK() ",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Var% Sales Order Amount",
+            "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD Sales Order Amount] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "SO Internal Open Quantity",
+            "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Customer Open Quantity",
+            "expression": "  SUM( 'Sales Order Documents'[Customer Open Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Internal Open Amount",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Internal Open Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Internal Open Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Internal Open Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Internal Open Amount] )   ",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Customer Open Amount",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Customer Open Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Customer Open Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Customer Open Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Customer Open Amount] )   ",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Ordered Quantity",
+            "expression": "SUM( 'Sales Order Documents'[Order Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Allocated Quantity",
+            "expression": " SUM( 'Sales Order Documents'[Allocated Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Shipped Quantity",
+            "expression": " SUM( 'Sales Order Documents'[Shipped Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "In Stock Measure",
+            "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date); Note that this calculation is report-side which means the material is not actually allocated to the order in SAP",
+            "expression": " PRODUCT( 'Sales Order Documents'[In Stock] )",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "MTD Gross Margin% Budget",
+            "description": "Budget numbers submitted by Sales to IT",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "\tCALCULATE(",
+              "        SUM( Targets_Sales[GrossMarginMTD] ),",
+              "        FILTER( Targets_Sales, Targets_Sales[GrossMarginMTD] <> 0 ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Territory] ),",
+              "            Targets_Sales[SalesTerritoryKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Targets_Sales[CalendarTimeKey]",
+              "        )",
+              "    ),",
+              "    DATESMTD( 'Calendar'[Date] )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Margin% Budget",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        AVERAGE( Targets_Sales[GrossMarginYTD] ),",
+              "        FILTER( Targets_Sales, Targets_Sales[GrossMarginYTD] <> 0 ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Territory] ),",
+              "            Targets_Sales[SalesTerritoryKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Targets_Sales[CalendarTimeKey]",
+              "        )",
+              "    ),",
+              "    DATESMTD( 'Calendar'[Date] )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales & Backorder",
+            "expression": " [MTD Gross Sales] + [Backorder Amount]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales & Backorder Margin",
+            "expression": " [MTD Gross Margin] + [Backorder Margin]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales & Backorder Margin%",
+            "expression": " DIVIDE( [MTD Gross Sales & Backorder Margin], [MTD Gross Sales & Backorder] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Gross Sales Budget",
+            "expression": " CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "FYTD Gross Sales Budget",
+            "expression": " CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "FYTD Gross Sales & Backorder",
+            "expression": " [FYTD Gross Sales] + [Backorder Amount]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales & Backorder Margin",
+            "expression": " [FYTD Gross Margin] + [Backorder Margin]",
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Gross Sales & Backorder Margin%",
+            "expression": " DIVIDE( [FYTD Gross Sales & Backorder Margin], [FYTD Gross Sales & Backorder] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PO Ordered Quantity",
+            "expression": " SUM( 'Purchase Orders'[Ordered Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Open Quantity",
+            "expression": " SUM( 'Purchase Orders'[Open Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Ordered Amount",
+            "expression": " SUM( 'Purchase Orders'[Ordered Amount] )",
+            "formatString": "#,0",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Open Amount",
+            "expression": " SUM( 'Purchase Orders'[Open Amount] )",
+            "formatString": "#,0",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Delivered Quantity",
+            "expression": " SUM( 'Stock Transfer Orders'[Delivered Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO In Transit Quantity",
+            "expression": " SUM( 'Stock Transfer Orders'[In Transit Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "GRIR Amount (Document)",
+            "expression": " SUM('Goods and Invoice Receipts'[Amount (Document)])",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Amount (Local)",
+            "expression": " SUM('Goods and Invoice Receipts'[Amount (Local)])",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Amount (Local2)",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local2)] )",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Quantity",
+            "expression": " SUM( 'Goods and Invoice Receipts'[Quantity] )",
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Open Amount",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", [GRIR Amount (Local2)],",
+              "            \"Local\", [GRIR Amount (Local)],",
+              "            [GRIR Amount (Local2)]",
+              "        ),",
+              "        [GRIR Amount (Local2)]",
+              "    ),",
+              "    FILTER(",
+              "        'Goods and Invoice Receipts',",
+              "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
+          },
+          {
+            "name": "GRIR Open Quantity",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GRIR Quantity],",
+              "    FILTER(",
+              "        'Goods and Invoice Receipts',",
+              "        'Goods and Invoice Receipts'[Clearing Date] > MAX( 'Calendar'[Date] )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0.00;(#,##0.00);\"-\"",
+            "displayFolder": "GRIR"
           }
         ]
       },
       {
         "name": "Sales Invoice Documents",
+        "description": "SAP Source: CE110US, VBRP, TVFKT; Active filters: PALEDGER = 01 & VRGAR = F & FKART not equal (IV, IVS) & RBELN starts with 009",
         "columns": [
           {
             "name": "Invoice Number",
             "dataType": "string",
+            "description": "SAP Source: CE110US.RBELN; Reference document number for CO-PA line item",
             "sourceColumn": "SaleDocNoKey"
           },
           {
             "name": "Invoice Line Number",
             "dataType": "string",
+            "description": "SAP Source: CE110US.RPOSN; Item number from reference document (CO-PA)",
             "sourceColumn": "SaleLineNo"
           },
           {
             "name": "Posting Date",
             "dataType": "dateTime",
+            "description": "SAP Source: CE110US.BUDAT ",
             "sourceColumn": "PostingDateKey",
             "formatString": "MM/dd/yyyy"
           },
@@ -1193,6 +1739,7 @@
           {
             "name": "Quantity",
             "dataType": "double",
+            "description": "SAP Source: CE110US.ABSMG",
             "sourceColumn": "QuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -1201,6 +1748,7 @@
           {
             "name": "Gross Sales Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.ERLOS",
             "sourceColumn": "GrossSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1215,6 +1763,7 @@
           {
             "name": "Net Sales Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
             "sourceColumn": "NetSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1229,6 +1778,7 @@
           {
             "name": "Overall Cost Amount",
             "dataType": "double",
+            "description": "SAP Source: VBRP.WAVWR",
             "sourceColumn": "CostValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1243,6 +1793,7 @@
           {
             "name": "Material Cost Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.VVMEP",
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1257,6 +1808,7 @@
           {
             "name": "Discount Amount",
             "dataType": "double",
+            "description": "SAP Source: CE110US.KWKDRB",
             "sourceColumn": "DiscountValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -1271,16 +1823,19 @@
           {
             "name": "Document Type",
             "dataType": "string",
+            "description": "SAP Source: CE110US.FKART",
             "sourceColumn": "DocType"
           },
           {
             "name": "Document Type Text",
             "dataType": "string",
+            "description": "SAP Source: TVFKT.VTEXT",
             "sourceColumn": "DocTypeText"
           },
           {
             "name": "Create Date",
             "dataType": "dateTime",
+            "description": "SAP Source: CE110US.HZDAT",
             "sourceColumn": "CreateDate",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -1293,6 +1848,7 @@
           {
             "name": "Invoice Date",
             "dataType": "dateTime",
+            "description": "SAP Source: CE110US.FADAT",
             "sourceColumn": "InvoiceDate",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -1311,11 +1867,13 @@
           {
             "name": "Quantity Unit",
             "dataType": "string",
+            "description": "SAP Source: CE110US.ABSMG_ME",
             "sourceColumn": "QuantityUoM"
           },
           {
             "name": "Exchange Rate",
             "dataType": "double",
+            "description": "SAP Source: CE110US.KURSF",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000"
           },
@@ -1324,7 +1882,36 @@
             "name": "Ship To Name",
             "dataType": "string",
             "isDataTypeInferred": true,
+            "description": "SAP Source: ADRC.NAME1",
             "expression": " RELATED( Addresses[Name] )"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "description": "SAP Source: CE110US.FRWAE",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Was New Product",
+            "dataType": "boolean",
+            "description": "Indicates whether the material is less than or equal to 3 years as of the invoice posting date from Commercialization Date",
+            "sourceColumn": "WasNewProduct",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+          },
+          {
+            "name": "Gross Margin Amount",
+            "dataType": "double",
+            "description": "Difference between gross sales and cost value",
+            "sourceColumn": "GrossMarginValueUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -1337,7 +1924,7 @@
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
                 "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -1709,10 +2296,12 @@
       },
       {
         "name": "Material Master",
+        "description": "SAP Source: MARA, MAKT, and AUSP",
         "columns": [
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: MARA.MATNR",
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "MaterialNoKey",
@@ -1721,6 +2310,7 @@
           {
             "name": "Material Description",
             "dataType": "string",
+            "description": "SAP Source: MAKT.MAKTG",
             "sourceColumn": "MaterialDescription",
             "displayFolder": "Master"
           },
@@ -1733,80 +2323,101 @@
           {
             "name": "Material Type",
             "dataType": "string",
+            "description": "SAP Source: MARA.MTART",
             "sourceColumn": "MaterialType",
             "displayFolder": "Master"
           },
           {
             "name": "Material Group",
             "dataType": "string",
+            "description": "SAP Source: MARA.MATKL",
             "sourceColumn": "MaterialGroup",
             "displayFolder": "Master"
           },
           {
             "name": "X Distribution Status",
             "dataType": "string",
+            "description": "SAP Source: MARA.MSTAV",
             "sourceColumn": "XDistributionStatus",
             "displayFolder": "Master"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: MARA.MEINS",
             "sourceColumn": "UnitOfMeasure",
             "displayFolder": "Master"
           },
           {
             "name": "Brand",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "Brand",
             "displayFolder": "Classification"
           },
           {
             "name": "Color Number",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "ColorNumber",
             "displayFolder": "Classification"
           },
           {
             "name": "Commercialization Date",
             "dataType": "dateTime",
+            "description": "SAP Source: AUSP.ATFLV",
             "sourceColumn": "CommercializationDate",
             "displayFolder": "Classification"
           },
           {
             "name": "Film Type",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "FilmType",
             "displayFolder": "Classification"
           },
           {
             "name": "Liner",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "Liner",
             "displayFolder": "Classification"
           },
           {
             "name": "Product Series",
             "dataType": "string",
+            "description": "SAP Source: AUSP.ATWRT",
             "sourceColumn": "ProductSeries",
             "displayFolder": "Classification"
           },
           {
             "name": "Product Hierarchy L1",
             "dataType": "string",
+            "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL1",
             "displayFolder": "Product Hierarchy"
           },
           {
             "name": "Product Hierarchy L2",
             "dataType": "string",
+            "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL2",
             "displayFolder": "Product Hierarchy"
           },
           {
             "name": "Product Hierarchy L3",
             "dataType": "string",
+            "description": "SAP Source: T179T.VTEXT",
             "sourceColumn": "ProductHierarchyDescriptionL3",
             "displayFolder": "Product Hierarchy"
+          },
+          {
+            "name": "Is New Product",
+            "dataType": "boolean",
+            "description": "Indicates whether the material is less than or equal to 3 years as of today from Commercialization Date",
+            "sourceColumn": "IsNewProduct",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "displayFolder": "Classification"
           }
         ],
         "partitions": [
@@ -1960,6 +2571,7 @@
       {
         "name": "Plant",
         "description": "List of warehouse numbers in SAP (best used for filtering/grouping by plant across multiple fact tables)",
+        "isHidden": true,
         "columns": [
           {
             "name": "Plant",
@@ -2294,26 +2906,75 @@
             "sourceColumn": "UnitOfMeasure"
           },
           {
-            "name": "Quantity",
-            "dataType": "double",
-            "sourceColumn": "Quantity",
-            "formatString": "0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "name": "Document Type",
+            "dataType": "string",
+            "sourceColumn": "PurchaseDocType"
           },
           {
-            "name": "Amount",
-            "dataType": "double",
-            "sourceColumn": "Amount",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum",
+            "name": "Is Complete Delivery",
+            "dataType": "string",
+            "sourceColumn": "CompleteDeliverIndicator"
+          },
+          {
+            "name": "Is Goods Receipt Required",
+            "dataType": "string",
+            "sourceColumn": "GoodsReceiptIndicator"
+          },
+          {
+            "name": "First Delivery Date",
+            "dataType": "dateTime",
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "MM/dd/yyyy",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
               }
             ]
+          },
+          {
+            "name": "Issuing Plant",
+            "dataType": "string",
+            "sourceColumn": "IssuingPlantNo"
+          },
+          {
+            "name": "Receiving Plant",
+            "dataType": "string",
+            "sourceColumn": "ReceivingPlantNo"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Ordered Quantity",
+            "dataType": "double",
+            "sourceColumn": "OrderedQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Ordered Amount",
+            "dataType": "double",
+            "sourceColumn": "OrderedAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Open Quantity",
+            "dataType": "double",
+            "sourceColumn": "OpenQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Open Amount",
+            "dataType": "double",
+            "sourceColumn": "OpenAmount",
+            "displayFolder": "_Values"
           }
         ],
         "partitions": [
@@ -2325,7 +2986,7 @@
               "expression": [
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_PURCHASE_ORDERS\"]}[Data]",
+                "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE\"]}[Data]",
                 "in",
                 "    dbo_VW_PURCHASE_ORDERS"
               ]
@@ -2799,21 +3460,25 @@
           {
             "name": "Order Number",
             "dataType": "string",
+            "description": "SAP Source: VBAK.VBELN",
             "sourceColumn": "OrderNoKey"
           },
           {
             "name": "Order Line Number",
             "dataType": "string",
+            "description": "SAP Source: VBAP.POSNR",
             "sourceColumn": "OrderLineNo"
           },
           {
             "name": "Order Type",
             "dataType": "string",
+            "description": "SAP Source: VBAK.AUART",
             "sourceColumn": "OrderType"
           },
           {
             "name": "Enter Date",
             "dataType": "dateTime",
+            "description": "SAP Source: VBAK.ERDAT",
             "sourceColumn": "EnterDateKey",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -2826,6 +3491,7 @@
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
+            "description": "SAP Source: VBEP.EDATU",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -2838,7 +3504,7 @@
           {
             "name": "Last PGI Date",
             "dataType": "dateTime",
-            "description": "If the values is 12/31/9999, then there is no PGI date for the sales order item",
+            "description": "SAP Source: LIKP.WADAT_IST; If the values is 12/31/9999, then there is no PGI date for the sales order item",
             "sourceColumn": "LastPgiDate",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -2851,17 +3517,19 @@
           {
             "name": "Entered By",
             "dataType": "string",
+            "description": "SAP Source: VBAK.ERNAM",
             "sourceColumn": "EnteredBy"
           },
           {
             "name": "Organization",
             "dataType": "string",
+            "description": "SAP Source: VBAK.VKORG",
             "sourceColumn": "OrgNoKey"
           },
           {
-            "name": "PlantNoKey",
+            "name": "Plant",
             "dataType": "string",
-            "isHidden": true,
+            "description": "SAP Source: VBAP.WERKS",
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -2877,24 +3545,21 @@
             "sourceColumn": "CustomerNoKey"
           },
           {
-            "name": "ShipToAddrKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ShipToAddrKey"
-          },
-          {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: VBAP.MATNR",
             "sourceColumn": "MaterialNoKey"
           },
           {
             "name": "Material Description",
             "dataType": "string",
+            "description": "SAP Source: VBAP.ARKTX",
             "sourceColumn": "MaterialText"
           },
           {
             "name": "Material Group",
             "dataType": "string",
+            "description": "SAP Source: VBAP.MATKL",
             "sourceColumn": "MaterialGroup"
           },
           {
@@ -2906,55 +3571,50 @@
           {
             "name": "Credit Block",
             "dataType": "string",
+            "description": "SAP Source: VBUP.CMGST",
             "sourceColumn": "CreditBlock"
           },
           {
             "name": "Overall Block",
             "dataType": "string",
+            "description": "SAP Source: VBUK.GBSTA",
             "sourceColumn": "OverallBlock"
           },
           {
             "name": "Route Type",
             "dataType": "string",
+            "description": "SAP Source: VBAP.ROUTE",
             "sourceColumn": "RouteType"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: VBAP.MEINS",
             "sourceColumn": "OrderUoM"
           },
           {
             "name": "Order Quantity",
             "dataType": "double",
+            "description": "SAP Source: VBAP.KWMENG",
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Delivered Quantity",
-            "dataType": "double",
-            "sourceColumn": "DeliveredQuantity",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "On Time Delivered Quantity",
-            "dataType": "double",
-            "sourceColumn": "OnTimeDeliveredQuantity",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
           },
           {
             "name": "Order Currency",
             "dataType": "string",
+            "description": "SAP Source: VBAP.WAERK",
             "sourceColumn": "OrderCurrency"
           },
           {
             "name": "Order Amount",
             "dataType": "double",
+            "description": "SAP Source: VBAP.NETWR; Converted to USD using the exchange rate",
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -2965,9 +3625,11 @@
           {
             "name": "Cost Amount",
             "dataType": "double",
+            "description": "SAP Source: VBAP.WAVWR; Converted to USD using the exchange rate",
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
             "annotations": [
               {
                 "name": "Format",
@@ -2976,11 +3638,187 @@
             ]
           },
           {
-            "type": "calculated",
+            "name": "Billing Status",
+            "dataType": "string",
+            "description": "SAP Source: VBUP.FKSAA",
+            "sourceColumn": "BillingStatBlock"
+          },
+          {
+            "name": "Allocated Quantity",
+            "dataType": "double",
+            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued without an actual PGI date yet",
+            "sourceColumn": "AllocatedQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shipped Quantity",
+            "dataType": "double",
+            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with actual PGI date set",
+            "sourceColumn": "ShippedQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shipped On Time Quantity",
+            "dataType": "double",
+            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with PGI date on or before the first schedule delivery date",
+            "sourceColumn": "OnTimeShippedQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Internal Open Quantity",
+            "dataType": "double",
+            "description": "Order quantity minus allocated and shipped quantity",
+            "sourceColumn": "InternalOpenQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Customer Open Quantity",
+            "dataType": "double",
+            "description": "Order quantity minus shipped quantity",
+            "sourceColumn": "CustomerOpenQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "double",
+            "description": "SAP Source: VBAP.NETPR",
+            "sourceColumn": "UnitPrice"
+          },
+          {
+            "name": "Exchange Rate",
+            "dataType": "double",
+            "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
+            "sourceColumn": "ExchangeRate",
+            "formatString": "0.0000"
+          },
+          {
+            "name": "Cost Amount Local",
+            "dataType": "double",
+            "description": "SAP Source: WAVWR",
+            "isHidden": true,
+            "sourceColumn": "CostAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Order Amount Local",
+            "dataType": "double",
+            "description": "SAP Source: NETWR",
+            "sourceColumn": "OrderAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Internal Open Amount Local",
+            "dataType": "double",
+            "description": "Total value of internal open quantity",
+            "sourceColumn": "InternalOpenAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Internal Open Amount",
+            "dataType": "double",
+            "description": "Total value of internal open quantity",
+            "sourceColumn": "InternalOpenAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Customer Open Amount Local",
+            "dataType": "double",
+            "sourceColumn": "CustomerOpenAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Customer Open Amount",
+            "dataType": "double",
+            "sourceColumn": "CustomerOpenAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Margin Amount Local",
+            "dataType": "double",
+            "description": "Net of order and cost amount",
+            "sourceColumn": "MarginAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Local Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Margin Amount",
+            "dataType": "double",
+            "description": "Net of order and cost amount",
+            "sourceColumn": "MarginAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_USD Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "External Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: VBEP.BSTKD",
+            "sourceColumn": "ExtPurchaseOrderNo"
+          },
+          {
+            "name": "Customer Material Number",
+            "dataType": "string",
+            "description": "SAP Source: KNMT.KDMAT",
+            "sourceColumn": "CustomerMaterialNo"
+          },
+          {
             "name": "Ship To Name",
             "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " RELATED( Addresses[Name] )"
+            "description": "SAP Source: ADRC.NAME1",
+            "sourceColumn": "ShipToName"
+          },
+          {
+            "name": "Ship To City",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.CITY1",
+            "sourceColumn": "ShipToCity"
+          },
+          {
+            "name": "In Stock",
+            "dataType": "int64",
+            "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
+            "sourceColumn": "InStockIndicator"
           }
         ],
         "partitions": [
@@ -3187,35 +4025,42 @@
         ]
       },
       {
-        "name": "RLS_CostCenter",
+        "name": "Targets_Sales",
         "isHidden": true,
         "columns": [
           {
-            "name": "EmployeeKey",
+            "name": "SalesTerritoryKey",
             "dataType": "string",
-            "sourceColumn": "EmployeeKey"
+            "sourceColumn": "SalesTerritoryKey"
           },
           {
-            "name": "DomainName",
+            "name": "CalendarTimeKey",
             "dataType": "string",
-            "sourceColumn": "DomainName"
+            "sourceColumn": "CalendarTimeKey"
           },
           {
-            "name": "SupervisorKey",
-            "dataType": "string",
-            "sourceColumn": "SupervisorKey"
+            "name": "GrossSales",
+            "dataType": "double",
+            "sourceColumn": "GrossSales",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           },
           {
-            "name": "CostCenterKey",
-            "dataType": "string",
-            "sourceColumn": "CostCenterKey"
+            "name": "GrossMarginMTD",
+            "dataType": "double",
+            "sourceColumn": "GrossMarginMTD",
+            "formatString": "0.00%;-0.00%;0.00%"
           },
           {
-            "type": "calculated",
-            "name": "Path",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " PATH( RLS_CostCenter[EmployeeKey], RLS_CostCenter[SupervisorKey] )"
+            "name": "GrossMarginYTD",
+            "dataType": "double",
+            "sourceColumn": "GrossMarginYTD",
+            "formatString": "0.00%;-0.00%;0.00%"
           }
         ],
         "partitions": [
@@ -3227,10 +4072,470 @@
               "expression": [
                 "let",
                 "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_USERLIST_DOMAIN = Source{[Schema=\"dbo\",Item=\"USERLIST_DOMAIN\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_USERLIST_DOMAIN,{\"EmployeeKey\", \"DomainName\", \"SupervisorKey\", \"CostCenterKey\"})",
+                "    dbo_zTARGETS_SALES = Source{[Schema=\"dbo\",Item=\"zTARGETS_SALES\"]}[Data]",
                 "in",
-                "    #\"Removed Other Columns\""
+                "    dbo_zTARGETS_SALES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_CostCenter",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "CostCenterKey",
+            "dataType": "string",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_RLS_COSTCENTER = Source{[Schema=\"dbo\",Item=\"VW_RLS_COSTCENTER\"]}[Data]",
+                "in",
+                "    dbo_VW_RLS_COSTCENTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Currency to Use",
+        "description": "This table is mainly used as a slicer to dynamically switch the calculation of measures from USD to local currency. Not all measures are applicable.",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Currency",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": " { \"USD\", \"Local\" }"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Stock Transfer Orders",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: EKKO.EBELN",
+            "sourceColumn": "PurchaseOrderNoKey"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "description": "SAP Source: EKPO.EBELP",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "description": "SAP Source: EKPO.MATNR",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Valuation Class",
+            "dataType": "string",
+            "description": "SAP Source: MBEW.BKLAS",
+            "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.CHARG",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Delivered Quantity",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'U'",
+            "sourceColumn": "DeliveredQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Goods Receipt Quantity",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'E'",
+            "sourceColumn": "GoodsReceiptQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "In Transit Quantity",
+            "dataType": "double",
+            "description": "Net of delivered and goods receipt",
+            "sourceColumn": "InTransitQuantity",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Delivered Amount",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'U'",
+            "sourceColumn": "DeliveredAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Goods Receipt Amount",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'E'",
+            "sourceColumn": "GoodsReceiptAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "In Transit Amount",
+            "dataType": "double",
+            "description": "Net of delivered and goods receipt",
+            "sourceColumn": "InTransitAmount",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.XBLNR",
+            "sourceColumn": "ReferencedDocumentNo"
+          },
+          {
+            "name": "Shipment Document Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTP.TPNUM",
+            "sourceColumn": "ShipmentDocumentNo"
+          },
+          {
+            "name": "Shipment Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTP.TKNUM",
+            "sourceColumn": "ShipmentLineNo"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data]",
+                "in",
+                "    dbo_VW_INVENTORY_INTRANSIT"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Goods and Invoice Receipts",
+        "description": "; Granularity: One row per account document and line number",
+        "columns": [
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BUKRS",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "G/L Account",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.HKONT",
+            "sourceColumn": "GeneralLedgerAcctNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.WERKS",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.KOSTL",
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Accounting Document Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BELNR",
+            "sourceColumn": "DocumentNo"
+          },
+          {
+            "name": "Accounting Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BUZEI",
+            "sourceColumn": "DocumentLineNo"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BLART",
+            "sourceColumn": "DocumentType"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.BLDAT",
+            "sourceColumn": "DocumentDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.BUDAT",
+            "sourceColumn": "PostingDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.MONAT",
+            "sourceColumn": "FiscalPeriod"
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.GJAHR",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.MATNR",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "description": "SAP Source: ACCTIT.ERFMG",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.ERFME",
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Amount (Document)",
+            "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.WRBTR",
+            "sourceColumn": "AmountInDocCurrency",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Document Currency",
+            "dataType": "string",
+            "description": "SAP Source: BKPF.WAERS",
+            "sourceColumn": "DocCurrency",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount (Local)",
+            "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.DMBTR",
+            "sourceColumn": "AmountInLocalCurrency",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Local Currency",
+            "dataType": "string",
+            "description": "SAP Source: BKPF.HWAER",
+            "sourceColumn": "LocalCurrency",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount (Local2)",
+            "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.DMBE2",
+            "sourceColumn": "AmountInLocalCurrency2",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Local Currency 2",
+            "dataType": "string",
+            "description": "SAP Source: BKPF.HWAE2",
+            "sourceColumn": "LocalCurrency2",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Clearing Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.AUGDT",
+            "sourceColumn": "ClearingDate",
+            "formatString": "MM/dd/yyyy",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Clearing Document Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.AUGBL",
+            "sourceColumn": "ClearingDocNo"
+          },
+          {
+            "name": "Assignment Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.ZUONR",
+            "sourceColumn": "AssignmentNo"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.EBELN",
+            "sourceColumn": "PurchaseOrderNo"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.EBELP",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "description": "SAP Source: EKKO.LIFNR",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.KUNNR",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.AUFNR",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Referenced Document Number",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.XBLNR",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Item Text",
+            "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.SGTXT",
+            "sourceColumn": "ItemText"
+          },
+          {
+            "name": "First GR Year",
+            "dataType": "string",
+            "description": "First year of posted goods receipt based on assignment number",
+            "sourceColumn": "FirstGRYear"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS = Source{[Schema=\"dbo\",Item=\"VW_GOODS_AND_INVOICE_RECEIPTS\"]}[Data]",
+                "in",
+                "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Vendor Master",
+        "description": "SAP Source: LFA1",
+        "columns": [
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "description": "SAP Source: LFA1.LIFNR",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Vendor Name",
+            "dataType": "string",
+            "description": "SAP Source: LFA1.NAME1",
+            "sourceColumn": "VendorName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
+                "in",
+                "    dbo_VW_VENDOR_MASTER"
               ]
             }
           }
@@ -3381,13 +4686,6 @@
         "toColumn": "Cost Center"
       },
       {
-        "name": "8dd87143-9d38-46ac-920d-6517fe79d0ed",
-        "fromTable": "Expenses",
-        "fromColumn": "PlantNoKey",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "e64c99ce-a3ae-4e92-a4d4-b827a2df4050",
         "fromTable": "Expenses",
         "fromColumn": "PurchaseDocLineKey",
@@ -3448,7 +4746,7 @@
       {
         "name": "35adc316-4142-445e-9e6c-d6faae1e1044",
         "fromTable": "Sales Order Documents",
-        "fromColumn": "PlantNoKey",
+        "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
       },
@@ -3467,13 +4765,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "40ca119b-9828-4473-b85e-59b864abd5da",
-        "fromTable": "Sales Order Documents",
-        "fromColumn": "ShipToAddrKey",
-        "toTable": "Addresses",
-        "toColumn": "AddressNoKey"
-      },
-      {
         "name": "b8c16a52-5847-4775-8abd-8bb356d4b1e3",
         "fromTable": "RLS_Region",
         "fromColumn": "SalesRegionKey",
@@ -3488,15 +4779,6 @@
         "fromColumn": "SalesTerritoryKey",
         "toTable": "Sales Territory",
         "toColumn": "Sales Territory",
-        "crossFilteringBehavior": "bothDirections",
-        "securityFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "cb2ce42e-968d-45fa-886d-71683cc4e3d3",
-        "fromTable": "RLS_CostCenter",
-        "fromColumn": "CostCenterKey",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
       },
@@ -3520,6 +4802,43 @@
         "fromColumn": "Sales Territory",
         "toTable": "Sales Territory",
         "toColumn": "Sales Territory"
+      },
+      {
+        "name": "49a4a367-97a4-4d97-af26-ec8affd1d7e1",
+        "fromTable": "Expenses",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "dc5f18dd-e738-46d9-a5c9-5306f5255523",
+        "fromTable": "RLS_CostCenter",
+        "fromColumn": "CostCenterKey",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "2dfef6b6-28fb-4b3a-aced-5bc2cb76c009",
+        "fromTable": "Stock Transfer Orders",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "8157dd03-c7e0-468a-b864-e8ab717607f1",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "fbae78f6-7c76-4020-8ea5-a7b4e3b3f4d8",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "Vendor Number",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
       }
     ],
     "perspectives": [
@@ -3634,6 +4953,9 @@
               },
               {
                 "name": "Is Weekday"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -3960,6 +5282,9 @@
               },
               {
                 "name": "Is Weekday"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4232,6 +5557,9 @@
               },
               {
                 "name": "Is Weekday"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4337,6 +5665,9 @@
               },
               {
                 "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Is New Product"
               }
             ]
           },
@@ -4399,9 +5730,6 @@
                 "name": "Credit Block"
               },
               {
-                "name": "Delivered Quantity"
-              },
-              {
                 "name": "Enter Date"
               },
               {
@@ -4448,6 +5776,72 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "External Purchase Order Number"
+              },
+              {
+                "name": "Ship To City"
               },
               {
                 "name": "Ship To Name"
@@ -4566,6 +5960,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -4631,9 +6028,6 @@
                 "name": "FYTD Gross Sales"
               },
               {
-                "name": "FYTD Gross Sales %Grand"
-              },
-              {
                 "name": "FYTD PY Gross Margin"
               },
               {
@@ -4641,9 +6035,6 @@
               },
               {
                 "name": "FYTD PY Gross Sales"
-              },
-              {
-                "name": "FYTD PY Gross Sales %Grand"
               },
               {
                 "name": "FYTD PY Var Gross Sales"
@@ -4655,12 +6046,6 @@
                 "name": "Gross Margin %"
               },
               {
-                "name": "Gross Sales"
-              },
-              {
-                "name": "Gross Sales %Grand"
-              },
-              {
                 "name": "MTD Gross Margin"
               },
               {
@@ -4668,9 +6053,6 @@
               },
               {
                 "name": "MTD Gross Sales"
-              },
-              {
-                "name": "MTD Gross Sales %Grand"
               },
               {
                 "name": "MTD PY Gross Margin"
@@ -4682,16 +6064,73 @@
                 "name": "MTD PY Gross Sales"
               },
               {
-                "name": "MTD PY Gross Sales %Grand"
+                "name": "Gross Sales Budget"
               },
               {
-                "name": "Net Margin"
+                "name": "Backorder Amount"
               },
               {
-                "name": "Net Margin %"
+                "name": "Backorder Margin"
               },
               {
-                "name": "Net Sales"
+                "name": "Sales Order Cost Amount"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Quantity Sold"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "Sales Order Margin"
+              },
+              {
+                "name": "MTD PY Var Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var% Gross Sales"
+              },
+              {
+                "name": "MTD PY Var% Gross Sales"
+              },
+              {
+                "name": "FYTD Quantity Sold"
+              },
+              {
+                "name": "MTD Quantity Sold"
+              },
+              {
+                "name": "FYTD Gross Margin% Budget"
+              },
+              {
+                "name": "MTD Gross Margin% Budget"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder Margin"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales Budget"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder Margin"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "MTD Gross Sales Budget"
               }
             ]
           },
@@ -4745,6 +6184,9 @@
               },
               {
                 "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Is New Product"
               }
             ]
           },
@@ -4810,6 +6252,1462 @@
               },
               {
                 "name": "Ship To Name"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Gross Margin Amount"
+              },
+              {
+                "name": "Was New Product"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "Customer Material Number"
+              },
+              {
+                "name": "Ship To City"
+              },
+              {
+                "name": "Ship To Name"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "BI Morning Report",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "FYTD Gross Margin"
+              },
+              {
+                "name": "FYTD Gross Margin%"
+              },
+              {
+                "name": "FYTD Gross Sales"
+              },
+              {
+                "name": "FYTD PY Gross Margin"
+              },
+              {
+                "name": "FYTD PY Gross Margin%"
+              },
+              {
+                "name": "FYTD PY Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var Gross Sales"
+              },
+              {
+                "name": "FYTD PY Var% Gross Sales"
+              },
+              {
+                "name": "Gross Margin"
+              },
+              {
+                "name": "Gross Margin %"
+              },
+              {
+                "name": "Gross Sales"
+              },
+              {
+                "name": "MTD Gross Margin"
+              },
+              {
+                "name": "MTD Gross Margin%"
+              },
+              {
+                "name": "MTD Gross Sales"
+              },
+              {
+                "name": "MTD PY Gross Margin"
+              },
+              {
+                "name": "MTD PY Gross Margin%"
+              },
+              {
+                "name": "MTD PY Gross Sales"
+              },
+              {
+                "name": "MTD PY Var Gross Sales"
+              },
+              {
+                "name": "MTD PY Var% Gross Sales"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Beginning of Month"
+              },
+              {
+                "name": "End of Month"
+              },
+              {
+                "name": "Yesterday"
+              },
+              {
+                "name": "FYTD PY Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "FYTD Sales Order Amount"
+              },
+              {
+                "name": "MTD Sales Order Amount"
+              },
+              {
+                "name": "Backorder Amount"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder"
+              },
+              {
+                "name": "FYTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder"
+              },
+              {
+                "name": "MTD Gross Sales & Backorder Margin%"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              },
+              {
+                "name": "Is New Product"
+              }
+            ]
+          },
+          {
+            "name": "Sales Invoice Documents",
+            "columns": [
+              {
+                "name": "Create Date"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Discount Amount"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Document Type Text"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "Gross Sales Amount"
+              },
+              {
+                "name": "Invoice Date"
+              },
+              {
+                "name": "Invoice Line Number"
+              },
+              {
+                "name": "Invoice Number"
+              },
+              {
+                "name": "Material Cost Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Sales Amount"
+              },
+              {
+                "name": "Overall Cost Amount"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "ShipToAddrKey"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Customer Material Number"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Open Orders Report",
+        "tables": [
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Backorder Amount"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Amount"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "In Stock Measure"
+              },
+              {
+                "name": "PO Delivered Quantity"
+              },
+              {
+                "name": "PO In Transit Quantity"
+              },
+              {
+                "name": "PO Open Amount"
+              },
+              {
+                "name": "PO Open Quantity"
+              },
+              {
+                "name": "PO Ordered Amount"
+              },
+              {
+                "name": "PO Ordered Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              },
+              {
+                "name": "Is New Product"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "External Purchase Order Number"
+              },
+              {
+                "name": "Customer Material Number"
+              },
+              {
+                "name": "Ship To City"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "In Stock"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Stock Transfer Orders",
+            "columns": [
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Delivered Amount"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "Goods Receipt Quantity"
+              },
+              {
+                "name": "In Transit Amount"
+              },
+              {
+                "name": "In Transit Quantity"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Shipment Document Number"
+              },
+              {
+                "name": "Shipment Document Line Number"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Is Complete Delivery"
+              },
+              {
+                "name": "Is Goods Receipt Required"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Open Quantity"
+              },
+              {
+                "name": "Ordered Amount"
+              },
+              {
+                "name": "Ordered Quantity"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "VendorNoKey"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Goods and Invoice Receipts",
+        "tables": [
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Goods and Invoice Receipts",
+            "columns": [
+              {
+                "name": "Accounting Document Line Number"
+              },
+              {
+                "name": "Accounting Document Number"
+              },
+              {
+                "name": "Amount (Document)"
+              },
+              {
+                "name": "Amount (Local)"
+              },
+              {
+                "name": "Amount (Local2)"
+              },
+              {
+                "name": "Assignment Number"
+              },
+              {
+                "name": "Clearing Date"
+              },
+              {
+                "name": "Clearing Document Number"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Document Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First GR Year"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "G/L Account"
+              },
+              {
+                "name": "Item Text"
+              },
+              {
+                "name": "Local Currency"
+              },
+              {
+                "name": "Local Currency 2"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Referenced Document Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "GRIR Amount (Document)"
+              },
+              {
+                "name": "GRIR Amount (Local)"
+              },
+              {
+                "name": "GRIR Amount (Local2)"
+              },
+              {
+                "name": "GRIR Quantity"
+              },
+              {
+                "name": "GRIR Open Amount"
+              },
+              {
+                "name": "GRIR Open Quantity"
               }
             ]
           }
@@ -4865,6 +7763,10 @@
           {
             "memberName": "DOMAIN\\jmcmanus",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
+          },
+          {
+            "memberName": "DOMAIN\\jjing",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
           }
         ]
       },
@@ -4932,6 +7834,10 @@
           {
             "memberName": "DOMAIN\\sterenzi",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8498"
+          },
+          {
+            "memberName": "DOMAIN\\pplessis",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2848"
           }
         ],
         "tablePermissions": [
@@ -4942,11 +7848,6 @@
           },
           {
             "name": "RLS_Territory",
-            "metadataPermission": "none"
-          },
-          {
-            "name": "RLS_CostCenter",
-            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
             "metadataPermission": "none"
           }
         ]
@@ -4995,6 +7896,34 @@
           {
             "memberName": "DOMAIN\\tswartout",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
+          },
+          {
+            "memberName": "DOMAIN\\acourtois",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8499"
+          },
+          {
+            "memberName": "DOMAIN\\ajoki",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7308"
+          },
+          {
+            "memberName": "DOMAIN\\jnagel",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7261"
+          },
+          {
+            "memberName": "DOMAIN\\pvangelder",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8484"
+          },
+          {
+            "memberName": "DOMAIN\\rplenzich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7305"
+          },
+          {
+            "memberName": "DOMAIN\\redwards",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-19929"
+          },
+          {
+            "memberName": "DOMAIN\\jkozlowski",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7200"
           }
         ],
         "tablePermissions": [
@@ -5006,17 +7935,12 @@
           {
             "name": "RLS_Region",
             "metadataPermission": "none"
-          },
-          {
-            "name": "RLS_CostCenter",
-            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
-            "metadataPermission": "none"
           }
         ]
       },
       {
         "name": "Default",
-        "description": "Default; Reads data by cost center hierarchy (mainly for expenses data)",
+        "description": "Default; Reads data by cost center (mainly for expenses data)",
         "modelPermission": "read",
         "members": [
           {
@@ -5106,6 +8030,214 @@
           {
             "memberName": "DOMAIN\\pbitest2",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20422"
+          },
+          {
+            "memberName": "DOMAIN\\nnguyen",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8899"
+          },
+          {
+            "memberName": "DOMAIN\\ausandoval",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21488"
+          },
+          {
+            "memberName": "DOMAIN\\efung",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8884"
+          },
+          {
+            "memberName": "DOMAIN\\lmartinez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8901"
+          },
+          {
+            "memberName": "DOMAIN\\JPaciotta",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1641"
+          },
+          {
+            "memberName": "DOMAIN\\caguilar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21008"
+          },
+          {
+            "memberName": "DOMAIN\\eldiaz",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8700"
+          },
+          {
+            "memberName": "DOMAIN\\SCarino",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1134"
+          },
+          {
+            "memberName": "DOMAIN\\aarzate",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4946"
+          },
+          {
+            "memberName": "DOMAIN\\agonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8541"
+          },
+          {
+            "memberName": "DOMAIN\\AGutierrez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1795"
+          },
+          {
+            "memberName": "DOMAIN\\arubio",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8524"
+          },
+          {
+            "memberName": "DOMAIN\\cflores",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8506"
+          },
+          {
+            "memberName": "DOMAIN\\cgarcia",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2747"
+          },
+          {
+            "memberName": "DOMAIN\\clopez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
+          },
+          {
+            "memberName": "DOMAIN\\cpham",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8719"
+          },
+          {
+            "memberName": "DOMAIN\\dmendoza",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2760"
+          },
+          {
+            "memberName": "DOMAIN\\EAnuu",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1279"
+          },
+          {
+            "memberName": "DOMAIN\\fesparza",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8456"
+          },
+          {
+            "memberName": "DOMAIN\\GArguello",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4929"
+          },
+          {
+            "memberName": "DOMAIN\\GCatalasan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1049"
+          },
+          {
+            "memberName": "DOMAIN\\GJimenez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1552"
+          },
+          {
+            "memberName": "DOMAIN\\grosales",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4954"
+          },
+          {
+            "memberName": "DOMAIN\\icruz",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8492"
+          },
+          {
+            "memberName": "DOMAIN\\ILopez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1772"
+          },
+          {
+            "memberName": "DOMAIN\\jcandias",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8545"
+          },
+          {
+            "memberName": "DOMAIN\\jfigueroa",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8435"
+          },
+          {
+            "memberName": "DOMAIN\\jignacio",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7164"
+          },
+          {
+            "memberName": "DOMAIN\\jluisa",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7160"
+          },
+          {
+            "memberName": "DOMAIN\\jmaradiaga",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7165"
+          },
+          {
+            "memberName": "DOMAIN\\jnicholson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-6995"
+          },
+          {
+            "memberName": "DOMAIN\\jpino",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2783"
+          },
+          {
+            "memberName": "DOMAIN\\jsanchez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7229"
+          },
+          {
+            "memberName": "DOMAIN\\jsandoval",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3249"
+          },
+          {
+            "memberName": "DOMAIN\\jvelazquez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7270"
+          },
+          {
+            "memberName": "DOMAIN\\kcamero",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8754"
+          },
+          {
+            "memberName": "DOMAIN\\kmoreno",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2762"
+          },
+          {
+            "memberName": "DOMAIN\\laguilar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7055"
+          },
+          {
+            "memberName": "DOMAIN\\lflores",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2784"
+          },
+          {
+            "memberName": "DOMAIN\\lkemp",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
+          },
+          {
+            "memberName": "DOMAIN\\LLebron",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3043"
+          },
+          {
+            "memberName": "DOMAIN\\mfranco",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8666"
+          },
+          {
+            "memberName": "DOMAIN\\mignacio",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7479"
+          },
+          {
+            "memberName": "DOMAIN\\mpavia",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7053"
+          },
+          {
+            "memberName": "DOMAIN\\rmartinez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7230"
+          },
+          {
+            "memberName": "DOMAIN\\rrivera",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7235"
+          },
+          {
+            "memberName": "DOMAIN\\schio",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8653"
+          },
+          {
+            "memberName": "DOMAIN\\TDinh",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1185"
+          },
+          {
+            "memberName": "DOMAIN\\YOrdiano",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1432"
+          },
+          {
+            "memberName": "DOMAIN\\mferraro",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8849"
+          },
+          {
+            "memberName": "DOMAIN\\jdasilva",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7293"
+          },
+          {
+            "memberName": "DOMAIN\\nmartino",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8641"
           }
         ],
         "tablePermissions": [
@@ -5119,8 +8251,7 @@
           },
           {
             "name": "RLS_CostCenter",
-            "filterExpression": "PATHCONTAINS( RLS_CostCenter[Path], MAXX( FILTER(RLS_CostCenter, RLS_CostCenter[DomainName]=USERNAME()), RLS_CostCenter[EmployeeKey]) ) ",
-            "metadataPermission": "none"
+            "filterExpression": "RLS_CostCenter[DomainName]=USERNAME() && RLS_CostCenter[InactiveDate] < TODAY()"
           }
         ]
       }

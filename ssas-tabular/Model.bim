@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "Username": "DOMAIN\\PBI-ETL",
@@ -64,8 +63,14 @@
             "dataType": "dateTime",
             "description": "SAP Source: KNA1.ERDAT",
             "sourceColumn": "AcctCreateDate",
-            "formatString": "MM/dd/yyyy",
-            "displayFolder": "Master"
+            "formatString": "Short Date",
+            "displayFolder": "Master",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Sales Organization",
@@ -180,7 +185,13 @@
             "name": "Enter Date",
             "dataType": "dateTime",
             "sourceColumn": "EnterDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "ReasonCodeKey",
@@ -252,7 +263,13 @@
             "name": "Last Credit Date",
             "dataType": "dateTime",
             "sourceColumn": "LastCreditDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "type": "calculated",
@@ -330,8 +347,14 @@
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "PK_Date",
-            "formatString": "MM/dd/yyyy",
-            "displayFolder": "Individual Attributes"
+            "formatString": "Short Date",
+            "displayFolder": "Individual Attributes",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Calendar Year Number",
@@ -1285,13 +1308,13 @@
           },
           {
             "name": "MTD PY Var% Gross Sales",
-            "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD Gross Sales] )",
+            "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD PY Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var% Gross Sales",
-            "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD Gross Sales] )",
+            "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD PY Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
@@ -1373,7 +1396,7 @@
           },
           {
             "name": "MTD PY Var% Sales Order Amount",
-            "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD Sales Order Amount] )",
+            "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD PY Sales Order Amount] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
@@ -1407,7 +1430,7 @@
           },
           {
             "name": "FYTD PY Var% Sales Order Amount",
-            "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD Sales Order Amount] )",
+            "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD PY Sales Order Amount] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
@@ -1716,7 +1739,13 @@
             "dataType": "dateTime",
             "description": "SAP Source: CE110US.BUDAT ",
             "sourceColumn": "PostingDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Material Number",
@@ -1837,11 +1866,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: CE110US.HZDAT",
             "sourceColumn": "CreateDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -1850,11 +1879,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: CE110US.FADAT",
             "sourceColumn": "InvoiceDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -1955,7 +1984,13 @@
             "name": "Enter Date",
             "dataType": "dateTime",
             "sourceColumn": "EnterDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Reference Number",
@@ -2151,19 +2186,37 @@
             "name": "Manufacturing Date",
             "dataType": "dateTime",
             "sourceColumn": "MfgDate",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Goods Receipt Date",
             "dataType": "dateTime",
             "sourceColumn": "GoodsReceiptDate",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Expiration Date",
             "dataType": "dateTime",
             "sourceColumn": "ExpirationDate",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Quantity",
@@ -2213,7 +2266,13 @@
             "name": "Snapshot Date",
             "dataType": "dateTime",
             "sourceColumn": "SnapshotDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Plant",
@@ -2367,7 +2426,14 @@
             "dataType": "dateTime",
             "description": "SAP Source: AUSP.ATFLV",
             "sourceColumn": "CommercializationDate",
-            "displayFolder": "Classification"
+            "formatString": "Short Date",
+            "displayFolder": "Classification",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Film Type",
@@ -2678,11 +2744,11 @@
             "name": "Posting Date",
             "dataType": "dateTime",
             "sourceColumn": "PostingDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -2690,11 +2756,11 @@
             "name": "Creation Date",
             "dataType": "dateTime",
             "sourceColumn": "CreateDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -2702,11 +2768,11 @@
             "name": "Document Date",
             "dataType": "dateTime",
             "sourceColumn": "DocumentDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -2861,11 +2927,11 @@
             "name": "Document Date",
             "dataType": "dateTime",
             "sourceColumn": "DocumentDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -3378,7 +3444,14 @@
           {
             "name": "Credit Issued Date",
             "dataType": "dateTime",
-            "sourceColumn": "CreditDateKey"
+            "sourceColumn": "CreditDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Credit Issued Amount",
@@ -3480,11 +3553,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: VBAK.ERDAT",
             "sourceColumn": "EnterDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -3493,11 +3566,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: VBEP.EDATU",
             "sourceColumn": "FirstDeliveryDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -3506,11 +3579,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: LIKP.WADAT_IST; If the values is 12/31/9999, then there is no PGI date for the sales order item",
             "sourceColumn": "LastPgiDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4309,11 +4382,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: BSIS/BSAS.BLDAT",
             "sourceColumn": "DocumentDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4322,11 +4395,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: BSIS/BSAS.BUDAT",
             "sourceColumn": "PostingDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4341,6 +4414,12 @@
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.GJAHR",
             "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "First GR Year",
+            "dataType": "string",
+            "description": "First year of posted goods receipt based on assignment number",
+            "sourceColumn": "FirstGRYear"
           },
           {
             "name": "Material Number",
@@ -4417,11 +4496,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: BSIS/BSAS.AUGDT",
             "sourceColumn": "ClearingDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4450,20 +4529,6 @@
             "sourceColumn": "PurchaseOrderLineNo"
           },
           {
-            "name": "Vendor Number",
-            "dataType": "string",
-            "description": "SAP Source: EKKO.LIFNR",
-            "isHidden": true,
-            "sourceColumn": "VendorNoKey"
-          },
-          {
-            "name": "Customer Number",
-            "dataType": "string",
-            "description": "SAP Source: ACCTIT.KUNNR",
-            "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
-          },
-          {
             "name": "Process Order Number",
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.AUFNR",
@@ -4482,10 +4547,18 @@
             "sourceColumn": "ItemText"
           },
           {
-            "name": "First GR Year",
+            "name": "Vendor Number",
             "dataType": "string",
-            "description": "First year of posted goods receipt based on assignment number",
-            "sourceColumn": "FirstGRYear"
+            "description": "SAP Source: EKKO.LIFNR",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.KUNNR",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
           }
         ],
         "partitions": [

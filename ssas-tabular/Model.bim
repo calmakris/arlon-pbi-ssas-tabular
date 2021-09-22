@@ -17,8 +17,11 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1715,6 +1718,169 @@
             ],
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
+          },
+          {
+            "name": "PO Invoice Receipt Amount",
+            "expression": " SUM( 'Purchase Order Invoices'[Amount] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Invoice Receipt Quantity",
+            "expression": " SUM( 'Purchase Order Invoices'[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Amount",
+            "expression": " CALCULATE( [PO Invoice Receipt Amount], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Quantity",
+            "expression": " CALCULATE( [PO Invoice Receipt Quantity], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Last PO Invoice Receipt Amount",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Last PO Invoice Receipt Quantity",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Last PO Invoice Receipt Amount",
+            "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Last PO Invoice Receipt Quantity",
+            "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Unit Price",
+            "expression": " DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Last PO Invoice Receipt Unit Price",
+            "expression": " DIVIDE( [FYTD Last PO Invoice Receipt Amount], [FYTD Last PO Invoice Receipt Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Amount in PY Price",
+            "expression": [
+              " ",
+              "VAR tbl =",
+              "    SUMMARIZE(",
+              "        'Purchase Order Invoices',",
+              "        'Vendor Master'[Vendor Name],",
+              "        'Purchase Orders'[Material Number]",
+              "    )",
+              "RETURN",
+              "    SUMX(",
+              "        tbl,",
+              "        [PO Invoice Receipt Amount in PY Price]",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Purchase Price Difference",
+            "expression": [
+              " ",
+              "VAR tbl = ",
+              "    SUMMARIZE(",
+              "        'Purchase Order Invoices',",
+              "        'Vendor Master'[Vendor Name],",
+              "        'Purchase Orders'[Material Number]",
+              "    )",
+              "RETURN",
+              "    SUMX(",
+              "        tbl,",
+              "        [Purchase Price Difference]",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Last PO Invoice Receipt Unit Price",
+            "expression": " DIVIDE( [FYTD PY Last PO Invoice Receipt Amount], [FYTD PY Last PO Invoice Receipt Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Purchase Price Index%",
+            "expression": [
+              " ",
+              "IF(",
+              "    [FYTD PO Invoice Receipt Amount in PY Price] = 0,",
+              "    BLANK(),",
+              "    DIVIDE([FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price]) - 1",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Purchase Price Index",
+            "expression": " ROUND(DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price] ), 4)",
+            "formatString": "0.0000",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Purchase Price Difference",
+            "expression": [
+              " ",
+              "IF(",
+              "    ISBLANK([FYTD PY Last PO Invoice Receipt Unit Price]),",
+              "    BLANK(),",
+              "   ([FYTD PO Invoice Receipt Unit Price] - [FYTD PY Last PO Invoice Receipt Unit Price]) * [FYTD PO Invoice Receipt Quantity]",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "isHidden": true,
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Invoice Receipt Amount in PY Price",
+            "expression": [
+              " ",
+              "IF( ",
+              "    ISBLANK([FYTD PY Last PO Invoice Receipt Quantity]), ",
+              "    [FYTD PO Invoice Receipt Amount], ",
+              "    [FYTD PO Invoice Receipt Quantity] * [FYTD PY Last PO Invoice Receipt Unit Price] ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "isHidden": true,
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "FYTD PY PO Invoice Receipt Amount",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY PO Invoice Receipt Quantity",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -3041,6 +3207,11 @@
             "dataType": "double",
             "sourceColumn": "OpenAmount",
             "displayFolder": "_Values"
+          },
+          {
+            "name": "Purchase Order Unit",
+            "dataType": "string",
+            "sourceColumn": "POUnitOfMeasure"
           }
         ],
         "partitions": [
@@ -4559,6 +4730,17 @@
             "description": "SAP Source: ACCTIT.KUNNR",
             "isHidden": true,
             "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "PostingRank",
+            "dataType": "int64",
+            "sourceColumn": "PostingRank"
+          },
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
           }
         ],
         "partitions": [
@@ -4609,6 +4791,78 @@
                 "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_VENDOR_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Order Invoices",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Material Document Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialDocNo"
+          },
+          {
+            "name": "Material Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialLineNo"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "PostingRank",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "PostingRank"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "InvoiceQty",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "sourceColumn": "InvoiceCurrency"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "InvoiceValue",
+            "formatString": "#,0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PURCHASE_INVOICES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE_INVOICES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PURCHASE_INVOICES"
               ]
             }
           }
@@ -4907,7 +5161,28 @@
         "toColumn": "Date"
       },
       {
-        "name": "fbae78f6-7c76-4020-8ea5-a7b4e3b3f4d8",
+        "name": "982c3aae-a31d-40c1-92a1-5b55611d01da",
+        "fromTable": "Purchase Order Invoices",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "ba1918f0-89e6-4284-93df-d56a390a189e",
+        "fromTable": "Purchase Order Invoices",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "ce291ef4-f6d6-43db-989e-e636805941b6",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "VendorNoKey",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
+      },
+      {
+        "name": "2c9b5b75-14a7-45ae-849d-a78e7f8033cd",
         "fromTable": "Goods and Invoice Receipts",
         "fromColumn": "Vendor Number",
         "toTable": "Vendor Master",
@@ -7496,6 +7771,9 @@
               },
               {
                 "name": "VendorNoKey"
+              },
+              {
+                "name": "Purchase Order Unit"
               }
             ]
           }
@@ -7691,6 +7969,12 @@
               },
               {
                 "name": "Vendor Number"
+              },
+              {
+                "name": "PostingRank"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -7781,6 +8065,331 @@
               },
               {
                 "name": "GRIR Open Quantity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Purchase Orders",
+        "tables": [
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order Invoices",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "PostingRank"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Is Complete Delivery"
+              },
+              {
+                "name": "Is Goods Receipt Required"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Open Quantity"
+              },
+              {
+                "name": "Ordered Amount"
+              },
+              {
+                "name": "Ordered Quantity"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "VendorNoKey"
+              },
+              {
+                "name": "Purchase Order Unit"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "FYTD Last PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD Last PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "FYTD Last PO Invoice Receipt Unit Price"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Amount in PY Price"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Unit Price"
+              },
+              {
+                "name": "FYTD Purchase Price Difference"
+              },
+              {
+                "name": "FYTD PY Last PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD PY Last PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "PO Delivered Quantity"
+              },
+              {
+                "name": "PO In Transit Quantity"
+              },
+              {
+                "name": "PO Invoice Receipt Amount"
+              },
+              {
+                "name": "PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "PO Open Amount"
+              },
+              {
+                "name": "PO Open Quantity"
+              },
+              {
+                "name": "PO Ordered Amount"
+              },
+              {
+                "name": "PO Ordered Quantity"
+              },
+              {
+                "name": "FYTD PY Last PO Invoice Receipt Unit Price"
+              },
+              {
+                "name": "FYTD Purchase Price Index"
+              },
+              {
+                "name": "FYTD Purchase Price Index%"
+              },
+              {
+                "name": "FYTD PY PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD PY PO Invoice Receipt Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
               }
             ]
           }

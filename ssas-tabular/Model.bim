@@ -1721,12 +1721,14 @@
           },
           {
             "name": "PO Invoice Receipt Amount",
+            "description": "Sum of invoice receipt amount in purchase order history. See 'Time Intelligence' folder for the FYTD versions.",
             "expression": " SUM( 'Purchase Order Invoices'[Amount] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
           },
           {
             "name": "PO Invoice Receipt Quantity",
+            "description": "Sum of invoice receipt quantity in purchase order history (in purchase order unit). See 'Time Intelligence' folder for the FYTD versions.",
             "expression": " SUM( 'Purchase Order Invoices'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
@@ -1745,42 +1747,49 @@
           },
           {
             "name": "FYTD Last PO Invoice Receipt Amount",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Last PO Invoice Receipt Quantity",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Amount",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Quantity",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PO Invoice Receipt Unit Price",
+            "description": "FYTD total invoice receipt amount divided quantity",
             "expression": " DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Last PO Invoice Receipt Unit Price",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year",
             "expression": " DIVIDE( [FYTD Last PO Invoice Receipt Amount], [FYTD Last PO Invoice Receipt Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PO Invoice Receipt Amount in PY Price",
+            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price",
             "expression": [
               " ",
               "VAR tbl =",
@@ -1800,6 +1809,7 @@
           },
           {
             "name": "FYTD Purchase Price Difference",
+            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price. This measure is only applicable when data is summarized by vendor name and material number.",
             "expression": [
               " ",
               "VAR tbl = ",
@@ -1819,12 +1829,14 @@
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Unit Price",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on previous fiscal year",
             "expression": " DIVIDE( [FYTD PY Last PO Invoice Receipt Amount], [FYTD PY Last PO Invoice Receipt Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Purchase Price Index%",
+            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price. This measure is only applicable when data is summarized by vendor name and material number.",
             "expression": [
               " ",
               "IF(",
@@ -1838,6 +1850,7 @@
           },
           {
             "name": "FYTD Purchase Price Index",
+            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price. This measure is only applicable when data is summarized by vendor name and material number.",
             "expression": " ROUND(DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price] ), 4)",
             "formatString": "0.0000",
             "displayFolder": "Time Intelligence"
@@ -4808,16 +4821,19 @@
           {
             "name": "Material Document Number",
             "dataType": "string",
+            "description": "SAP Source: EKBE.BELNR",
             "sourceColumn": "MaterialDocNo"
           },
           {
             "name": "Material Document Line Number",
             "dataType": "string",
+            "description": "SAP Source: EKBE.BUZEI",
             "sourceColumn": "MaterialLineNo"
           },
           {
             "name": "Posting Date",
             "dataType": "dateTime",
+            "description": "SAP Source: EKBE.BUDAT",
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
             "annotations": [
@@ -4836,17 +4852,20 @@
           {
             "name": "Quantity",
             "dataType": "double",
+            "description": "SAP Source: EKBE.BPMNG; Value is in purchase order unit (see 'Purchase Orders' table)",
             "sourceColumn": "InvoiceQty",
             "formatString": "#,0.00"
           },
           {
             "name": "Currency",
             "dataType": "string",
+            "description": "SAP Source: EKBE.WAERS",
             "sourceColumn": "InvoiceCurrency"
           },
           {
             "name": "Amount",
             "dataType": "double",
+            "description": "SAP Source: EKBE.REEWR",
             "sourceColumn": "InvoiceValue",
             "formatString": "#,0.00"
           }

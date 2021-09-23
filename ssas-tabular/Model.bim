@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -121,20 +120,17 @@
             "displayFolder": "Sales Related"
           },
           {
-            "type": "calculated",
-            "name": "Sales Territory Name",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "description": "SAP Source: TVKBT.BEZEI",
-            "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
-            "sortByColumn": "Sales Territory",
-            "displayFolder": "Sales Related"
-          },
-          {
             "name": "SalesRegionSortKey",
             "dataType": "double",
             "isHidden": true,
             "sourceColumn": "SalesRegionSortKey"
+          },
+          {
+            "name": "Sales Territory Name",
+            "dataType": "string",
+            "description": "SAP Source: TVKBT.BEZEI",
+            "sourceColumn": "SalesTerritoryName",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -4074,6 +4070,7 @@
             "name": "In Stock",
             "dataType": "int64",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
+            "isHidden": true,
             "sourceColumn": "InStockIndicator"
           }
         ],
@@ -7331,9 +7328,6 @@
                 "name": "Sales Territory"
               },
               {
-                "name": "Sales Territory Name"
-              },
-              {
                 "name": "SalesRegionSortKey"
               }
             ]
@@ -8408,6 +8402,17 @@
               },
               {
                 "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
               }
             ]
           }

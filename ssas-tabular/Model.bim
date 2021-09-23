@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1742,28 +1743,28 @@
           },
           {
             "name": "FYTD Last PO Invoice Receipt Amount",
-            "description": "Last positive invoice receipt amount from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Last PO Invoice Receipt Quantity",
-            "description": "Last positive invoice receipt quantity from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Amount",
-            "description": "Last positive invoice receipt amount from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Quantity",
-            "description": "Last positive invoice receipt quantity from purchase order history based on material number and posting fiscal year ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
             "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
@@ -1784,40 +1785,26 @@
           },
           {
             "name": "FYTD PO Invoice Receipt Amount in PY Price",
-            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price",
+            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount.",
             "expression": [
               " ",
-              "VAR tbl =",
-              "    SUMMARIZE(",
-              "        'Purchase Order Invoices',",
-              "        'Vendor Master'[Vendor Name],",
-              "        'Purchase Orders'[Material Number]",
-              "    )",
-              "RETURN",
-              "    SUMX(",
-              "        tbl,",
-              "        [PO Invoice Receipt Amount in PY Price]",
-              "    )"
+              "CALCULATE(",
+              "    SUM( 'Purchase Order Invoices'[Amount at Last PY Price] ),",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
             ],
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Purchase Price Difference",
-            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price. This measure is only applicable when data is summarized by vendor name and material number.",
+            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price.",
             "expression": [
               " ",
-              "VAR tbl = ",
-              "    SUMMARIZE(",
-              "        'Purchase Order Invoices',",
-              "        'Vendor Master'[Vendor Name],",
-              "        'Purchase Orders'[Material Number]",
-              "    )",
-              "RETURN",
-              "    SUMX(",
-              "        tbl,",
-              "        [Purchase Price Difference]",
-              "    )"
+              "CALCULATE(",
+              "    SUM( 'Purchase Order Invoices'[Price Difference] ),",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
             ],
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
@@ -1831,7 +1818,7 @@
           },
           {
             "name": "FYTD Purchase Price Index%",
-            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price. This measure is only applicable when data is summarized by vendor name and material number.",
+            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price.",
             "expression": [
               " ",
               "IF(",
@@ -1845,38 +1832,10 @@
           },
           {
             "name": "FYTD Purchase Price Index",
-            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price. This measure is only applicable when data is summarized by vendor name and material number.",
+            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price.",
             "expression": " ROUND(DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price] ), 4)",
             "formatString": "0.0000",
             "displayFolder": "Time Intelligence"
-          },
-          {
-            "name": "Purchase Price Difference",
-            "expression": [
-              " ",
-              "IF(",
-              "    ISBLANK([FYTD PY Last PO Invoice Receipt Unit Price]),",
-              "    BLANK(),",
-              "   ([FYTD PO Invoice Receipt Unit Price] - [FYTD PY Last PO Invoice Receipt Unit Price]) * [FYTD PO Invoice Receipt Quantity]",
-              ")"
-            ],
-            "formatString": "#,0.00",
-            "isHidden": true,
-            "displayFolder": "Purchase Orders"
-          },
-          {
-            "name": "PO Invoice Receipt Amount in PY Price",
-            "expression": [
-              " ",
-              "IF( ",
-              "    ISBLANK([FYTD PY Last PO Invoice Receipt Quantity]), ",
-              "    [FYTD PO Invoice Receipt Amount], ",
-              "    [FYTD PO Invoice Receipt Quantity] * [FYTD PY Last PO Invoice Receipt Unit Price] ",
-              ")"
-            ],
-            "formatString": "#,0.00",
-            "isHidden": true,
-            "displayFolder": "Purchase Orders"
           },
           {
             "name": "FYTD PY PO Invoice Receipt Amount",
@@ -4863,6 +4822,32 @@
             "dataType": "double",
             "description": "SAP Source: EKBE.REEWR",
             "sourceColumn": "InvoiceValue",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Amount at Last PY Price",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "InvoiceValue_LastPYPrice"
+          },
+          {
+            "name": "Last PY Quantity",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LastInvoiceQty_PY"
+          },
+          {
+            "name": "Last PY Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LastInvoiceValue_PY",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Price Difference",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "PriceDifference",
             "formatString": "#,0.00"
           }
         ],
@@ -8184,6 +8169,18 @@
               },
               {
                 "name": "Quantity"
+              },
+              {
+                "name": "Amount at Last PY Price"
+              },
+              {
+                "name": "Last PY Quantity"
+              },
+              {
+                "name": "Last PY Amount"
+              },
+              {
+                "name": "Price Difference"
               }
             ]
           },

@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -8468,6 +8467,18 @@
           {
             "memberName": "DOMAIN\\jjing",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
+          },
+          {
+            "memberName": "DOMAIN\\bmoore",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21012"
+          },
+          {
+            "memberName": "DOMAIN\\sdong",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
+          },
+          {
+            "memberName": "DOMAIN\\rraymundo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2857"
           }
         ]
       },

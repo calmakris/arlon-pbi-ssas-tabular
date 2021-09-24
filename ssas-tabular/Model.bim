@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1120,13 +1122,13 @@
           {
             "name": "Date 12 Months Ago",
             "expression": " EOMONTH( EDATE( TODAY() - 1, -12), -1) + 1",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "isHidden": true,
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -1242,14 +1244,19 @@
           },
           {
             "name": "Backorder Amount",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) with non-complete overall block and first delivery dates on or before this month",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount.",
             "expression": [
               "",
               "CALCULATE(",
               "    [SO Internal Open Amount],",
               "    FILTER(",
-              "        'Sales Order Documents',",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")",
               ""
@@ -1277,14 +1284,18 @@
           },
           {
             "name": "Backorder Margin",
+            "description": "Total margin of internally open sales order items (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount.",
             "expression": [
               "",
               "CALCULATE(",
               "    [Sales Order Margin],",
               "    FILTER(",
-              "        'Sales Order Documents',",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
-              "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Overall Block] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")"
@@ -1331,36 +1342,36 @@
           {
             "name": "Yesterday",
             "expression": " TODAY() - 1",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "Beginning of Month",
             "expression": " EOMONTH( [Yesterday], -1 ) + 1",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "End of Month",
             "expression": " EOMONTH( [Yesterday], 0 )",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -1847,6 +1858,107 @@
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Backorder Amount (Past Due)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship before the current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Internal Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] < [Beginning of Month]",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Backorder Amount (Current Month)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Internal Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] >= [Beginning of Month]",
+              "            && 'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "End of Next Month",
+            "expression": " EOMONTH( [Yesterday], 1 )",
+            "formatString": "Short Date",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Amount (Next Month)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship starting next month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Internal Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] > [End of Month]",
+              "            && 'Sales Order Documents'[First Delivery Date] <= [End of Next Month]",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Backorder Amount (Beyond Next Month)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship after next month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Internal Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] > [End of Next Month]",
+              "    ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
           }
         ]
       },
@@ -6478,6 +6590,27 @@
               },
               {
                 "name": "MTD Gross Sales Budget"
+              },
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Amount"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
               }
             ]
           },
@@ -7004,6 +7137,21 @@
               },
               {
                 "name": "MTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "Backorder Amount (Beyond Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Current Month)"
+              },
+              {
+                "name": "Backorder Amount (Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Past Due)"
+              },
+              {
+                "name": "Backorder Margin"
               }
             ]
           },

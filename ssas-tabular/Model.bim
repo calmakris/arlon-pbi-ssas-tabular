@@ -473,6 +473,12 @@
             "dataType": "boolean",
             "sourceColumn": "Is_Last2_Calendar_Years",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Fiscal Year Month Name",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Year_Month_Name",
+            "displayFolder": "Individual Attributes"
           }
         ],
         "partitions": [
@@ -486,7 +492,7 @@
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -603,6 +609,13 @@
           {
             "type": "calculated",
             "name": "GRIR",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Absorption Measure",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -1959,6 +1972,43 @@
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Earned Labor",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Absorption[Amount] ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Sub Category] IN {\"Labor\", \"Setup\"}",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Earned Overhead",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Absorption[Amount] ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Sub Category] = \"Overhead\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Absorption",
+            "description": "Sum of earned labor, setup, and overhead",
+            "expression": " [Earned Labor] + [Earned Overhead]",
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
           }
         ]
       },
@@ -4978,6 +5028,74 @@
             }
           }
         ]
+      },
+      {
+        "name": "Absorption",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Business Transaction Type",
+            "dataType": "string",
+            "sourceColumn": "BusTransType"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "QuantityValue",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "AmountValue",
+            "formatString": "0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_ABSORPTION\"]}[Data]",
+                "in",
+                "    dbo_VW_ABSORPTION"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -5298,6 +5416,27 @@
         "fromColumn": "Vendor Number",
         "toTable": "Vendor Master",
         "toColumn": "Vendor Number"
+      },
+      {
+        "name": "d3f017b1-44bd-4645-8deb-8c26d0ecde96",
+        "fromTable": "Absorption",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "aa32963f-d2e9-4965-839d-1354c85503d6",
+        "fromTable": "Absorption",
+        "fromColumn": "Cost Element",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "749c05b1-49f2-4a5c-899b-3801eaaa0f52",
+        "fromTable": "Absorption",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -5415,6 +5554,9 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -5744,6 +5886,9 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -6019,6 +6164,9 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -6422,6 +6570,9 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -6975,6 +7126,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -7152,6 +7306,15 @@
               },
               {
                 "name": "Backorder Margin"
+              },
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Earned Labor"
+              },
+              {
+                "name": "Earned Overhead"
               }
             ]
           },
@@ -7404,6 +7567,49 @@
               },
               {
                 "name": "Customer Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "DepartmentSortKey"
+              },
+              {
+                "name": "Operations Category"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Sub Category"
               }
             ]
           }
@@ -7783,6 +7989,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -8007,6 +8216,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -8279,6 +8491,9 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
               }
             ],
             "hierarchies": [
@@ -8557,6 +8772,181 @@
               },
               {
                 "name": "Report Name"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Absorption",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Business Transaction Type"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "DepartmentSortKey"
+              },
+              {
+                "name": "Operations Category"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Earned Labor"
+              },
+              {
+                "name": "Earned Overhead"
               }
             ]
           }

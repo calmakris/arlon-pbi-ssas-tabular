@@ -479,6 +479,13 @@
             "dataType": "string",
             "sourceColumn": "Fiscal_Year_Month_Name",
             "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Month Name (Calendar)",
+            "dataType": "string",
+            "sourceColumn": "Month_Name_Abbrev_Calendar",
+            "sortByColumn": "Calendar Month Number",
+            "displayFolder": "Individual Attributes"
           }
         ],
         "partitions": [
@@ -492,7 +499,7 @@
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -514,14 +521,14 @@
                 "column": "Calendar Quarter Name"
               },
               {
-                "name": "Month",
-                "ordinal": 2,
-                "column": "Month Name"
-              },
-              {
                 "name": "Date",
                 "ordinal": 3,
                 "column": "Date"
+              },
+              {
+                "name": "Month",
+                "ordinal": 2,
+                "column": "Month Name (Calendar)"
               }
             ]
           },
@@ -652,7 +659,7 @@
           },
           {
             "name": "Net Sales",
-            "description": "Net of gross sales and discounts",
+            "description": "Net of gross sales and discounts; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
               "IF(",
@@ -671,6 +678,7 @@
           },
           {
             "name": "Cost of Goods",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
               "IF(",
@@ -689,25 +697,28 @@
           },
           {
             "name": "Gross Margin",
-            "description": "Net of gross sales and overall cost",
+            "description": "Net of gross sales and overall cost; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " SUM( 'Sales Invoice Documents'[Gross Margin Amount] )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
           {
             "name": "Net Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [Net Sales] - [Cost of Goods]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin %",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE([Gross Margin], [Gross Sales])",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Sales"
           },
           {
             "name": "Net Margin %",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [Net Margin], [Net Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Sales"
@@ -760,12 +771,14 @@
           },
           {
             "name": "PQ Complaint Count",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Value",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
@@ -778,6 +791,7 @@
           },
           {
             "name": "PQ Credit Issued",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
@@ -790,6 +804,7 @@
           },
           {
             "name": "PQ Open Value",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
@@ -802,24 +817,28 @@
           },
           {
             "name": "Product Quality Index",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " DIVIDE( [PQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Product Quality Index (Credited)",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " DIVIDE( [PQ Credit Issued], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Product Quality Index (Open)",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " DIVIDE( [PQ Open Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Hold Amount",
+            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Hold Tags",
@@ -832,12 +851,14 @@
           },
           {
             "name": "Hold Quantity",
+            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
             "formatString": "#,0.00",
             "displayFolder": "Hold Tags"
           },
           {
             "name": "Hold Tag Count",
+            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
             "formatString": "#,0",
             "displayFolder": "Hold Tags"
@@ -904,6 +925,7 @@
           },
           {
             "name": "Product Quality Index (Target)",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -923,6 +945,7 @@
           },
           {
             "name": "PQ Complaint Cycle Time",
+            "description": "Date grouping: 'Complaint Documents'[Last Credit Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -939,6 +962,7 @@
           },
           {
             "name": "Expenses Amount",
+            "description": "Date grouping: 'Expenses'[Posting Date]",
             "expression": " SUM(Expenses[Amount]) + 0",
             "formatString": "$#,##0;($#,##0);\"-\"",
             "displayFolder": "Expenses"
@@ -978,6 +1002,7 @@
           },
           {
             "name": "SQ Complaint Count",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -993,6 +1018,7 @@
           },
           {
             "name": "SQ Complaint Value",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1019,6 +1045,7 @@
           },
           {
             "name": "CA Complaint Value",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1045,6 +1072,7 @@
           },
           {
             "name": "CA Complaint Count",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1060,18 +1088,21 @@
           },
           {
             "name": "Service Quality Index",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
           {
             "name": "Service Quality Index (Target)",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1091,6 +1122,7 @@
           },
           {
             "name": "Customer Accommodation Index (Target)",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1110,6 +1142,7 @@
           },
           {
             "name": "Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Order Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales Orders",
@@ -1122,6 +1155,7 @@
           },
           {
             "name": "Sales Order Cost Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Cost Amount] ) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales Orders",
@@ -1147,91 +1181,105 @@
           },
           {
             "name": "Sales Order Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DISTINCTCOUNT(  'Sales Order Documents'[Order Number] )",
             "formatString": "#,0",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "MTD Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin %], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "Gross Sales Budget",
-            "description": "Budget numbers submitted by Sales to IT",
+            "description": "Budget numbers submitted by Sales to IT; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1257,7 +1305,7 @@
           },
           {
             "name": "Backorder Amount",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1279,6 +1327,7 @@
           },
           {
             "name": "Sales Order Margin",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "IF(",
@@ -1297,7 +1346,7 @@
           },
           {
             "name": "Backorder Margin",
-            "description": "Total margin of internally open sales order items (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "description": "Total margin of internally open sales order items (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1318,36 +1367,42 @@
           },
           {
             "name": "Quantity Sold",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " SUM( 'Sales Invoice Documents'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales"
           },
           {
             "name": "MTD PY Var Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " IF( NOT( OR(ISBLANK([MTD Gross Sales]), ISBLANK([MTD PY Gross Sales]) ) ), [MTD Gross Sales] - [MTD PY Gross Sales], BLANK() )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Var% Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD PY Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var% Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD PY Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Quantity Sold",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Quantity Sold], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Quantity Sold",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Quantity Sold], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
@@ -1390,18 +1445,21 @@
           },
           {
             "name": "MTD Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [Sales Order Amount], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [MTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Var Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "IF( ",
@@ -1418,24 +1476,28 @@
           },
           {
             "name": "MTD PY Var% Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD PY Sales Order Amount] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [Sales Order Amount], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [FYTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "IF( ",
@@ -1452,24 +1514,28 @@
           },
           {
             "name": "FYTD PY Var% Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD PY Sales Order Amount] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "SO Internal Open Quantity",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Customer Open Quantity",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": "  SUM( 'Sales Order Documents'[Customer Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Internal Open Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1490,6 +1556,7 @@
           },
           {
             "name": "SO Customer Open Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1510,18 +1577,21 @@
           },
           {
             "name": "SO Ordered Quantity",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": "SUM( 'Sales Order Documents'[Order Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Allocated Quantity",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Allocated Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Shipped Quantity",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Shipped Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
@@ -1558,6 +1628,7 @@
           },
           {
             "name": "FYTD Gross Margin% Budget",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1581,24 +1652,28 @@
           },
           {
             "name": "MTD Gross Sales & Backorder",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [MTD Gross Sales] + [Backorder Amount]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales & Backorder Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [MTD Gross Margin] + [Backorder Margin]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales & Backorder Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [MTD Gross Sales & Backorder Margin], [MTD Gross Sales & Backorder] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales Budget",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Time Intelligence",
@@ -1611,6 +1686,7 @@
           },
           {
             "name": "FYTD Gross Sales Budget",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Time Intelligence",
@@ -1623,18 +1699,21 @@
           },
           {
             "name": "FYTD Gross Sales & Backorder",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [FYTD Gross Sales] + [Backorder Amount]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales & Backorder Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [FYTD Gross Margin] + [Backorder Margin]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales & Backorder Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [FYTD Gross Sales & Backorder Margin], [FYTD Gross Sales & Backorder] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
@@ -1677,30 +1756,35 @@
           },
           {
             "name": "GRIR Amount (Document)",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM('Goods and Invoice Receipts'[Amount (Document)])",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local)",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM('Goods and Invoice Receipts'[Amount (Local)])",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local2)",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local2)] )",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Quantity",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM( 'Goods and Invoice Receipts'[Quantity] )",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Open Amount",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1725,6 +1809,7 @@
           },
           {
             "name": "GRIR Open Quantity",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1740,26 +1825,28 @@
           },
           {
             "name": "PO Invoice Receipt Amount",
-            "description": "Sum of invoice receipt amount in purchase order history. See 'Time Intelligence' folder for the FYTD versions.",
+            "description": "Sum of invoice receipt amount in purchase order history. See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " SUM( 'Purchase Order Invoices'[Amount] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
           },
           {
             "name": "PO Invoice Receipt Quantity",
-            "description": "Sum of invoice receipt quantity in purchase order history (in purchase order unit). See 'Time Intelligence' folder for the FYTD versions.",
+            "description": "Sum of invoice receipt quantity in purchase order history (in purchase order unit). See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " SUM( 'Purchase Order Invoices'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
           },
           {
             "name": "FYTD PO Invoice Receipt Amount",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [PO Invoice Receipt Amount], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PO Invoice Receipt Quantity",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [PO Invoice Receipt Quantity], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
@@ -1773,42 +1860,42 @@
           },
           {
             "name": "FYTD Last PO Invoice Receipt Quantity",
-            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Amount",
-            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Quantity",
-            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PO Invoice Receipt Unit Price",
-            "description": "FYTD total invoice receipt amount divided quantity",
+            "description": "FYTD total invoice receipt amount divided quantity; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Last PO Invoice Receipt Unit Price",
-            "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " DIVIDE( [FYTD Last PO Invoice Receipt Amount], [FYTD Last PO Invoice Receipt Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PO Invoice Receipt Amount in PY Price",
-            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount.",
+            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1821,7 +1908,7 @@
           },
           {
             "name": "FYTD Purchase Price Difference",
-            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price.",
+            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1834,14 +1921,14 @@
           },
           {
             "name": "FYTD PY Last PO Invoice Receipt Unit Price",
-            "description": "Amount divided quantity of the last invoice receipt in purchase order history on previous fiscal year",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on previous fiscal year; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " DIVIDE( [FYTD PY Last PO Invoice Receipt Amount], [FYTD PY Last PO Invoice Receipt Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Purchase Price Index%",
-            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price.",
+            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": [
               " ",
               "IF(",
@@ -1855,19 +1942,21 @@
           },
           {
             "name": "FYTD Purchase Price Index",
-            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price.",
+            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " ROUND(DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price] ), 4)",
             "formatString": "0.0000",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY PO Invoice Receipt Amount",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY PO Invoice Receipt Quantity",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
@@ -1975,6 +2064,7 @@
           },
           {
             "name": "Earned Labor",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1990,6 +2080,7 @@
           },
           {
             "name": "Earned Overhead",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -2005,10 +2096,107 @@
           },
           {
             "name": "Absorption",
-            "description": "Sum of earned labor, setup, and overhead",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
             "expression": " [Earned Labor] + [Earned Overhead]",
             "formatString": "#,0",
             "displayFolder": "Absorption"
+          },
+          {
+            "name": "Sales Order Lines Automated",
+            "description": "Number of sales order line items entered by BATCHUSER (sales order automation); Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " COUNTROWS( FILTER( 'Sales Order Documents', 'Sales Order Documents'[Entered By] = \"BATCHUSER\" ) )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Line Count",
+            "description": "Number of sales order line items; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " COUNTROWS( 'Sales Order Documents' )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Lines Automated%",
+            "description": "Number of sales order line items entered by BATCHUSER divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": [
+              " ",
+              "DIVIDE( ",
+              "    [Sales Order Lines Automated],",
+              "    [Sales Order Line Count (CS)] + [Sales Order Lines Automated]",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Line Count (CS)",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Line Count], FILTER( 'SAP Users', 'SAP Users'[Department] = \"CUSTOMER SERVICE\") )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "FYTD Sales Order Line Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Line Count], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Sales Order Line Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [FYTD Sales Order Line Count], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Sales Order Lines Automated%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Lines Automated%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Sales Order Lines Automated%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Lines Automated%], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Sales Order Line Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Line Count], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Sales Order Lines Automated (No Changes)",
+            "description": "Number of sales order line items entered by BATCHUSER (sales order automation) without manual changes from Customer Service; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Lines Automated], 'Sales Order Documents'[Has Changes (CS)] = 0 )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Automation Efficiency%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " DIVIDE( [Sales Order Lines Automated (No Changes)], [Sales Order Lines Automated] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "FYTD Sales Order Automation Efficiency%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Sales Order Automation Efficiency%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -3822,6 +4010,7 @@
       },
       {
         "name": "Sales Order Documents",
+        "description": "SAP Source: VBAK, VBAP, VBUK, VBUP, VBUK, VBPA, VBEP, LIKP, LIPS, and KNMT; Granularity: One row per sales order document and line number; Contains general and status information about sales order documents.",
         "columns": [
           {
             "name": "OrderNoLineKey",
@@ -4192,6 +4381,12 @@
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
             "isHidden": true,
             "sourceColumn": "InStockIndicator"
+          },
+          {
+            "name": "Has Changes (CS)",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "HasChanges_CS"
           }
         ],
         "partitions": [
@@ -5096,6 +5291,102 @@
             }
           }
         ]
+      },
+      {
+        "name": "SAP Users",
+        "description": "SAP Source: USR21 and ADCP",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "UsernameKey",
+            "dataType": "string",
+            "description": "SAP Source: USR21.BNAME",
+            "sourceColumn": "UsernameKey"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "description": "SAP Source: ADCP.DEPARTMENT",
+            "sourceColumn": "Department"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_USERS_SAP = Source{[Schema=\"dbo\",Item=\"VW_USERS_SAP\"]}[Data]",
+                "in",
+                "    dbo_VW_USERS_SAP"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Order Document Changes",
+        "description": "SAP Source: CDHDR; Granularity: Multiple rows per sales order document number",
+        "columns": [
+          {
+            "name": "OrderNoKey",
+            "dataType": "string",
+            "description": "SAP Source: CDHDR.OBJECTID",
+            "isHidden": true,
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Changed By",
+            "dataType": "string",
+            "description": "SAP Source: CDHDR.USERNAME",
+            "sourceColumn": "ChangedBy"
+          },
+          {
+            "name": "Change Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: CDHDR.UDATE",
+            "sourceColumn": "ChangedDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Change Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: CDHDR.UTIME",
+            "sourceColumn": "ChangedTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_SALES_CHANGES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES_CHANGES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_SALES_CHANGES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -5437,6 +5728,29 @@
         "fromColumn": "Posting Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "be0acd87-ca5c-487c-9366-d05855204388",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "Entered By",
+        "toTable": "SAP Users",
+        "toColumn": "UsernameKey"
+      },
+      {
+        "name": "2db43657-5faa-4957-981b-1815c9ecf050",
+        "toCardinality": "many",
+        "fromTable": "Sales Order Document Changes",
+        "fromColumn": "OrderNoKey",
+        "toTable": "Sales Order Documents",
+        "toColumn": "Order Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "3df54883-286b-415a-a9ca-e9431f57d2f4",
+        "fromTable": "Sales Order Document Changes",
+        "fromColumn": "Changed By",
+        "toTable": "SAP Users",
+        "toColumn": "UsernameKey"
       }
     ],
     "perspectives": [
@@ -5557,6 +5871,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -5889,6 +6206,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -6167,6 +6487,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -6573,6 +6896,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -7129,6 +7455,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -7992,6 +8321,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -8219,6 +8551,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -8494,6 +8829,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -8882,6 +9220,9 @@
               },
               {
                 "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
               }
             ],
             "hierarchies": [
@@ -8947,6 +9288,491 @@
               },
               {
                 "name": "Earned Overhead"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Sales Orders",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Material Number"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "External Purchase Order Number"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "In Stock"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Overall Block"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Ship To City"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Has Changes (CS)"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Backorder Amount"
+              },
+              {
+                "name": "Backorder Amount (Beyond Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Current Month)"
+              },
+              {
+                "name": "Backorder Amount (Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Past Due)"
+              },
+              {
+                "name": "Backorder Margin"
+              },
+              {
+                "name": "FYTD PY Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "FYTD Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "MTD Sales Order Amount"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Sales Order Cost Amount"
+              },
+              {
+                "name": "Sales Order Count"
+              },
+              {
+                "name": "Sales Order Line Count"
+              },
+              {
+                "name": "Sales Order Lines Automated"
+              },
+              {
+                "name": "Sales Order Lines Automated%"
+              },
+              {
+                "name": "Sales Order Margin"
+              },
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Amount"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "Sales Order Line Count (CS)"
+              },
+              {
+                "name": "FYTD PY Sales Order Line Count"
+              },
+              {
+                "name": "FYTD Sales Order Line Count"
+              },
+              {
+                "name": "FYTD Sales Order Lines Automated%"
+              },
+              {
+                "name": "MTD Sales Order Lines Automated%"
+              },
+              {
+                "name": "MTD Sales Order Line Count"
+              },
+              {
+                "name": "FYTD Sales Order Automation Efficiency%"
+              },
+              {
+                "name": "MTD Sales Order Automation Efficiency%"
+              },
+              {
+                "name": "Sales Order Automation Efficiency%"
+              },
+              {
+                "name": "Sales Order Lines Automated (No Changes)"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Document Changes",
+            "columns": [
+              {
+                "name": "Change Date"
+              },
+              {
+                "name": "Change Time"
+              },
+              {
+                "name": "Changed By"
+              },
+              {
+                "name": "OrderNoKey"
               }
             ]
           }

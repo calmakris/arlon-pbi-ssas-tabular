@@ -2115,7 +2115,7 @@
             "displayFolder": "Sales Orders"
           },
           {
-            "name": "Sales Order Lines Automated%",
+            "name": "Sales Order Lines Automated Entry%",
             "description": "Number of sales order line items entered by BATCHUSER divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
@@ -2149,16 +2149,16 @@
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "FYTD Sales Order Lines Automated%",
+            "name": "FYTD Sales Order Lines Automated Entry%",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " CALCULATE( [Sales Order Lines Automated%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "MTD Sales Order Lines Automated%",
+            "name": "MTD Sales Order Lines Automated Entry%",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " CALCULATE( [Sales Order Lines Automated%], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
@@ -2196,6 +2196,13 @@
             "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Sales Order Lines Manual Entry%",
+            "description": "Number of sales order line items entered by Customer Service divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " DIVIDE( [Sales Order Line Count (CS)], [Sales Order Line Count (CS)] + [Sales Order Lines Automated] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales Orders"
           }
         ]
       },
@@ -9637,7 +9644,7 @@
                 "name": "Sales Order Lines Automated"
               },
               {
-                "name": "Sales Order Lines Automated%"
+                "name": "Sales Order Lines Automated Entry%"
               },
               {
                 "name": "Sales Order Margin"
@@ -9673,10 +9680,10 @@
                 "name": "FYTD Sales Order Line Count"
               },
               {
-                "name": "FYTD Sales Order Lines Automated%"
+                "name": "FYTD Sales Order Lines Automated Entry%"
               },
               {
-                "name": "MTD Sales Order Lines Automated%"
+                "name": "MTD Sales Order Lines Automated Entry%"
               },
               {
                 "name": "MTD Sales Order Line Count"
@@ -9692,6 +9699,9 @@
               },
               {
                 "name": "Sales Order Lines Automated (No Changes)"
+              },
+              {
+                "name": "Sales Order Lines Manual Entry%"
               }
             ]
           },

@@ -1304,11 +1304,11 @@
           },
           {
             "name": "Backorder Amount",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total customer open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
-              "    [SO Internal Open Amount],",
+              "    [SO Customer Open Amount],",
               "    FILTER(",
               "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
@@ -1966,7 +1966,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [SO Internal Open Amount],",
+              "    [SO Customer Open Amount],",
               "    FILTER(",
               "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] < [Beginning of Month]",
@@ -1987,7 +1987,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [SO Internal Open Amount],",
+              "    [SO Customer Open Amount],",
               "    FILTER(",
               "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] >= [Beginning of Month]",
@@ -2022,7 +2022,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [SO Internal Open Amount],",
+              "    [SO Customer Open Amount],",
               "    FILTER(",
               "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] > [End of Month]",
@@ -2045,7 +2045,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [SO Internal Open Amount],",
+              "    [SO Customer Open Amount],",
               "    FILTER(",
               "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] > [End of Next Month]",

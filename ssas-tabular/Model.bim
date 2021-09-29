@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -1316,7 +1315,7 @@
               "    ),",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "        'Sales Order Documents'[Processing Status] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")",
@@ -1357,7 +1356,7 @@
               "    ),",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "        'Sales Order Documents'[Processing Status] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")"
@@ -1521,21 +1520,21 @@
           },
           {
             "name": "SO Internal Open Quantity",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "If processing status is not complete, this value is ordered minus allocated minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Customer Open Quantity",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "If billing status is not complete, this value is ordered minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": "  SUM( 'Sales Order Documents'[Customer Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Internal Open Amount",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "If processing status is not complete, this value is ordered minus allocated minus shipped amount;Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1556,7 +1555,7 @@
           },
           {
             "name": "SO Customer Open Amount",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "If billing status is not complete, this value is ordered minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1584,14 +1583,14 @@
           },
           {
             "name": "SO Allocated Quantity",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Allocated Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Shipped Quantity",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Shipped Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
@@ -1974,7 +1973,7 @@
               "    ),",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "        'Sales Order Documents'[Processing Status] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")"
@@ -1996,7 +1995,7 @@
               "    ),",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "        'Sales Order Documents'[Processing Status] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")",
@@ -2031,7 +2030,7 @@
               "    ),",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "        'Sales Order Documents'[Processing Status] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")",
@@ -2053,7 +2052,7 @@
               "    ),",
               "    FILTER(",
               "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Overall Block] <> \"C\"",
+              "        'Sales Order Documents'[Processing Status] <> \"C\"",
               "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
               "    )",
               ")",
@@ -2370,12 +2369,6 @@
             ]
           },
           {
-            "name": "ShipToAddrKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ShipToAddrKey"
-          },
-          {
             "name": "Quantity Unit",
             "dataType": "string",
             "description": "SAP Source: CE110US.ABSMG_ME",
@@ -2389,14 +2382,6 @@
             "formatString": "0.0000"
           },
           {
-            "type": "calculated",
-            "name": "Ship To Name",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "description": "SAP Source: ADRC.NAME1",
-            "expression": " RELATED( Addresses[Name] )"
-          },
-          {
             "name": "Currency",
             "dataType": "string",
             "description": "SAP Source: CE110US.FRWAE",
@@ -2404,7 +2389,7 @@
           },
           {
             "name": "Was New Product",
-            "dataType": "boolean",
+            "dataType": "int64",
             "description": "Indicates whether the material is less than or equal to 3 years as of the invoice posting date from Commercialization Date",
             "sourceColumn": "WasNewProduct",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
@@ -2423,6 +2408,18 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Ship To Name",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.NAME1",
+            "sourceColumn": "ShipToName"
+          },
+          {
+            "name": "Ship To City",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.CITY1",
+            "sourceColumn": "ShipToCity"
           }
         ],
         "partitions": [
@@ -2435,7 +2432,7 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToName\", \"ShipToCity\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -4136,7 +4133,7 @@
             "sourceColumn": "CreditBlock"
           },
           {
-            "name": "Overall Block",
+            "name": "Processing Status",
             "dataType": "string",
             "description": "SAP Source: VBUK.GBSTA",
             "sourceColumn": "OverallBlock"
@@ -4401,54 +4398,6 @@
                 "    dbo_VW_ORDER_SALES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES\"]}[Data]",
                 "in",
                 "    dbo_VW_ORDER_SALES"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Addresses",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "AddressNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "AddressNoKey"
-          },
-          {
-            "name": "Name",
-            "dataType": "string",
-            "sourceColumn": "Name"
-          },
-          {
-            "name": "City",
-            "dataType": "string",
-            "sourceColumn": "City"
-          },
-          {
-            "name": "Street",
-            "dataType": "string",
-            "sourceColumn": "Street"
-          },
-          {
-            "name": "Country",
-            "dataType": "string",
-            "sourceColumn": "Country"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_VW_ADDRESS_INFO = Source{[Schema=\"dbo\",Item=\"VW_ADDRESS_INFO\"]}[Data]",
-                "in",
-                "    dbo_VW_ADDRESS_INFO"
               ]
             }
           }
@@ -5630,13 +5579,6 @@
         "securityFilteringBehavior": "bothDirections"
       },
       {
-        "name": "20adfd74-cda0-42a6-bf53-9198127d8dc5",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "ShipToAddrKey",
-        "toTable": "Addresses",
-        "toColumn": "AddressNoKey"
-      },
-      {
         "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
         "fromTable": "Customer Master",
         "fromColumn": "Sales Region",
@@ -6699,7 +6641,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Route Type"
@@ -7199,16 +7141,10 @@
                 "name": "Invoice Date"
               },
               {
-                "name": "ShipToAddrKey"
-              },
-              {
                 "name": "Quantity Unit"
               },
               {
                 "name": "Exchange Rate"
-              },
-              {
-                "name": "Ship To Name"
               },
               {
                 "name": "Currency"
@@ -7218,6 +7154,12 @@
               },
               {
                 "name": "Was New Product"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Ship To City"
               }
             ]
           },
@@ -7315,7 +7257,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -7762,12 +7704,6 @@
               },
               {
                 "name": "Quantity Unit"
-              },
-              {
-                "name": "Ship To Name"
-              },
-              {
-                "name": "ShipToAddrKey"
               }
             ]
           },
@@ -7871,7 +7807,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -8208,7 +8144,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -9527,7 +9463,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"

@@ -477,6 +477,7 @@
             "name": "Fiscal Year Month Name",
             "dataType": "string",
             "sourceColumn": "Fiscal_Year_Month_Name",
+            "sortByColumn": "Year_Month_Sort_Key",
             "displayFolder": "Individual Attributes"
           },
           {
@@ -2121,14 +2122,14 @@
               " ",
               "DIVIDE( ",
               "    [Sales Order Lines Automated],",
-              "    [Sales Order Line Count (CS)] + [Sales Order Lines Automated]",
+              "    [Sales Order Line Count (Automated + Manual)]",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Sales Orders"
           },
           {
-            "name": "Sales Order Line Count (CS)",
+            "name": "Sales Order Lines Manual",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [Sales Order Line Count], FILTER( 'SAP Users', 'SAP Users'[Department] = \"CUSTOMER SERVICE\") )",
             "formatString": "#,0",
@@ -2200,9 +2201,36 @@
           {
             "name": "Sales Order Lines Manual Entry%",
             "description": "Number of sales order line items entered by Customer Service divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " DIVIDE( [Sales Order Line Count (CS)], [Sales Order Line Count (CS)] + [Sales Order Lines Automated] )",
+            "expression": " DIVIDE( [Sales Order Lines Manual], [Sales Order Line Count (Automated + Manual)] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Line Count (Automated + Manual)",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " [Sales Order Lines Manual] + [Sales Order Lines Automated]",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "MTD Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " CALCULATE( [Absorption], DATESMTD( 'Calendar'[Date] ) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " CALCULATE( [MTD Absorption], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -7593,6 +7621,12 @@
               },
               {
                 "name": "Earned Overhead"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD PY Absorption"
               }
             ]
           },
@@ -9231,6 +9265,12 @@
               },
               {
                 "name": "Earned Overhead"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD PY Absorption"
               }
             ]
           }
@@ -9671,7 +9711,7 @@
                 "name": "SO Shipped Quantity"
               },
               {
-                "name": "Sales Order Line Count (CS)"
+                "name": "Sales Order Lines Manual"
               },
               {
                 "name": "FYTD PY Sales Order Line Count"
@@ -9702,6 +9742,9 @@
               },
               {
                 "name": "Sales Order Lines Manual Entry%"
+              },
+              {
+                "name": "Sales Order Line Count (Automated + Manual)"
               }
             ]
           },
@@ -9790,6 +9833,10 @@
           {
             "memberName": "DOMAIN\\rraymundo",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2857"
+          },
+          {
+            "memberName": "DOMAIN\\kbesse",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8862"
           }
         ]
       },

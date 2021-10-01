@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7343,7 +7342,7 @@
         ]
       },
       {
-        "name": "BI Morning Report",
+        "name": "BI Morning Dashboard",
         "tables": [
           {
             "name": "_Refresh Date",

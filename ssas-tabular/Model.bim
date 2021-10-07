@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -485,6 +487,18 @@
             "sourceColumn": "Month_Name_Abbrev_Calendar",
             "sortByColumn": "Calendar Month Number",
             "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Is Last 3 Fiscal Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last3_Fiscal_Years",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Last 3 Calendar Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last3_Calendar_Years",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -498,7 +512,7 @@
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -1314,9 +1328,8 @@
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
               "    ),",
               "    FILTER(",
-              "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Processing Status] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] <= [End of Month]",
               "    )",
               ")",
               ""
@@ -1349,15 +1362,14 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [Sales Order Margin],",
+              "    [SO Customer Open Margin],",
               "    FILTER(",
               "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
               "    ),",
               "    FILTER(",
-              "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Processing Status] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] <= [End of Month]",
               "    )",
               ")"
             ],
@@ -1528,7 +1540,14 @@
           {
             "name": "SO Customer Open Quantity",
             "description": "If billing status is not complete, this value is ordered minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": "  SUM( 'Sales Order Documents'[Customer Open Quantity] )",
+            "expression": [
+              "  ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Customer Open Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")",
+              ""
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
@@ -1568,7 +1587,8 @@
               "            SUM( 'Sales Order Documents'[Customer Open Amount] )",
               "        ),",
               "        SUM( 'Sales Order Documents'[Customer Open Amount] )   ",
-              "    )",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
@@ -1725,7 +1745,13 @@
           },
           {
             "name": "PO Open Quantity",
-            "expression": " SUM( 'Purchase Orders'[Open Quantity] )",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Purchase Orders - Deliveries'[Open Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Purchase Orders - Deliveries'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
           },
@@ -1737,7 +1763,13 @@
           },
           {
             "name": "PO Open Amount",
-            "expression": " SUM( 'Purchase Orders'[Open Amount] )",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Purchase Orders - Deliveries'[Open Amount] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Purchase Orders - Deliveries'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Purchase Orders"
           },
@@ -1972,9 +2004,8 @@
               "        'Sales Order Documents'[First Delivery Date] < [Beginning of Month]",
               "    ),",
               "    FILTER(",
-              "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Processing Status] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] < [Beginning of Month]",
               "    )",
               ")"
             ],
@@ -1994,9 +2025,9 @@
               "            && 'Sales Order Documents'[First Delivery Date] <= [End of Month]",
               "    ),",
               "    FILTER(",
-              "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Processing Status] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] >= [Beginning of Month]",
+              "            && 'Calendar'[Date] <= [End of Month]",
               "    )",
               ")",
               ""
@@ -2029,9 +2060,9 @@
               "            && 'Sales Order Documents'[First Delivery Date] <= [End of Next Month]",
               "    ),",
               "    FILTER(",
-              "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Processing Status] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] > [End of Month]",
+              "            && 'Calendar'[Date] <= [End of Next Month]",
               "    )",
               ")",
               ""
@@ -2051,9 +2082,8 @@
               "        'Sales Order Documents'[First Delivery Date] > [End of Next Month]",
               "    ),",
               "    FILTER(",
-              "        'Sales Order Documents',",
-              "        'Sales Order Documents'[Processing Status] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] > [End of Next Month]",
               "    )",
               ")",
               ""
@@ -2230,6 +2260,59 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD PO Backorder Amount",
+            "description": "Sum of open UB, NB, and ZNB purchase orders with GR requirement scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "expression": [
+              " ",
+              "CALCULATE( ",
+              "    SUM( 'Backorder Snapshots'[Incoming] ), ",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Material Master'[Material Type] ),",
+              "        'Backorder Snapshots'[Material Type]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Purchase Orders'[Document Type] ),",
+              "        'Backorder Snapshots'[Order Type]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD Var PO Open Amount",
+            "description": "Variance of PO Open Amount to prior day's open amount (PD PO Backorder Amount) which is the sum of open UB, NB, and ZNB purchase orders with GR requirement scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "expression": " [PO Open Amount] - [PD PO Backorder Amount]",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "SO Customer Open Margin",
+            "description": "If billing status is not complete, this value is margin amount of non-shipped; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Customer Open Margin Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Customer Open Margin Amount (Local)] ),",
+              "            SUM( 'Sales Order Documents'[Customer Open Margin Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Customer Open Margin Amount] )   ",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
           }
         ]
       },
@@ -2693,6 +2776,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNo"
           },
           {
@@ -3150,7 +3234,6 @@
       {
         "name": "Plant",
         "description": "List of warehouse numbers in SAP (best used for filtering/grouping by plant across multiple fact tables)",
-        "isHidden": true,
         "columns": [
           {
             "name": "Plant",
@@ -3429,16 +3512,19 @@
           {
             "name": "Purchase Order Number",
             "dataType": "string",
+            "description": "SAP Source: EKKO.EBELN",
             "sourceColumn": "PurchaseOrderNoKey"
           },
           {
             "name": "Purchase Line Number",
             "dataType": "string",
+            "description": "SAP Source: EKPO.EBELN",
             "sourceColumn": "PurchaseOrderLineNo"
           },
           {
             "name": "Document Date",
             "dataType": "dateTime",
+            "description": "SAP Source: EKKO.AEDAT",
             "sourceColumn": "DocumentDateKey",
             "formatString": "Short Date",
             "annotations": [
@@ -3451,57 +3537,68 @@
           {
             "name": "VendorNoKey",
             "dataType": "string",
+            "description": "SAP Source: EKKO.LIFNR",
             "isHidden": true,
             "sourceColumn": "VendorNoKey"
           },
           {
             "name": "Material Group",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MATKL",
             "sourceColumn": "MaterialGroup"
           },
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MATNR",
             "sourceColumn": "MaterialNoKey"
           },
           {
             "name": "Material Description",
             "dataType": "string",
+            "description": "SAP Source: EKPO.TXZ01",
             "sourceColumn": "MaterialText"
           },
           {
             "name": "Req Track Number",
             "dataType": "string",
+            "description": "SAP Source: EKPO.BEDNR",
             "sourceColumn": "RequisitionTrackNo"
           },
           {
             "name": "Unit Price",
             "dataType": "double",
+            "description": "SAP Source: EKPO.NETPR",
             "sourceColumn": "UnitPrice"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MEINS",
             "sourceColumn": "UnitOfMeasure"
           },
           {
             "name": "Document Type",
             "dataType": "string",
+            "description": "SAP Source: EKKO.BSART",
             "sourceColumn": "PurchaseDocType"
           },
           {
             "name": "Is Complete Delivery",
             "dataType": "string",
+            "description": "SAP Source: EKPO.ELIKZ",
             "sourceColumn": "CompleteDeliverIndicator"
           },
           {
             "name": "Is Goods Receipt Required",
             "dataType": "string",
+            "description": "SAP Source: EKPO.WEPOS",
             "sourceColumn": "GoodsReceiptIndicator"
           },
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
+            "description": "SAP Source: EKET.SLFDT",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -3514,51 +3611,70 @@
           {
             "name": "Issuing Plant",
             "dataType": "string",
+            "description": "SAP Source: EKKO.RESWK",
             "sourceColumn": "IssuingPlantNo"
           },
           {
             "name": "Receiving Plant",
             "dataType": "string",
+            "description": "SAP Source: EKPO.WERKS",
             "sourceColumn": "ReceivingPlantNo"
           },
           {
             "name": "Material Type",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MTART",
             "sourceColumn": "MaterialType"
           },
           {
             "name": "Currency",
             "dataType": "string",
+            "description": "SAP Source: EKKO.WAERS",
             "sourceColumn": "Currency"
           },
           {
             "name": "Ordered Quantity",
             "dataType": "double",
+            "description": "SAP Source: EKPO.MENGE",
             "sourceColumn": "OrderedQuantity",
+            "formatString": "#,0.00",
             "displayFolder": "_Quantities"
           },
           {
             "name": "Ordered Amount",
             "dataType": "double",
+            "description": "SAP Source: EKPO.NETWR",
             "sourceColumn": "OrderedAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values"
           },
           {
             "name": "Open Quantity",
             "dataType": "double",
+            "description": "Difference between the ordered and delivered quantity. SAP Source: EKPO.MENGE and EKET.WEMNG",
             "sourceColumn": "OpenQuantity",
+            "formatString": "#,0.00",
             "displayFolder": "_Quantities"
           },
           {
             "name": "Open Amount",
             "dataType": "double",
+            "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
             "sourceColumn": "OpenAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values"
           },
           {
             "name": "Purchase Order Unit",
             "dataType": "string",
+            "description": "SAP Source: EKPO.BPRME",
             "sourceColumn": "POUnitOfMeasure"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: EKKO.BUKRS",
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -4418,6 +4534,32 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "HasChanges_CS"
+          },
+          {
+            "name": "Customer Open Margin Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "CustomerOpenMarginAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Customer Open Margin Amount (Local)",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "CustomerOpenMarginAmount",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Tier",
+            "dataType": "string",
+            "description": "SAP Source: MARC.MAABC",
+            "sourceColumn": "TierCode"
           }
         ],
         "partitions": [
@@ -5370,6 +5512,120 @@
             }
           }
         ]
+      },
+      {
+        "name": "Purchase Orders - Deliveries",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "First Delivery Date",
+            "dataType": "dateTime",
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Open Quantity",
+            "dataType": "double",
+            "sourceColumn": "OpenQuantity",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Open Amount",
+            "dataType": "double",
+            "sourceColumn": "OpenAmount",
+            "formatString": "#,0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PURCHASE_DELIVERIES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE_DELIVERIES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PURCHASE_DELIVERIES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Backorder Snapshots",
+        "description": "A daily snapshot (near midnight) of backordered sales orders; Each value is the daily closing backorder value per plant, material type, and order type.",
+        "columns": [
+          {
+            "name": "Snapshot Date",
+            "dataType": "dateTime",
+            "sourceColumn": "SnapshotDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType"
+          },
+          {
+            "name": "Incoming",
+            "dataType": "double",
+            "sourceColumn": "Incoming",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Outgoing",
+            "dataType": "double",
+            "sourceColumn": "Outgoing",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Order Type",
+            "dataType": "string",
+            "sourceColumn": "OrderType"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_zDAILY_BACKORDER = Source{[Schema=\"dbo\",Item=\"zDAILY_BACKORDER\"]}[Data]",
+                "in",
+                "    dbo_zDAILY_BACKORDER"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -5468,13 +5724,6 @@
       {
         "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
         "fromTable": "Blocked Inventory",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
-        "name": "82e0b1e4-2025-48e8-ade7-938129650e46",
-        "fromTable": "Expired Inventory",
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
@@ -5627,13 +5876,6 @@
         "toColumn": "Sales Territory"
       },
       {
-        "name": "49a4a367-97a4-4d97-af26-ec8affd1d7e1",
-        "fromTable": "Expenses",
-        "fromColumn": "PlantNoKey",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "dc5f18dd-e738-46d9-a5c9-5306f5255523",
         "fromTable": "RLS_CostCenter",
         "fromColumn": "CostCenterKey",
@@ -5727,6 +5969,50 @@
         "fromColumn": "Changed By",
         "toTable": "SAP Users",
         "toColumn": "UsernameKey"
+      },
+      {
+        "name": "9428d940-fbc3-4bdb-8689-20a209035670",
+        "fromTable": "Purchase Orders - Deliveries",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "48cb8180-79ac-45f5-b7ad-8912c6e44e15",
+        "fromTable": "Purchase Orders - Deliveries",
+        "fromColumn": "First Delivery Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "d1ed3275-cbe1-4844-937e-a4d48686f5a3",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "56e0be47-1a9b-4c43-8428-32b03121860a",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "38ba1433-fc53-4068-aa51-5947fcc2ae49",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "c8527d3a-4ba0-4eee-b9b7-2e8ab62b7327",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "Receiving Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -5850,6 +6136,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -6185,6 +6477,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -6279,17 +6577,6 @@
               },
               {
                 "name": "Material Description"
-              }
-            ]
-          },
-          {
-            "name": "Plant",
-            "columns": [
-              {
-                "name": "Description"
-              },
-              {
-                "name": "Plant"
               }
             ]
           },
@@ -6466,6 +6753,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -6875,6 +7168,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -7434,6 +7733,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -8025,6 +8330,12 @@
               },
               {
                 "name": "PO Ordered Quantity"
+              },
+              {
+                "name": "PD PO Backorder Amount"
+              },
+              {
+                "name": "PD Var PO Open Amount"
               }
             ]
           },
@@ -8300,6 +8611,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -8435,6 +8752,54 @@
               },
               {
                 "name": "Purchase Order Unit"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Snapshots",
+            "columns": [
+              {
+                "name": "Incoming"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Outgoing"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Order Type"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
               }
             ]
           }
@@ -8530,6 +8895,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -8808,6 +9179,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -8934,6 +9311,9 @@
               },
               {
                 "name": "Purchase Order Unit"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -9199,6 +9579,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -9540,6 +9926,15 @@
               },
               {
                 "name": "Has Changes (CS)"
+              },
+              {
+                "name": "Customer Open Margin Amount"
+              },
+              {
+                "name": "Customer Open Margin Amount (Local)"
+              },
+              {
+                "name": "Tier"
               }
             ]
           },
@@ -9611,6 +10006,12 @@
               },
               {
                 "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [

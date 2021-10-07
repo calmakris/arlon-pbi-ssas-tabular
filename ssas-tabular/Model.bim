@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -64,8 +66,14 @@
             "dataType": "dateTime",
             "description": "SAP Source: KNA1.ERDAT",
             "sourceColumn": "AcctCreateDate",
-            "formatString": "MM/dd/yyyy",
-            "displayFolder": "Master"
+            "formatString": "Short Date",
+            "displayFolder": "Master",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Sales Organization",
@@ -114,20 +122,17 @@
             "displayFolder": "Sales Related"
           },
           {
-            "type": "calculated",
-            "name": "Sales Territory Name",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "description": "SAP Source: TVKBT.BEZEI",
-            "expression": " RELATED( 'Sales Territory'[Sales Territory Name] )",
-            "sortByColumn": "Sales Territory",
-            "displayFolder": "Sales Related"
-          },
-          {
             "name": "SalesRegionSortKey",
             "dataType": "double",
             "isHidden": true,
             "sourceColumn": "SalesRegionSortKey"
+          },
+          {
+            "name": "Sales Territory Name",
+            "dataType": "string",
+            "description": "SAP Source: TVKBT.BEZEI",
+            "sourceColumn": "SalesTerritoryName",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -138,7 +143,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data],",
                 "    #\"Added Custom\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
                 "in",
@@ -180,7 +185,13 @@
             "name": "Enter Date",
             "dataType": "dateTime",
             "sourceColumn": "EnterDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "ReasonCodeKey",
@@ -252,7 +263,13 @@
             "name": "Last Credit Date",
             "dataType": "dateTime",
             "sourceColumn": "LastCreditDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "type": "calculated",
@@ -309,7 +326,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COMPLAINTS = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS,{\"ComplaintLineKey\", \"ComplaintNoKey\", \"ComplaintLineNo\", \"ComplaintType\", \"BillingBlockIndicator\", \"EnteredBy\", \"EnterDateKey\", \"LastCreditDateKey\", \"ReasonCodeKey\", \"CustomerOrgKey\", \"PlantNoKey\", \"MaterialNoKey\", \"ComplaintValueUSD\", \"CreditIssueValueUSD\", \"OpenValueUSD\"})",
                 "in",
@@ -330,8 +347,14 @@
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "PK_Date",
-            "formatString": "MM/dd/yyyy",
-            "displayFolder": "Individual Attributes"
+            "formatString": "Short Date",
+            "displayFolder": "Individual Attributes",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Calendar Year Number",
@@ -450,6 +473,32 @@
             "dataType": "boolean",
             "sourceColumn": "Is_Last2_Calendar_Years",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Fiscal Year Month Name",
+            "dataType": "string",
+            "sourceColumn": "Fiscal_Year_Month_Name",
+            "sortByColumn": "Year_Month_Sort_Key",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Month Name (Calendar)",
+            "dataType": "string",
+            "sourceColumn": "Month_Name_Abbrev_Calendar",
+            "sortByColumn": "Calendar Month Number",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Is Last 3 Fiscal Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last3_Fiscal_Years",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Last 3 Calendar Years",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Last3_Calendar_Years",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -460,10 +509,10 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Month_Name_Abbrev\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last13_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -485,14 +534,14 @@
                 "column": "Calendar Quarter Name"
               },
               {
-                "name": "Month",
-                "ordinal": 2,
-                "column": "Month Name"
-              },
-              {
                 "name": "Date",
                 "ordinal": 3,
                 "column": "Date"
+              },
+              {
+                "name": "Month",
+                "ordinal": 2,
+                "column": "Month Name (Calendar)"
               }
             ]
           },
@@ -583,6 +632,13 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Absorption Measure",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -616,7 +672,7 @@
           },
           {
             "name": "Net Sales",
-            "description": "Net of gross sales and discounts",
+            "description": "Net of gross sales and discounts; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
               "IF(",
@@ -635,6 +691,7 @@
           },
           {
             "name": "Cost of Goods",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
               "IF(",
@@ -653,25 +710,28 @@
           },
           {
             "name": "Gross Margin",
-            "description": "Net of gross sales and overall cost",
+            "description": "Net of gross sales and overall cost; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " SUM( 'Sales Invoice Documents'[Gross Margin Amount] )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
           {
             "name": "Net Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [Net Sales] - [Cost of Goods]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin %",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE([Gross Margin], [Gross Sales])",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Sales"
           },
           {
             "name": "Net Margin %",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [Net Margin], [Net Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Sales"
@@ -724,12 +784,14 @@
           },
           {
             "name": "PQ Complaint Count",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Value",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
@@ -742,6 +804,7 @@
           },
           {
             "name": "PQ Credit Issued",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
@@ -754,6 +817,7 @@
           },
           {
             "name": "PQ Open Value",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
@@ -766,24 +830,28 @@
           },
           {
             "name": "Product Quality Index",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " DIVIDE( [PQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Product Quality Index (Credited)",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " DIVIDE( [PQ Credit Issued], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Product Quality Index (Open)",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": " DIVIDE( [PQ Open Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Hold Amount",
+            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Hold Tags",
@@ -796,12 +864,14 @@
           },
           {
             "name": "Hold Quantity",
+            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
             "formatString": "#,0.00",
             "displayFolder": "Hold Tags"
           },
           {
             "name": "Hold Tag Count",
+            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
             "formatString": "#,0",
             "displayFolder": "Hold Tags"
@@ -868,6 +938,7 @@
           },
           {
             "name": "Product Quality Index (Target)",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -887,6 +958,7 @@
           },
           {
             "name": "PQ Complaint Cycle Time",
+            "description": "Date grouping: 'Complaint Documents'[Last Credit Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -903,6 +975,7 @@
           },
           {
             "name": "Expenses Amount",
+            "description": "Date grouping: 'Expenses'[Posting Date]",
             "expression": " SUM(Expenses[Amount]) + 0",
             "formatString": "$#,##0;($#,##0);\"-\"",
             "displayFolder": "Expenses"
@@ -942,6 +1015,7 @@
           },
           {
             "name": "SQ Complaint Count",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -957,6 +1031,7 @@
           },
           {
             "name": "SQ Complaint Value",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -983,6 +1058,7 @@
           },
           {
             "name": "CA Complaint Value",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1009,6 +1085,7 @@
           },
           {
             "name": "CA Complaint Count",
+            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1024,18 +1101,21 @@
           },
           {
             "name": "Service Quality Index",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
           {
             "name": "Service Quality Index (Target)",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1055,6 +1135,7 @@
           },
           {
             "name": "Customer Accommodation Index (Target)",
+            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1074,6 +1155,7 @@
           },
           {
             "name": "Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Order Amount]) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales Orders",
@@ -1086,6 +1168,7 @@
           },
           {
             "name": "Sales Order Cost Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Cost Amount] ) + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales Orders",
@@ -1099,103 +1182,117 @@
           {
             "name": "Date 12 Months Ago",
             "expression": " EOMONTH( EDATE( TODAY() - 1, -12), -1) + 1",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "isHidden": true,
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "Sales Order Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DISTINCTCOUNT(  'Sales Order Documents'[Order Number] )",
             "formatString": "#,0",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "MTD Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin %], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "Gross Sales Budget",
-            "description": "Budget numbers submitted by Sales to IT",
+            "description": "Budget numbers submitted by Sales to IT; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1221,14 +1318,18 @@
           },
           {
             "name": "Backorder Amount",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) with non-complete overall block and first delivery dates on or before this month",
+            "description": "Total customer open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
-              "    [SO Internal Open Amount],",
+              "    [SO Customer Open Amount],",
               "    FILTER(",
-              "        'Sales Order Documents',",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "    ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] <= [End of Month]",
               "    )",
               ")",
               ""
@@ -1238,6 +1339,7 @@
           },
           {
             "name": "Sales Order Margin",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "IF(",
@@ -1256,15 +1358,18 @@
           },
           {
             "name": "Backorder Margin",
+            "description": "Total margin of internally open sales order items (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               "",
               "CALCULATE(",
-              "    [Sales Order Margin],",
+              "    [SO Customer Open Margin],",
               "    FILTER(",
-              "        'Sales Order Documents',",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
               "        'Sales Order Documents'[First Delivery Date] <= [End of Month]",
-              "            && 'Sales Order Documents'[Overall Block] <> \"C\"",
-              "            && 'Sales Order Documents'[Order Type] IN { \"TA\", \"ZCON\", \"ZDSP\" }",
+              "    ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] <= [End of Month]",
               "    )",
               ")"
             ],
@@ -1273,36 +1378,42 @@
           },
           {
             "name": "Quantity Sold",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " SUM( 'Sales Invoice Documents'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales"
           },
           {
             "name": "MTD PY Var Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " IF( NOT( OR(ISBLANK([MTD Gross Sales]), ISBLANK([MTD PY Gross Sales]) ) ), [MTD Gross Sales] - [MTD PY Gross Sales], BLANK() )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Var% Gross Sales",
-            "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD Gross Sales] )",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " DIVIDE( [MTD PY Var Gross Sales], [MTD PY Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var% Gross Sales",
-            "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD Gross Sales] )",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " DIVIDE( [FYTD PY Var Gross Sales], [FYTD PY Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Quantity Sold",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Quantity Sold], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Quantity Sold",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Quantity Sold], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
@@ -1310,53 +1421,56 @@
           {
             "name": "Yesterday",
             "expression": " TODAY() - 1",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "Beginning of Month",
             "expression": " EOMONTH( [Yesterday], -1 ) + 1",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "End of Month",
             "expression": " EOMONTH( [Yesterday], 0 )",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "displayFolder": "Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "MTD Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [Sales Order Amount], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [MTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Var Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "IF( ",
@@ -1373,24 +1487,28 @@
           },
           {
             "name": "MTD PY Var% Sales Order Amount",
-            "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD Sales Order Amount] )",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " DIVIDE( [MTD PY Var Sales Order Amount], [MTD PY Sales Order Amount] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [Sales Order Amount], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " CALCULATE( [FYTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Sales Order Amount",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "IF( ",
@@ -1407,24 +1525,35 @@
           },
           {
             "name": "FYTD PY Var% Sales Order Amount",
-            "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD Sales Order Amount] )",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " DIVIDE( [FYTD PY Var Sales Order Amount], [FYTD PY Sales Order Amount] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "SO Internal Open Quantity",
+            "description": "If processing status is not complete, this value is ordered minus allocated minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Customer Open Quantity",
-            "expression": "  SUM( 'Sales Order Documents'[Customer Open Quantity] )",
+            "description": "If billing status is not complete, this value is ordered minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": [
+              "  ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Customer Open Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")",
+              ""
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Internal Open Amount",
+            "description": "If processing status is not complete, this value is ordered minus allocated minus shipped amount;Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1445,6 +1574,7 @@
           },
           {
             "name": "SO Customer Open Amount",
+            "description": "If billing status is not complete, this value is ordered minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1457,7 +1587,8 @@
               "            SUM( 'Sales Order Documents'[Customer Open Amount] )",
               "        ),",
               "        SUM( 'Sales Order Documents'[Customer Open Amount] )   ",
-              "    )",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
@@ -1465,18 +1596,21 @@
           },
           {
             "name": "SO Ordered Quantity",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": "SUM( 'Sales Order Documents'[Order Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Allocated Quantity",
+            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Allocated Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Shipped Quantity",
+            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " SUM( 'Sales Order Documents'[Shipped Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
@@ -1513,6 +1647,7 @@
           },
           {
             "name": "FYTD Gross Margin% Budget",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1536,24 +1671,28 @@
           },
           {
             "name": "MTD Gross Sales & Backorder",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [MTD Gross Sales] + [Backorder Amount]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales & Backorder Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [MTD Gross Margin] + [Backorder Margin]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales & Backorder Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [MTD Gross Sales & Backorder Margin], [MTD Gross Sales & Backorder] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales Budget",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Time Intelligence",
@@ -1566,6 +1705,7 @@
           },
           {
             "name": "FYTD Gross Sales Budget",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Time Intelligence",
@@ -1578,18 +1718,21 @@
           },
           {
             "name": "FYTD Gross Sales & Backorder",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [FYTD Gross Sales] + [Backorder Amount]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales & Backorder Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [FYTD Gross Margin] + [Backorder Margin]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales & Backorder Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " DIVIDE( [FYTD Gross Sales & Backorder Margin], [FYTD Gross Sales & Backorder] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
@@ -1602,7 +1745,13 @@
           },
           {
             "name": "PO Open Quantity",
-            "expression": " SUM( 'Purchase Orders'[Open Quantity] )",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Purchase Orders - Deliveries'[Open Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Purchase Orders - Deliveries'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Purchase Orders"
           },
@@ -1614,7 +1763,13 @@
           },
           {
             "name": "PO Open Amount",
-            "expression": " SUM( 'Purchase Orders'[Open Amount] )",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Purchase Orders - Deliveries'[Open Amount] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Purchase Orders - Deliveries'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Purchase Orders"
           },
@@ -1632,30 +1787,35 @@
           },
           {
             "name": "GRIR Amount (Document)",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM('Goods and Invoice Receipts'[Amount (Document)])",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local)",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM('Goods and Invoice Receipts'[Amount (Local)])",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount (Local2)",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM( 'Goods and Invoice Receipts'[Amount (Local2)] )",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Quantity",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": " SUM( 'Goods and Invoice Receipts'[Quantity] )",
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Open Amount",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1680,6 +1840,7 @@
           },
           {
             "name": "GRIR Open Quantity",
+            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
             "expression": [
               "",
               "CALCULATE(",
@@ -1692,6 +1853,497 @@
             ],
             "formatString": "#,##0.00;(#,##0.00);\"-\"",
             "displayFolder": "GRIR"
+          },
+          {
+            "name": "PO Invoice Receipt Amount",
+            "description": "Sum of invoice receipt amount in purchase order history. See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " SUM( 'Purchase Order Invoices'[Amount] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "PO Invoice Receipt Quantity",
+            "description": "Sum of invoice receipt quantity in purchase order history (in purchase order unit). See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " SUM( 'Purchase Order Invoices'[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Amount",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [PO Invoice Receipt Amount], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Quantity",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [PO Invoice Receipt Quantity], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Last PO Invoice Receipt Amount",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Last PO Invoice Receipt Quantity",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], FILTER( 'Purchase Order Invoices', 'Purchase Order Invoices'[PostingRank] = 1 ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Last PO Invoice Receipt Amount",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Last PO Invoice Receipt Quantity",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [FYTD Last PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Unit Price",
+            "description": "FYTD total invoice receipt amount divided quantity; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Last PO Invoice Receipt Unit Price",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " DIVIDE( [FYTD Last PO Invoice Receipt Amount], [FYTD Last PO Invoice Receipt Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PO Invoice Receipt Amount in PY Price",
+            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Purchase Order Invoices'[Amount at Last PY Price] ),",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Purchase Price Difference",
+            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Purchase Order Invoices'[Price Difference] ),",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Last PO Invoice Receipt Unit Price",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on previous fiscal year; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " DIVIDE( [FYTD PY Last PO Invoice Receipt Amount], [FYTD PY Last PO Invoice Receipt Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Purchase Price Index%",
+            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": [
+              " ",
+              "IF(",
+              "    [FYTD PO Invoice Receipt Amount in PY Price] = 0,",
+              "    BLANK(),",
+              "    DIVIDE([FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price]) - 1",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Purchase Price Index",
+            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " ROUND(DIVIDE( [FYTD PO Invoice Receipt Amount], [FYTD PO Invoice Receipt Amount in PY Price] ), 4)",
+            "formatString": "0.0000",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY PO Invoice Receipt Amount",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY PO Invoice Receipt Quantity",
+            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "expression": " CALCULATE( [FYTD PO Invoice Receipt Quantity], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Backorder Amount (Past Due)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship before the current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Customer Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] < [Beginning of Month]",
+              "    ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] < [Beginning of Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Backorder Amount (Current Month)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Customer Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] >= [Beginning of Month]",
+              "            && 'Sales Order Documents'[First Delivery Date] <= [End of Month]",
+              "    ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] >= [Beginning of Month]",
+              "            && 'Calendar'[Date] <= [End of Month]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "End of Next Month",
+            "expression": " EOMONTH( [Yesterday], 1 )",
+            "formatString": "Short Date",
+            "displayFolder": "Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Amount (Next Month)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship starting next month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Customer Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] > [End of Month]",
+              "            && 'Sales Order Documents'[First Delivery Date] <= [End of Next Month]",
+              "    ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] > [End of Month]",
+              "            && 'Calendar'[Date] <= [End of Next Month]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Backorder Amount (Beyond Next Month)",
+            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship after next month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [SO Customer Open Amount],",
+              "    FILTER(",
+              "        ALL( 'Sales Order Documents'[First Delivery Date] ),",
+              "        'Sales Order Documents'[First Delivery Date] > [End of Next Month]",
+              "    ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] > [End of Next Month]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Earned Labor",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Absorption[Amount] ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Sub Category] IN {\"Labor\", \"Setup\"}",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Earned Overhead",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Absorption[Amount] ),",
+              "    FILTER(",
+              "        'Cost Element Names',",
+              "        'Cost Element Names'[Sub Category] = \"Overhead\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": " [Earned Labor] + [Earned Overhead]",
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Sales Order Lines Automated",
+            "description": "Number of sales order line items entered by BATCHUSER (sales order automation); Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " COUNTROWS( FILTER( 'Sales Order Documents', 'Sales Order Documents'[Entered By] = \"BATCHUSER\" ) )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Line Count",
+            "description": "Number of sales order line items; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " COUNTROWS( 'Sales Order Documents' )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Lines Automated Entry%",
+            "description": "Number of sales order line items entered by BATCHUSER divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": [
+              " ",
+              "DIVIDE( ",
+              "    [Sales Order Lines Automated],",
+              "    [Sales Order Line Count (Automated + Manual)]",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Lines Manual",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Line Count], FILTER( 'SAP Users', 'SAP Users'[Department] = \"CUSTOMER SERVICE\") )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "FYTD Sales Order Line Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Line Count], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Sales Order Line Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [FYTD Sales Order Line Count], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Sales Order Lines Automated Entry%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Sales Order Lines Automated Entry%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Sales Order Line Count",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Line Count], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Sales Order Lines Automated (No Changes)",
+            "description": "Number of sales order line items entered by BATCHUSER (sales order automation) without manual changes from Customer Service; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Lines Automated], 'Sales Order Documents'[Has Changes (CS)] = 0 )",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Automation Efficiency%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " DIVIDE( [Sales Order Lines Automated (No Changes)], [Sales Order Lines Automated] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "FYTD Sales Order Automation Efficiency%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Sales Order Automation Efficiency%",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Sales Order Lines Manual Entry%",
+            "description": "Number of sales order line items entered by Customer Service divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " DIVIDE( [Sales Order Lines Manual], [Sales Order Line Count (Automated + Manual)] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Sales Order Line Count (Automated + Manual)",
+            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": " [Sales Order Lines Manual] + [Sales Order Lines Automated]",
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "MTD Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " CALCULATE( [Absorption], DATESMTD( 'Calendar'[Date] ) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " CALCULATE( [MTD Absorption], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD PO Backorder Amount",
+            "description": "Sum of open UB, NB, and ZNB purchase orders with GR requirement scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "expression": [
+              " ",
+              "CALCULATE( ",
+              "    SUM( 'Backorder Snapshots'[Incoming] ), ",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Material Master'[Material Type] ),",
+              "        'Backorder Snapshots'[Material Type]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Purchase Orders'[Document Type] ),",
+              "        'Backorder Snapshots'[Order Type]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD Var PO Open Amount",
+            "description": "Variance of PO Open Amount to prior day's open amount (PD PO Backorder Amount) which is the sum of open UB, NB, and ZNB purchase orders with GR requirement scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "expression": " [PO Open Amount] - [PD PO Backorder Amount]",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "SO Customer Open Margin",
+            "description": "If billing status is not complete, this value is margin amount of non-shipped; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Customer Open Margin Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Customer Open Margin Amount (Local)] ),",
+              "            SUM( 'Sales Order Documents'[Customer Open Margin Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Customer Open Margin Amount] )   ",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "PD SO Customer Open Amount",
+            "description": "Sum of open TA and ZCON sales orders with with active/pre-launch product status, no credit block, has product tier code, and scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date]). Excludes BURLINGTON GRAPHICS customer.",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM('Backorder Snapshots'[Outgoing]),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Material Master'[Material Type] ),",
+              "        'Backorder Snapshots'[Material Type]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Sales Order Documents'[Order Type] ),",
+              "        'Backorder Snapshots'[Order Type]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD Var SO Customer Open Amount",
+            "description": "Variance of SO Customer Open Amount to prior day's open amount (PD SO Customer Open Amount) which is the sum of open TA and ZCON sales orders with with active/pre-launch product status, no credit block, has product tier code, and scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "expression": " [SO Customer Open Amount] - [PD SO Customer Open Amount]",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -1716,7 +2368,13 @@
             "dataType": "dateTime",
             "description": "SAP Source: CE110US.BUDAT ",
             "sourceColumn": "PostingDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Material Number",
@@ -1837,11 +2495,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: CE110US.HZDAT",
             "sourceColumn": "CreateDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -1850,19 +2508,13 @@
             "dataType": "dateTime",
             "description": "SAP Source: CE110US.FADAT",
             "sourceColumn": "InvoiceDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
-          },
-          {
-            "name": "ShipToAddrKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "ShipToAddrKey"
           },
           {
             "name": "Quantity Unit",
@@ -1878,14 +2530,6 @@
             "formatString": "0.0000"
           },
           {
-            "type": "calculated",
-            "name": "Ship To Name",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "description": "SAP Source: ADRC.NAME1",
-            "expression": " RELATED( Addresses[Name] )"
-          },
-          {
             "name": "Currency",
             "dataType": "string",
             "description": "SAP Source: CE110US.FRWAE",
@@ -1893,7 +2537,7 @@
           },
           {
             "name": "Was New Product",
-            "dataType": "boolean",
+            "dataType": "int64",
             "description": "Indicates whether the material is less than or equal to 3 years as of the invoice posting date from Commercialization Date",
             "sourceColumn": "WasNewProduct",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
@@ -1912,6 +2556,18 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Ship To Name",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.NAME1",
+            "sourceColumn": "ShipToName"
+          },
+          {
+            "name": "Ship To City",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.CITY1",
+            "sourceColumn": "ShipToCity"
           }
         ],
         "partitions": [
@@ -1922,9 +2578,9 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToAddrKey\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToName\", \"ShipToCity\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -1955,7 +2611,13 @@
             "name": "Enter Date",
             "dataType": "dateTime",
             "sourceColumn": "EnterDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Reference Number",
@@ -2009,7 +2671,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
                 "in",
@@ -2119,7 +2781,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BLOCK\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_BLOCK,{\"MaterialNoKey\", \"BatchNoKey\", \"NotificationNoKey\", \"PlantNo\", \"StorageLoc\", \"SBlockQuantityValue\", \"SBlockAmountUSD\", \"QBlockQuantityValue\", \"QBlockAmountUSD\"})",
                 "in",
@@ -2145,25 +2807,44 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNo"
           },
           {
             "name": "Manufacturing Date",
             "dataType": "dateTime",
             "sourceColumn": "MfgDate",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Goods Receipt Date",
             "dataType": "dateTime",
             "sourceColumn": "GoodsReceiptDate",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Expiration Date",
             "dataType": "dateTime",
             "sourceColumn": "ExpirationDate",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Quantity",
@@ -2196,7 +2877,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_EXPIRED = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_EXPIRED\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_EXPIRED,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"ExpiredQuantityValue\", \"StockAmountUSD\", \"ExpiredAmountUSD\"})",
                 "in",
@@ -2213,7 +2894,13 @@
             "name": "Snapshot Date",
             "dataType": "dateTime",
             "sourceColumn": "SnapshotDateKey",
-            "formatString": "MM/dd/yyyy"
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Plant",
@@ -2283,7 +2970,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_DAILY_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"DAILY_INVENTORY_BLOCK\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_DAILY_INVENTORY_BLOCK,{{\"SnapshotDateKey\", type date}}),",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"SnapshotDateKey\", \"PlantNoKey\", \"SBlockValueUSD\", \"QBlockValueUSD\", \"ExpiredValueUSD\"})",
@@ -2367,7 +3054,14 @@
             "dataType": "dateTime",
             "description": "SAP Source: AUSP.ATFLV",
             "sourceColumn": "CommercializationDate",
-            "displayFolder": "Classification"
+            "formatString": "Short Date",
+            "displayFolder": "Classification",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Film Type",
@@ -2428,7 +3122,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_MATERIAL_MASTER = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_MATERIAL_MASTER"
@@ -2484,7 +3178,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COST_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_CENTER_NAMES\"]}[Data],",
                 "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_CENTER_NAMES, \"DepartmentSortKey\", each if [Department] = \"COMP\" then 0",
                 "else if [Department] = \"CAST\" then 1",
@@ -2559,7 +3253,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data]",
                 "in",
                 "    dbo_VW_COST_ELEMENT_NAMES"
@@ -2571,7 +3265,6 @@
       {
         "name": "Plant",
         "description": "List of warehouse numbers in SAP (best used for filtering/grouping by plant across multiple fact tables)",
-        "isHidden": true,
         "columns": [
           {
             "name": "Plant",
@@ -2594,7 +3287,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_PLANT = Source{[Schema=\"dbo\",Item=\"VW_PLANT\"]}[Data]",
                 "in",
                 "    dbo_VW_PLANT"
@@ -2632,7 +3325,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SPECAPPROVAL_PENDING = Source{[Schema=\"dbo\",Item=\"VW_SPECAPPROVAL_PENDING\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SPECAPPROVAL_PENDING,{\"ApproverName\", \"Department\", \"PendingCount\"})",
                 "in",
@@ -2678,11 +3371,11 @@
             "name": "Posting Date",
             "dataType": "dateTime",
             "sourceColumn": "PostingDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -2690,11 +3383,11 @@
             "name": "Creation Date",
             "dataType": "dateTime",
             "sourceColumn": "CreateDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -2702,11 +3395,11 @@
             "name": "Document Date",
             "dataType": "dateTime",
             "sourceColumn": "DocumentDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -2827,7 +3520,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_EXPENSES = Source{[Schema=\"dbo\",Item=\"VW_EXPENSES\"]}[Data]",
                 "in",
                 "    dbo_VW_EXPENSES"
@@ -2850,79 +3543,93 @@
           {
             "name": "Purchase Order Number",
             "dataType": "string",
+            "description": "SAP Source: EKKO.EBELN",
             "sourceColumn": "PurchaseOrderNoKey"
           },
           {
             "name": "Purchase Line Number",
             "dataType": "string",
+            "description": "SAP Source: EKPO.EBELN",
             "sourceColumn": "PurchaseOrderLineNo"
           },
           {
             "name": "Document Date",
             "dataType": "dateTime",
+            "description": "SAP Source: EKKO.AEDAT",
             "sourceColumn": "DocumentDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
           {
             "name": "VendorNoKey",
             "dataType": "string",
+            "description": "SAP Source: EKKO.LIFNR",
             "isHidden": true,
             "sourceColumn": "VendorNoKey"
           },
           {
             "name": "Material Group",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MATKL",
             "sourceColumn": "MaterialGroup"
           },
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MATNR",
             "sourceColumn": "MaterialNoKey"
           },
           {
             "name": "Material Description",
             "dataType": "string",
+            "description": "SAP Source: EKPO.TXZ01",
             "sourceColumn": "MaterialText"
           },
           {
             "name": "Req Track Number",
             "dataType": "string",
+            "description": "SAP Source: EKPO.BEDNR",
             "sourceColumn": "RequisitionTrackNo"
           },
           {
             "name": "Unit Price",
             "dataType": "double",
+            "description": "SAP Source: EKPO.NETPR",
             "sourceColumn": "UnitPrice"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MEINS",
             "sourceColumn": "UnitOfMeasure"
           },
           {
             "name": "Document Type",
             "dataType": "string",
+            "description": "SAP Source: EKKO.BSART",
             "sourceColumn": "PurchaseDocType"
           },
           {
             "name": "Is Complete Delivery",
             "dataType": "string",
+            "description": "SAP Source: EKPO.ELIKZ",
             "sourceColumn": "CompleteDeliverIndicator"
           },
           {
             "name": "Is Goods Receipt Required",
             "dataType": "string",
+            "description": "SAP Source: EKPO.WEPOS",
             "sourceColumn": "GoodsReceiptIndicator"
           },
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
+            "description": "SAP Source: EKET.SLFDT",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "MM/dd/yyyy",
             "annotations": [
@@ -2935,46 +3642,70 @@
           {
             "name": "Issuing Plant",
             "dataType": "string",
+            "description": "SAP Source: EKKO.RESWK",
             "sourceColumn": "IssuingPlantNo"
           },
           {
             "name": "Receiving Plant",
             "dataType": "string",
+            "description": "SAP Source: EKPO.WERKS",
             "sourceColumn": "ReceivingPlantNo"
           },
           {
             "name": "Material Type",
             "dataType": "string",
+            "description": "SAP Source: EKPO.MTART",
             "sourceColumn": "MaterialType"
           },
           {
             "name": "Currency",
             "dataType": "string",
+            "description": "SAP Source: EKKO.WAERS",
             "sourceColumn": "Currency"
           },
           {
             "name": "Ordered Quantity",
             "dataType": "double",
+            "description": "SAP Source: EKPO.MENGE",
             "sourceColumn": "OrderedQuantity",
+            "formatString": "#,0.00",
             "displayFolder": "_Quantities"
           },
           {
             "name": "Ordered Amount",
             "dataType": "double",
+            "description": "SAP Source: EKPO.NETWR",
             "sourceColumn": "OrderedAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values"
           },
           {
             "name": "Open Quantity",
             "dataType": "double",
+            "description": "Difference between the ordered and delivered quantity. SAP Source: EKPO.MENGE and EKET.WEMNG",
             "sourceColumn": "OpenQuantity",
+            "formatString": "#,0.00",
             "displayFolder": "_Quantities"
           },
           {
             "name": "Open Amount",
             "dataType": "double",
+            "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
             "sourceColumn": "OpenAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values"
+          },
+          {
+            "name": "Purchase Order Unit",
+            "dataType": "string",
+            "description": "SAP Source: EKPO.BPRME",
+            "sourceColumn": "POUnitOfMeasure"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: EKKO.BUKRS",
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -2985,7 +3716,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_PURCHASE_ORDERS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE\"]}[Data]",
                 "in",
                 "    dbo_VW_PURCHASE_ORDERS"
@@ -3195,7 +3926,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zPROCESSDATE_REPORTS = Source{[Schema=\"dbo\",Item=\"zPROCESSDATE_REPORTS\"]}[Data]",
                 "in",
                 "    dbo_zPROCESSDATE_REPORTS"
@@ -3237,7 +3968,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zTARGETS_EXPENSES = Source{[Schema=\"dbo\",Item=\"zTARGETS_EXPENSES\"]}[Data]",
                 "in",
                 "    dbo_zTARGETS_EXPENSES"
@@ -3344,7 +4075,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data],",
                 "    #\"Removed Duplicates\" = Table.Distinct(dbo_VW_REASON_CODE, {\"ReasonCodeKey\"})",
                 "in",
@@ -3356,7 +4087,7 @@
                 "name": "QueryEditorSerialization",
                 "value": [
                   "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>let",
-                  "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                  "    Source = #\"ARLPBI_STAGE\",",
                   "    dbo_VW_REASON_CODE = Source{[Schema=\"dbo\",Item=\"VW_REASON_CODE\"]}[Data]",
                   "in",
                   "    dbo_VW_REASON_CODE</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
@@ -3378,7 +4109,14 @@
           {
             "name": "Credit Issued Date",
             "dataType": "dateTime",
-            "sourceColumn": "CreditDateKey"
+            "sourceColumn": "CreditDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           },
           {
             "name": "Credit Issued Amount",
@@ -3401,7 +4139,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COMPLAINTS_CREDITED = Source{[Schema=\"dbo\",Item=\"VW_COMPLAINTS_CREDITED\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_COMPLAINTS_CREDITED,{\"ComplaintLineKey\", \"CreditDateKey\", \"CreditIssueValueUSD\"})",
                 "in",
@@ -3439,7 +4177,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zTARGETS_KPI = Source{[Schema=\"dbo\",Item=\"zTARGETS_KPI\"]}[Data]",
                 "in",
                 "    dbo_zTARGETS_KPI"
@@ -3450,6 +4188,7 @@
       },
       {
         "name": "Sales Order Documents",
+        "description": "SAP Source: VBAK, VBAP, VBUK, VBUP, VBUK, VBPA, VBEP, LIKP, LIPS, and KNMT; Granularity: One row per sales order document and line number; Contains general and status information about sales order documents.",
         "columns": [
           {
             "name": "OrderNoLineKey",
@@ -3480,11 +4219,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: VBAK.ERDAT",
             "sourceColumn": "EnterDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -3493,11 +4232,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: VBEP.EDATU",
             "sourceColumn": "FirstDeliveryDateKey",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -3506,11 +4245,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: LIKP.WADAT_IST; If the values is 12/31/9999, then there is no PGI date for the sales order item",
             "sourceColumn": "LastPgiDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -3575,7 +4314,7 @@
             "sourceColumn": "CreditBlock"
           },
           {
-            "name": "Overall Block",
+            "name": "Processing Status",
             "dataType": "string",
             "description": "SAP Source: VBUK.GBSTA",
             "sourceColumn": "OverallBlock"
@@ -3818,7 +4557,40 @@
             "name": "In Stock",
             "dataType": "int64",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
+            "isHidden": true,
             "sourceColumn": "InStockIndicator"
+          },
+          {
+            "name": "Has Changes (CS)",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "HasChanges_CS"
+          },
+          {
+            "name": "Customer Open Margin Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "CustomerOpenMarginAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Customer Open Margin Amount (Local)",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "CustomerOpenMarginAmount",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Tier",
+            "dataType": "string",
+            "description": "SAP Source: MARC.MAABC",
+            "sourceColumn": "TierCode"
           }
         ],
         "partitions": [
@@ -3829,58 +4601,10 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_ORDER_SALES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES\"]}[Data]",
                 "in",
                 "    dbo_VW_ORDER_SALES"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Addresses",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "AddressNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "AddressNoKey"
-          },
-          {
-            "name": "Name",
-            "dataType": "string",
-            "sourceColumn": "Name"
-          },
-          {
-            "name": "City",
-            "dataType": "string",
-            "sourceColumn": "City"
-          },
-          {
-            "name": "Street",
-            "dataType": "string",
-            "sourceColumn": "Street"
-          },
-          {
-            "name": "Country",
-            "dataType": "string",
-            "sourceColumn": "Country"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
-                "    dbo_VW_ADDRESS_INFO = Source{[Schema=\"dbo\",Item=\"VW_ADDRESS_INFO\"]}[Data]",
-                "in",
-                "    dbo_VW_ADDRESS_INFO"
               ]
             }
           }
@@ -3909,7 +4633,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES_REGION = Source{[Schema=\"dbo\",Item=\"VW_SALES_REGION\"]}[Data]",
                 "in",
                 "    dbo_VW_SALES_REGION"
@@ -3941,7 +4665,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_SALES_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_SALES_TERRITORY\"]}[Data]",
                 "in",
                 "    dbo_VW_SALES_TERRITORY"
@@ -3978,7 +4702,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_RLS_TERRITORY = Source{[Schema=\"dbo\",Item=\"VW_RLS_TERRITORY\"]}[Data]",
                 "in",
                 "    dbo_VW_RLS_TERRITORY"
@@ -4015,7 +4739,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_RLS_REGION = Source{[Schema=\"dbo\",Item=\"VW_RLS_REGION\"]}[Data]",
                 "in",
                 "    dbo_VW_RLS_REGION"
@@ -4071,7 +4795,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_zTARGETS_SALES = Source{[Schema=\"dbo\",Item=\"zTARGETS_SALES\"]}[Data]",
                 "in",
                 "    dbo_zTARGETS_SALES"
@@ -4108,7 +4832,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_RLS_COSTCENTER = Source{[Schema=\"dbo\",Item=\"VW_RLS_COSTCENTER\"]}[Data]",
                 "in",
                 "    dbo_VW_RLS_COSTCENTER"
@@ -4249,7 +4973,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data]",
                 "in",
                 "    dbo_VW_INVENTORY_INTRANSIT"
@@ -4309,11 +5033,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: BSIS/BSAS.BLDAT",
             "sourceColumn": "DocumentDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4322,11 +5046,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: BSIS/BSAS.BUDAT",
             "sourceColumn": "PostingDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4341,6 +5065,12 @@
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.GJAHR",
             "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "First GR Year",
+            "dataType": "string",
+            "description": "First year of posted goods receipt based on assignment number",
+            "sourceColumn": "FirstGRYear"
           },
           {
             "name": "Material Number",
@@ -4417,11 +5147,11 @@
             "dataType": "dateTime",
             "description": "SAP Source: BSIS/BSAS.AUGDT",
             "sourceColumn": "ClearingDate",
-            "formatString": "MM/dd/yyyy",
+            "formatString": "Short Date",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
           },
@@ -4450,20 +5180,6 @@
             "sourceColumn": "PurchaseOrderLineNo"
           },
           {
-            "name": "Vendor Number",
-            "dataType": "string",
-            "description": "SAP Source: EKKO.LIFNR",
-            "isHidden": true,
-            "sourceColumn": "VendorNoKey"
-          },
-          {
-            "name": "Customer Number",
-            "dataType": "string",
-            "description": "SAP Source: ACCTIT.KUNNR",
-            "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
-          },
-          {
             "name": "Process Order Number",
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.AUFNR",
@@ -4482,10 +5198,29 @@
             "sourceColumn": "ItemText"
           },
           {
-            "name": "First GR Year",
+            "name": "Vendor Number",
             "dataType": "string",
-            "description": "First year of posted goods receipt based on assignment number",
-            "sourceColumn": "FirstGRYear"
+            "description": "SAP Source: EKKO.LIFNR",
+            "isHidden": true,
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.KUNNR",
+            "isHidden": true,
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "PostingRank",
+            "dataType": "int64",
+            "sourceColumn": "PostingRank"
+          },
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
           }
         ],
         "partitions": [
@@ -4496,7 +5231,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS = Source{[Schema=\"dbo\",Item=\"VW_GOODS_AND_INVOICE_RECEIPTS\"]}[Data]",
                 "in",
                 "    dbo_VW_GOODS_AND_INVOICE_RECEIPTS"
@@ -4532,10 +5267,392 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"SQL/ARLPBIDEV;ARLPBI_STAGE\",",
+                "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_VENDOR_MASTER = Source{[Schema=\"dbo\",Item=\"VW_VENDOR_MASTER\"]}[Data]",
                 "in",
                 "    dbo_VW_VENDOR_MASTER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Order Invoices",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Material Document Number",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.BELNR",
+            "sourceColumn": "MaterialDocNo"
+          },
+          {
+            "name": "Material Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.BUZEI",
+            "sourceColumn": "MaterialLineNo"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: EKBE.BUDAT",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "PostingRank",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "PostingRank"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.BPMNG; Value is in purchase order unit (see 'Purchase Orders' table)",
+            "sourceColumn": "InvoiceQty",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "description": "SAP Source: EKBE.WAERS",
+            "sourceColumn": "InvoiceCurrency"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "description": "SAP Source: EKBE.REEWR",
+            "sourceColumn": "InvoiceValue",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Amount at Last PY Price",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "InvoiceValue_LastPYPrice"
+          },
+          {
+            "name": "Last PY Quantity",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LastInvoiceQty_PY"
+          },
+          {
+            "name": "Last PY Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LastInvoiceValue_PY",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Price Difference",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "PriceDifference",
+            "formatString": "#,0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PURCHASE_INVOICES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE_INVOICES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PURCHASE_INVOICES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Absorption",
+        "columns": [
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElementKey"
+          },
+          {
+            "name": "Business Transaction Type",
+            "dataType": "string",
+            "sourceColumn": "BusTransType"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "QuantityValue",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "AmountValue",
+            "formatString": "0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_ABSORPTION\"]}[Data]",
+                "in",
+                "    dbo_VW_ABSORPTION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "SAP Users",
+        "description": "SAP Source: USR21 and ADCP",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "UsernameKey",
+            "dataType": "string",
+            "description": "SAP Source: USR21.BNAME",
+            "sourceColumn": "UsernameKey"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "description": "SAP Source: ADCP.DEPARTMENT",
+            "sourceColumn": "Department"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_USERS_SAP = Source{[Schema=\"dbo\",Item=\"VW_USERS_SAP\"]}[Data]",
+                "in",
+                "    dbo_VW_USERS_SAP"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Order Document Changes",
+        "description": "SAP Source: CDHDR; Granularity: Multiple rows per sales order document number",
+        "columns": [
+          {
+            "name": "OrderNoKey",
+            "dataType": "string",
+            "description": "SAP Source: CDHDR.OBJECTID",
+            "isHidden": true,
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Changed By",
+            "dataType": "string",
+            "description": "SAP Source: CDHDR.USERNAME",
+            "sourceColumn": "ChangedBy"
+          },
+          {
+            "name": "Change Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: CDHDR.UDATE",
+            "sourceColumn": "ChangedDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Change Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: CDHDR.UTIME",
+            "sourceColumn": "ChangedTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_SALES_CHANGES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES_CHANGES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_SALES_CHANGES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Orders - Deliveries",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "First Delivery Date",
+            "dataType": "dateTime",
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Open Quantity",
+            "dataType": "double",
+            "sourceColumn": "OpenQuantity",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Open Amount",
+            "dataType": "double",
+            "sourceColumn": "OpenAmount",
+            "formatString": "#,0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PURCHASE_DELIVERIES = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PURCHASE_DELIVERIES\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PURCHASE_DELIVERIES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Backorder Snapshots",
+        "description": "A daily snapshot (near midnight) of backordered sales orders; Each value is the daily closing backorder value per plant, material type, and order type.",
+        "columns": [
+          {
+            "name": "Snapshot Date",
+            "dataType": "dateTime",
+            "sourceColumn": "SnapshotDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType"
+          },
+          {
+            "name": "Incoming",
+            "dataType": "double",
+            "sourceColumn": "Incoming",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Outgoing",
+            "dataType": "double",
+            "sourceColumn": "Outgoing",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Order Type",
+            "dataType": "string",
+            "sourceColumn": "OrderType"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_zDAILY_BACKORDER = Source{[Schema=\"dbo\",Item=\"zDAILY_BACKORDER\"]}[Data]",
+                "in",
+                "    dbo_zDAILY_BACKORDER"
               ]
             }
           }
@@ -4638,13 +5755,6 @@
       {
         "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
         "fromTable": "Blocked Inventory",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
-        "name": "82e0b1e4-2025-48e8-ade7-938129650e46",
-        "fromTable": "Expired Inventory",
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
@@ -4783,13 +5893,6 @@
         "securityFilteringBehavior": "bothDirections"
       },
       {
-        "name": "20adfd74-cda0-42a6-bf53-9198127d8dc5",
-        "fromTable": "Sales Invoice Documents",
-        "fromColumn": "ShipToAddrKey",
-        "toTable": "Addresses",
-        "toColumn": "AddressNoKey"
-      },
-      {
         "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
         "fromTable": "Customer Master",
         "fromColumn": "Sales Region",
@@ -4802,13 +5905,6 @@
         "fromColumn": "Sales Territory",
         "toTable": "Sales Territory",
         "toColumn": "Sales Territory"
-      },
-      {
-        "name": "49a4a367-97a4-4d97-af26-ec8affd1d7e1",
-        "fromTable": "Expenses",
-        "fromColumn": "PlantNoKey",
-        "toTable": "Plant",
-        "toColumn": "Plant"
       },
       {
         "name": "dc5f18dd-e738-46d9-a5c9-5306f5255523",
@@ -4834,11 +5930,120 @@
         "toColumn": "Date"
       },
       {
-        "name": "fbae78f6-7c76-4020-8ea5-a7b4e3b3f4d8",
+        "name": "982c3aae-a31d-40c1-92a1-5b55611d01da",
+        "fromTable": "Purchase Order Invoices",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "ba1918f0-89e6-4284-93df-d56a390a189e",
+        "fromTable": "Purchase Order Invoices",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "ce291ef4-f6d6-43db-989e-e636805941b6",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "VendorNoKey",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
+      },
+      {
+        "name": "2c9b5b75-14a7-45ae-849d-a78e7f8033cd",
         "fromTable": "Goods and Invoice Receipts",
         "fromColumn": "Vendor Number",
         "toTable": "Vendor Master",
         "toColumn": "Vendor Number"
+      },
+      {
+        "name": "d3f017b1-44bd-4645-8deb-8c26d0ecde96",
+        "fromTable": "Absorption",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "aa32963f-d2e9-4965-839d-1354c85503d6",
+        "fromTable": "Absorption",
+        "fromColumn": "Cost Element",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "749c05b1-49f2-4a5c-899b-3801eaaa0f52",
+        "fromTable": "Absorption",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "be0acd87-ca5c-487c-9366-d05855204388",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "Entered By",
+        "toTable": "SAP Users",
+        "toColumn": "UsernameKey"
+      },
+      {
+        "name": "2db43657-5faa-4957-981b-1815c9ecf050",
+        "toCardinality": "many",
+        "fromTable": "Sales Order Document Changes",
+        "fromColumn": "OrderNoKey",
+        "toTable": "Sales Order Documents",
+        "toColumn": "Order Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "3df54883-286b-415a-a9ca-e9431f57d2f4",
+        "fromTable": "Sales Order Document Changes",
+        "fromColumn": "Changed By",
+        "toTable": "SAP Users",
+        "toColumn": "UsernameKey"
+      },
+      {
+        "name": "9428d940-fbc3-4bdb-8689-20a209035670",
+        "fromTable": "Purchase Orders - Deliveries",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Orders",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "48cb8180-79ac-45f5-b7ad-8912c6e44e15",
+        "fromTable": "Purchase Orders - Deliveries",
+        "fromColumn": "First Delivery Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "d1ed3275-cbe1-4844-937e-a4d48686f5a3",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "56e0be47-1a9b-4c43-8428-32b03121860a",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "38ba1433-fc53-4068-aa51-5947fcc2ae49",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "c8527d3a-4ba0-4eee-b9b7-2e8ab62b7327",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "Receiving Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -4956,6 +6161,18 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -5285,6 +6502,18 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -5379,17 +6608,6 @@
               },
               {
                 "name": "Material Description"
-              }
-            ]
-          },
-          {
-            "name": "Plant",
-            "columns": [
-              {
-                "name": "Description"
-              },
-              {
-                "name": "Plant"
               }
             ]
           },
@@ -5560,6 +6778,18 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -5769,7 +6999,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Route Type"
@@ -5963,6 +7193,18 @@
               },
               {
                 "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -6131,6 +7373,27 @@
               },
               {
                 "name": "MTD Gross Sales Budget"
+              },
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Amount"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
               }
             ]
           },
@@ -6242,16 +7505,10 @@
                 "name": "Invoice Date"
               },
               {
-                "name": "ShipToAddrKey"
-              },
-              {
                 "name": "Quantity Unit"
               },
               {
                 "name": "Exchange Rate"
-              },
-              {
-                "name": "Ship To Name"
               },
               {
                 "name": "Currency"
@@ -6261,6 +7518,12 @@
               },
               {
                 "name": "Was New Product"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Ship To City"
               }
             ]
           },
@@ -6358,7 +7621,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -6409,7 +7672,7 @@
         ]
       },
       {
-        "name": "BI Morning Report",
+        "name": "BI Morning Dashboard",
         "tables": [
           {
             "name": "_Refresh Date",
@@ -6495,6 +7758,18 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -6657,6 +7932,36 @@
               },
               {
                 "name": "MTD Gross Sales & Backorder Margin%"
+              },
+              {
+                "name": "Backorder Amount (Beyond Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Current Month)"
+              },
+              {
+                "name": "Backorder Amount (Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Past Due)"
+              },
+              {
+                "name": "Backorder Margin"
+              },
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Earned Labor"
+              },
+              {
+                "name": "Earned Overhead"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD PY Absorption"
               }
             ]
           },
@@ -6775,12 +8080,6 @@
               },
               {
                 "name": "Quantity Unit"
-              },
-              {
-                "name": "Ship To Name"
-              },
-              {
-                "name": "ShipToAddrKey"
               }
             ]
           },
@@ -6884,7 +8183,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -6909,6 +8208,49 @@
               },
               {
                 "name": "Customer Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "DepartmentSortKey"
+              },
+              {
+                "name": "Operations Category"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Sub Category"
               }
             ]
           }
@@ -6965,9 +8307,6 @@
                 "name": "Sales Territory"
               },
               {
-                "name": "Sales Territory Name"
-              },
-              {
                 "name": "SalesRegionSortKey"
               }
             ]
@@ -7022,6 +8361,18 @@
               },
               {
                 "name": "PO Ordered Quantity"
+              },
+              {
+                "name": "PD PO Backorder Amount"
+              },
+              {
+                "name": "PD Var PO Open Amount"
+              },
+              {
+                "name": "PD SO Customer Open Amount"
+              },
+              {
+                "name": "PD Var SO Customer Open Amount"
               }
             ]
           },
@@ -7181,7 +8532,7 @@
                 "name": "Organization"
               },
               {
-                "name": "Overall Block"
+                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -7291,6 +8642,18 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -7423,6 +8786,57 @@
               },
               {
                 "name": "VendorNoKey"
+              },
+              {
+                "name": "Purchase Order Unit"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Snapshots",
+            "columns": [
+              {
+                "name": "Incoming"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Outgoing"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Order Type"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
               }
             ]
           }
@@ -7512,6 +8926,18 @@
               },
               {
                 "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
               }
             ],
             "hierarchies": [
@@ -7618,6 +9044,12 @@
               },
               {
                 "name": "Vendor Number"
+              },
+              {
+                "name": "PostingRank"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -7712,6 +9144,1065 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Purchase Orders",
+        "tables": [
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order Invoices",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "PostingRank"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Amount at Last PY Price"
+              },
+              {
+                "name": "Last PY Quantity"
+              },
+              {
+                "name": "Last PY Amount"
+              },
+              {
+                "name": "Price Difference"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Is Complete Delivery"
+              },
+              {
+                "name": "Is Goods Receipt Required"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Open Quantity"
+              },
+              {
+                "name": "Ordered Amount"
+              },
+              {
+                "name": "Ordered Quantity"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "VendorNoKey"
+              },
+              {
+                "name": "Purchase Order Unit"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Vendor Master",
+            "columns": [
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "FYTD Last PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD Last PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "FYTD Last PO Invoice Receipt Unit Price"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Amount in PY Price"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "FYTD PO Invoice Receipt Unit Price"
+              },
+              {
+                "name": "FYTD Purchase Price Difference"
+              },
+              {
+                "name": "FYTD PY Last PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD PY Last PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "PO Delivered Quantity"
+              },
+              {
+                "name": "PO In Transit Quantity"
+              },
+              {
+                "name": "PO Invoice Receipt Amount"
+              },
+              {
+                "name": "PO Invoice Receipt Quantity"
+              },
+              {
+                "name": "PO Open Amount"
+              },
+              {
+                "name": "PO Open Quantity"
+              },
+              {
+                "name": "PO Ordered Amount"
+              },
+              {
+                "name": "PO Ordered Quantity"
+              },
+              {
+                "name": "FYTD PY Last PO Invoice Receipt Unit Price"
+              },
+              {
+                "name": "FYTD Purchase Price Index"
+              },
+              {
+                "name": "FYTD Purchase Price Index%"
+              },
+              {
+                "name": "FYTD PY PO Invoice Receipt Amount"
+              },
+              {
+                "name": "FYTD PY PO Invoice Receipt Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Absorption",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Business Transaction Type"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "DepartmentSortKey"
+              },
+              {
+                "name": "Operations Category"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Earned Labor"
+              },
+              {
+                "name": "Earned Overhead"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD PY Absorption"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Sales Orders",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Customer Master",
+            "columns": [
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Sales Organization"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Documents",
+            "columns": [
+              {
+                "name": "Allocated Quantity"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Cost Amount Local"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Customer Material Number"
+              },
+              {
+                "name": "Customer Open Amount"
+              },
+              {
+                "name": "Customer Open Amount Local"
+              },
+              {
+                "name": "Customer Open Quantity"
+              },
+              {
+                "name": "CustomerNoKey"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "External Purchase Order Number"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "In Stock"
+              },
+              {
+                "name": "Internal Open Amount"
+              },
+              {
+                "name": "Internal Open Amount Local"
+              },
+              {
+                "name": "Internal Open Quantity"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Amount Local"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Organization"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "ReasonCodeKey"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Ship To City"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Shipped Quantity"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Has Changes (CS)"
+              },
+              {
+                "name": "Customer Open Margin Amount"
+              },
+              {
+                "name": "Customer Open Margin Amount (Local)"
+              },
+              {
+                "name": "Tier"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Backorder Amount"
+              },
+              {
+                "name": "Backorder Amount (Beyond Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Current Month)"
+              },
+              {
+                "name": "Backorder Amount (Next Month)"
+              },
+              {
+                "name": "Backorder Amount (Past Due)"
+              },
+              {
+                "name": "Backorder Margin"
+              },
+              {
+                "name": "FYTD PY Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "FYTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "FYTD Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "MTD Sales Order Amount"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Sales Order Cost Amount"
+              },
+              {
+                "name": "Sales Order Count"
+              },
+              {
+                "name": "Sales Order Line Count"
+              },
+              {
+                "name": "Sales Order Lines Automated"
+              },
+              {
+                "name": "Sales Order Lines Automated Entry%"
+              },
+              {
+                "name": "Sales Order Margin"
+              },
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Amount"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "Sales Order Lines Manual"
+              },
+              {
+                "name": "FYTD PY Sales Order Line Count"
+              },
+              {
+                "name": "FYTD Sales Order Line Count"
+              },
+              {
+                "name": "FYTD Sales Order Lines Automated Entry%"
+              },
+              {
+                "name": "MTD Sales Order Lines Automated Entry%"
+              },
+              {
+                "name": "MTD Sales Order Line Count"
+              },
+              {
+                "name": "FYTD Sales Order Automation Efficiency%"
+              },
+              {
+                "name": "MTD Sales Order Automation Efficiency%"
+              },
+              {
+                "name": "Sales Order Automation Efficiency%"
+              },
+              {
+                "name": "Sales Order Lines Automated (No Changes)"
+              },
+              {
+                "name": "Sales Order Lines Manual Entry%"
+              },
+              {
+                "name": "Sales Order Line Count (Automated + Manual)"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Document Changes",
+            "columns": [
+              {
+                "name": "Change Date"
+              },
+              {
+                "name": "Change Time"
+              },
+              {
+                "name": "Changed By"
+              },
+              {
+                "name": "OrderNoKey"
+              }
+            ]
+          }
+        ]
       }
     ],
     "roles": [
@@ -7767,6 +10258,26 @@
           {
             "memberName": "DOMAIN\\jjing",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
+          },
+          {
+            "memberName": "DOMAIN\\bmoore",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21012"
+          },
+          {
+            "memberName": "DOMAIN\\sdong",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
+          },
+          {
+            "memberName": "DOMAIN\\rraymundo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2857"
+          },
+          {
+            "memberName": "DOMAIN\\kbesse",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8862"
+          },
+          {
+            "memberName": "DOMAIN\\mqadir",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
           }
         ]
       },
@@ -8238,6 +10749,10 @@
           {
             "memberName": "DOMAIN\\nmartino",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8641"
+          },
+          {
+            "memberName": "DOMAIN\\xcai",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21504"
           }
         ],
         "tablePermissions": [

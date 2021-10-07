@@ -2313,6 +2313,37 @@
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "PD SO Customer Open Amount",
+            "description": "Sum of open TA and ZCON sales orders with with active/pre-launch product status, no credit block, has product tier code, and scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date]). Excludes BURLINGTON GRAPHICS customer.",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM('Backorder Snapshots'[Outgoing]),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Material Master'[Material Type] ),",
+              "        'Backorder Snapshots'[Material Type]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Sales Order Documents'[Order Type] ),",
+              "        'Backorder Snapshots'[Order Type]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD Var SO Customer Open Amount",
+            "description": "Variance of SO Customer Open Amount to prior day's open amount (PD SO Customer Open Amount) which is the sum of open TA and ZCON sales orders with with active/pre-launch product status, no credit block, has product tier code, and scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "expression": " [SO Customer Open Amount] - [PD SO Customer Open Amount]",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -8336,6 +8367,12 @@
               },
               {
                 "name": "PD Var PO Open Amount"
+              },
+              {
+                "name": "PD SO Customer Open Amount"
+              },
+              {
+                "name": "PD Var SO Customer Open Amount"
               }
             ]
           },
@@ -10237,6 +10274,10 @@
           {
             "memberName": "DOMAIN\\kbesse",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8862"
+          },
+          {
+            "memberName": "DOMAIN\\mqadir",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
           }
         ]
       },

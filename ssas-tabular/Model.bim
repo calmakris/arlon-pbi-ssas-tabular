@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -1533,7 +1532,13 @@
           {
             "name": "SO Internal Open Quantity",
             "description": "If processing status is not complete, this value is ordered minus allocated minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Internal Open Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
@@ -1566,7 +1571,8 @@
               "            SUM( 'Sales Order Documents'[Internal Open Amount] )",
               "        ),",
               "        SUM( 'Sales Order Documents'[Internal Open Amount] )   ",
-              "    )",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
@@ -3107,11 +3113,32 @@
           },
           {
             "name": "Is New Product",
-            "dataType": "boolean",
+            "dataType": "int64",
             "description": "Indicates whether the material is less than or equal to 3 years as of today from Commercialization Date",
             "sourceColumn": "IsNewProduct",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
             "displayFolder": "Classification"
+          },
+          {
+            "name": "Length (ft)",
+            "dataType": "double",
+            "description": "SAP Source: MARM.LAENG; Some data cleanup is involved.",
+            "sourceColumn": "LengthValue",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Width (in)",
+            "dataType": "double",
+            "description": "SAP Source: MARM.BREIT. Some data cleanup is involved.",
+            "sourceColumn": "WidthValue",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Square Feet",
+            "dataType": "double",
+            "description": "Product of length and width (in to ft)",
+            "sourceColumn": "SquareFeetValue",
+            "formatString": "#,0"
           }
         ],
         "partitions": [
@@ -6898,6 +6925,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -7450,6 +7486,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -8018,6 +8063,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -8429,6 +8483,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -9106,6 +9169,15 @@
               },
               {
                 "name": "Material Number - Description"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -9492,6 +9564,15 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -9820,6 +9901,15 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },

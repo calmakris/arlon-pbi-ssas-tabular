@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIDEV",
+            "server": "ARLPBIPRD",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -19,8 +19,6 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3122,23 +3120,26 @@
           {
             "name": "Length (ft)",
             "dataType": "double",
-            "description": "SAP Source: MARM.LAENG; Some data cleanup is involved.",
+            "description": "SAP Source: MARM.LAENG OR MARM.UMREN; Some data cleanup is involved.",
             "sourceColumn": "LengthValue",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "displayFolder": "Dimensions"
           },
           {
             "name": "Width (in)",
             "dataType": "double",
             "description": "SAP Source: MARM.BREIT. Some data cleanup is involved.",
             "sourceColumn": "WidthValue",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "displayFolder": "Dimensions"
           },
           {
             "name": "Square Feet",
             "dataType": "double",
             "description": "Product of length and width (in to ft)",
             "sourceColumn": "SquareFeetValue",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "displayFolder": "Dimensions"
           }
         ],
         "partitions": [
@@ -6415,6 +6416,54 @@
               },
               {
                 "name": "Material Type"
+              },
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "X Distribution Status"
               }
             ]
           },

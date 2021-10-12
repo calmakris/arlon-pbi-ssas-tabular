@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -634,6 +636,13 @@
           {
             "type": "calculated",
             "name": "Absorption Measure",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "CONV Dashboard",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -2349,6 +2358,89 @@
             "expression": " [SO Customer Open Amount] - [PD SO Customer Open Amount]",
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "GR Footage",
+            "description": "Total footage of postings with movement types 101, 102, 531, and 532.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Goods Issues and Receipts'[Linear Feet] ),",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"555\", \"700\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GR Square Footage",
+            "description": "Total square footage of postings with movement types 101, 102, 531, and 532.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Goods Issues and Receipts'[Square Feet] ),",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"555\", \"700\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GI Footage",
+            "description": "Total footage of postings with movement types 261, 262, 551, and 552.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    ABS( SUM( 'Goods Issues and Receipts'[Linear Feet] ) ),",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"551\", \"262\", \"552\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\"}",
+              "            && 'Goods Issues and Receipts'[Reason Code] <> \"0000\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GI Scrap Rate",
+            "description": "GI Footage over GR Footage",
+            "expression": " DIVIDE( [GI Footage], [GR Footage] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Footage",
+            "expression": " SUM ('Goods Issues and Receipts'[Linear Feet])",
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Square Footage",
+            "expression": " SUM ('Goods Issues and Receipts'[Square Feet])",
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Quantity",
+            "expression": " SUM( 'Goods Issues and Receipts'[Quantity])",
+            "formatString": "#,0.00",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Amount",
+            "expression": " SUM( 'Goods Issues and Receipts'[Amount] )",
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
           }
         ]
       },
@@ -3121,7 +3213,7 @@
           {
             "name": "Length (ft)",
             "dataType": "double",
-            "description": "SAP Source: MARM.LAENG OR MARM.UMREN; Some data cleanup is involved.",
+            "description": "SAP Source: MARM.LAENG OR MARM.UMREN; Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "LengthValue",
             "formatString": "#,0",
             "displayFolder": "Dimensions"
@@ -3129,7 +3221,7 @@
           {
             "name": "Width (in)",
             "dataType": "double",
-            "description": "SAP Source: MARM.BREIT. Some data cleanup is involved.",
+            "description": "SAP Source: MARM.BREIT. Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "WidthValue",
             "formatString": "#,0.00",
             "displayFolder": "Dimensions"
@@ -3137,7 +3229,7 @@
           {
             "name": "Square Feet",
             "dataType": "double",
-            "description": "Product of length and width (in to ft)",
+            "description": "Product of length and width (in to ft). Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "SquareFeetValue",
             "formatString": "#,0",
             "displayFolder": "Dimensions"
@@ -4343,12 +4435,6 @@
             "sourceColumn": "CreditBlock"
           },
           {
-            "name": "Processing Status",
-            "dataType": "string",
-            "description": "SAP Source: VBUK.GBSTA",
-            "sourceColumn": "OverallBlock"
-          },
-          {
             "name": "Route Type",
             "dataType": "string",
             "description": "SAP Source: VBAP.ROUTE",
@@ -4620,6 +4706,11 @@
             "dataType": "string",
             "description": "SAP Source: MARC.MAABC",
             "sourceColumn": "TierCode"
+          },
+          {
+            "name": "Processing Status",
+            "dataType": "string",
+            "sourceColumn": "ProcessingBlock"
           }
         ],
         "partitions": [
@@ -5686,6 +5777,199 @@
             }
           }
         ]
+      },
+      {
+        "name": "Goods Issues and Receipts",
+        "description": "SAP Source: MKPF and MSEG.Contains postings of goods issue and goods receipts posted in the last 3 fiscal years.",
+        "columns": [
+          {
+            "name": "Material Document Number",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.MBLNR",
+            "sourceColumn": "MaterialDocNo"
+          },
+          {
+            "name": "Material Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.ZEILE",
+            "sourceColumn": "MaterialDocItemNo"
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.MJAHR",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.BWART",
+            "sourceColumn": "MovementType"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.MATNR",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.AUFNR",
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.CHARG",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.WERKS",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGORT",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "Storage Bin",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGPLA",
+            "sourceColumn": "StorageBin"
+          },
+          {
+            "name": "Storage Type",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGTYP",
+            "sourceColumn": "StorageType"
+          },
+          {
+            "name": "Reason Code",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.GRUND",
+            "sourceColumn": "ReasonCode"
+          },
+          {
+            "name": "Material Document Header Text",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.BKTXT",
+            "sourceColumn": "DocHeaderText"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Extracted from Document Header Text",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Posted By",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.USNAM",
+            "sourceColumn": "PostingUsername"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.BUDAT",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Posting Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.CPUTM",
+            "sourceColumn": "PostingTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Calculated from posting date and time. Production dates starts at 6AM and ends at 5:59AM the next day.",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.ERFME",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "description": "SAP Source: MSEG.ERFMG",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Linear Feet",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LinearFeet",
+            "formatString": "#,0",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Square Feet",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "SquareFeet",
+            "formatString": "#,0",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "description": "SAP Source: MSEG.DMBTR",
+            "sourceColumn": "Amount",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_TRANSACTIONS_MATERIAL = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_MATERIAL\"]}[Data]",
+                "in",
+                "    dbo_VW_TRANSACTIONS_MATERIAL"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -6073,6 +6357,20 @@
         "fromColumn": "Receiving Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "29b9c765-765f-47b2-99ab-83bc3b93a8b8",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "55be127a-f081-4dd0-ae15-9cea0b6b081c",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -7085,9 +7383,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Route Type"
               },
               {
@@ -7716,9 +8011,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Plant"
               },
               {
@@ -8287,9 +8579,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Plant"
               },
               {
@@ -8643,9 +8932,6 @@
               },
               {
                 "name": "Organization"
-              },
-              {
-                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -10339,6 +10625,289 @@
               },
               {
                 "name": "OrderNoKey"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "CONV Dashboard",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Goods Issues and Receipts",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "Linear Feet"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Material Document Header Text"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posted By"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Posting Time"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reason Code"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Unit of Measure"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "GI Footage"
+              },
+              {
+                "name": "GI Scrap Rate"
+              },
+              {
+                "name": "GR Footage"
+              },
+              {
+                "name": "GR Square Footage"
+              },
+              {
+                "name": "Yesterday"
+              },
+              {
+                "name": "GIR Amount"
+              },
+              {
+                "name": "GIR Footage"
+              },
+              {
+                "name": "GIR Quantity"
+              },
+              {
+                "name": "GIR Square Footage"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
               }
             ]
           }

@@ -1617,15 +1617,27 @@
           },
           {
             "name": "SO Allocated Quantity",
-            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Allocated Quantity] )",
+            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Allocated Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Shipped Quantity",
-            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Shipped Quantity] )",
+            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Shipped Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
@@ -2441,6 +2453,49 @@
             "expression": " SUM( 'Goods Issues and Receipts'[Amount] )",
             "formatString": "#,0",
             "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "SO Allocated Amount",
+            "description": "Total value of items in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Allocated Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Allocated Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Allocated Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Allocated Amount] )   ",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Shipped Amount",
+            "description": "Total value of items in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Shipped Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Shipped Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Shipped Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Shipped Amount] )   ",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
           }
         ]
       },
@@ -4711,6 +4766,50 @@
             "name": "Processing Status",
             "dataType": "string",
             "sourceColumn": "ProcessingBlock"
+          },
+          {
+            "name": "Allocated Amount Local",
+            "dataType": "double",
+            "sourceColumn": "AllocatedAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Allocated Amount",
+            "dataType": "double",
+            "sourceColumn": "AllocatedAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Shipped Amount Local",
+            "dataType": "double",
+            "sourceColumn": "ShippedAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shipped Amount",
+            "dataType": "double",
+            "sourceColumn": "ShippedAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -8766,6 +8865,15 @@
               },
               {
                 "name": "PD Var SO Customer Open Amount"
+              },
+              {
+                "name": "SO Allocated Amount"
+              },
+              {
+                "name": "SO Customer Open Margin"
+              },
+              {
+                "name": "SO Shipped Amount"
               }
             ]
           },
@@ -8965,6 +9073,36 @@
               },
               {
                 "name": "In Stock"
+              },
+              {
+                "name": "Allocated Amount"
+              },
+              {
+                "name": "Allocated Amount Local"
+              },
+              {
+                "name": "Customer Open Margin Amount"
+              },
+              {
+                "name": "Customer Open Margin Amount (Local)"
+              },
+              {
+                "name": "Has Changes (CS)"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Shipped Amount"
+              },
+              {
+                "name": "Shipped Amount Local"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Tier"
               }
             ]
           },
@@ -10358,9 +10496,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Plant"
               },
               {
@@ -10398,6 +10533,21 @@
               },
               {
                 "name": "Tier"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Allocated Amount Local"
+              },
+              {
+                "name": "Allocated Amount"
+              },
+              {
+                "name": "Shipped Amount Local"
+              },
+              {
+                "name": "Shipped Amount"
               }
             ]
           },
@@ -10608,6 +10758,15 @@
               },
               {
                 "name": "Sales Order Line Count (Automated + Manual)"
+              },
+              {
+                "name": "SO Allocated Amount"
+              },
+              {
+                "name": "SO Customer Open Margin"
+              },
+              {
+                "name": "SO Shipped Amount"
               }
             ]
           },

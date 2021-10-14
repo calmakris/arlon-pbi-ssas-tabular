@@ -697,7 +697,7 @@
             "displayFolder": "Sales"
           },
           {
-            "name": "Cost of Goods",
+            "name": "Overall Cost",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
@@ -725,7 +725,7 @@
           {
             "name": "Net Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " [Net Sales] - [Cost of Goods]",
+            "expression": " [Net Sales] - [Overall Cost]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
@@ -7874,6 +7874,9 @@
               },
               {
                 "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "Overall Cost"
               }
             ]
           },

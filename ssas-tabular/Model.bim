@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -1191,7 +1190,7 @@
             "expression": " EOMONTH( EDATE( TODAY() - 1, -12), -1) + 1",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1429,7 +1428,7 @@
             "name": "Yesterday",
             "expression": " TODAY() - 1",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1441,7 +1440,7 @@
             "name": "Beginning of Month",
             "expression": " EOMONTH( [Yesterday], -1 ) + 1",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1453,7 +1452,7 @@
             "name": "End of Month",
             "expression": " EOMONTH( [Yesterday], 0 )",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -2065,7 +2064,7 @@
             "name": "End of Next Month",
             "expression": " EOMONTH( [Yesterday], 1 )",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -2372,7 +2371,7 @@
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "GR Footage",
+            "name": "GR Linear Footage",
             "description": "Total footage of postings with movement types 101, 102, 531, and 532.",
             "expression": [
               "",
@@ -2406,7 +2405,7 @@
             "displayFolder": "Goods Receipts and Issues"
           },
           {
-            "name": "GI Footage",
+            "name": "GI Linear Footage",
             "description": "Total footage of postings with movement types 261, 262, 551, and 552.",
             "expression": [
               "",
@@ -2426,12 +2425,12 @@
           {
             "name": "GI Scrap Rate",
             "description": "GI Footage over GR Footage",
-            "expression": " DIVIDE( [GI Footage], [GR Footage] )",
+            "expression": " DIVIDE( [GI Linear Footage], [GR Linear Footage] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Goods Receipts and Issues"
           },
           {
-            "name": "GIR Footage",
+            "name": "GIR Linear Footage",
             "expression": " SUM ('Goods Issues and Receipts'[Linear Feet])",
             "formatString": "#,0",
             "displayFolder": "Goods Receipts and Issues"
@@ -2496,6 +2495,103 @@
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "CONV Production Hours",
+            "description": "The number of hours across all converting employees when they are producing material",
+            "expression": " SUM( 'Converting Man Hours'[Production Hours] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Available Hours",
+            "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
+            "expression": " SUM( 'Converting Man Hours'[Available Hours] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Square Feet per Man Hour",
+            "description": "Total number of square footage over total production hours in Converting",
+            "expression": " DIVIDE( [GR Square Footage], [CONV Production Hours] )",
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Square Feet per Man Hour (Target)",
+            "description": "These values are provided by Converting at the beginning of the fiscal year. If none provided, the default value used is 5,000.",
+            "expression": [
+              " ",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        SUM( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"Sqftmh\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK( TargetVal ),",
+              "        5000,",
+              "        TargetVal",
+              "    )",
+              " "
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Square Feet per Man Hour (Target Variance)",
+            "expression": " [CONV Square Feet per Man Hour] - [CONV Square Feet per Man Hour (Target)]",
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Uptime Hours",
+            "expression": " SUM( 'Converting Uptime'[Uptime Seconds] ) / 60 / 60",
+            "formatString": "#,0.00",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Availability",
+            "description": "Converting uptime hours divided by available hours",
+            "expression": [
+              " ",
+              "AVERAGEX(",
+              "    VALUES( 'Converting Uptime'[Machine Name] ),",
+              "    CALCULATE(",
+              "        AVERAGEX(",
+              "            VALUES( 'Calendar'[Date] ),",
+              "            DIVIDE( [CONV Uptime Hours], [CONV Available Hours] )",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "PD GR Linear Footage",
+            "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+            "expression": " CALCULATE( [GR Linear Footage],PREVIOUSDAY('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD GI Linear Footage",
+            "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+            "expression": " CALCULATE( [GI Linear Footage], PREVIOUSDAY( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD GI Scrap Rate",
+            "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+            "expression": " CALCULATE( [GI Scrap Rate], PREVIOUSDAY( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -6069,6 +6165,119 @@
             }
           }
         ]
+      },
+      {
+        "name": "Converting Man Hours",
+        "columns": [
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date starts at 6am and ends at 5:59am the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Shift",
+            "dataType": "string",
+            "sourceColumn": "Shift",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Production Hours",
+            "dataType": "double",
+            "description": "The number of hours across all converting employees when they are producing material",
+            "sourceColumn": "ProductionHours",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Non Production Hours",
+            "dataType": "double",
+            "description": "The total number of hours across all converting employees when they are doing trainings, FEs, and other non-production activities",
+            "sourceColumn": "NonProductionHours",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Available Hours",
+            "dataType": "double",
+            "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
+            "sourceColumn": "AvailableHours",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Notes",
+            "dataType": "string",
+            "sourceColumn": "Notes"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_CONV_HOURS\"]}[Data]",
+                "in",
+                "    dbo_VW_ABSORPTION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Converting Uptime",
+        "columns": [
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date starts at 6am and ends at 5:59am the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Uptime Seconds",
+            "dataType": "int64",
+            "sourceColumn": "UptimeSeconds"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_CONV_UPTIME = Source{[Schema=\"dbo\",Item=\"VW_CONV_UPTIME\"]}[Data]",
+                "in",
+                "    dbo_VW_CONV_UPTIME"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -6470,6 +6679,29 @@
         "fromColumn": "Production Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "92d76df7-af86-4843-9820-c0dc4d79be5d",
+        "fromTable": "Converting Man Hours",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "6985a741-d8a9-4d99-bee9-693dd4e5011c",
+        "fromTable": "Converting Uptime",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "fbe75965-0259-4a21-9f85-7ec85969c6b3",
+        "toCardinality": "many",
+        "fromTable": "Converting Uptime",
+        "fromColumn": "Machine Name",
+        "toTable": "Goods Issues and Receipts",
+        "toColumn": "Machine Name",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -11034,13 +11266,13 @@
             "name": "DAX Measures",
             "measures": [
               {
-                "name": "GI Footage"
+                "name": "GI Linear Footage"
               },
               {
                 "name": "GI Scrap Rate"
               },
               {
-                "name": "GR Footage"
+                "name": "GR Linear Footage"
               },
               {
                 "name": "GR Square Footage"
@@ -11052,13 +11284,43 @@
                 "name": "GIR Amount"
               },
               {
-                "name": "GIR Footage"
+                "name": "GIR Linear Footage"
               },
               {
                 "name": "GIR Quantity"
               },
               {
                 "name": "GIR Square Footage"
+              },
+              {
+                "name": "CONV Available Hours"
+              },
+              {
+                "name": "CONV Production Hours"
+              },
+              {
+                "name": "CONV Square Feet per Man Hour"
+              },
+              {
+                "name": "CONV Square Feet per Man Hour (Target)"
+              },
+              {
+                "name": "CONV Square Feet per Man Hour (Target Variance)"
+              },
+              {
+                "name": "CONV Availability"
+              },
+              {
+                "name": "CONV Uptime Hours"
+              },
+              {
+                "name": "PD GI Linear Footage"
+              },
+              {
+                "name": "PD GI Scrap Rate"
+              },
+              {
+                "name": "PD GR Linear Footage"
               }
             ]
           },
@@ -11070,6 +11332,43 @@
               },
               {
                 "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Converting Man Hours",
+            "columns": [
+              {
+                "name": "Available Hours"
+              },
+              {
+                "name": "Non Production Hours"
+              },
+              {
+                "name": "Notes"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Production Hours"
+              },
+              {
+                "name": "Shift"
+              }
+            ]
+          },
+          {
+            "name": "Converting Uptime",
+            "columns": [
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Uptime Seconds"
               }
             ]
           }

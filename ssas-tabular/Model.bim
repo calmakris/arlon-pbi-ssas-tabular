@@ -5975,7 +5975,7 @@
       },
       {
         "name": "Goods Issues and Receipts",
-        "description": "SAP Source: MKPF and MSEG.Contains postings of goods issue and goods receipts posted in the last 3 fiscal years.",
+        "description": "SAP Source: MKPF and MSEG. Contains postings of goods issue and goods receipts posted in the last 3 fiscal years.",
         "columns": [
           {
             "name": "Material Document Number",
@@ -11025,7 +11025,7 @@
         ]
       },
       {
-        "name": "CONV Dashboard",
+        "name": "Engineering",
         "tables": [
           {
             "name": "_Refresh Date",
@@ -11927,6 +11927,10 @@
           {
             "memberName": "DOMAIN\\htolla",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20437"
+          },
+          {
+            "memberName": "DOMAIN\\lmota",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21494"
           }
         ],
         "tablePermissions": [

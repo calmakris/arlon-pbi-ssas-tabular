@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -4905,6 +4906,12 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Sample Category",
+            "dataType": "string",
+            "description": "Calculated column: If the order type is 'KL', then 'Full Rolls'. Else if the order type is 'ZSMP' and order reason is 'Tradeshow Requests' then 'Tradeshow'. Else if order type is 'ZSMP' and material group is 'MARKETG', then 'Literature'. Else if order type is 'ZSMP' and not a tradeshow nor literature, then 'Samples'. Otherwise, 'Not Applicable'.",
+            "sourceColumn": "FOCCategory"
           }
         ],
         "partitions": [
@@ -7786,6 +7793,12 @@
               },
               {
                 "name": "Ship To Name"
+              },
+              {
+                "name": "Sample Category"
+              },
+              {
+                "name": "Tier"
               }
             ]
           },
@@ -9337,6 +9350,9 @@
               },
               {
                 "name": "Tier"
+              },
+              {
+                "name": "Sample Category"
               }
             ]
           },
@@ -10782,6 +10798,9 @@
               },
               {
                 "name": "Shipped Amount"
+              },
+              {
+                "name": "Sample Category"
               }
             ]
           },

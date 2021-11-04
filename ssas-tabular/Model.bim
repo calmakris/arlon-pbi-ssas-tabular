@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -858,7 +857,7 @@
           {
             "name": "Hold Amount",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
-            "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
+            "expression": " SUM('Hold Tag Documents'[Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Hold Tags",
             "annotations": [
@@ -871,20 +870,20 @@
           {
             "name": "Hold Quantity",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
-            "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
+            "expression": " SUM('Hold Tag Documents'[Quantity])",
             "formatString": "#,0.00",
             "displayFolder": "Hold Tags"
           },
           {
             "name": "Hold Tag Count",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
-            "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
+            "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] )",
             "formatString": "#,0",
             "displayFolder": "Hold Tags"
           },
           {
             "name": "Current S-Block Value",
-            "expression": " SUM('Blocked Inventory'[SBlock Amount]) + 0",
+            "expression": " SUM('Blocked Inventory'[SBlock Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -896,7 +895,7 @@
           },
           {
             "name": "Current Q-Block Value",
-            "expression": " SUM('Blocked Inventory'[QBlock Amount]) + 0",
+            "expression": " SUM('Blocked Inventory'[QBlock Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -920,7 +919,7 @@
           },
           {
             "name": "Current Expired Value",
-            "expression": " SUM('Expired Inventory'[Amount]) + 0",
+            "expression": " SUM('Expired Inventory'[Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -932,7 +931,7 @@
           },
           {
             "name": "Current S-Block Value with Hold Tags",
-            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
+            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[Notification Number], 'Hold Tag Documents'[Notification Number]) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -2592,6 +2591,24 @@
             "expression": " CALCULATE( [GI Scrap Rate], PREVIOUSDAY( 'Calendar'[Date] ) )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Current S-Block Quantity",
+            "expression": " SUM( 'Blocked Inventory'[SBlock Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Blocked Inv"
+          },
+          {
+            "name": "Current Q-Block Quantity",
+            "expression": " SUM( 'Blocked Inventory'[QBlock Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Blocked Inv"
+          },
+          {
+            "name": "Current Expired Quantity",
+            "expression": " SUM( 'Expired Inventory'[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Blocked Inv"
           }
         ]
       },
@@ -2944,9 +2961,8 @@
             "sourceColumn": "BatchNoKey"
           },
           {
-            "name": "NotificationNoKey",
+            "name": "Notification Number",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "NotificationNoKey"
           },
           {
@@ -2986,7 +3002,7 @@
             "name": "QBlock Quantity",
             "dataType": "double",
             "sourceColumn": "QBlockQuantityValue",
-            "formatString": "0.00",
+            "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
@@ -3009,16 +3025,14 @@
             "name": "Notification Text",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))",
-            "displayFolder": "Hold Tag Related"
+            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
           },
           {
             "type": "calculated",
             "name": "Notification Code",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))",
-            "displayFolder": "Hold Tag Related"
+            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
           }
         ],
         "partitions": [
@@ -6325,7 +6339,7 @@
       {
         "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
         "fromTable": "Blocked Inventory",
-        "fromColumn": "NotificationNoKey",
+        "fromColumn": "Notification Number",
         "toTable": "Hold Tag Documents",
         "toColumn": "Notification Number",
         "isActive": false
@@ -6740,6 +6754,9 @@
               },
               {
                 "name": "Notification Text"
+              },
+              {
+                "name": "Notification Number"
               }
             ]
           },
@@ -6977,6 +6994,15 @@
               },
               {
                 "name": "PQ Complaint Cycle Time"
+              },
+              {
+                "name": "Current Q-Block Quantity"
+              },
+              {
+                "name": "Current S-Block Quantity"
+              },
+              {
+                "name": "Current Expired Quantity"
               }
             ]
           },

@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -640,7 +642,7 @@
           },
           {
             "type": "calculated",
-            "name": "CONV Dashboard",
+            "name": "Engineering",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -6298,6 +6300,294 @@
             }
           }
         ]
+      },
+      {
+        "name": "Upstream Logs - Raw",
+        "description": "Similar to machine log queries that includes job data and primary structure tables",
+        "columns": [
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Calculated column derived from the name of the database",
+            "sourceColumn": "Machine"
+          },
+          {
+            "name": "Job Index",
+            "dataType": "int64",
+            "description": "Source: jobindex.JobIndex",
+            "sourceColumn": "JobIndex",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Start Time",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StartTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Stop Time",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StopTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Footage",
+            "dataType": "int64",
+            "description": "Source: jobdata.LastRollFt",
+            "sourceColumn": "Footage",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Ideal Footage",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+            "sourceColumn": "IdealFootage",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: primarystruct.Category",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Causes",
+            "dataType": "string",
+            "description": "Source: primarystruct.Causes",
+            "sourceColumn": "Causes"
+          },
+          {
+            "name": "Further Detail",
+            "dataType": "string",
+            "description": "Source: primarystruct.FurtherDetail",
+            "sourceColumn": "FurtherDetail"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: primarystruct.Comments",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "Source: primarystruct.ProcessOrder",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "Source: primarystruct.Spec",
+            "sourceColumn": "SpecNo"
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date of the 'Start Time'; A production day is between 6:00AM and 5:59:59AM the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Production Shift",
+            "dataType": "int64",
+            "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
+            "sourceColumn": "ShiftNum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_LOG_RAW = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_LOG_RAW\"]}[Data],",
+                "    #\"Sorted Rows\" = Table.Sort(dbo_VW_UPSTREAM_LOG_RAW,{{\"Machine\", Order.Ascending}, {\"StartTime\", Order.Ascending}, {\"StopTime\", Order.Ascending}})",
+                "in",
+                "    #\"Sorted Rows\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Upstream Logs - Simplified",
+        "description": "Similar to 'Upstream Logs - Raw' except Production/Downtime records are split if the record occurs in between different shifts or calendar day. Also, consecutively similar clean up records (by category, causes, further detail/comments, and PO) are combined",
+        "columns": [
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Calculated column derived from the name of the database",
+            "sourceColumn": "Machine"
+          },
+          {
+            "name": "Start Time",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StartTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "StopTime",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StopTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Duration Minutes",
+            "dataType": "double",
+            "description": "Duration between 'Start Time' and 'Stop Time' in minutes",
+            "sourceColumn": "DurationMinute",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Footage",
+            "dataType": "int64",
+            "description": "Source: jobdata.LastRollFt",
+            "sourceColumn": "Footage",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Ideal Footage",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+            "sourceColumn": "IdealFootage",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Scrap Footage",
+            "dataType": "int64",
+            "description": "Total footage of caliper or setup scrap during clean ups",
+            "sourceColumn": "ScrapFootage",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: primarystruct.Category",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Causes",
+            "dataType": "string",
+            "description": "Source: primarystruct.Causes",
+            "sourceColumn": "Causes"
+          },
+          {
+            "name": "Further Detail",
+            "dataType": "string",
+            "description": "Source: primarystruct.FurtherDetail",
+            "sourceColumn": "FurtherDetail"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: primarystruct.Comments",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "Non Uptime Reason",
+            "dataType": "string",
+            "description": "Calculated column derived from 'Further Detail' and 'Comments' of non-production records; Used for grouping big hitters of availability",
+            "sourceColumn": "NonUptimeReason"
+          },
+          {
+            "name": "Efficiency Hitter",
+            "dataType": "string",
+            "description": "Calculated column derived from 'Further Detail', 'Comments', and 'Specification Number'; Used for grouping big hitters of overall equipment efficiency",
+            "sourceColumn": "EfficiencyHitter"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "Source: primarystruct.Spec",
+            "sourceColumn": "SpecNo"
+          },
+          {
+            "name": "Is Transition",
+            "dataType": "boolean",
+            "description": "A record is transition if it is end of production, downtime, unplanned clean up, or planned clean ups that occur before/after the previous types of records mentioned",
+            "sourceColumn": "IsTransition"
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date of the 'Start Time'; A production day is between 6:00AM and 5:59:59AM the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Production Shift",
+            "dataType": "string",
+            "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
+            "sourceColumn": "ShiftNum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_LOG_SIMPLIFIED = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_LOG_SIMPLIFIED\"]}[Data],",
+                "    #\"Sorted Rows\" = Table.Sort(dbo_VW_UPSTREAM_LOG_SIMPLIFIED,{{\"Machine\", Order.Ascending}, {\"StartTime\", Order.Ascending}, {\"StopTime\", Order.Ascending}})",
+                "in",
+                "    #\"Sorted Rows\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -6722,6 +7012,20 @@
         "toTable": "Goods Issues and Receipts",
         "toColumn": "Machine Name",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "ae929e18-a212-4e3a-887a-33676a5d28cb",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "2a7d8317-b122-4a81-b5ba-c855ebccc8c2",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -11413,6 +11717,112 @@
               },
               {
                 "name": "Uptime Seconds"
+              }
+            ]
+          },
+          {
+            "name": "Upstream Logs - Raw",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Causes"
+              },
+              {
+                "name": "Comments"
+              },
+              {
+                "name": "Footage"
+              },
+              {
+                "name": "Further Detail"
+              },
+              {
+                "name": "Ideal Footage"
+              },
+              {
+                "name": "Job Index"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Start Time"
+              },
+              {
+                "name": "Stop Time"
+              }
+            ]
+          },
+          {
+            "name": "Upstream Logs - Simplified",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Causes"
+              },
+              {
+                "name": "Comments"
+              },
+              {
+                "name": "Duration Minutes"
+              },
+              {
+                "name": "Efficiency Hitter"
+              },
+              {
+                "name": "Footage"
+              },
+              {
+                "name": "Further Detail"
+              },
+              {
+                "name": "Ideal Footage"
+              },
+              {
+                "name": "Is Transition"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Non Uptime Reason"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Scrap Footage"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Start Time"
+              },
+              {
+                "name": "StopTime"
               }
             ]
           }

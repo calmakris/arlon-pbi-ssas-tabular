@@ -2525,7 +2525,7 @@
               " ",
               "VAR TargetVal = ",
               "    CALCULATE(",
-              "        SUM( Target_KPI[TargetValue] ),",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"Sqftmh\",",
               "        TREATAS(",
               "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
@@ -2611,6 +2611,511 @@
             "expression": " SUM( 'Expired Inventory'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Blocked Inv"
+          },
+          {
+            "name": "Upstream Actual Production Footage",
+            "description": "Sum of 'Upstream Logs - Simplified'[Footage] of production records excluding FEs",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    [Upstream Actual Footage],",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "            && LEFT('Upstream Logs - Simplified'[Causes], 4) = \"Roll\"",
+              "            && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Ideal Production Footage",
+            "description": "Sum of 'Upstream Logs - Simplified'[Footage] of production records excluding FEs",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    [Upstream Ideal Footage],",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "            && LEFT('Upstream Logs - Simplified'[Causes], 4) = \"Roll\"",
+              "            && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Uptime Minutes",
+            "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of production records excluding FEs",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "            && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Runtime Minutes",
+            "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of all records except end of production, EOS, and FEs",
+            "expression": [
+              "",
+              "VAR CAST = ",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Category] <> \"End of Production\"",
+              "                && 'Upstream Logs - Simplified'[Further Detail] <> \"EOS\"",
+              "                && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "        )",
+              "    )",
+              "",
+              "VAR COAT = ",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Category] <> \"End of Production\"",
+              "                && 'Upstream Logs - Simplified'[Further Detail] <> \"EOS\"",
+              "                && 'Upstream Logs - Simplified'[Non Uptime Reason] <> \"PLANNED DT\"",
+              "                && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    CAST",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Actual Footage",
+            "description": "Sum of 'Upstreal Logs - Simplified'[Footage]",
+            "expression": " SUM('Upstream Logs - Simplified'[Footage])",
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Ideal Footage",
+            "description": "Sum of 'Upstreal Logs - Simplified'[Ideal Footage]. Ideal footage is derived from the specification linespeed and duration between 'Start Time' and 'Stop Time' in minutes",
+            "expression": "SUM('Upstream Logs - Simplified'[Ideal Footage])",
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Downtime Hours",
+            "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of unplanned clean up and unplanned downtime records",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DIVIDE( SUM( 'Upstream Logs - Simplified'[Duration Minutes] ), 60 ) + 0,",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] IN { \"Clean Up\", \"Downtime\" }",
+              "            && LEFT('Upstream Logs - Simplified'[Causes], 9) = \"Unplanned\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,###0.00 \"hr\";-#,###0.00 #,###0.00 \"hr\";0 \"hr\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "CAST Clean Up Count",
+            "expression": "COUNTROWS(FILTER('Upstream Logs - Simplified', 'Upstream Logs - Simplified'[Category] = \"Clean Up\" && 'Upstream Logs - Simplified'[Causes] IN { \"Planned\", \"Unplanned\", \"Unplanned - Casting\" })) + 0",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "COAT Clean Up Count",
+            "expression": "COUNTROWS(FILTER('Upstream Logs - Raw', 'Upstream Logs - Raw'[Category] = \"Clean Up\" && 'Upstream Logs - Raw'[Causes] IN { \"Planned\", \"Unplanned\" })) + 0",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "Upstream Planned CU Count",
+            "description": "Number of planned clean up records. For casting, the clean ups from 'Upstream Logs - Simplified' table is counted where consecutively similar clean ups are combined into one clean up. For coating, it is the raw count of clean ups in 'Upstream Logs - Raw'.",
+            "expression": [
+              "",
+              "VAR CAST = CALCULATE( [CAST Clean Up Count], 'Upstream Logs - Simplified'[Causes] = \"Planned\" )",
+              "VAR COAT = CALCULATE( [COAT Clean Up Count], 'Upstream Logs - Raw'[Causes] = \"Planned\" )",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    CAST + COAT",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Unplanned CU Count",
+            "description": "Number of unplanned clean up records. For casting, the clean ups from 'Upstream Logs - Simplified' table is counted where consecutively similar clean ups are combined into one clean up. For coating, it is the raw count of clean ups in 'Upstream Logs - Raw'",
+            "expression": [
+              "",
+              "VAR CAST = CALCULATE( [CAST Clean Up Count], 'Upstream Logs - Simplified'[Causes] = \"Unplanned - Casting\" )",
+              "VAR COAT = CALCULATE( [COAT Clean Up Count], 'Upstream Logs - Raw'[Causes] = \"Unplanned\" )",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    CAST + COAT",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Performance",
+            "description": "Upstream actual production footage divided by ideal production footage",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    DIVIDE( [Upstream Actual Production Footage], [Upstream Ideal Production Footage] ),",
+              "    ALL(",
+              "        'Upstream Logs - Simplified'[Category],",
+              "        'Upstream Logs - Simplified'[Causes],",
+              "        'Upstream Logs - Simplified'[Further Detail],",
+              "        'Upstream Logs - Simplified'[Comments],",
+              "        'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "        'Upstream Logs - Simplified'[Specification Number],",
+              "        'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Availability",
+            "description": "Upstream uptime duration minutes divided by runtime duration minutes",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    DIVIDE( [Upstream Uptime Minutes], [Upstream Runtime Minutes] ),",
+              "    ALL(",
+              "        'Upstream Logs - Simplified'[Category],",
+              "        'Upstream Logs - Simplified'[Causes],",
+              "        'Upstream Logs - Simplified'[Further Detail],",
+              "        'Upstream Logs - Simplified'[Comments],",
+              "        'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "        'Upstream Logs - Simplified'[Specification Number],",
+              "        'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency",
+            "description": "Product of upstream availability, performance, and quality",
+            "expression": "[Upstream Availability] * [Upstream Performance] * [Upstream Quality]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream First Pass Reliability",
+            "description": "Number of planned clean ups divided by the total planned and unplanned clean ups",
+            "expression": " DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Changeover Time",
+            "description": "Average duration of clean up records in 'Upstream Logs - Simplified'",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,### \"min\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "CAST Overall Equipment Efficiency (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"OEE_CAST\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.85,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "COAT Overall Equipment Efficiency (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"OEE_COAT\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.85,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency (Target)",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED('_Machines'[Department]), [CAST Overall Equipment Efficiency (Target)],",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), [COAT Overall Equipment Efficiency (Target)],",
+              "    ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]) / 2",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "CAST First Pass Reliability (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"FPass_CAST\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.95,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "COAT First Pass Reliability (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"FPass_COAT\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.95,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream First Pass Reliability (Target)",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED('_Machines'[Department]), [CAST First Pass Reliability (Target)],",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), [COAT First Pass Reliability (Target)],",
+              "    ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]) / 2",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Changeover Time (Target)",
+            "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified'",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Upstream Changeover Time],",
+              "    SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\"))",
+              ")"
+            ],
+            "formatString": "#,### \"min\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Performance Impact",
+            "description": "Impact on the overall performance of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Upstream Ideal Production Footage] - [Upstream Actual Production Footage],",
+              "    CALCULATE(",
+              "        [Upstream Ideal Production Footage],",
+              "        ALL(",
+              "            'Upstream Logs - Simplified'[Category],",
+              "            'Upstream Logs - Simplified'[Causes],",
+              "            'Upstream Logs - Simplified'[Further Detail],",
+              "            'Upstream Logs - Simplified'[Comments],",
+              "            'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "            'Upstream Logs - Simplified'[Specification Number],",
+              "            'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "        ),",
+              "        ALL(_Machines[Machine Name])",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Availability Impact",
+            "description": "Impact on the overall availablility of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    CALCULATE(",
+              "        [Upstream Runtime Minutes],",
+              "        'Upstream Logs - Simplified'[Category] <> \"Production\"",
+              "    ),",
+              "    CALCULATE(",
+              "        [Upstream Runtime Minutes],",
+              "        ALL(",
+              "            'Upstream Logs - Simplified'[Category],",
+              "            'Upstream Logs - Simplified'[Causes],",
+              "            'Upstream Logs - Simplified'[Further Detail],",
+              "            'Upstream Logs - Simplified'[Comments],",
+              "            'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "            'Upstream Logs - Simplified'[Specification Number],",
+              "            'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "        ),",
+              "        ALL(_Machines[Machine Name])",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Quality",
+            "description": "A fixed number defined by Engineering",
+            "expression": [
+              "",
+              "VAR CAST = 0.95",
+              "VAR COAT = 0.98",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    0.95",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency Impact",
+            "description": "Impact on the overall equipment efficiency of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+            "expression": "(( [Upstream Availability] + [Upstream Availability Impact] ) * ( [Upstream Performance] + [Upstream Performance Impact] ) * [Upstream Quality] ) - [Upstream Overall Equipment Efficiency]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Days Since Last Unplanned Clean Up",
+            "description": "Number of days between yesterday and the last unplanned clean up before yesterday",
+            "expression": [
+              "",
+              "VAR UP_Cause = ",
+              "    SWITCH( TRUE(),",
+              "        \"CAST\" IN ALLSELECTED(_Machines[Department]), \"Unplanned - Casting\",",
+              "        \"COAT\" IN ALLSELECTED(_Machines[Department]), \"Unplanned\",",
+              "        \"Unplanned\"",
+              "    )",
+              "",
+              "VAR Last_Date =",
+              "    CALCULATE(",
+              "        MAX( 'Upstream Logs - Simplified'[Production Date] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Production Date] < [Yesterday]",
+              "                && 'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
+              "                && 'Upstream Logs - Simplified'[Causes] = UP_Cause",
+              "        )    ",
+              "    )",
+              "",
+              "RETURN",
+              "DATEDIFF(Last_Date, [Yesterday], DAY)"
+            ],
+            "formatString": "#,###0 \"days\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Changeover Scrap",
+            "description": "Average footage of clean up records. In Casting, this value is the caliper scrap. In Coating, it is the combined footage of consecutive clean up and setup records.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Upstream Logs - Simplified'[Scrap Footage] ),",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
           }
         ]
       },
@@ -3035,6 +3540,20 @@
             "dataType": "string",
             "isDataTypeInferred": true,
             "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
+          },
+          {
+            "type": "calculated",
+            "name": "Notification Enter Date",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " LOOKUPVALUE( 'Hold Tag Documents'[Enter Date], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -6414,6 +6933,20 @@
             "dataType": "int64",
             "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
             "sourceColumn": "ShiftNum"
+          },
+          {
+            "name": "Specification Linespeed",
+            "dataType": "int64",
+            "description": "Source: primarystruct.SpecLS",
+            "sourceColumn": "SpecLinespeed",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Actual Linespeed",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
+            "sourceColumn": "ActualLinespeed"
           }
         ],
         "partitions": [
@@ -6566,9 +7099,23 @@
           },
           {
             "name": "Production Shift",
-            "dataType": "string",
+            "dataType": "int64",
             "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
             "sourceColumn": "ShiftNum"
+          },
+          {
+            "name": "Specification Linespeed",
+            "dataType": "int64",
+            "description": "Source: primarystruct.SpecLS",
+            "sourceColumn": "SpecLinespeed",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Actual Linespeed",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
+            "sourceColumn": "ActualLinespeed"
           }
         ],
         "partitions": [
@@ -6585,6 +7132,68 @@
                 "in",
                 "    #\"Sorted Rows\""
               ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Machines",
+        "description": "Contains machine names used to filter related tables with 'Machine Name' fields",
+        "columns": [
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_zMACHINE = Source{[Schema=\"dbo\",Item=\"zMACHINE\"]}[Data]",
+                "in",
+                "    dbo_zMACHINE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Production Shifts",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Production Shift",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value1]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Shift Name",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value2]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "{ (\"1\", \"1st\"), (\"2\", \"2nd\"), (\"3\", \"3rd\") }"
             }
           }
         ]
@@ -7026,6 +7635,41 @@
         "fromColumn": "Production Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "ab46bd23-f168-453a-9da6-0f7839a7504a",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "c43d17ba-58df-49a4-a1f2-f33e0a1c591c",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "10344338-100d-447d-9f74-b27f469d26d0",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "3dfea972-a6c3-4217-a6f9-2e2df7e2eecb",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Production Shift",
+        "toTable": "_Production Shifts",
+        "toColumn": "Production Shift"
+      },
+      {
+        "name": "becaf1fd-b98b-4518-8016-1bf2f89b99fa",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Production Shift",
+        "toTable": "_Production Shifts",
+        "toColumn": "Production Shift"
       }
     ],
     "perspectives": [
@@ -7061,6 +7705,9 @@
               },
               {
                 "name": "Notification Number"
+              },
+              {
+                "name": "Notification Enter Date"
               }
             ]
           },
@@ -11669,6 +12316,75 @@
               },
               {
                 "name": "PD GR Linear Footage"
+              },
+              {
+                "name": "Upstream Actual Production Footage"
+              },
+              {
+                "name": "Upstream Ideal Production Footage"
+              },
+              {
+                "name": "Upstream Runtime Minutes"
+              },
+              {
+                "name": "Upstream Uptime Minutes"
+              },
+              {
+                "name": "Upstream Actual Footage"
+              },
+              {
+                "name": "Upstream Ideal Footage"
+              },
+              {
+                "name": "Upstream Downtime Hours"
+              },
+              {
+                "name": "Upstream Planned CU Count"
+              },
+              {
+                "name": "Upstream Unplanned CU Count"
+              },
+              {
+                "name": "Upstream Availability"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency"
+              },
+              {
+                "name": "Upstream Performance"
+              },
+              {
+                "name": "Upstream First Pass Reliability"
+              },
+              {
+                "name": "Upstream Changeover Time"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency (Target)"
+              },
+              {
+                "name": "Upstream First Pass Reliability (Target)"
+              },
+              {
+                "name": "Upstream Changeover Time (Target)"
+              },
+              {
+                "name": "Upstream Performance Impact"
+              },
+              {
+                "name": "Upstream Availability Impact"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency Impact"
+              },
+              {
+                "name": "Upstream Quality"
+              },
+              {
+                "name": "Upstream Days Since Last Unplanned Clean Up"
+              },
+              {
+                "name": "Upstream Changeover Scrap"
               }
             ]
           },
@@ -11764,6 +12480,12 @@
               },
               {
                 "name": "Stop Time"
+              },
+              {
+                "name": "Specification Linespeed"
+              },
+              {
+                "name": "Actual Linespeed"
               }
             ]
           },
@@ -11823,6 +12545,34 @@
               },
               {
                 "name": "StopTime"
+              },
+              {
+                "name": "Specification Linespeed"
+              },
+              {
+                "name": "Actual Linespeed"
+              }
+            ]
+          },
+          {
+            "name": "_Machines",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
+              }
+            ]
+          },
+          {
+            "name": "_Production Shifts",
+            "columns": [
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Shift Name"
               }
             ]
           }

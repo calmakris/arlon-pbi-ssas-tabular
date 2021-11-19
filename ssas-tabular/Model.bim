@@ -639,6 +639,13 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Engineering",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -690,7 +697,7 @@
             "displayFolder": "Sales"
           },
           {
-            "name": "Cost of Goods",
+            "name": "Overall Cost",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
@@ -718,7 +725,7 @@
           {
             "name": "Net Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " [Net Sales] - [Cost of Goods]",
+            "expression": " [Net Sales] - [Overall Cost]",
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Sales"
           },
@@ -852,7 +859,7 @@
           {
             "name": "Hold Amount",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
-            "expression": " SUM('Hold Tag Documents'[Amount]) + 0",
+            "expression": " SUM('Hold Tag Documents'[Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Hold Tags",
             "annotations": [
@@ -865,20 +872,20 @@
           {
             "name": "Hold Quantity",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
-            "expression": " SUM('Hold Tag Documents'[Quantity]) + 0",
+            "expression": " SUM('Hold Tag Documents'[Quantity])",
             "formatString": "#,0.00",
             "displayFolder": "Hold Tags"
           },
           {
             "name": "Hold Tag Count",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
-            "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] ) + 0",
+            "expression": " DISTINCTCOUNT( 'Hold Tag Documents'[Notification Number] )",
             "formatString": "#,0",
             "displayFolder": "Hold Tags"
           },
           {
             "name": "Current S-Block Value",
-            "expression": " SUM('Blocked Inventory'[SBlock Amount]) + 0",
+            "expression": " SUM('Blocked Inventory'[SBlock Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -890,7 +897,7 @@
           },
           {
             "name": "Current Q-Block Value",
-            "expression": " SUM('Blocked Inventory'[QBlock Amount]) + 0",
+            "expression": " SUM('Blocked Inventory'[QBlock Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -914,7 +921,7 @@
           },
           {
             "name": "Current Expired Value",
-            "expression": " SUM('Expired Inventory'[Amount]) + 0",
+            "expression": " SUM('Expired Inventory'[Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -926,7 +933,7 @@
           },
           {
             "name": "Current S-Block Value with Hold Tags",
-            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[NotificationNoKey], 'Hold Tag Documents'[Notification Number]) )",
+            "expression": " CALCULATE( SUM('Blocked Inventory'[SBlock Amount])+0, USERELATIONSHIP('Blocked Inventory'[Notification Number], 'Hold Tag Documents'[Notification Number]) )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Blocked Inv",
             "annotations": [
@@ -1184,7 +1191,7 @@
             "expression": " EOMONTH( EDATE( TODAY() - 1, -12), -1) + 1",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1422,7 +1429,7 @@
             "name": "Yesterday",
             "expression": " TODAY() - 1",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1434,7 +1441,7 @@
             "name": "Beginning of Month",
             "expression": " EOMONTH( [Yesterday], -1 ) + 1",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1446,7 +1453,7 @@
             "name": "End of Month",
             "expression": " EOMONTH( [Yesterday], 0 )",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1533,13 +1540,19 @@
           {
             "name": "SO Internal Open Quantity",
             "description": "If processing status is not complete, this value is ordered minus allocated minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Internal Open Quantity] )",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Internal Open Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Customer Open Quantity",
-            "description": "If billing status is not complete, this value is ordered minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "If billing status is not complete, this value is ordered minus shipped quantities; Date grouping: 'Sales Order Documents'[First Delivery Date]",
             "expression": [
               "  ",
               "CALCULATE(",
@@ -1566,7 +1579,8 @@
               "            SUM( 'Sales Order Documents'[Internal Open Amount] )",
               "        ),",
               "        SUM( 'Sales Order Documents'[Internal Open Amount] )   ",
-              "    )",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
@@ -1574,7 +1588,7 @@
           },
           {
             "name": "SO Customer Open Amount",
-            "description": "If billing status is not complete, this value is ordered minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "If billing status is not complete, this value is ordered minus shipped amount; Date grouping: 'Sales Order Documents'[First Delivery Date]",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1603,15 +1617,27 @@
           },
           {
             "name": "SO Allocated Quantity",
-            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Allocated Quantity] )",
+            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Allocated Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
             "name": "SO Shipped Quantity",
-            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Shipped Quantity] )",
+            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Shipped Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
@@ -2039,7 +2065,7 @@
             "name": "End of Next Month",
             "expression": " EOMONTH( [Yesterday], 1 )",
             "formatString": "Short Date",
-            "displayFolder": "Dates",
+            "displayFolder": ".Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -2344,6 +2370,752 @@
             "expression": " [SO Customer Open Amount] - [PD SO Customer Open Amount]",
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "GR Linear Footage",
+            "description": "Total footage of postings with movement types 101, 102, 531, and 532.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Goods Issues and Receipts'[Linear Feet] ),",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"555\", \"700\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GR Square Footage",
+            "description": "Total square footage of postings with movement types 101, 102, 531, and 532.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Goods Issues and Receipts'[Square Feet] ),",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"555\", \"700\" }",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GI Linear Footage",
+            "description": "Total footage of postings with movement types 261, 262, 551, and 552.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    ABS( SUM( 'Goods Issues and Receipts'[Linear Feet] ) ),",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"551\", \"262\", \"552\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\"}",
+              "            && 'Goods Issues and Receipts'[Reason Code] <> \"0000\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GI Scrap Rate",
+            "description": "GI Footage over GR Footage",
+            "expression": " DIVIDE( [GI Linear Footage], [GR Linear Footage] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Linear Footage",
+            "expression": " SUM ('Goods Issues and Receipts'[Linear Feet])",
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Square Footage",
+            "expression": " SUM ('Goods Issues and Receipts'[Square Feet])",
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Quantity",
+            "expression": " SUM( 'Goods Issues and Receipts'[Quantity])",
+            "formatString": "#,0.00",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "GIR Amount",
+            "expression": " SUM( 'Goods Issues and Receipts'[Amount] )",
+            "formatString": "#,0",
+            "displayFolder": "Goods Receipts and Issues"
+          },
+          {
+            "name": "SO Allocated Amount",
+            "description": "Total value of items in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Allocated Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Allocated Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Allocated Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Allocated Amount] )   ",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "SO Shipped Amount",
+            "description": "Total value of items in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "expression": [
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Order Documents'[Shipped Amount] ),",
+              "            \"Local\", SUM( 'Sales Order Documents'[Shipped Amount Local] ),",
+              "            SUM( 'Sales Order Documents'[Shipped Amount] )",
+              "        ),",
+              "        SUM( 'Sales Order Documents'[Shipped Amount] )   ",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,##0;(#,##0);\"-\"",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "CONV Production Hours",
+            "description": "The number of hours across all converting employees when they are producing material",
+            "expression": " SUM( 'Converting Man Hours'[Production Hours] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Available Hours",
+            "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
+            "expression": " SUM( 'Converting Man Hours'[Available Hours] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Square Feet per Man Hour",
+            "description": "Total number of square footage over total production hours in Converting",
+            "expression": " DIVIDE( [GR Square Footage], [CONV Production Hours] )",
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Square Feet per Man Hour (Target)",
+            "description": "These values are provided by Converting at the beginning of the fiscal year. If none provided, the default value used is 5,000.",
+            "expression": [
+              " ",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"Sqftmh\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK( TargetVal ),",
+              "        5000,",
+              "        TargetVal",
+              "    )",
+              " "
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Square Feet per Man Hour (Target Variance)",
+            "expression": " [CONV Square Feet per Man Hour] - [CONV Square Feet per Man Hour (Target)]",
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Uptime Hours",
+            "expression": " SUM( 'Converting Uptime'[Uptime Seconds] ) / 60 / 60",
+            "formatString": "#,0.00",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Availability",
+            "description": "Converting uptime hours divided by available hours",
+            "expression": [
+              " ",
+              "AVERAGEX(",
+              "    VALUES( 'Converting Uptime'[Machine Name] ),",
+              "    CALCULATE(",
+              "        AVERAGEX(",
+              "            VALUES( 'Calendar'[Date] ),",
+              "            DIVIDE( [CONV Uptime Hours], [CONV Available Hours] )",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "PD GR Linear Footage",
+            "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+            "expression": " CALCULATE( [GR Linear Footage],PREVIOUSDAY('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD GI Linear Footage",
+            "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+            "expression": " CALCULATE( [GI Linear Footage], PREVIOUSDAY( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "PD GI Scrap Rate",
+            "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+            "expression": " CALCULATE( [GI Scrap Rate], PREVIOUSDAY( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Current S-Block Quantity",
+            "expression": " SUM( 'Blocked Inventory'[SBlock Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Blocked Inv"
+          },
+          {
+            "name": "Current Q-Block Quantity",
+            "expression": " SUM( 'Blocked Inventory'[QBlock Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Blocked Inv"
+          },
+          {
+            "name": "Current Expired Quantity",
+            "expression": " SUM( 'Expired Inventory'[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Blocked Inv"
+          },
+          {
+            "name": "Upstream Actual Production Footage",
+            "description": "Sum of 'Upstream Logs - Simplified'[Footage] of production records excluding FEs",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    [Upstream Actual Footage],",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "            && LEFT('Upstream Logs - Simplified'[Causes], 4) = \"Roll\"",
+              "            && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Ideal Production Footage",
+            "description": "Sum of 'Upstream Logs - Simplified'[Footage] of production records excluding FEs",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    [Upstream Ideal Footage],",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "            && LEFT('Upstream Logs - Simplified'[Causes], 4) = \"Roll\"",
+              "            && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Uptime Minutes",
+            "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of production records excluding FEs",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "            && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Runtime Minutes",
+            "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of all records except end of production, EOS, and FEs",
+            "expression": [
+              "",
+              "VAR CAST = ",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Category] <> \"End of Production\"",
+              "                && 'Upstream Logs - Simplified'[Further Detail] <> \"EOS\"",
+              "                && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "        )",
+              "    )",
+              "",
+              "VAR COAT = ",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Category] <> \"End of Production\"",
+              "                && 'Upstream Logs - Simplified'[Further Detail] <> \"EOS\"",
+              "                && 'Upstream Logs - Simplified'[Non Uptime Reason] <> \"PLANNED DT\"",
+              "                && NOT(CONTAINSSTRING('Upstream Logs - Simplified'[Causes], \"FE\"))",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    CAST",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Actual Footage",
+            "description": "Sum of 'Upstreal Logs - Simplified'[Footage]",
+            "expression": " SUM('Upstream Logs - Simplified'[Footage])",
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Ideal Footage",
+            "description": "Sum of 'Upstreal Logs - Simplified'[Ideal Footage]. Ideal footage is derived from the specification linespeed and duration between 'Start Time' and 'Stop Time' in minutes",
+            "expression": "SUM('Upstream Logs - Simplified'[Ideal Footage])",
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Downtime Hours",
+            "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of unplanned clean up and unplanned downtime records",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DIVIDE( SUM( 'Upstream Logs - Simplified'[Duration Minutes] ), 60 ) + 0,",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] IN { \"Clean Up\", \"Downtime\" }",
+              "            && LEFT('Upstream Logs - Simplified'[Causes], 9) = \"Unplanned\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,###0.00 \"hr\";-#,###0.00 #,###0.00 \"hr\";0 \"hr\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "CAST Clean Up Count",
+            "expression": "COUNTROWS(FILTER('Upstream Logs - Simplified', 'Upstream Logs - Simplified'[Category] = \"Clean Up\" && 'Upstream Logs - Simplified'[Causes] IN { \"Planned\", \"Unplanned\", \"Unplanned - Casting\" })) + 0",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "COAT Clean Up Count",
+            "expression": "COUNTROWS(FILTER('Upstream Logs - Raw', 'Upstream Logs - Raw'[Category] = \"Clean Up\" && 'Upstream Logs - Raw'[Causes] IN { \"Planned\", \"Unplanned\" })) + 0",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "Upstream Planned CU Count",
+            "description": "Number of planned clean up records. For casting, the clean ups from 'Upstream Logs - Simplified' table is counted where consecutively similar clean ups are combined into one clean up. For coating, it is the raw count of clean ups in 'Upstream Logs - Raw'.",
+            "expression": [
+              "",
+              "VAR CAST = CALCULATE( [CAST Clean Up Count], 'Upstream Logs - Simplified'[Causes] = \"Planned\" )",
+              "VAR COAT = CALCULATE( [COAT Clean Up Count], 'Upstream Logs - Raw'[Causes] = \"Planned\" )",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    CAST + COAT",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Unplanned CU Count",
+            "description": "Number of unplanned clean up records. For casting, the clean ups from 'Upstream Logs - Simplified' table is counted where consecutively similar clean ups are combined into one clean up. For coating, it is the raw count of clean ups in 'Upstream Logs - Raw'",
+            "expression": [
+              "",
+              "VAR CAST = CALCULATE( [CAST Clean Up Count], 'Upstream Logs - Simplified'[Causes] = \"Unplanned - Casting\" )",
+              "VAR COAT = CALCULATE( [COAT Clean Up Count], 'Upstream Logs - Raw'[Causes] = \"Unplanned\" )",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    CAST + COAT",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Performance",
+            "description": "Upstream actual production footage divided by ideal production footage",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    DIVIDE( [Upstream Actual Production Footage], [Upstream Ideal Production Footage] ),",
+              "    ALL(",
+              "        'Upstream Logs - Simplified'[Category],",
+              "        'Upstream Logs - Simplified'[Causes],",
+              "        'Upstream Logs - Simplified'[Further Detail],",
+              "        'Upstream Logs - Simplified'[Comments],",
+              "        'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "        'Upstream Logs - Simplified'[Specification Number],",
+              "        'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Availability",
+            "description": "Upstream uptime duration minutes divided by runtime duration minutes",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    DIVIDE( [Upstream Uptime Minutes], [Upstream Runtime Minutes] ),",
+              "    ALL(",
+              "        'Upstream Logs - Simplified'[Category],",
+              "        'Upstream Logs - Simplified'[Causes],",
+              "        'Upstream Logs - Simplified'[Further Detail],",
+              "        'Upstream Logs - Simplified'[Comments],",
+              "        'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "        'Upstream Logs - Simplified'[Specification Number],",
+              "        'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency",
+            "description": "Product of upstream availability, performance, and quality",
+            "expression": "[Upstream Availability] * [Upstream Performance] * [Upstream Quality]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream First Pass Reliability",
+            "description": "Number of planned clean ups divided by the total planned and unplanned clean ups",
+            "expression": " DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Changeover Time",
+            "description": "Average duration of clean up records in 'Upstream Logs - Simplified'",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,### \"min\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "CAST Overall Equipment Efficiency (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"OEE_CAST\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.85,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "COAT Overall Equipment Efficiency (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"OEE_COAT\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.85,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency (Target)",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED('_Machines'[Department]), [CAST Overall Equipment Efficiency (Target)],",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), [COAT Overall Equipment Efficiency (Target)],",
+              "    ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]) / 2",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "CAST First Pass Reliability (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"FPass_CAST\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.95,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "COAT First Pass Reliability (Target)",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"FPass_COAT\",",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.95,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream First Pass Reliability (Target)",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED('_Machines'[Department]), [CAST First Pass Reliability (Target)],",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), [COAT First Pass Reliability (Target)],",
+              "    ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]) / 2",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Changeover Time (Target)",
+            "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified'",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Upstream Changeover Time],",
+              "    SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\"))",
+              ")"
+            ],
+            "formatString": "#,### \"min\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Performance Impact",
+            "description": "Impact on the overall performance of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Upstream Ideal Production Footage] - [Upstream Actual Production Footage],",
+              "    CALCULATE(",
+              "        [Upstream Ideal Production Footage],",
+              "        ALL(",
+              "            'Upstream Logs - Simplified'[Category],",
+              "            'Upstream Logs - Simplified'[Causes],",
+              "            'Upstream Logs - Simplified'[Further Detail],",
+              "            'Upstream Logs - Simplified'[Comments],",
+              "            'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "            'Upstream Logs - Simplified'[Specification Number],",
+              "            'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "        ),",
+              "        ALL(_Machines[Machine Name])",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Availability Impact",
+            "description": "Impact on the overall availablility of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    CALCULATE(",
+              "        [Upstream Runtime Minutes],",
+              "        'Upstream Logs - Simplified'[Category] <> \"Production\"",
+              "    ),",
+              "    CALCULATE(",
+              "        [Upstream Runtime Minutes],",
+              "        ALL(",
+              "            'Upstream Logs - Simplified'[Category],",
+              "            'Upstream Logs - Simplified'[Causes],",
+              "            'Upstream Logs - Simplified'[Further Detail],",
+              "            'Upstream Logs - Simplified'[Comments],",
+              "            'Upstream Logs - Simplified'[Non Uptime Reason],",
+              "            'Upstream Logs - Simplified'[Specification Number],",
+              "            'Upstream Logs - Simplified'[Efficiency Hitter]",
+              "        ),",
+              "        ALL(_Machines[Machine Name])",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Quality",
+            "description": "A fixed number defined by Engineering",
+            "expression": [
+              "",
+              "VAR CAST = 0.95",
+              "VAR COAT = 0.98",
+              "",
+              "RETURN",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED(_Machines[Department]), CAST,",
+              "    \"COAT\" IN ALLSELECTED(_Machines[Department]), COAT,",
+              "    0.95",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency Impact",
+            "description": "Impact on the overall equipment efficiency of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+            "expression": "(( [Upstream Availability] + [Upstream Availability Impact] ) * ( [Upstream Performance] + [Upstream Performance Impact] ) * [Upstream Quality] ) - [Upstream Overall Equipment Efficiency]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Days Since Last Unplanned Clean Up",
+            "description": "Number of days between yesterday and the last unplanned clean up before yesterday",
+            "expression": [
+              "",
+              "VAR UP_Cause = ",
+              "    SWITCH( TRUE(),",
+              "        \"CAST\" IN ALLSELECTED(_Machines[Department]), \"Unplanned - Casting\",",
+              "        \"COAT\" IN ALLSELECTED(_Machines[Department]), \"Unplanned\",",
+              "        \"Unplanned\"",
+              "    )",
+              "",
+              "VAR Last_Date =",
+              "    CALCULATE(",
+              "        MAX( 'Upstream Logs - Simplified'[Production Date] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Production Date] < [Yesterday]",
+              "                && 'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
+              "                && 'Upstream Logs - Simplified'[Causes] = UP_Cause",
+              "        )    ",
+              "    )",
+              "",
+              "RETURN",
+              "DATEDIFF(Last_Date, [Yesterday], DAY)"
+            ],
+            "formatString": "#,###0 \"days\"",
+            "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "Upstream Changeover Scrap",
+            "description": "Average footage of clean up records. In Casting, this value is the caliper scrap. In Coating, it is the combined footage of consecutive clean up and setup records.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( 'Upstream Logs - Simplified'[Scrap Footage] ),",
+              "    FILTER(",
+              "        'Upstream Logs - Simplified',",
+              "        'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Upstream Logs"
           }
         ]
       },
@@ -2696,9 +3468,8 @@
             "sourceColumn": "BatchNoKey"
           },
           {
-            "name": "NotificationNoKey",
+            "name": "Notification Number",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "NotificationNoKey"
           },
           {
@@ -2738,7 +3509,7 @@
             "name": "QBlock Quantity",
             "dataType": "double",
             "sourceColumn": "QBlockQuantityValue",
-            "formatString": "0.00",
+            "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
@@ -2761,16 +3532,28 @@
             "name": "Notification Text",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))",
-            "displayFolder": "Hold Tag Related"
+            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
           },
           {
             "type": "calculated",
             "name": "Notification Code",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[NotificationNoKey] ))",
-            "displayFolder": "Hold Tag Related"
+            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
+          },
+          {
+            "type": "calculated",
+            "name": "Notification Enter Date",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " LOOKUPVALUE( 'Hold Tag Documents'[Enter Date], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -3107,11 +3890,35 @@
           },
           {
             "name": "Is New Product",
-            "dataType": "boolean",
+            "dataType": "int64",
             "description": "Indicates whether the material is less than or equal to 3 years as of today from Commercialization Date",
             "sourceColumn": "IsNewProduct",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
             "displayFolder": "Classification"
+          },
+          {
+            "name": "Length (ft)",
+            "dataType": "double",
+            "description": "SAP Source: MARM.LAENG OR MARM.UMREN; Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
+            "sourceColumn": "LengthValue",
+            "formatString": "#,0",
+            "displayFolder": "Dimensions"
+          },
+          {
+            "name": "Width (in)",
+            "dataType": "double",
+            "description": "SAP Source: MARM.BREIT. Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
+            "sourceColumn": "WidthValue",
+            "formatString": "#,0.00",
+            "displayFolder": "Dimensions"
+          },
+          {
+            "name": "Square Feet",
+            "dataType": "double",
+            "description": "Product of length and width (in to ft). Applies to 'FERT' and 'HAWA' materials only.",
+            "sourceColumn": "SquareFeetValue",
+            "formatString": "#,0",
+            "displayFolder": "Dimensions"
           }
         ],
         "partitions": [
@@ -4314,12 +5121,6 @@
             "sourceColumn": "CreditBlock"
           },
           {
-            "name": "Processing Status",
-            "dataType": "string",
-            "description": "SAP Source: VBUK.GBSTA",
-            "sourceColumn": "OverallBlock"
-          },
-          {
             "name": "Route Type",
             "dataType": "string",
             "description": "SAP Source: VBAP.ROUTE",
@@ -4591,6 +5392,61 @@
             "dataType": "string",
             "description": "SAP Source: MARC.MAABC",
             "sourceColumn": "TierCode"
+          },
+          {
+            "name": "Processing Status",
+            "dataType": "string",
+            "sourceColumn": "ProcessingBlock"
+          },
+          {
+            "name": "Allocated Amount Local",
+            "dataType": "double",
+            "sourceColumn": "AllocatedAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Allocated Amount",
+            "dataType": "double",
+            "sourceColumn": "AllocatedAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Shipped Amount Local",
+            "dataType": "double",
+            "sourceColumn": "ShippedAmount",
+            "formatString": "#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shipped Amount",
+            "dataType": "double",
+            "sourceColumn": "ShippedAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sample Category",
+            "dataType": "string",
+            "description": "Calculated column: If the order type is 'KL', then 'Full Rolls'. Else if the order type is 'ZSMP' and order reason is 'Tradeshow Requests' then 'Tradeshow'. Else if order type is 'ZSMP' and material group is 'MARKETG', then 'Literature'. Else if order type is 'ZSMP' and not a tradeshow nor literature, then 'Samples'. Otherwise, 'Not Applicable'.",
+            "sourceColumn": "FOCCategory"
           }
         ],
         "partitions": [
@@ -5657,6 +6513,690 @@
             }
           }
         ]
+      },
+      {
+        "name": "Goods Issues and Receipts",
+        "description": "SAP Source: MKPF and MSEG. Contains postings of goods issue and goods receipts posted in the last 3 fiscal years.",
+        "columns": [
+          {
+            "name": "Material Document Number",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.MBLNR",
+            "sourceColumn": "MaterialDocNo"
+          },
+          {
+            "name": "Material Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.ZEILE",
+            "sourceColumn": "MaterialDocItemNo"
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.MJAHR",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.BWART",
+            "sourceColumn": "MovementType"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.MATNR",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.AUFNR",
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.CHARG",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.WERKS",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGORT",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "Storage Bin",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGPLA",
+            "sourceColumn": "StorageBin"
+          },
+          {
+            "name": "Storage Type",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGTYP",
+            "sourceColumn": "StorageType"
+          },
+          {
+            "name": "Reason Code",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.GRUND",
+            "sourceColumn": "ReasonCode"
+          },
+          {
+            "name": "Material Document Header Text",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.BKTXT",
+            "sourceColumn": "DocHeaderText"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Extracted from Document Header Text",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Posted By",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.USNAM",
+            "sourceColumn": "PostingUsername"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.BUDAT",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Posting Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.CPUTM",
+            "sourceColumn": "PostingTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Calculated from posting date and time. Production dates starts at 6AM and ends at 5:59AM the next day.",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.ERFME",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "description": "SAP Source: MSEG.ERFMG",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Linear Feet",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LinearFeet",
+            "formatString": "#,0",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Square Feet",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "SquareFeet",
+            "formatString": "#,0",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "description": "SAP Source: MSEG.DMBTR",
+            "sourceColumn": "Amount",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_TRANSACTIONS_MATERIAL = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_MATERIAL\"]}[Data]",
+                "in",
+                "    dbo_VW_TRANSACTIONS_MATERIAL"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Converting Man Hours",
+        "columns": [
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date starts at 6am and ends at 5:59am the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Shift",
+            "dataType": "string",
+            "sourceColumn": "Shift",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Production Hours",
+            "dataType": "double",
+            "description": "The number of hours across all converting employees when they are producing material",
+            "sourceColumn": "ProductionHours",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Non Production Hours",
+            "dataType": "double",
+            "description": "The total number of hours across all converting employees when they are doing trainings, FEs, and other non-production activities",
+            "sourceColumn": "NonProductionHours",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Available Hours",
+            "dataType": "double",
+            "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
+            "sourceColumn": "AvailableHours",
+            "formatString": "0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Notes",
+            "dataType": "string",
+            "sourceColumn": "Notes"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_CONV_HOURS\"]}[Data]",
+                "in",
+                "    dbo_VW_ABSORPTION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Converting Uptime",
+        "columns": [
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date starts at 6am and ends at 5:59am the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Uptime Seconds",
+            "dataType": "int64",
+            "sourceColumn": "UptimeSeconds"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_CONV_UPTIME = Source{[Schema=\"dbo\",Item=\"VW_CONV_UPTIME\"]}[Data]",
+                "in",
+                "    dbo_VW_CONV_UPTIME"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Upstream Logs - Raw",
+        "description": "Similar to machine log queries that includes job data and primary structure tables",
+        "columns": [
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Calculated column derived from the name of the database",
+            "sourceColumn": "Machine"
+          },
+          {
+            "name": "Job Index",
+            "dataType": "int64",
+            "description": "Source: jobindex.JobIndex",
+            "sourceColumn": "JobIndex",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Start Time",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StartTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Stop Time",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StopTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Footage",
+            "dataType": "int64",
+            "description": "Source: jobdata.LastRollFt",
+            "sourceColumn": "Footage",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Ideal Footage",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+            "sourceColumn": "IdealFootage",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: primarystruct.Category",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Causes",
+            "dataType": "string",
+            "description": "Source: primarystruct.Causes",
+            "sourceColumn": "Causes"
+          },
+          {
+            "name": "Further Detail",
+            "dataType": "string",
+            "description": "Source: primarystruct.FurtherDetail",
+            "sourceColumn": "FurtherDetail"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: primarystruct.Comments",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "Source: primarystruct.ProcessOrder",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "Source: primarystruct.Spec",
+            "sourceColumn": "SpecNo"
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date of the 'Start Time'; A production day is between 6:00AM and 5:59:59AM the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Production Shift",
+            "dataType": "int64",
+            "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
+            "sourceColumn": "ShiftNum"
+          },
+          {
+            "name": "Specification Linespeed",
+            "dataType": "int64",
+            "description": "Source: primarystruct.SpecLS",
+            "sourceColumn": "SpecLinespeed",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Actual Linespeed",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
+            "sourceColumn": "ActualLinespeed"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_LOG_RAW = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_LOG_RAW\"]}[Data],",
+                "    #\"Sorted Rows\" = Table.Sort(dbo_VW_UPSTREAM_LOG_RAW,{{\"Machine\", Order.Ascending}, {\"StartTime\", Order.Ascending}, {\"StopTime\", Order.Ascending}})",
+                "in",
+                "    #\"Sorted Rows\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Upstream Logs - Simplified",
+        "description": "Similar to 'Upstream Logs - Raw' except Production/Downtime records are split if the record occurs in between different shifts or calendar day. Also, consecutively similar clean up records (by category, causes, further detail/comments, and PO) are combined",
+        "columns": [
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Calculated column derived from the name of the database",
+            "sourceColumn": "Machine"
+          },
+          {
+            "name": "Start Time",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StartTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "StopTime",
+            "dataType": "dateTime",
+            "description": "Source: jobdata.Date_Time",
+            "sourceColumn": "StopTime",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Duration Minutes",
+            "dataType": "double",
+            "description": "Duration between 'Start Time' and 'Stop Time' in minutes",
+            "sourceColumn": "DurationMinute",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Footage",
+            "dataType": "int64",
+            "description": "Source: jobdata.LastRollFt",
+            "sourceColumn": "Footage",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Ideal Footage",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+            "sourceColumn": "IdealFootage",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Scrap Footage",
+            "dataType": "int64",
+            "description": "Total footage of caliper or setup scrap during clean ups",
+            "sourceColumn": "ScrapFootage",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: primarystruct.Category",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Causes",
+            "dataType": "string",
+            "description": "Source: primarystruct.Causes",
+            "sourceColumn": "Causes"
+          },
+          {
+            "name": "Further Detail",
+            "dataType": "string",
+            "description": "Source: primarystruct.FurtherDetail",
+            "sourceColumn": "FurtherDetail"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: primarystruct.Comments",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "Non Uptime Reason",
+            "dataType": "string",
+            "description": "Calculated column derived from 'Further Detail' and 'Comments' of non-production records; Used for grouping big hitters of availability",
+            "sourceColumn": "NonUptimeReason"
+          },
+          {
+            "name": "Efficiency Hitter",
+            "dataType": "string",
+            "description": "Calculated column derived from 'Further Detail', 'Comments', and 'Specification Number'; Used for grouping big hitters of overall equipment efficiency",
+            "sourceColumn": "EfficiencyHitter"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "Source: primarystruct.Spec",
+            "sourceColumn": "SpecNo"
+          },
+          {
+            "name": "Is Transition",
+            "dataType": "boolean",
+            "description": "A record is transition if it is end of production, downtime, unplanned clean up, or planned clean ups that occur before/after the previous types of records mentioned",
+            "sourceColumn": "IsTransition"
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Production date of the 'Start Time'; A production day is between 6:00AM and 5:59:59AM the next day",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Production Shift",
+            "dataType": "int64",
+            "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
+            "sourceColumn": "ShiftNum"
+          },
+          {
+            "name": "Specification Linespeed",
+            "dataType": "int64",
+            "description": "Source: primarystruct.SpecLS",
+            "sourceColumn": "SpecLinespeed",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Actual Linespeed",
+            "dataType": "int64",
+            "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
+            "sourceColumn": "ActualLinespeed"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_LOG_SIMPLIFIED = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_LOG_SIMPLIFIED\"]}[Data],",
+                "    #\"Sorted Rows\" = Table.Sort(dbo_VW_UPSTREAM_LOG_SIMPLIFIED,{{\"Machine\", Order.Ascending}, {\"StartTime\", Order.Ascending}, {\"StopTime\", Order.Ascending}})",
+                "in",
+                "    #\"Sorted Rows\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Machines",
+        "description": "Contains machine names used to filter related tables with 'Machine Name' fields",
+        "columns": [
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_zMACHINE = Source{[Schema=\"dbo\",Item=\"zMACHINE\"]}[Data]",
+                "in",
+                "    dbo_zMACHINE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Production Shifts",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Production Shift",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value1]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Shift Name",
+            "dataType": "string",
+            "isNameInferred": false,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value2]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "{ (\"1\", \"1st\"), (\"2\", \"2nd\"), (\"3\", \"3rd\") }"
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -5698,7 +7238,7 @@
       {
         "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
         "fromTable": "Blocked Inventory",
-        "fromColumn": "NotificationNoKey",
+        "fromColumn": "Notification Number",
         "toTable": "Hold Tag Documents",
         "toColumn": "Notification Number",
         "isActive": false
@@ -6044,6 +7584,92 @@
         "fromColumn": "Receiving Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "29b9c765-765f-47b2-99ab-83bc3b93a8b8",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "55be127a-f081-4dd0-ae15-9cea0b6b081c",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "92d76df7-af86-4843-9820-c0dc4d79be5d",
+        "fromTable": "Converting Man Hours",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "6985a741-d8a9-4d99-bee9-693dd4e5011c",
+        "fromTable": "Converting Uptime",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "fbe75965-0259-4a21-9f85-7ec85969c6b3",
+        "toCardinality": "many",
+        "fromTable": "Converting Uptime",
+        "fromColumn": "Machine Name",
+        "toTable": "Goods Issues and Receipts",
+        "toColumn": "Machine Name",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "ae929e18-a212-4e3a-887a-33676a5d28cb",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "2a7d8317-b122-4a81-b5ba-c855ebccc8c2",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "ab46bd23-f168-453a-9da6-0f7839a7504a",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "c43d17ba-58df-49a4-a1f2-f33e0a1c591c",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "10344338-100d-447d-9f74-b27f469d26d0",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "3dfea972-a6c3-4217-a6f9-2e2df7e2eecb",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Production Shift",
+        "toTable": "_Production Shifts",
+        "toColumn": "Production Shift"
+      },
+      {
+        "name": "becaf1fd-b98b-4518-8016-1bf2f89b99fa",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Production Shift",
+        "toTable": "_Production Shifts",
+        "toColumn": "Production Shift"
       }
     ],
     "perspectives": [
@@ -6076,6 +7702,12 @@
               },
               {
                 "name": "Notification Text"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Enter Date"
               }
             ]
           },
@@ -6313,6 +7945,15 @@
               },
               {
                 "name": "PQ Complaint Cycle Time"
+              },
+              {
+                "name": "Current Q-Block Quantity"
+              },
+              {
+                "name": "Current S-Block Quantity"
+              },
+              {
+                "name": "Current Expired Quantity"
               }
             ]
           },
@@ -6388,6 +8029,54 @@
               },
               {
                 "name": "Material Type"
+              },
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "X Distribution Status"
               }
             ]
           },
@@ -6898,6 +8587,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -6999,9 +8697,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Route Type"
               },
               {
@@ -7075,6 +8770,12 @@
               },
               {
                 "name": "Ship To Name"
+              },
+              {
+                "name": "Sample Category"
+              },
+              {
+                "name": "Tier"
               }
             ]
           },
@@ -7394,6 +9095,9 @@
               },
               {
                 "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "Overall Cost"
               }
             ]
           },
@@ -7450,6 +9154,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -7619,9 +9332,6 @@
               },
               {
                 "name": "Organization"
-              },
-              {
-                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -8018,6 +9728,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -8181,9 +9900,6 @@
               },
               {
                 "name": "Organization"
-              },
-              {
-                "name": "Processing Status"
               },
               {
                 "name": "Plant"
@@ -8373,6 +10089,15 @@
               },
               {
                 "name": "PD Var SO Customer Open Amount"
+              },
+              {
+                "name": "SO Allocated Amount"
+              },
+              {
+                "name": "SO Customer Open Margin"
+              },
+              {
+                "name": "SO Shipped Amount"
               }
             ]
           },
@@ -8429,6 +10154,15 @@
               },
               {
                 "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -8532,9 +10266,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Plant"
               },
               {
@@ -8566,6 +10297,39 @@
               },
               {
                 "name": "In Stock"
+              },
+              {
+                "name": "Allocated Amount"
+              },
+              {
+                "name": "Allocated Amount Local"
+              },
+              {
+                "name": "Customer Open Margin Amount"
+              },
+              {
+                "name": "Customer Open Margin Amount (Local)"
+              },
+              {
+                "name": "Has Changes (CS)"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Shipped Amount"
+              },
+              {
+                "name": "Shipped Amount Local"
+              },
+              {
+                "name": "Shipped On Time Quantity"
+              },
+              {
+                "name": "Tier"
+              },
+              {
+                "name": "Sample Category"
               }
             ]
           },
@@ -9106,6 +10870,15 @@
               },
               {
                 "name": "Material Number - Description"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -9492,6 +11265,15 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -9820,6 +11602,15 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "Square Feet"
               }
             ]
           },
@@ -9932,9 +11723,6 @@
                 "name": "Organization"
               },
               {
-                "name": "Processing Status"
-              },
-              {
                 "name": "Plant"
               },
               {
@@ -9972,6 +11760,24 @@
               },
               {
                 "name": "Tier"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Allocated Amount Local"
+              },
+              {
+                "name": "Allocated Amount"
+              },
+              {
+                "name": "Shipped Amount Local"
+              },
+              {
+                "name": "Shipped Amount"
+              },
+              {
+                "name": "Sample Category"
               }
             ]
           },
@@ -10182,6 +11988,15 @@
               },
               {
                 "name": "Sales Order Line Count (Automated + Manual)"
+              },
+              {
+                "name": "SO Allocated Amount"
+              },
+              {
+                "name": "SO Customer Open Margin"
+              },
+              {
+                "name": "SO Shipped Amount"
               }
             ]
           },
@@ -10199,6 +12014,565 @@
               },
               {
                 "name": "OrderNoKey"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Engineering",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Goods Issues and Receipts",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "Linear Feet"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Material Document Header Text"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posted By"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Posting Time"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reason Code"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Unit of Measure"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "GI Linear Footage"
+              },
+              {
+                "name": "GI Scrap Rate"
+              },
+              {
+                "name": "GR Linear Footage"
+              },
+              {
+                "name": "GR Square Footage"
+              },
+              {
+                "name": "Yesterday"
+              },
+              {
+                "name": "GIR Amount"
+              },
+              {
+                "name": "GIR Linear Footage"
+              },
+              {
+                "name": "GIR Quantity"
+              },
+              {
+                "name": "GIR Square Footage"
+              },
+              {
+                "name": "CONV Available Hours"
+              },
+              {
+                "name": "CONV Production Hours"
+              },
+              {
+                "name": "CONV Square Feet per Man Hour"
+              },
+              {
+                "name": "CONV Square Feet per Man Hour (Target)"
+              },
+              {
+                "name": "CONV Square Feet per Man Hour (Target Variance)"
+              },
+              {
+                "name": "CONV Availability"
+              },
+              {
+                "name": "CONV Uptime Hours"
+              },
+              {
+                "name": "PD GI Linear Footage"
+              },
+              {
+                "name": "PD GI Scrap Rate"
+              },
+              {
+                "name": "PD GR Linear Footage"
+              },
+              {
+                "name": "Upstream Actual Production Footage"
+              },
+              {
+                "name": "Upstream Ideal Production Footage"
+              },
+              {
+                "name": "Upstream Runtime Minutes"
+              },
+              {
+                "name": "Upstream Uptime Minutes"
+              },
+              {
+                "name": "Upstream Actual Footage"
+              },
+              {
+                "name": "Upstream Ideal Footage"
+              },
+              {
+                "name": "Upstream Downtime Hours"
+              },
+              {
+                "name": "Upstream Planned CU Count"
+              },
+              {
+                "name": "Upstream Unplanned CU Count"
+              },
+              {
+                "name": "Upstream Availability"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency"
+              },
+              {
+                "name": "Upstream Performance"
+              },
+              {
+                "name": "Upstream First Pass Reliability"
+              },
+              {
+                "name": "Upstream Changeover Time"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency (Target)"
+              },
+              {
+                "name": "Upstream First Pass Reliability (Target)"
+              },
+              {
+                "name": "Upstream Changeover Time (Target)"
+              },
+              {
+                "name": "Upstream Performance Impact"
+              },
+              {
+                "name": "Upstream Availability Impact"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency Impact"
+              },
+              {
+                "name": "Upstream Quality"
+              },
+              {
+                "name": "Upstream Days Since Last Unplanned Clean Up"
+              },
+              {
+                "name": "Upstream Changeover Scrap"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Converting Man Hours",
+            "columns": [
+              {
+                "name": "Available Hours"
+              },
+              {
+                "name": "Non Production Hours"
+              },
+              {
+                "name": "Notes"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Production Hours"
+              },
+              {
+                "name": "Shift"
+              }
+            ]
+          },
+          {
+            "name": "Converting Uptime",
+            "columns": [
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Uptime Seconds"
+              }
+            ]
+          },
+          {
+            "name": "Upstream Logs - Raw",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Causes"
+              },
+              {
+                "name": "Comments"
+              },
+              {
+                "name": "Footage"
+              },
+              {
+                "name": "Further Detail"
+              },
+              {
+                "name": "Ideal Footage"
+              },
+              {
+                "name": "Job Index"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Start Time"
+              },
+              {
+                "name": "Stop Time"
+              },
+              {
+                "name": "Specification Linespeed"
+              },
+              {
+                "name": "Actual Linespeed"
+              }
+            ]
+          },
+          {
+            "name": "Upstream Logs - Simplified",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Causes"
+              },
+              {
+                "name": "Comments"
+              },
+              {
+                "name": "Duration Minutes"
+              },
+              {
+                "name": "Efficiency Hitter"
+              },
+              {
+                "name": "Footage"
+              },
+              {
+                "name": "Further Detail"
+              },
+              {
+                "name": "Ideal Footage"
+              },
+              {
+                "name": "Is Transition"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Non Uptime Reason"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Scrap Footage"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Start Time"
+              },
+              {
+                "name": "StopTime"
+              },
+              {
+                "name": "Specification Linespeed"
+              },
+              {
+                "name": "Actual Linespeed"
+              }
+            ]
+          },
+          {
+            "name": "_Machines",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
+              }
+            ]
+          },
+          {
+            "name": "_Production Shifts",
+            "columns": [
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Shift Name"
               }
             ]
           }
@@ -10753,6 +13127,14 @@
           {
             "memberName": "DOMAIN\\xcai",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21504"
+          },
+          {
+            "memberName": "DOMAIN\\htolla",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20437"
+          },
+          {
+            "memberName": "DOMAIN\\lmota",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21494"
           }
         ],
         "tablePermissions": [

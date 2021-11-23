@@ -3115,12 +3115,6 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Upstream Logs"
-          },
-          {
-            "name": "Upstream Overall Equipment Efficiency (Target Var)",
-            "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency (Target)]",
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
           }
         ]
       },
@@ -7628,6 +7622,13 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
+        "name": "ae929e18-a212-4e3a-887a-33676a5d28cb",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
         "name": "2a7d8317-b122-4a81-b5ba-c855ebccc8c2",
         "fromTable": "Upstream Logs - Raw",
         "fromColumn": "Production Date",
@@ -7668,13 +7669,6 @@
         "fromColumn": "Production Shift",
         "toTable": "_Production Shifts",
         "toColumn": "Production Shift"
-      },
-      {
-        "name": "ae929e18-a212-4e3a-887a-33676a5d28cb",
-        "fromTable": "Upstream Logs - Simplified",
-        "fromColumn": "Production Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -9677,12 +9671,6 @@
               },
               {
                 "name": "MTD PY Absorption"
-              },
-              {
-                "name": "Sales Order Line Count"
-              },
-              {
-                "name": "Sales Order Count"
               }
             ]
           },
@@ -12396,9 +12384,6 @@
               },
               {
                 "name": "Upstream Changeover Scrap"
-              },
-              {
-                "name": "Upstream Overall Equipment Efficiency (Target Var)"
               }
             ]
           },
@@ -13149,18 +13134,6 @@
           {
             "memberName": "DOMAIN\\lmota",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21494"
-          },
-          {
-            "memberName": "DOMAIN\\PTennies",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1007"
-          },
-          {
-            "memberName": "DOMAIN\\DBhogte",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8872"
-          },
-          {
-            "memberName": "DOMAIN\\amejia",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20917"
           }
         ],
         "tablePermissions": [

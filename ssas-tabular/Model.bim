@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3087,7 +3088,7 @@
               "        MAX( 'Upstream Logs - Simplified'[Production Date] ),",
               "        FILTER(",
               "            'Upstream Logs - Simplified',",
-              "            'Upstream Logs - Simplified'[Production Date] < [Yesterday]",
+              "            'Upstream Logs - Simplified'[Production Date] <= [Yesterday]",
               "                && 'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
               "                && 'Upstream Logs - Simplified'[Causes] = UP_Cause",
               "        )    ",
@@ -12665,6 +12666,10 @@
           {
             "memberName": "DOMAIN\\mqadir",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
+          },
+          {
+            "memberName": "DOMAIN\\lkemp",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
           }
         ]
       },
@@ -13084,10 +13089,6 @@
           {
             "memberName": "DOMAIN\\lflores",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2784"
-          },
-          {
-            "memberName": "DOMAIN\\lkemp",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
           },
           {
             "memberName": "DOMAIN\\LLebron",

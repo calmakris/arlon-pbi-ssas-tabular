@@ -3191,6 +3191,12 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency (Target Var)",
+            "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency (Target)]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Upstream Logs"
           }
         ]
       },
@@ -4695,7 +4701,11 @@
               "expression": [
                 "CALCULATE(",
                 "    SELECTEDMEASURE(),",
-                "    LASTDATE( 'Calendar'[Date] )",
+                "    LASTDATE( 'Calendar'[Date] ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Report Date]",
+                "    )",
                 ")"
               ],
               "ordinal": 2
@@ -12531,6 +12541,9 @@
               },
               {
                 "name": "Report Date"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency (Target Var)"
               }
             ]
           },

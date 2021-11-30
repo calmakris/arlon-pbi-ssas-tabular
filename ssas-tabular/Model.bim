@@ -673,7 +673,7 @@
               "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Sales"
           },
           {
@@ -692,7 +692,7 @@
               "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Sales"
           },
           {
@@ -711,21 +711,21 @@
               "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Sales"
           },
           {
             "name": "Gross Margin",
             "description": "Net of gross sales and overall cost; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " SUM( 'Sales Invoice Documents'[Gross Margin Amount] )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Sales"
           },
           {
             "name": "Net Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [Net Sales] - [Overall Cost]",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Sales"
           },
           {
@@ -1209,49 +1209,49 @@
             "name": "MTD Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1286,14 +1286,14 @@
             "name": "MTD PY Gross Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [MTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Var Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " IF( NOT( OR(ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD PY Gross Sales]) ) ), [FYTD Gross Sales] - [FYTD PY Gross Sales], BLANK() )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1313,14 +1313,8 @@
               "    )",
               ")"
             ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,0",
+            "displayFolder": "Sales"
           },
           {
             "name": "Backorder Amount",
@@ -1393,7 +1387,7 @@
             "name": "MTD PY Var Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " IF( NOT( OR(ISBLANK([MTD Gross Sales]), ISBLANK([MTD PY Gross Sales]) ) ), [MTD Gross Sales] - [MTD PY Gross Sales], BLANK() )",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1651,20 +1645,24 @@
             "description": "Budget numbers submitted by Sales to IT",
             "expression": [
               "",
-              "CALCULATE(",
-              "\tCALCULATE(",
-              "        SUM( Targets_Sales[GrossMarginMTD] ),",
-              "        FILTER( Targets_Sales, Targets_Sales[GrossMarginMTD] <> 0 ),",
-              "        TREATAS(",
-              "            VALUES( 'Customer Master'[Sales Territory] ),",
-              "            Targets_Sales[SalesTerritoryKey]",
+              "IF(",
+              "    ISFILTERED( 'Customer Master' ),",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            AVERAGE( Targets_Sales[GrossMarginMTD] ),",
+              "            FILTER( Targets_Sales, Targets_Sales[GrossMarginMTD] <> 0 ),",
+              "            TREATAS(",
+              "                VALUES( 'Customer Master'[Sales Territory] ),",
+              "                Targets_Sales[SalesTerritoryKey]",
+              "            ),",
+              "            TREATAS(",
+              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "                Targets_Sales[CalendarTimeKey]",
+              "            )",
               "        ),",
-              "        TREATAS(",
-              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "            Targets_Sales[CalendarTimeKey]",
-              "        )",
+              "        DATESMTD( 'Calendar'[Date] )",
               "    ),",
-              "    DATESMTD( 'Calendar'[Date] )",
+              "    BLANK()",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
@@ -1675,20 +1673,24 @@
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
-              "CALCULATE(",
+              "IF(",
+              "    ISFILTERED( 'Customer Master' ),",
               "    CALCULATE(",
-              "        AVERAGE( Targets_Sales[GrossMarginYTD] ),",
-              "        FILTER( Targets_Sales, Targets_Sales[GrossMarginYTD] <> 0 ),",
-              "        TREATAS(",
-              "            VALUES( 'Customer Master'[Sales Territory] ),",
-              "            Targets_Sales[SalesTerritoryKey]",
+              "        CALCULATE(",
+              "            AVERAGE( Targets_Sales[GrossMarginYTD] ),",
+              "            FILTER( Targets_Sales, Targets_Sales[GrossMarginYTD] <> 0 ),",
+              "            TREATAS(",
+              "                VALUES( 'Customer Master'[Sales Territory] ),",
+              "                Targets_Sales[SalesTerritoryKey]",
+              "            ),",
+              "            TREATAS(",
+              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "                Targets_Sales[CalendarTimeKey]",
+              "            )",
               "        ),",
-              "        TREATAS(",
-              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "            Targets_Sales[CalendarTimeKey]",
-              "        )",
+              "        DATESMTD( 'Calendar'[Date] )",
               "    ),",
-              "    DATESMTD( 'Calendar'[Date] )",
+              "    BLANK()",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
@@ -1698,14 +1700,14 @@
             "name": "MTD Gross Sales & Backorder",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [MTD Gross Sales] + [Backorder Amount]",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD Gross Sales & Backorder Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [MTD Gross Margin] + [Backorder Margin]",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -1718,41 +1720,57 @@
           {
             "name": "MTD Gross Sales Budget",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Time Intelligence",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "expression": [
+              " ",
+              "VAR WeightVal = ",
+              "    DIVIDE( ",
+              "        [MTD PY Gross Sales], ",
+              "        CALCULATE( [MTD PY Gross Sales], ALL('Material Master') ) ",
+              "    )",
+              "",
+              "RETURN",
+              "    SWITCH(TRUE(),",
+              "        ISFILTERED( 'Material Master' ), CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) ) * WeightVal,",
+              "        ISFILTERED( 'Customer Master' ), CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) ),",
+              "        BLANK()",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales Budget",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Time Intelligence",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "expression": [
+              " ",
+              "VAR WeightVal = ",
+              "    DIVIDE( ",
+              "        [FYTD PY Gross Sales], ",
+              "        CALCULATE( [FYTD PY Gross Sales], ALL('Material Master') ) ",
+              "    )",
+              "",
+              "RETURN",
+              "    SWITCH(TRUE(),",
+              "        ISFILTERED( 'Material Master' ), CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) ) * WeightVal,",
+              "        ISFILTERED( 'Customer Master' ), CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) ),",
+              "        BLANK()",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales & Backorder",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [FYTD Gross Sales] + [Backorder Amount]",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD Gross Sales & Backorder Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " [FYTD Gross Margin] + [Backorder Margin]",
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -3115,6 +3133,64 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "MTD Sales Order Amount %Grand",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [MTD Sales Order Amount],",
+              "    CALCULATE(",
+              "        [MTD Sales Order Amount],",
+              "        ALL( 'Customer Master' ),",
+              "        ALL( 'Material Master' )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Budget Var% Gross Sales",
+            "expression": [
+              "",
+              "VAR VarVal = IF( OR( ISBLANK([MTD Gross Sales]), ISBLANK([MTD Gross Sales Budget]) ), BLANK(), [MTD Gross Sales] - [MTD Gross Sales Budget] )",
+              "",
+              "RETURN",
+              "    DIVIDE(",
+              "        VarVal,",
+              "        [MTD Gross Sales Budget]",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Budget Var% Gross Sales",
+            "expression": [
+              "",
+              "VAR VarVal = IF( OR( ISBLANK([FYTD Gross Sales]), ISBLANK([FYTD Gross Sales Budget]) ), BLANK(), [FYTD Gross Sales] - [FYTD Gross Sales Budget] )",
+              "",
+              "RETURN",
+              "    DIVIDE(",
+              "        VarVal,",
+              "        [FYTD Gross Sales Budget]",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Report Date",
+            "expression": " CALCULATE( Max( 'Calendar'[Date] ), 'Calendar'[Date] <= [Yesterday] )",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ]
       },
@@ -7622,13 +7698,6 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "ae929e18-a212-4e3a-887a-33676a5d28cb",
-        "fromTable": "Upstream Logs - Simplified",
-        "fromColumn": "Production Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
         "name": "2a7d8317-b122-4a81-b5ba-c855ebccc8c2",
         "fromTable": "Upstream Logs - Raw",
         "fromColumn": "Production Date",
@@ -7669,6 +7738,13 @@
         "fromColumn": "Production Shift",
         "toTable": "_Production Shifts",
         "toColumn": "Production Shift"
+      },
+      {
+        "name": "ae929e18-a212-4e3a-887a-33676a5d28cb",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -7953,6 +8029,9 @@
               },
               {
                 "name": "Current Expired Quantity"
+              },
+              {
+                "name": "Report Date"
               }
             ]
           },
@@ -8644,6 +8723,9 @@
               },
               {
                 "name": "Sales Order Count"
+              },
+              {
+                "name": "Report Date"
               }
             ]
           },
@@ -9671,6 +9753,42 @@
               },
               {
                 "name": "MTD PY Absorption"
+              },
+              {
+                "name": "MTD Sales Order Amount %Grand"
+              },
+              {
+                "name": "FYTD Gross Margin% Budget"
+              },
+              {
+                "name": "FYTD Gross Sales Budget"
+              },
+              {
+                "name": "MTD Gross Margin% Budget"
+              },
+              {
+                "name": "MTD Gross Sales Budget"
+              },
+              {
+                "name": "FYTD Budget Var% Gross Sales"
+              },
+              {
+                "name": "MTD Budget Var% Gross Sales"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Amount"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "Report Date"
               }
             ]
           },
@@ -9966,6 +10084,32 @@
               },
               {
                 "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Business Transaction Type"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
               }
             ]
           }
@@ -12384,6 +12528,9 @@
               },
               {
                 "name": "Upstream Changeover Scrap"
+              },
+              {
+                "name": "Report Date"
               }
             ]
           },

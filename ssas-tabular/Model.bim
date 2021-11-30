@@ -3106,7 +3106,7 @@
               "        MAX( 'Upstream Logs - Simplified'[Production Date] ),",
               "        FILTER(",
               "            'Upstream Logs - Simplified',",
-              "            'Upstream Logs - Simplified'[Production Date] <= [Yesterday]",
+              "            'Upstream Logs - Simplified'[Production Date] <= [Report Date]",
               "                && 'Upstream Logs - Simplified'[Category] = \"Clean Up\"",
               "                && 'Upstream Logs - Simplified'[Causes] = UP_Cause",
               "        )    ",
@@ -3182,7 +3182,7 @@
           },
           {
             "name": "Report Date",
-            "expression": " CALCULATE( Max( 'Calendar'[Date] ), 'Calendar'[Date] <= [Yesterday] )",
+            "expression": " CALCULATE( Max( 'Calendar'[Date] ), FILTER( 'Calendar', 'Calendar'[Date] <= [Yesterday] ) )",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
             "annotations": [

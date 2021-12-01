@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3197,6 +3196,48 @@
             "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency (Target)]",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Upstream Logs"
+          },
+          {
+            "name": "YTD Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD PY Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " CALCULATE( [YTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD PY Gross Margin",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " CALCULATE( [YTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD PY Gross Margin%",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " CALCULATE( [YTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -9189,6 +9230,24 @@
               },
               {
                 "name": "Overall Cost"
+              },
+              {
+                "name": "YTD Gross Margin"
+              },
+              {
+                "name": "YTD Gross Margin%"
+              },
+              {
+                "name": "YTD Gross Sales"
+              },
+              {
+                "name": "YTD PY Gross Margin"
+              },
+              {
+                "name": "YTD PY Gross Margin%"
+              },
+              {
+                "name": "YTD PY Gross Sales"
               }
             ]
           },

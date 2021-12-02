@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -131,6 +133,20 @@
             "description": "SAP Source: TVKBT.BEZEI",
             "sourceColumn": "SalesTerritoryName",
             "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Price List Code",
+            "dataType": "string",
+            "description": "SAP Source: KNVV.PLTYP",
+            "sourceColumn": "PriceListCode",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Price List Name",
+            "dataType": "string",
+            "description": "SAP Source: T189T.PTEXT",
+            "sourceColumn": "PriceListName",
+            "displayFolder": "Master"
           }
         ],
         "partitions": [
@@ -3237,6 +3253,20 @@
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": " CALCULATE( [YTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD PY Var% Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " DIVIDE( [YTD PY Var Gross Sales], [YTD PY Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "YTD PY Var Gross Sales",
+            "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+            "expression": " IF( NOT( OR(ISBLANK([YTD Gross Sales]), ISBLANK([YTD PY Gross Sales]) ) ), [YTD Gross Sales] - [YTD PY Gross Sales], BLANK() )",
+            "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           }
         ]
@@ -9087,6 +9117,15 @@
               },
               {
                 "name": "Sales Territory Name"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -9248,6 +9287,12 @@
               },
               {
                 "name": "YTD PY Gross Sales"
+              },
+              {
+                "name": "YTD PY Var Gross Sales"
+              },
+              {
+                "name": "YTD PY Var% Gross Sales"
               }
             ]
           },
@@ -9679,6 +9724,12 @@
               },
               {
                 "name": "Sales Territory Name"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
               }
             ]
           },
@@ -10236,6 +10287,12 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
               }
             ]
           },

@@ -4071,6 +4071,27 @@
             "sourceColumn": "SquareFeetValue",
             "formatString": "#,0",
             "displayFolder": "Dimensions"
+          },
+          {
+            "name": "Color Name",
+            "dataType": "string",
+            "description": "SAP Source: CAWNT.ATWTB",
+            "sourceColumn": "ColorName",
+            "displayFolder": "Classification"
+          },
+          {
+            "name": "Size Code",
+            "dataType": "string",
+            "description": "SAP Source: CAWNT.ATWTB",
+            "sourceColumn": "SizeCode",
+            "displayFolder": "Classification"
+          },
+          {
+            "name": "Type Code",
+            "dataType": "string",
+            "description": "SAP Source: CAWNT.ATWTB",
+            "sourceColumn": "TypeCode",
+            "displayFolder": "Classification"
           }
         ],
         "partitions": [
@@ -8236,6 +8257,15 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -8755,6 +8785,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -9358,6 +9397,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -9974,6 +10022,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -10432,6 +10489,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -11148,6 +11214,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -11543,6 +11618,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -11880,6 +11964,15 @@
               },
               {
                 "name": "Square Feet"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },
@@ -12523,6 +12616,15 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Type Code"
               }
             ]
           },

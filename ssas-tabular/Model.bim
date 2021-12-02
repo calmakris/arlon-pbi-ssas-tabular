@@ -12954,6 +12954,135 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Inventory",
+        "tables": [
+          {
+            "name": "_Refresh Date",
+            "columns": [
+              {
+                "name": "Refresh Date"
+              },
+              {
+                "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Type Code"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "PO In Transit Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          }
+        ]
       }
     ],
     "roles": [

@@ -3704,6 +3704,13 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "type": "calculated",
+            "name": "Notification Author",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " LOOKUPVALUE( 'Hold Tag Documents'[Entered By], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )"
           }
         ],
         "partitions": [
@@ -7892,6 +7899,15 @@
               },
               {
                 "name": "Notification Enter Date"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "Plant"
               }
             ]
           },

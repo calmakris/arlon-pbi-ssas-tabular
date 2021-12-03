@@ -11,17 +11,16 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIDEV",
+            "server": "ARLPBIPRD",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
+          "path": "arlpbiprd;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1447,7 +1446,7 @@
           },
           {
             "name": "Beginning of Month",
-            "expression": " EOMONTH( [Yesterday], -1 ) + 1",
+            "expression": " EOMONTH( [Report Date], -1 ) + 1",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
             "annotations": [
@@ -1459,7 +1458,7 @@
           },
           {
             "name": "End of Month",
-            "expression": " EOMONTH( [Yesterday], 0 )",
+            "expression": " EOMONTH( [Report Date], 0 )",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
             "annotations": [
@@ -2095,7 +2094,7 @@
           },
           {
             "name": "End of Next Month",
-            "expression": " EOMONTH( [Yesterday], 1 )",
+            "expression": " EOMONTH( [Report Date], 1 )",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
             "annotations": [
@@ -4190,7 +4189,8 @@
           {
             "name": "Sub Category",
             "dataType": "string",
-            "sourceColumn": "SubCategory"
+            "sourceColumn": "SubCategory",
+            "sortByColumn": "CustomOrder"
           },
           {
             "name": "Category Renamed",
@@ -4223,6 +4223,12 @@
             "name": "Cost Element Name",
             "dataType": "string",
             "sourceColumn": "CostElementName"
+          },
+          {
+            "name": "CustomOrder",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "CustomOrder"
           }
         ],
         "partitions": [
@@ -4234,9 +4240,11 @@
               "expression": [
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data]",
+                "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data],",
+                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_ELEMENT_NAMES, \"CustomOrder\", each if [SubCategory] = \"Labor\" then 1 else if [SubCategory] = \"Setup\" then 2 else if [SubCategory] = \"Overhead\" then 3 else 0, type number),",
+                "    #\"Removed Errors\" = Table.RemoveRowsWithErrors(#\"Added Custom\", {\"SubCategory\"})",
                 "in",
-                "    dbo_VW_COST_ELEMENT_NAMES"
+                "    #\"Removed Errors\""
               ]
             }
           }

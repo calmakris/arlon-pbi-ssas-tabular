@@ -4178,6 +4178,13 @@
             "description": "SAP Source: MARA.ERNAM",
             "sourceColumn": "CreatedBy",
             "displayFolder": "Master"
+          },
+          {
+            "name": "Material Type Text",
+            "dataType": "string",
+            "description": "SAP Source: T134T.MTBEZ",
+            "sourceColumn": "MaterialTypeText",
+            "displayFolder": "Master"
           }
         ],
         "partitions": [
@@ -8540,6 +8547,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -9071,6 +9081,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -9686,6 +9699,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -10317,6 +10333,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -10787,6 +10806,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -11518,6 +11540,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -11925,6 +11950,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -12274,6 +12302,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -12932,6 +12963,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },
@@ -13361,6 +13395,9 @@
               },
               {
                 "name": "Created By"
+              },
+              {
+                "name": "Material Type Text"
               }
             ]
           },

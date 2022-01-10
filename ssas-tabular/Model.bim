@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -513,10 +514,35 @@
             "displayFolder": "Helper Attributes"
           },
           {
+            "name": "Week Group",
+            "dataType": "string",
+            "sourceColumn": "Group_Week",
+            "sortByColumn": "Year_Week_Sort_Key",
+            "displayFolder": "Individual Attributes"
+          },
+          {
             "name": "Is Next 3 Months",
             "dataType": "boolean",
             "sourceColumn": "Is_Next3_Months",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Is Recent Weeks",
+            "dataType": "boolean",
+            "sourceColumn": "Is_Recent_Weeks",
+            "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Weekday",
+            "dataType": "int64",
+            "sourceColumn": "Day_Of_Week",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Year_Week_Sort_Key",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Year_Week_Sort_Key"
           }
         ],
         "partitions": [
@@ -530,7 +556,7 @@
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_Next3_Months\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Day_Of_Week\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -661,6 +687,20 @@
           {
             "type": "calculated",
             "name": "Engineering",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Shop Orders",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Machine Status",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -2313,18 +2353,10 @@
             "expression": [
               " ",
               "CALCULATE( ",
-              "    SUM( 'Backorder Snapshots'[Incoming] ), ",
+              "    SUM( 'Backorder Snapshots'[Incoming Amount] ), ",
               "    FILTER(",
               "        'Calendar',",
               "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Material Master'[Material Type] ),",
-              "        'Backorder Snapshots'[Material Type]",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Purchase Orders'[Document Type] ),",
-              "        'Backorder Snapshots'[Order Type]",
               "    )",
               ")"
             ],
@@ -2366,18 +2398,10 @@
             "expression": [
               " ",
               "CALCULATE(",
-              "    SUM('Backorder Snapshots'[Outgoing]),",
+              "    SUM('Backorder Snapshots'[Outgoing Amount]),",
               "    FILTER(",
               "        'Calendar',",
-              "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Material Master'[Material Type] ),",
-              "        'Backorder Snapshots'[Material Type]",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Sales Order Documents'[Order Type] ),",
-              "        'Backorder Snapshots'[Order Type]",
+              "        'Calendar'[Date] = [Report Date] - 1",
               "    )",
               ")"
             ],
@@ -3200,7 +3224,7 @@
           },
           {
             "name": "Report Date",
-            "expression": " CALCULATE( Max( 'Calendar'[Date] ), FILTER( 'Calendar', 'Calendar'[Date] <= [Yesterday] ) )",
+            "expression": " CALCULATE( Max( 'Calendar'[Date] ), FILTER(  ALLSELECTED('Calendar'), 'Calendar'[Date] <= [Yesterday] ) )",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
             "annotations": [
@@ -3497,6 +3521,481 @@
             "name": "Days Count",
             "expression": " CALCULATE( COUNTROWS( 'Calendar' ), FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date] ) )",
             "isHidden": true
+          },
+          {
+            "name": "Current Inventory Amount",
+            "expression": [
+              "",
+              "SUMX(",
+              "    'Current Inventory',",
+              "    'Current Inventory'[Unrestricted Stock Amount (USD)]",
+              "        + 'Current Inventory'[Blocked Stock Amount (USD)]",
+              "        + 'Current Inventory'[Inspection Stock Amount (USD)]",
+              ") +",
+              "[PO In Transit Amount] +",
+              "[Current Open WIP Value]"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PO In Transit Amount",
+            "expression": [
+              " SUM( 'Stock Transfer Orders'[In Transit Amount] )",
+              ""
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Purchase Orders"
+          },
+          {
+            "name": "Current Open WIP Value",
+            "expression": " SUM( 'Open WIP'[Net Cost Amount] )",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Amount",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date])",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] = RefDate",
+              "        )",
+              "    )"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PD Inventory Amount",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER( 'Calendar', 'Calendar'[Date] < [Report Date])",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] = RefDate",
+              "        )",
+              "    )"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PD Var Inventory Amount",
+            "expression": " [Last Inventory Amount] - [PD Inventory Amount]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "S/O Count",
+            "expression": "DISTINCTCOUNT( 'Shop Orders'[Process Order Number] )",
+            "formatString": "#,0",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "S/O Ordered Quantity",
+            "expression": " SUM( 'Shop Orders'[Order Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "S/O Delivered Quantity",
+            "expression": " SUM( 'Shop Orders'[Delivered Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "S/O Scheduled Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [S/O Count],",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Shop Orders'[Basic Start Date] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "S/O Completed Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [S/O Count],",
+              "    FILTER(",
+              "        'Shop Orders',",
+              "        'Shop Orders'[Close Indicator] = \"X\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "S/O With Hold Tag Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [S/O Count],",
+              "    FILTER(",
+              "        'Shop Orders',",
+              "        'Shop Orders'[Notification Number] <> BLANK()",
+              "    )",
+              ")"
+            ],
+            "formatString": "0",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "S/O With Hold Tag %",
+            "expression": "DIVIDE( [S/O With Hold Tag Count], [S/O Count] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "Min Date",
+            "expression": "MIN( 'Calendar'[Date] )",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Max Date",
+            "expression": "MAX( 'Calendar'[Date] )",
+            "formatString": "MM/dd/yyyy",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "FYTD S/O Completed Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [S/O Completed Count],",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY S/O Completed Count",
+            "expression": "CALCULATE( [FYTD S/O Completed Count], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD S/O Scheduled Count",
+            "expression": "CALCULATE( [S/O Scheduled Count], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "S/O Scheduled Quantity (Upstream)",
+            "description": "Sum of 'Upstream Schedule'[Target Quantity]; This value is the total target quantity in the daily schedule files created by Planning",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Upstream Schedule'[Target Quantity] ),",
+              "    'Upstream Schedule'[Ranking Desc] = 1",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Shop Orders"
+          },
+          {
+            "name": "MTD S/O Remake Reason Hour",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Schedule'[Processing Hour] ),",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Month End S/O Remake Reason Hour",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Schedule'[Processing Hour] ),",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [End of Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Report Production Date",
+            "expression": "[Report Date] + TIME(6, 0, 0)",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MStat Last Process Order Number",
+            "description": "Last process order ran in the machine. This measure is designed to be analyzed by machine.",
+            "expression": [
+              "",
+              "VAR LastActDate = ",
+              "    CALCULATE(",
+              "        MAX('Machine Status'[Actual Start Time]),",
+              "        FILTER(",
+              "            'Machine Status',",
+              "            'Machine Status'[Plan Start Time] <> BLANK()",
+              "                && 'Machine Status'[Actual Start Time] <> BLANK()",
+              "                && 'Machine Status'[Actual Start Time] >= [Report Production Date]",
+              "        )",
+              "    )",
+              "RETURN",
+              "    LOOKUPVALUE('Machine Status'[Process Order Number],'Machine Status'[Actual Start Time], LastActDate, BLANK() )"
+            ],
+            "formatString": "\"0\"",
+            "displayFolder": "Machine Status"
+          },
+          {
+            "name": "MStat Last Actual Start Time",
+            "description": "Start time of the last process order ran in the machine. This measure is designed when analyzing by machine.",
+            "expression": "LOOKUPVALUE('Machine Status'[Actual Start Time],'Machine Status'[Process Order Number], [MStat Last Process Order Number], BLANK() )",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "displayFolder": "Machine Status",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MStat Last Plan Start Time",
+            "description": "Scheduled start time of last process order ran in the machine. This measure is designed when analyzing by machine.",
+            "expression": "LOOKUPVALUE('Machine Status'[Plan Start Time],'Machine Status'[Process Order Number], [MStat Last Process Order Number], BLANK() )",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "displayFolder": "Machine Status",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "MStat Net Hours Loss/Gain",
+            "description": "Difference between [Last Actual Start Time] and [Last Plan Start Time] measures in hours.",
+            "expression": "DATEDIFF( [MStat Last Actual Start Time], [MStat Last Plan Start Time], MINUTE) / 60",
+            "formatString": "#,##0.0 \"hr\"",
+            "displayFolder": "Machine Status"
+          },
+          {
+            "name": "MStat Skipped S/O Duration Hour",
+            "description": "Total duration of process orders scheduled between current production date and now. Skipped process orders have data in schedule files but none in machine data.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM('Machine Status'[Plan Duration Hour] ),",
+              "    FILTER(",
+              "        'Machine Status',",
+              "        'Machine Status'[Actual Start Time] = BLANK()",
+              "            && 'Machine Status'[Plan Stop Time] >= [Report Production Date]",
+              "            && 'Machine Status'[Plan Stop Time] <= [Now Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0.0 \"hr\"",
+            "displayFolder": "Machine Status"
+          },
+          {
+            "name": "MStat Effective Net Hours Loss/Gain",
+            "description": "Difference between [Net Hours Loss/Gain] and [Skipped S/O Duration Hours] measures.",
+            "expression": "[MStat Net Hours Loss/Gain] - [MStat Skipped S/O Duration Hour]",
+            "formatString": "#,##0.0 \"hr\"",
+            "displayFolder": "Machine Status"
+          },
+          {
+            "name": "MStat Net Footage Variance",
+            "description": "Variance between the actual and scheduled footage between start of current production date and now.",
+            "expression": [
+              "",
+              "VAR Actual = ",
+              "    CALCULATE(",
+              "        SUM( 'Machine Status'[Actual Footage] ),",
+              "        FILTER(",
+              "            'Machine Status',",
+              "            'Machine Status'[Actual Stop Time] >= [Report Production Date]",
+              "                && 'Machine Status'[Actual Stop Time] <= [Now Date]",
+              "                && 'Machine Status'[Plan Start Time] <> BLANK()",
+              "        )",
+              "    )",
+              "VAR Plan = ",
+              "    CALCULATE(",
+              "        SUM( 'Machine Status'[Plan Footage] ),",
+              "        FILTER(",
+              "            'Machine Status',",
+              "            'Machine Status'[Actual Stop Time] >= [Report Production Date]",
+              "                && 'Machine Status'[Actual Stop Time] <= [Now Date]",
+              "                && 'Machine Status'[Plan Start Time] <> BLANK()",
+              "        )",
+              "    )",
+              "RETURN",
+              "    Actual - Plan",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Machine Status"
+          },
+          {
+            "name": "MStat Data Integrity",
+            "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
+            "expression": [
+              "",
+              "VAR Required = DATEDIFF([Prior Production Date] - 1, [Now Date], SECOND) / 60",
+              "VAR Actual = ",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
+              "        FILTER(",
+              "            'Upstream Logs - Simplified',",
+              "            'Upstream Logs - Simplified'[Start Time] >= [Prior Production Date]",
+              "                && 'Upstream Logs - Simplified'[Start Time] <= [Now Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    DIVIDE( Actual, Required )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Machine Status"
+          },
+          {
+            "name": "Prior Production Date",
+            "expression": " ([Report Date] - 1) + TIME(6, 0, 0)",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Now Date",
+            "expression": "NOW() + TIME(0,0,0)",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Backorder Snapshot Amount",
+            "expression": "SUM('Backorder Snapshots'[Outgoing Amount])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Shortage Amount% Snapshot",
+            "expression": [
+              "",
+              "VAR bo = [Last Backorder Snapshot Amount]",
+              "VAR transit = SUM( 'Backorder Snapshots'[Incoming Amount] )",
+              "VAR stock = SUM( 'Backorder Snapshots'[Unrestricted Stock Amount] )",
+              "VAR sto_eom = SUM( 'Backorder Snapshots'[Remaining by Month End Transit Stock Amount] )",
+              "VAR inv = [Last Inventory Amount]",
+              "",
+              "RETURN",
+              "    IF(",
+              "        bo <= (transit + stock + sto_eom),",
+              "        BLANK(),",
+              "        DIVIDE(bo - transit - stock - sto_eom, inv)",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -3826,6 +4325,12 @@
             "dataType": "string",
             "description": "SAP Source: QMEL.MGEIN",
             "sourceColumn": "QuantityUoM"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: QMEL.FERTAUFNR",
+            "sourceColumn": "OrderNoKey"
           }
         ],
         "partitions": [
@@ -3838,7 +4343,7 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"EnteredBy\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"EnteredBy\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"OrderNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -6224,7 +6729,8 @@
           {
             "name": "Valuation Class",
             "dataType": "string",
-            "description": "SAP Source: MBEW.BKLAS",
+            "description": "SAP Source: MBEW.BKLAS; This field is not directly related to the '_Valuation Class' table",
+            "isHidden": true,
             "sourceColumn": "ValuationClass"
           },
           {
@@ -6292,6 +6798,12 @@
             "dataType": "string",
             "description": "SAP Source: VTTP.TKNUM",
             "sourceColumn": "ShipmentLineNo"
+          },
+          {
+            "name": "ValuationClassKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ValuationClassKey"
           }
         ],
         "partitions": [
@@ -6926,7 +7438,7 @@
       },
       {
         "name": "Backorder Snapshots",
-        "description": "A daily snapshot (near midnight) of backordered sales orders; Each value is the daily closing backorder value per plant, material type, and order type.",
+        "description": "A daily snapshot (near midnight) of backordered sales orders; Each value is the daily closing backorder value per plant and material number.",
         "columns": [
           {
             "name": "Snapshot Date",
@@ -6946,28 +7458,94 @@
             "sourceColumn": "PlantNoKey"
           },
           {
-            "name": "Material Type",
+            "name": "Material Number",
             "dataType": "string",
-            "sourceColumn": "MaterialType"
+            "sourceColumn": "MaterialNoKey"
           },
           {
-            "name": "Incoming",
-            "dataType": "double",
-            "sourceColumn": "Incoming",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Outgoing",
-            "dataType": "double",
-            "sourceColumn": "Outgoing",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Order Type",
+            "name": "Valuation Class",
             "dataType": "string",
-            "sourceColumn": "OrderType"
+            "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Incoming Amount",
+            "dataType": "double",
+            "sourceColumn": "IncomingAmt",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Outgoing Amount",
+            "dataType": "double",
+            "sourceColumn": "OutgoingAmt",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Unrestricted Stock Amount",
+            "dataType": "double",
+            "sourceColumn": "UnrestrictStockAmt",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Remaining by Month End Transit Stock Amount",
+            "dataType": "double",
+            "sourceColumn": "TransitStockEOMAmt",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Incoming Quantity",
+            "dataType": "double",
+            "sourceColumn": "IncomingQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Outgoing Quantity",
+            "dataType": "double",
+            "sourceColumn": "OutgoingQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Unrestricted Stock Quantity",
+            "dataType": "double",
+            "sourceColumn": "UnrestrictStockQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Remaining by Month End Transit Stock Quantity",
+            "dataType": "double",
+            "sourceColumn": "TransitStockEOMQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
           }
         ],
         "partitions": [
@@ -7420,6 +7998,14 @@
             "dataType": "int64",
             "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
             "sourceColumn": "ActualLinespeed"
+          },
+          {
+            "name": "Duration Minutes",
+            "dataType": "double",
+            "description": "Duration between [Start Time] and [Stop Time] in minutes",
+            "sourceColumn": "DurationMinutes",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
           }
         ],
         "partitions": [
@@ -7464,7 +8050,7 @@
             ]
           },
           {
-            "name": "StopTime",
+            "name": "Stop Time",
             "dataType": "dateTime",
             "description": "Source: jobdata.Date_Time",
             "sourceColumn": "StopTime",
@@ -7692,6 +8278,7 @@
             "description": "SAP Source: MARD.LABST",
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
@@ -7700,6 +8287,7 @@
             "description": "SAP Source: MARC.EISBE",
             "sourceColumn": "SafetyStockQty",
             "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
@@ -7732,30 +8320,71 @@
             "dataType": "double",
             "description": "SAP Source: MCHB.CINSM",
             "sourceColumn": "InspectionStockQty",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
           },
           {
             "name": "Blocked Stock Quantity",
             "dataType": "double",
             "description": "SAP Source: MCHB.CSPEM",
             "sourceColumn": "BlockedStockQty",
-            "formatString": "#,0.00"
-          },
-          {
-            "name": "UnitPrice",
-            "dataType": "double",
-            "sourceColumn": "UnitPrice"
-          },
-          {
-            "name": "UnitQty",
-            "dataType": "double",
-            "sourceColumn": "UnitQty"
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "sum"
           },
           {
             "name": "MaterialPlantKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "MaterialPlantKey"
+          },
+          {
+            "name": "Standard Price",
+            "dataType": "double",
+            "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
+            "sourceColumn": "StandardPrice",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Unrestricted Stock Amount (USD)",
+            "dataType": "double",
+            "sourceColumn": "UnrestrictStockAmtUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Inspection Stock Amount (USD)",
+            "dataType": "double",
+            "sourceColumn": "InspectionStockAmtUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Blocked Stock Amount (USD)",
+            "dataType": "double",
+            "sourceColumn": "BlockedStockAmtUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Standard Price (USD)",
+            "dataType": "double",
+            "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH * Today's exchange rate)",
+            "sourceColumn": "StandardPriceUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Valuation Class",
+            "dataType": "string",
+            "description": "SAP Source: MBEW.BKLAS",
+            "sourceColumn": "ValuationClass"
           }
         ],
         "partitions": [
@@ -7865,6 +8494,889 @@
                 "    dbo_VW_TARGETS_ABSORPTION = Source{[Schema=\"dbo\",Item=\"VW_TARGETS_ABSORPTION\"]}[Data]",
                 "in",
                 "    dbo_VW_TARGETS_ABSORPTION"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Valuation Class",
+        "description": "SAP Source: T025T. Contains valuation class mainly used for categorizing inventory",
+        "columns": [
+          {
+            "name": "Valuation Class",
+            "dataType": "string",
+            "description": "SAP Source: T025T.BKLAS",
+            "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "description": "SAP Source: T025T.BKBEZ",
+            "sourceColumn": "DescriptionText"
+          },
+          {
+            "name": "Rename",
+            "dataType": "string",
+            "description": "Custom value to rename the description of valuation class",
+            "sourceColumn": "RenameText",
+            "sortByColumn": "SortKey"
+          },
+          {
+            "name": "SortKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "SortKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_VALUATION_CLASS = Source{[Schema=\"dbo\",Item=\"VW_VALUATION_CLASS\"]}[Data]",
+                "in",
+                "    dbo_VW_VALUATION_CLASS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Open WIP",
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "ValuationClassKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ValuationClassKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Net Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "NetCostVal",
+            "formatString": "#,0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_INVENTORY_OPENWIP = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_OPENWIP\"]}[Data]",
+                "in",
+                "    dbo_VW_INVENTORY_OPENWIP"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Current Inventory Snapshots",
+        "columns": [
+          {
+            "name": "Snapshot Date",
+            "dataType": "dateTime",
+            "sourceColumn": "SnapshotDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Valuation Class",
+            "dataType": "string",
+            "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "AmountUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_zDAILY_INVENTORY = Source{[Schema=\"dbo\",Item=\"zDAILY_INVENTORY\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_zDAILY_INVENTORY,{{\"SnapshotDateKey\", type date}})",
+                "in",
+                "    #\"Changed Type\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Shop Orders",
+        "description": "Contains general information of all process orders. Related to 'Calendar' table via [End Date Key]",
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.AUFNR",
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Item Number",
+            "dataType": "string",
+            "description": "SAP Source: AFPO.POSNR",
+            "sourceColumn": "ItemNo"
+          },
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "description": "SAP Source: CRCO.KOSTL",
+            "sourceColumn": "CostCenterKey"
+          },
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "description": "SAP Source: CRHD.ARBPL or AFVC.KTSCH",
+            "sourceColumn": "WorkCenterKey"
+          },
+          {
+            "name": "Deliver Indicator",
+            "dataType": "string",
+            "description": "SAP Source: AFPO.ELIKZ",
+            "sourceColumn": "DeliverIndicator"
+          },
+          {
+            "name": "Final Deliver Indicator",
+            "dataType": "string",
+            "description": "SAP Source: AFPO.WEPOS",
+            "sourceColumn": "FinalDeliverIndicator"
+          },
+          {
+            "name": "Same Day Indicator",
+            "dataType": "string",
+            "description": "Calculated column. Value is 'X' if the order comment contains 'SAMEDAY' or 'SAME-DAY'.",
+            "sourceColumn": "SameDayIndicator"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "description": "SAP Source: AFPO.ABLAD",
+            "sourceColumn": "OrderComment"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.PLNBEZ",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Document Group",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.PLNNR",
+            "sourceColumn": "DocGroup"
+          },
+          {
+            "name": "Basic Start Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GSTRP",
+            "sourceColumn": "StartDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Basic Start Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GSUZP",
+            "sourceColumn": "StartTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Basic End Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GLTRP",
+            "sourceColumn": "EndDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Basic End Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GLUZP",
+            "sourceColumn": "EndTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Actual Start Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GSTRI",
+            "sourceColumn": "ActualStartDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Actual Start Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GSUZI",
+            "sourceColumn": "ActualStartTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Actual End Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GLTRI or AFPO.LTRMI",
+            "sourceColumn": "ActualEndDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Actual End Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GEUZI",
+            "sourceColumn": "ActualEndTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Confirm Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFPO.LTRMI",
+            "sourceColumn": "ConfirmDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.GMEIN",
+            "sourceColumn": "QtyUoM"
+          },
+          {
+            "name": "Order Quantity",
+            "dataType": "double",
+            "description": "SAP Source: AFKO.GAMNG",
+            "sourceColumn": "OrderQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Delivered Quantity",
+            "dataType": "double",
+            "description": "SAP Source: AFPO.WEMNG",
+            "sourceColumn": "DeliverQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "End Date Key",
+            "dataType": "dateTime",
+            "description": "Calculated column; If Actual End Date is available, use it. Otherwise, use the Basic End Date. Related to 'Calendar'[Date]",
+            "sourceColumn": "EndDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Notification Number",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              "CALCULATE(",
+              "    FIRSTNONBLANK( 'Hold Tag Documents'[Notification Number], TRUE() ),",
+              "    FILTER(",
+              "        'Hold Tag Documents',",
+              "        'Hold Tag Documents'[Process Order Number] = 'Shop Orders'[Process Order Number]",
+              "    )",
+              ")",
+              ""
+            ]
+          },
+          {
+            "name": "Close Indicator",
+            "dataType": "string",
+            "description": "Calculated column; Value is 'X' if the order has TECO, CLSD, or DLFL status. ",
+            "sourceColumn": "CloseIndicator"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "description": "Custom value assigned per work center",
+            "sourceColumn": "Department"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PROCESS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PROCESS\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PROCESS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Upstream Schedule",
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Remake Code",
+            "dataType": "string",
+            "sourceColumn": "RemakeCode"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "Machine"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Publish Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PublishDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Processing Hour",
+            "dataType": "double",
+            "sourceColumn": "ProcessingHour",
+            "formatString": "#,0.000"
+          },
+          {
+            "name": "Plan Finish Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanFinishDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Plan Production Date",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "PlanProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Target Quantity",
+            "dataType": "int64",
+            "sourceColumn": "TargetQuantity",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Adhesive Quantity",
+            "dataType": "int64",
+            "sourceColumn": "AdhesiveQuantity",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Remake Code Text",
+            "dataType": "string",
+            "sourceColumn": "RemakeCodeText"
+          },
+          {
+            "name": "Plan Start Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanStartDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Ranking Desc",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RankingDesc"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_SCHEDULE = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_SCHEDULE\"]}[Data]",
+                "in",
+                "    dbo_VW_UPSTREAM_SCHEDULE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Machine Status - Prep",
+        "isHidden": true,
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Machine Name",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Upstream Logs - Raw[Machine Name]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Process Order Number",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Upstream Logs - Raw[Process Order Number]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Start",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": false,
+            "isHidden": true,
+            "sourceColumn": "[Plan Start]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Start",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": false,
+            "isHidden": true,
+            "sourceColumn": "[Actual Start]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Stop",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": false,
+            "isHidden": true,
+            "sourceColumn": "[Plan Stop]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Stop",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": false,
+            "isHidden": true,
+            "sourceColumn": "[Actual Stop]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Ft",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Plan Ft]",
+            "formatString": "#,0"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Ft",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Actual Ft]",
+            "formatString": "#,0"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Dur",
+            "dataType": "double",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Plan Dur]",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Dur",
+            "dataType": "double",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Actual Dur]",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": [
+                "",
+                "VAR Actuals =",
+                "    SUMMARIZE(",
+                "        FILTER(",
+                "            'Upstream Logs - Raw',",
+                "            'Upstream Logs - Raw'[Stop Time] >= [Report Production Date] - 14",
+                "                && 'Upstream Logs - Raw'[Start Time] <= [Now Date]",
+                "                && 'Upstream Logs - Raw'[Category] = \"Production\"",
+                "                && 'Upstream Logs - Raw'[Process Order Number] <> \"000000000000\"",
+                "        ),",
+                "        'Upstream Logs - Raw'[Machine Name],",
+                "        'Upstream Logs - Raw'[Process Order Number],",
+                "        \"Plan Start\", BLANK(),",
+                "        \"Plan Stop\", BLANK(),",
+                "        \"Actual Start\", MIN( 'Upstream Logs - Raw'[Start Time] ),",
+                "        \"Actual Stop\", MAX( 'Upstream Logs - Raw'[Stop Time] ),",
+                "        \"Plan Ft\", BLANK(),",
+                "        \"Actual Ft\", SUM( 'Upstream Logs - Raw'[Footage] ),",
+                "        \"Plan Dur\", BLANK(),",
+                "        \"Actual Dur\", SUM( 'Upstream Logs - Raw'[Duration Minutes] ) / 60.0",
+                "    )",
+                "",
+                "VAR Schedule =",
+                "    SUMMARIZE(",
+                "        FILTER(",
+                "            'Upstream Schedule',",
+                "            'Upstream Schedule'[Plan Finish Date] >= [Report Production Date] - 14",
+                "                && 'Upstream Schedule'[Plan Start Date] < [Report Production Date] + 14",
+                "                && 'Upstream Schedule'[Publish Date] < [Report Production Date] + 1",
+                "                && 'Upstream Schedule'[Ranking Desc] = 1",
+                "                && 'Upstream Schedule'[Target Quantity] > 0",
+                "        ),",
+                "        'Upstream Schedule'[Machine Name],",
+                "        'Upstream Schedule'[Process Order Number],",
+                "        \"Plan Start\", MIN( 'Upstream Schedule'[Plan Start Date] ),",
+                "        \"Plan Stop\", MAX( 'Upstream Schedule'[Plan Finish Date] ),",
+                "        \"Actual Start\", BLANK(),",
+                "        \"Actual Stop\", BLANK(),",
+                "        \"Plan Ft\", SUM( 'Upstream Schedule'[Target Quantity] ),",
+                "        \"Actual Ft\", BLANK(),",
+                "        \"Plan Dur\", SUM( 'Upstream Schedule'[Processing Hour] ),",
+                "        \"Actual Dur\", BLANK()",
+                "    )",
+                "",
+                "RETURN ",
+                "    UNION(Actuals, Schedule)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Machine Status",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Machine Name",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Machine Status - Prep[Machine Name]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Process Order Number",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Machine Status - Prep[Process Order Number]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Start Time",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Plan Start Time]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Stop Time",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Plan Stop Time]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Start Time",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Actual Start Time]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Stop Time",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Actual Stop Time]",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Footage",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Plan Footage]",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Footage",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Actual Footage]",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Plan Duration Hour",
+            "dataType": "double",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Plan Duration Hour]",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Actual Duration Hour",
+            "dataType": "double",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Actual Duration Hour]",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": [
+                "",
+                "SUMMARIZE(",
+                "    'Machine Status - Prep',",
+                "    'Machine Status - Prep'[Machine Name],",
+                "    'Machine Status - Prep'[Process Order Number],",
+                "    \"Plan Start Time\", MIN( 'Machine Status - Prep'[Plan Start] ),",
+                "    \"Plan Stop Time\", MAX( 'Machine Status - Prep'[Plan Stop] ),",
+                "    \"Actual Start Time\", MIN( 'Machine Status - Prep'[Actual Start] ),",
+                "    \"Actual Stop Time\", MAX( 'Machine Status - Prep'[Actual Stop] ),",
+                "    \"Plan Footage\", SUM( 'Machine Status - Prep'[Plan Ft] ),",
+                "    \"Actual Footage\", SUM( 'Machine Status - Prep'[Actual Ft] ),",
+                "    \"Plan Duration Hour\", SUM( 'Machine Status - Prep'[Plan Dur] ),",
+                "    \"Actual Duration Hour\", SUM( 'Machine Status - Prep'[Actual Dur] )",
+                ")"
               ]
             }
           }
@@ -8377,6 +9889,136 @@
         "fromColumn": "CustomerOrgKey",
         "toTable": "Customer Master",
         "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "ee1a5083-509b-40ff-b7b4-6c386bad6dc5",
+        "fromTable": "Current Inventory",
+        "fromColumn": "Valuation Class",
+        "toTable": "_Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "8bb9fd92-a42c-4ac4-984a-03efddb6b978",
+        "fromTable": "Stock Transfer Orders",
+        "fromColumn": "ValuationClassKey",
+        "toTable": "_Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "9c9472c7-7f2d-4c47-8494-4c48136d7537",
+        "fromTable": "Open WIP",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "40c6d0d8-249b-46f8-8e23-ac83c22b9b42",
+        "fromTable": "Open WIP",
+        "fromColumn": "ValuationClassKey",
+        "toTable": "_Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "06dd5de3-8791-422a-9058-b4fa8f0ab14b",
+        "fromTable": "Current Inventory Snapshots",
+        "fromColumn": "Snapshot Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "fde30517-6684-4145-979d-5dc8561c26e9",
+        "fromTable": "Current Inventory Snapshots",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "d8687cfd-d586-4083-ab77-ae3b4c894ab3",
+        "fromTable": "Current Inventory Snapshots",
+        "fromColumn": "Valuation Class",
+        "toTable": "_Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "347ad7db-de48-4877-b20b-016915340cc1",
+        "fromTable": "Current Inventory Snapshots",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "4b317c1f-63e0-4239-9ebb-797489c7b214",
+        "fromTable": "Shop Orders",
+        "fromColumn": "End Date Key",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "3ae4c98f-48a8-41e0-b185-acb365c121ad",
+        "fromTable": "Shop Orders",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "e19a146a-9bb5-4d0b-917c-89dbb52fa2c6",
+        "fromTable": "Shop Orders",
+        "fromColumn": "Process Order Number",
+        "toTable": "Open WIP",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "1fe727ce-d640-4f9b-9406-0e31ca90416e",
+        "fromTable": "Shop Orders",
+        "fromColumn": "Basic Start Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "ae6ad895-860e-4659-a084-69992bb07400",
+        "toCardinality": "many",
+        "fromTable": "Upstream Logs - Simplified",
+        "fromColumn": "Process Order Number",
+        "toTable": "Shop Orders",
+        "toColumn": "Process Order Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "9e3d8325-575b-4183-9f36-c00277724088",
+        "fromTable": "Upstream Schedule",
+        "fromColumn": "Plan Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "fc38a22e-bdd7-41aa-8806-a4bac5a049cb",
+        "fromTable": "Upstream Schedule",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "ef834f87-34f7-4a20-8caa-012402592f76",
+        "toCardinality": "many",
+        "fromTable": "Upstream Schedule",
+        "fromColumn": "Process Order Number",
+        "toTable": "Shop Orders",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "658d9e4a-953d-40c9-bd24-176d803ed9bd",
+        "fromTable": "Machine Status",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "b273bbb0-3dc8-4e3c-a061-37e7b82f33c9",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
       }
     ],
     "perspectives": [
@@ -8523,7 +10165,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -8740,6 +10394,9 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Process Order Number"
               }
             ]
           },
@@ -8948,7 +10605,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -9227,7 +10896,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -9675,7 +11356,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -10300,7 +11993,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -11453,7 +13158,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -11512,6 +13229,9 @@
               },
               {
                 "name": "Shipment Document Line Number"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -11610,22 +13330,40 @@
             "name": "Backorder Snapshots",
             "columns": [
               {
-                "name": "Incoming"
-              },
-              {
-                "name": "Material Type"
-              },
-              {
-                "name": "Outgoing"
-              },
-              {
                 "name": "Plant"
               },
               {
                 "name": "Snapshot Date"
               },
               {
-                "name": "Order Type"
+                "name": "Material Number"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Incoming Amount"
+              },
+              {
+                "name": "Outgoing Amount"
+              },
+              {
+                "name": "Unrestricted Stock Amount"
+              },
+              {
+                "name": "Remaining by Month End Transit Stock Amount"
+              },
+              {
+                "name": "Incoming Quantity"
+              },
+              {
+                "name": "Outgoing Quantity"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Remaining by Month End Transit Stock Quantity"
               }
             ]
           },
@@ -11740,7 +13478,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -12051,7 +13801,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -12478,7 +14240,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -12950,7 +14724,19 @@
                 "name": "Is Last 3 Calendar Years"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -13205,7 +14991,19 @@
                 "name": "Year_Month_Sort_Key"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -13606,6 +15404,9 @@
               },
               {
                 "name": "Actual Linespeed"
+              },
+              {
+                "name": "Duration Minutes"
               }
             ]
           },
@@ -13664,7 +15465,7 @@
                 "name": "Start Time"
               },
               {
-                "name": "StopTime"
+                "name": "Stop Time"
               },
               {
                 "name": "Specification Linespeed"
@@ -13916,13 +15717,25 @@
                 "name": "Blocked Stock Quantity"
               },
               {
-                "name": "UnitPrice"
-              },
-              {
-                "name": "UnitQty"
-              },
-              {
                 "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Standard Price"
+              },
+              {
+                "name": "Unrestricted Stock Amount (USD)"
+              },
+              {
+                "name": "Inspection Stock Amount (USD)"
+              },
+              {
+                "name": "Blocked Stock Amount (USD)"
+              },
+              {
+                "name": "Standard Price (USD)"
+              },
+              {
+                "name": "Valuation Class"
               }
             ]
           },
@@ -14002,7 +15815,19 @@
                 "name": "Year_Month_Sort_Key"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -14158,6 +15983,9 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -14380,6 +16208,29 @@
                 "name": "SalesRegionSortKey"
               }
             ]
+          },
+          {
+            "name": "Current Inventory Snapshots",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Valuation Class"
+              }
+            ]
           }
         ]
       },
@@ -14484,7 +16335,19 @@
                 "name": "Year_Month_Sort_Key"
               },
               {
+                "name": "Week Group"
+              },
+              {
                 "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
               }
             ],
             "hierarchies": [
@@ -14527,13 +16390,25 @@
                 "name": "Blocked Stock Quantity"
               },
               {
-                "name": "UnitPrice"
-              },
-              {
-                "name": "UnitQty"
-              },
-              {
                 "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Standard Price"
+              },
+              {
+                "name": "Unrestricted Stock Amount (USD)"
+              },
+              {
+                "name": "Inspection Stock Amount (USD)"
+              },
+              {
+                "name": "Blocked Stock Amount (USD)"
+              },
+              {
+                "name": "Standard Price (USD)"
+              },
+              {
+                "name": "Valuation Class"
               }
             ]
           },
@@ -14575,6 +16450,9 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Process Order Number"
               }
             ]
           },
@@ -14705,6 +16583,9 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -14746,6 +16627,117 @@
               },
               {
                 "name": "Cumulative Expired Value"
+              },
+              {
+                "name": "Current Inventory Amount"
+              },
+              {
+                "name": "Report Date"
+              },
+              {
+                "name": "Beginning of Month"
+              },
+              {
+                "name": "Date 12 Months Ago"
+              },
+              {
+                "name": "End of Month"
+              },
+              {
+                "name": "End of Next Month"
+              },
+              {
+                "name": "Last Inventory Amount"
+              },
+              {
+                "name": "PD Inventory Amount"
+              },
+              {
+                "name": "PD Var Inventory Amount"
+              },
+              {
+                "name": "S/O Count"
+              },
+              {
+                "name": "S/O Delivered Quantity"
+              },
+              {
+                "name": "S/O Ordered Quantity"
+              },
+              {
+                "name": "S/O Completed Count"
+              },
+              {
+                "name": "S/O Scheduled Count"
+              },
+              {
+                "name": "S/O With Hold Tag Count"
+              },
+              {
+                "name": "S/O With Hold Tag %"
+              },
+              {
+                "name": "Max Date"
+              },
+              {
+                "name": "Min Date"
+              },
+              {
+                "name": "FYTD PY S/O Completed Count"
+              },
+              {
+                "name": "FYTD S/O Completed Count"
+              },
+              {
+                "name": "FYTD S/O Scheduled Count"
+              },
+              {
+                "name": "S/O Scheduled Quantity (Upstream)"
+              },
+              {
+                "name": "MTD S/O Remake Reason Hour"
+              },
+              {
+                "name": "Month End S/O Remake Reason Hour"
+              },
+              {
+                "name": "Report Production Date"
+              },
+              {
+                "name": "MStat Effective Net Hours Loss/Gain"
+              },
+              {
+                "name": "MStat Last Actual Start Time"
+              },
+              {
+                "name": "MStat Last Plan Start Time"
+              },
+              {
+                "name": "MStat Last Process Order Number"
+              },
+              {
+                "name": "MStat Net Hours Loss/Gain"
+              },
+              {
+                "name": "MStat Skipped S/O Duration Hour"
+              },
+              {
+                "name": "MStat Net Footage Variance"
+              },
+              {
+                "name": "MStat Data Integrity"
+              },
+              {
+                "name": "Now Date"
+              },
+              {
+                "name": "Prior Production Date"
+              },
+              {
+                "name": "Last Backorder Snapshot Amount"
+              },
+              {
+                "name": "Last Shortage Amount% Snapshot"
               }
             ]
           },
@@ -14792,6 +16784,355 @@
               },
               {
                 "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "_Valuation Class",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Rename"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "SortKey"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Orders",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Is Complete Delivery"
+              },
+              {
+                "name": "Is Goods Receipt Required"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Open Amount"
+              },
+              {
+                "name": "Open Quantity"
+              },
+              {
+                "name": "Ordered Amount"
+              },
+              {
+                "name": "Ordered Quantity"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Unit"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "VendorNoKey"
+              }
+            ]
+          },
+          {
+            "name": "Open WIP",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Net Cost Amount"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "ValuationClassKey"
+              }
+            ]
+          },
+          {
+            "name": "Current Inventory Snapshots",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Valuation Class"
+              }
+            ]
+          },
+          {
+            "name": "Shop Orders",
+            "columns": [
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Deliver Indicator"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Document Group"
+              },
+              {
+                "name": "End Date Key"
+              },
+              {
+                "name": "Final Deliver Indicator"
+              },
+              {
+                "name": "Item Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Same Day Indicator"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Work Center"
+              },
+              {
+                "name": "Close Indicator"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Department"
+              }
+            ]
+          },
+          {
+            "name": "Upstream Schedule",
+            "columns": [
+              {
+                "name": "Adhesive Quantity"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plan Finish Date"
+              },
+              {
+                "name": "Plan Production Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Processing Hour"
+              },
+              {
+                "name": "Publish Date"
+              },
+              {
+                "name": "Remake Code"
+              },
+              {
+                "name": "Target Quantity"
+              },
+              {
+                "name": "Remake Code Text"
+              },
+              {
+                "name": "Plan Start Date"
+              },
+              {
+                "name": "Ranking Desc"
+              }
+            ]
+          },
+          {
+            "name": "Machine Status",
+            "columns": [
+              {
+                "name": "Actual Duration Hour"
+              },
+              {
+                "name": "Actual Footage"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Actual Stop Time"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Plan Duration Hour"
+              },
+              {
+                "name": "Plan Footage"
+              },
+              {
+                "name": "Plan Start Time"
+              },
+              {
+                "name": "Plan Stop Time"
+              },
+              {
+                "name": "Process Order Number"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Snapshots",
+            "columns": [
+              {
+                "name": "Incoming Amount"
+              },
+              {
+                "name": "Incoming Quantity"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Outgoing Amount"
+              },
+              {
+                "name": "Outgoing Quantity"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Remaining by Month End Transit Stock Amount"
+              },
+              {
+                "name": "Remaining by Month End Transit Stock Quantity"
+              },
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Unrestricted Stock Amount"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Valuation Class"
               }
             ]
           }
@@ -14902,10 +17243,6 @@
           {
             "memberName": "DOMAIN\\dpiechocki",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8767"
-          },
-          {
-            "memberName": "DOMAIN\\GDebes",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1711"
           },
           {
             "memberName": "DOMAIN\\jsmith",
@@ -15032,6 +17369,10 @@
           {
             "memberName": "DOMAIN\\jkozlowski",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7200"
+          },
+          {
+            "memberName": "DOMAIN\\GDebes",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1711"
           }
         ],
         "tablePermissions": [

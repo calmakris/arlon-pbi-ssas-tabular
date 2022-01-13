@@ -3368,14 +3368,15 @@
             "description": "Cumulative stock amount by expiration date. Best used with 'Calendar' and its hierarchies.",
             "expression": [
               "",
-              "VAR MaxDate = MAX( 'Calendar'[Date] )",
-              "RETURN",
-              "    CALCULATE(",
-              "        SUM( 'Expired Inventory'[Stock Amount] ),",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Expired Inventory'[Expiration Date] ),",
-              "        'Calendar'[Date] <= MaxDate && 'Calendar'[Date] <> BLANK(),",
-              "        ALL( 'Calendar'[Date] )",
-              "    )"
+              "CALCULATE(",
+              "    SUM( 'Expired Inventory'[Stock Amount] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Expired Inventory'[Expiration Date] ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] <= MAX( 'Calendar'[Date] )",
+              "            && 'Calendar'[Date] <> BLANK()",
+              "    )",
+              ")"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Inventory",
@@ -3785,10 +3786,11 @@
               "CALCULATE(",
               "    CALCULATE(",
               "        SUM( 'Upstream Schedule'[Processing Hour] ),",
-              "        DATESMTD( 'Calendar'[Date] )",
+              "        DATESMTD( 'Calendar'[Date] ),",
+              "        'Upstream Schedule'[Ranking Desc] = 1",
               "    ),",
               "    FILTER(",
-              "        'Calendar',",
+              "        ALL( 'Calendar' ),",
               "        'Calendar'[Date] <= [End of Month]",
               "    )",
               ")"
@@ -3967,7 +3969,23 @@
           },
           {
             "name": "Last Backorder Snapshot Amount",
-            "expression": "SUM('Backorder Snapshots'[Outgoing Amount])",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date])",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM('Backorder Snapshots'[Outgoing Amount]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] = RefDate",
+              "        )",
+              "    )"
+            ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Time Intelligence",
             "annotations": [
@@ -3981,18 +3999,23 @@
             "name": "Last Shortage Amount% Snapshot",
             "expression": [
               "",
-              "VAR bo = [Last Backorder Snapshot Amount]",
-              "VAR transit = SUM( 'Backorder Snapshots'[Incoming Amount] )",
-              "VAR stock = SUM( 'Backorder Snapshots'[Unrestricted Stock Amount] )",
-              "VAR sto_eom = SUM( 'Backorder Snapshots'[Remaining by Month End Transit Stock Amount] )",
-              "VAR inv = [Last Inventory Amount]",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date])",
+              "    )",
+              "",
+              "VAR LastShortage = ",
+              "    CALCULATE(",
+              "        SUM( 'Backorder Snapshots'[Shortage Amount] ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] = RefDate",
+              "        )",
+              "    )",
               "",
               "RETURN",
-              "    IF(",
-              "        bo <= (transit + stock + sto_eom),",
-              "        BLANK(),",
-              "        DIVIDE(bo - transit - stock - sto_eom, inv)",
-              "    )"
+              "    DIVIDE( LastShortage, [Last Inventory Amount] )"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
@@ -4187,6 +4210,18 @@
             ],
             "formatString": "0",
             "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "End of Next 3 Months",
+            "expression": " EOMONTH( [Report Date], 3 )",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ]
       },
@@ -7735,6 +7770,26 @@
             "name": "Remaining by Month End Transit Stock Quantity",
             "dataType": "double",
             "sourceColumn": "TransitStockEOMQty",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Shortage Amount",
+            "dataType": "double",
+            "sourceColumn": "ShortageAmt",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Shortage Quantity",
+            "dataType": "double",
+            "sourceColumn": "ShortageQty",
             "formatString": "#,0.00",
             "summarizeBy": "sum"
           }
@@ -13974,6 +14029,12 @@
               },
               {
                 "name": "Remaining by Month End Transit Stock Quantity"
+              },
+              {
+                "name": "Shortage Amount"
+              },
+              {
+                "name": "Shortage Quantity"
               }
             ]
           },
@@ -17959,6 +18020,12 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Shortage Amount"
+              },
+              {
+                "name": "Shortage Quantity"
               }
             ]
           }

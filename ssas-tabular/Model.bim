@@ -3996,6 +3996,197 @@
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Accumulated Inventory Balance",
+            "description": "Accumulated balance as of this month relative to [Report Date]",
+            "expression": [
+              "",
+              "VAR LastVisibleDate =",
+              "    MAX ( 'Calendar'[Date] )",
+              "VAR FirstVisibleDate =",
+              "    MIN ( 'Calendar'[Date] )",
+              "VAR LastDateWithData =",
+              "    CALCULATE (",
+              "        MAX ( 'Inventory Balance (Totals)'[MonthDateKey] ),",
+              "        REMOVEFILTERS ()",
+              "    )",
+              "VAR Result =",
+              "    IF (",
+              "        FirstVisibleDate <= LastDateWithData,",
+              "        CALCULATE (",
+              "            SUM( 'Inventory Balance (Totals)'[Amount (Group Currency)] ),",
+              "            'Calendar'[Date] <= LastVisibleDate ",
+              "        )",
+              "    )",
+              "RETURN",
+              "    Result"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Prior Accumulated Inventory Balance",
+            "description": "Accumulated balance as of end of last month relative to [Report Date]",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Accumulated Inventory Balance],",
+              "    DATEADD( 'Calendar'[Date], -1, MONTH )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "Inventory Balance",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Inventory Balance (Items)'[Amount (Local Currency 2)] ),",
+              "        \"Local\", SUM( 'Inventory Balance (Items)'[Amount (Local Currency)] ),",
+              "        SUM( 'Inventory Balance (Items)'[Amount (Local Currency 2)] )",
+              "    ),",
+              "    SUM( 'Inventory Balance (Items)'[Amount (Local Currency)] )  ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Purchases)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Purchases\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Produced)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Produced\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Transfers)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Transfers\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Sales)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Sales\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Scrap)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Scrap\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Write-offs)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Write-offs\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Accruals)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Accruals\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (Reversals)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"Reversals\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance (PPV)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"PPV\"",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "MTD Inventory Balance",
+            "expression": "CALCULATE( [Inventory Balance], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory Balance"
+          },
+          {
+            "name": "Check Inventory Balance",
+            "description": "Value is 1 (or TRUE) if the [MTD Accumulated Inventory Balance] from 'Inventory Balance (Totals)' equals the sum of [MTD Prior Accumulated Inventory Balance] from 'Inventory Balance (Totals)' and [MTD Inventory Balance] from 'Inventory Balance (Items)'",
+            "expression": [
+              "",
+              "IF(",
+              "    ISBLANK( [MTD Prior Accumulated Inventory Balance] ),",
+              "    BLANK(),",
+              "    IF(",
+              "        ROUND([MTD Prior Accumulated Inventory Balance] + [MTD Inventory Balance], 2) = ROUND([MTD Accumulated Inventory Balance], 2),",
+              "        1,",
+              "        0",
+              "    )",
+              ")"
+            ],
+            "formatString": "0",
+            "displayFolder": "Inventory Balance"
           }
         ]
       },
@@ -7566,199 +7757,6 @@
         ]
       },
       {
-        "name": "Goods Issues and Receipts",
-        "description": "SAP Source: MKPF and MSEG. Contains postings of goods issue and goods receipts posted in the last 3 fiscal years.",
-        "columns": [
-          {
-            "name": "Material Document Number",
-            "dataType": "string",
-            "description": "SAP Source: MKPF.MBLNR",
-            "sourceColumn": "MaterialDocNo"
-          },
-          {
-            "name": "Material Document Line Number",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.ZEILE",
-            "sourceColumn": "MaterialDocItemNo"
-          },
-          {
-            "name": "Fiscal Year",
-            "dataType": "string",
-            "description": "SAP Source: MKPF.MJAHR",
-            "sourceColumn": "FiscalYear"
-          },
-          {
-            "name": "Movement Type",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.BWART",
-            "sourceColumn": "MovementType"
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.MATNR",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Process Order Number",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.AUFNR",
-            "isHidden": true,
-            "sourceColumn": "ProcessOrderNoKey"
-          },
-          {
-            "name": "Batch Number",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.CHARG",
-            "sourceColumn": "BatchNo"
-          },
-          {
-            "name": "Plant",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.WERKS",
-            "sourceColumn": "PlantNoKey"
-          },
-          {
-            "name": "Storage Location",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.LGORT",
-            "sourceColumn": "StorageLoc"
-          },
-          {
-            "name": "Storage Bin",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.LGPLA",
-            "sourceColumn": "StorageBin"
-          },
-          {
-            "name": "Storage Type",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.LGTYP",
-            "sourceColumn": "StorageType"
-          },
-          {
-            "name": "Reason Code",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.GRUND",
-            "sourceColumn": "ReasonCode"
-          },
-          {
-            "name": "Material Document Header Text",
-            "dataType": "string",
-            "description": "SAP Source: MKPF.BKTXT",
-            "sourceColumn": "DocHeaderText"
-          },
-          {
-            "name": "Machine Name",
-            "dataType": "string",
-            "description": "Extracted from Document Header Text",
-            "sourceColumn": "MachineName"
-          },
-          {
-            "name": "Posted By",
-            "dataType": "string",
-            "description": "SAP Source: MKPF.USNAM",
-            "sourceColumn": "PostingUsername"
-          },
-          {
-            "name": "Posting Date",
-            "dataType": "dateTime",
-            "description": "SAP Source: MSEG.BUDAT",
-            "sourceColumn": "PostingDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Posting Time",
-            "dataType": "dateTime",
-            "description": "SAP Source: MSEG.CPUTM",
-            "sourceColumn": "PostingTime",
-            "formatString": "HH:mm:ss",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Production Date",
-            "dataType": "dateTime",
-            "description": "Calculated from posting date and time. Production dates starts at 6AM and ends at 5:59AM the next day.",
-            "sourceColumn": "ProductionDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Unit of Measure",
-            "dataType": "string",
-            "description": "SAP Source: MSEG.ERFME",
-            "sourceColumn": "UnitOfMeasure"
-          },
-          {
-            "name": "Quantity",
-            "dataType": "double",
-            "description": "SAP Source: MSEG.ERFMG",
-            "sourceColumn": "Quantity",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "Linear Feet",
-            "dataType": "double",
-            "isHidden": true,
-            "sourceColumn": "LinearFeet",
-            "formatString": "#,0",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Square Feet",
-            "dataType": "double",
-            "isHidden": true,
-            "sourceColumn": "SquareFeet",
-            "formatString": "#,0",
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Amount",
-            "dataType": "double",
-            "description": "SAP Source: MSEG.DMBTR",
-            "sourceColumn": "Amount",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_VW_TRANSACTIONS_MATERIAL = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_MATERIAL\"]}[Data]",
-                "in",
-                "    dbo_VW_TRANSACTIONS_MATERIAL"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Converting Man Hours",
         "columns": [
           {
@@ -9381,6 +9379,541 @@
             }
           }
         ]
+      },
+      {
+        "name": "Goods Issues and Receipts",
+        "description": "SAP Source: MKPF and MSEG. Contains postings of goods issue and goods receipts posted in the last 3 fiscal years.",
+        "columns": [
+          {
+            "name": "Material Document Number",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.MBLNR",
+            "sourceColumn": "MaterialDocNo"
+          },
+          {
+            "name": "Material Document Line Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.ZEILE",
+            "sourceColumn": "MaterialDocItemNo"
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.MJAHR",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.BWART",
+            "sourceColumn": "MovementType"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.MATNR",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.AUFNR",
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.CHARG",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.WERKS",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGORT",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "Storage Bin",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGPLA",
+            "sourceColumn": "StorageBin"
+          },
+          {
+            "name": "Storage Type",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.LGTYP",
+            "sourceColumn": "StorageType"
+          },
+          {
+            "name": "Reason Code",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.GRUND",
+            "sourceColumn": "ReasonCode"
+          },
+          {
+            "name": "Material Document Header Text",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.BKTXT",
+            "sourceColumn": "DocHeaderText"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "description": "Extracted from Document Header Text",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Posted By",
+            "dataType": "string",
+            "description": "SAP Source: MKPF.USNAM",
+            "sourceColumn": "PostingUsername"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.BUDAT",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Posting Time",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.CPUTM",
+            "sourceColumn": "PostingTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Production Date",
+            "dataType": "dateTime",
+            "description": "Calculated from posting date and time. Production dates starts at 6AM and ends at 5:59AM the next day.",
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.ERFME",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "description": "SAP Source: MSEG.ERFMG",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Linear Feet",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "LinearFeet",
+            "formatString": "#,0",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Square Feet",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "SquareFeet",
+            "formatString": "#,0",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "description": "SAP Source: MSEG.DMBTR",
+            "sourceColumn": "Amount",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_TRANSACTIONS_MATERIAL = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_MATERIAL\"]}[Data]",
+                "in",
+                "    dbo_VW_TRANSACTIONS_MATERIAL"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Inventory Balance (Items)",
+        "columns": [
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "G/L Account Number",
+            "dataType": "string",
+            "sourceColumn": "GLAccountNoKey"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Accounting Document Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentNo"
+          },
+          {
+            "name": "Accounting Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "DocumentLineNo"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "sourceColumn": "DocumentType"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DocumentDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "string",
+            "sourceColumn": "FiscalPeriod"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Valuation Class",
+            "dataType": "string",
+            "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "sourceColumn": "MovementType"
+          },
+          {
+            "name": "Movement Type Category",
+            "dataType": "string",
+            "sourceColumn": "MovementTypeCategory"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Amount (Document Currency)",
+            "dataType": "double",
+            "sourceColumn": "AmountInDocCurrency",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Document Currency",
+            "dataType": "string",
+            "sourceColumn": "DocCurrency"
+          },
+          {
+            "name": "Amount (Local Currency)",
+            "dataType": "double",
+            "sourceColumn": "AmountInLocalCurrency",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Local Currency",
+            "dataType": "string",
+            "sourceColumn": "LocalCurrency"
+          },
+          {
+            "name": "Amount (Local Currency 2)",
+            "dataType": "double",
+            "sourceColumn": "AmountInLocalCurrency2",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Local Currency 2",
+            "dataType": "string",
+            "sourceColumn": "LocalCurrency2"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderNo"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey"
+          },
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "sourceColumn": "VendorNoKey"
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "sourceColumn": "CustomerNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Reference Document Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Item Text",
+            "dataType": "string",
+            "sourceColumn": "ItemText"
+          },
+          {
+            "name": "CustomerOrgKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerOrgKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_INVENTORY_BALANCE_ITEMS = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BALANCE_ITEMS\"]}[Data]",
+                "in",
+                "    dbo_VW_INVENTORY_BALANCE_ITEMS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Inventory Balance (Totals)",
+        "columns": [
+          {
+            "name": "Fiscal Year",
+            "dataType": "string",
+            "description": "SAP Source: FAGLFLEXT.RYEAR",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "Fiscal Period",
+            "dataType": "int64",
+            "description": "Calculated column after unpivoting HSLxx columns in FAGLFLEXT.",
+            "sourceColumn": "FiscalPeriod"
+          },
+          {
+            "name": "Ledger",
+            "dataType": "string",
+            "description": "SAP Source: FAGLFLEXT.RLDNR",
+            "sourceColumn": "LedgerType"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: FAGLFLEXT.RBUKRS",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "G/L Account Number",
+            "dataType": "string",
+            "description": "SAP Source: FAGLFLEXT.RACCT",
+            "sourceColumn": "AccountNo"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "description": "SAP Source: FAGLFLEXT.RTCUR",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Amount (Group Currency)",
+            "dataType": "double",
+            "description": "SAP Source: FAGLFLEXT.HSL01 to HSL12",
+            "sourceColumn": "AmountInGroup",
+            "formatString": "0.00"
+          },
+          {
+            "name": "MonthDateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "MonthDateKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_INVENTORY_BALANCE_TOTALS = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BALANCE_TOTALS\"]}[Data]",
+                "in",
+                "    dbo_VW_INVENTORY_BALANCE_TOTALS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "GL Account Names",
+        "description": "List of G/L accounts in 'AGCA' chart of accounts",
+        "columns": [
+          {
+            "name": "G/L Account Number",
+            "dataType": "string",
+            "description": "SAP Source: SKAT.SAKNR",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "AccountNoKey"
+          },
+          {
+            "name": "G/L Account Description",
+            "dataType": "string",
+            "description": "SAP Source: SKAT.TXT50",
+            "sourceColumn": "AccountDescription"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_GL_ACCOUNT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_GL_ACCOUNT_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_GL_ACCOUNT_NAMES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Company Code",
+        "description": "List of company codes (SAP Source: T001)",
+        "columns": [
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: T001.BUKRS",
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "description": "SAP Source: T001.WAERS",
+            "sourceColumn": "Currency"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_COMPCODE = Source{[Schema=\"dbo\",Item=\"VW_COMPCODE\"]}[Data]",
+                "in",
+                "    dbo_VW_COMPCODE"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -10019,6 +10552,83 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "b9425909-7f44-42d9-b4d9-ef825068889a",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "G/L Account Number",
+        "toTable": "GL Account Names",
+        "toColumn": "G/L Account Number"
+      },
+      {
+        "name": "9c1e5864-9a35-4c31-9aae-dc1865981c33",
+        "fromTable": "Inventory Balance (Totals)",
+        "fromColumn": "G/L Account Number",
+        "toTable": "GL Account Names",
+        "toColumn": "G/L Account Number"
+      },
+      {
+        "name": "e009df4d-6e8a-4df2-b04d-a3ac28c61edc",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "Valuation Class",
+        "toTable": "_Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "459c6d4a-2a16-433d-b42a-a821930060c5",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "368813ea-602e-4b41-afa2-b0f16320b642",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "Vendor Number",
+        "toTable": "Vendor Master",
+        "toColumn": "Vendor Number"
+      },
+      {
+        "name": "c027290f-a4f9-402e-b864-9e24d3be2c9c",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "CustomerOrgKey",
+        "toTable": "Customer Master",
+        "toColumn": "CustomerOrgKey"
+      },
+      {
+        "name": "a2d417b9-fe0d-4ef0-b1c0-5939f526a813",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "18e3a975-a427-437e-876a-7203858f128d",
+        "fromTable": "Inventory Balance (Totals)",
+        "fromColumn": "MonthDateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "e2773836-79ea-4759-a754-9a5012eabbc3",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "e6397c5c-7400-48d1-a482-adf7843b82c1",
+        "fromTable": "Inventory Balance (Totals)",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "18573a26-b074-4d4c-8ce6-6ec9f7ff6506",
+        "fromTable": "Inventory Balance (Items)",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -15016,80 +15626,6 @@
             ]
           },
           {
-            "name": "Goods Issues and Receipts",
-            "columns": [
-              {
-                "name": "Amount"
-              },
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "Fiscal Year"
-              },
-              {
-                "name": "Linear Feet"
-              },
-              {
-                "name": "Machine Name"
-              },
-              {
-                "name": "Material Document Header Text"
-              },
-              {
-                "name": "Material Document Line Number"
-              },
-              {
-                "name": "Material Document Number"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Movement Type"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "Posted By"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Posting Time"
-              },
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Production Date"
-              },
-              {
-                "name": "Quantity"
-              },
-              {
-                "name": "Reason Code"
-              },
-              {
-                "name": "Square Feet"
-              },
-              {
-                "name": "Storage Bin"
-              },
-              {
-                "name": "Storage Location"
-              },
-              {
-                "name": "Storage Type"
-              },
-              {
-                "name": "Unit of Measure"
-              }
-            ]
-          },
-          {
             "name": "Material Master",
             "columns": [
               {
@@ -15496,6 +16032,80 @@
                 "name": "Shift Name"
               }
             ]
+          },
+          {
+            "name": "Goods Issues and Receipts",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "Linear Feet"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Material Document Header Text"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posted By"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Posting Time"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reason Code"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Unit of Measure"
+              }
+            ]
           }
         ]
       },
@@ -15672,6 +16282,48 @@
               },
               {
                 "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "MTD Accumulated Inventory Balance"
+              },
+              {
+                "name": "MTD Prior Accumulated Inventory Balance"
+              },
+              {
+                "name": "MTD Inventory Balance (Accruals)"
+              },
+              {
+                "name": "MTD Inventory Balance (Produced)"
+              },
+              {
+                "name": "MTD Inventory Balance (Purchases)"
+              },
+              {
+                "name": "MTD Inventory Balance (Reversals)"
+              },
+              {
+                "name": "MTD Inventory Balance (Sales)"
+              },
+              {
+                "name": "MTD Inventory Balance (Scrap)"
+              },
+              {
+                "name": "MTD Inventory Balance (Transfers)"
+              },
+              {
+                "name": "MTD Inventory Balance (Write-offs)"
+              },
+              {
+                "name": "Inventory Balance"
+              },
+              {
+                "name": "MTD Inventory Balance (PPV)"
+              },
+              {
+                "name": "Check Inventory Balance"
+              },
+              {
+                "name": "MTD Inventory Balance"
               }
             ]
           },
@@ -16226,6 +16878,180 @@
               },
               {
                 "name": "Snapshot Date"
+              },
+              {
+                "name": "Valuation Class"
+              }
+            ]
+          },
+          {
+            "name": "GL Account Names",
+            "columns": [
+              {
+                "name": "G/L Account Description"
+              },
+              {
+                "name": "G/L Account Number"
+              }
+            ]
+          },
+          {
+            "name": "Inventory Balance (Items)",
+            "columns": [
+              {
+                "name": "Accounting Document Line Number"
+              },
+              {
+                "name": "Accounting Document Number"
+              },
+              {
+                "name": "Amount (Document Currency)"
+              },
+              {
+                "name": "Amount (Local Currency 2)"
+              },
+              {
+                "name": "Amount (Local Currency)"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Document Currency"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "G/L Account Number"
+              },
+              {
+                "name": "Item Text"
+              },
+              {
+                "name": "Local Currency"
+              },
+              {
+                "name": "Local Currency 2"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Movement Type Category"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reference Document Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Vendor Number"
+              }
+            ]
+          },
+          {
+            "name": "Inventory Balance (Totals)",
+            "columns": [
+              {
+                "name": "Amount (Group Currency)"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Year"
+              },
+              {
+                "name": "G/L Account Number"
+              },
+              {
+                "name": "Ledger"
+              },
+              {
+                "name": "MonthDateKey"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "_Valuation Class",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Rename"
+              },
+              {
+                "name": "SortKey"
               },
               {
                 "name": "Valuation Class"

@@ -4222,6 +4222,13 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "name": "MStat Indicator",
+            "description": "Log error / typo (-1); Skipped S/O (0); Other (1)",
+            "expression": "MAX( 'Machine Status'[Status] )",
+            "formatString": "0",
+            "displayFolder": "Machine Status"
           }
         ]
       },
@@ -9408,6 +9415,15 @@
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "sum"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Status",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[Status]"
           }
         ],
         "partitions": [
@@ -9428,7 +9444,23 @@
                 "    \"Plan Footage\", SUM( 'Machine Status - Prep'[Plan Ft] ),",
                 "    \"Actual Footage\", SUM( 'Machine Status - Prep'[Actual Ft] ),",
                 "    \"Plan Duration Hour\", SUM( 'Machine Status - Prep'[Plan Dur] ),",
-                "    \"Actual Duration Hour\", SUM( 'Machine Status - Prep'[Actual Dur] )",
+                "    \"Actual Duration Hour\", SUM( 'Machine Status - Prep'[Actual Dur] ),",
+                "    \"Status\",",
+                "        SWITCH( TRUE(),",
+                "            NOT(ISBLANK( MIN( 'Machine Status - Prep'[Actual Start] ) ) )",
+                "                && ISBLANK( MIN( 'Machine Status - Prep'[Plan Start] ) )",
+                "                && MAX( 'Machine Status - Prep'[Actual Stop] ) >= [Report Production Date]",
+                "                && MIN( 'Machine Status - Prep'[Actual Start] ) <= [Now Date], -1,",
+                "            ISBLANK( MIN( 'Machine Status - Prep'[Actual Start] ) )",
+                "                && NOT(ISBLANK( MIN( 'Machine Status - Prep'[Plan Start] ) ) )",
+                "                && MAX( 'Machine Status - Prep'[Plan Stop] ) >= [Report Production Date]",
+                "                && MIN( 'Machine Status - Prep'[Plan Start] ) <= [Now Date], 0,",
+                "            NOT(ISBLANK( MIN( 'Machine Status - Prep'[Actual Start] ) ) )",
+                "                && NOT(ISBLANK( MIN( 'Machine Status - Prep'[Plan Start] ) ) )",
+                "                && MAX( 'Machine Status - Prep'[Actual Stop] ) >= [Report Production Date]",
+                "                && MIN( 'Machine Status - Prep'[Actual Start] ) <= [Now Date], 1, ",
+                "            BLANK()",
+                "        )",
                 ")"
               ]
             }
@@ -17625,6 +17657,9 @@
               },
               {
                 "name": "Last Shortage Amount% Snapshot"
+              },
+              {
+                "name": "MStat Indicator"
               }
             ]
           },

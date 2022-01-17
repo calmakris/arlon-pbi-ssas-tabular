@@ -10704,12 +10704,11 @@
         "toColumn": "Plant"
       },
       {
-        "name": "56e0be47-1a9b-4c43-8428-32b03121860a",
+        "name": "def38767-e23d-4a2c-b94b-f024d4394589",
         "fromTable": "Backorder Snapshots",
         "fromColumn": "Plant",
         "toTable": "Plant",
-        "toColumn": "Plant",
-        "crossFilteringBehavior": "bothDirections"
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [

@@ -4491,11 +4491,6 @@
             "sourceColumn": "NotificationType"
           },
           {
-            "name": "Notification Code",
-            "dataType": "string",
-            "sourceColumn": "NotificationCode"
-          },
-          {
             "name": "Enter Date",
             "dataType": "dateTime",
             "sourceColumn": "EnterDateKey",
@@ -4522,11 +4517,6 @@
             "name": "Batch Number",
             "dataType": "string",
             "sourceColumn": "BatchNoKey"
-          },
-          {
-            "name": "Notification Text",
-            "dataType": "string",
-            "sourceColumn": "NotificationText"
           },
           {
             "name": "Quantity",
@@ -4567,6 +4557,16 @@
             "dataType": "string",
             "description": "SAP Source: QMEL.FERTAUFNR",
             "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Notification Code",
+            "dataType": "string",
+            "sourceColumn": "NotificationCode"
+          },
+          {
+            "name": "Notification Text",
+            "dataType": "string",
+            "sourceColumn": "NotificationText"
           }
         ],
         "partitions": [
@@ -4580,134 +4580,6 @@
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"EnteredBy\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"OrderNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
-                "in",
-                "    #\"Removed Other Columns\""
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Blocked Inventory",
-        "columns": [
-          {
-            "name": "MaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
-          },
-          {
-            "name": "Batch Number",
-            "dataType": "string",
-            "sourceColumn": "BatchNoKey"
-          },
-          {
-            "name": "Notification Number",
-            "dataType": "string",
-            "sourceColumn": "NotificationNoKey"
-          },
-          {
-            "name": "Plant",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "PlantNo"
-          },
-          {
-            "name": "Storage Location",
-            "dataType": "string",
-            "sourceColumn": "StorageLoc"
-          },
-          {
-            "name": "SBlock Quantity",
-            "dataType": "double",
-            "sourceColumn": "SBlockQuantityValue",
-            "formatString": "0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "SBlock Amount",
-            "dataType": "double",
-            "sourceColumn": "SBlockAmountUSD",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "QBlock Quantity",
-            "dataType": "double",
-            "sourceColumn": "QBlockQuantityValue",
-            "formatString": "#,0.00",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "QBlock Amount",
-            "dataType": "double",
-            "sourceColumn": "QBlockAmountUSD",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculated",
-            "name": "Notification Text",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": "IF(ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Text], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
-          },
-          {
-            "type": "calculated",
-            "name": "Notification Code",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " IF( ISBLANK(LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )), \"NO TAG\", LOOKUPVALUE( 'Hold Tag Documents'[Notification Code], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] ))"
-          },
-          {
-            "type": "calculated",
-            "name": "Notification Enter Date",
-            "dataType": "dateTime",
-            "isDataTypeInferred": true,
-            "expression": " LOOKUPVALUE( 'Hold Tag Documents'[Enter Date], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "type": "calculated",
-            "name": "Notification Author",
-            "dataType": "string",
-            "isDataTypeInferred": true,
-            "expression": " LOOKUPVALUE( 'Hold Tag Documents'[Entered By], 'Hold Tag Documents'[Notification Number], 'Blocked Inventory'[Notification Number] )"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Partition",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_VW_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BLOCK\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_BLOCK,{\"MaterialNoKey\", \"BatchNoKey\", \"NotificationNoKey\", \"PlantNo\", \"StorageLoc\", \"SBlockQuantityValue\", \"SBlockAmountUSD\", \"QBlockQuantityValue\", \"QBlockAmountUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -10004,6 +9876,125 @@
             }
           }
         ]
+      },
+      {
+        "name": "Blocked Inventory",
+        "columns": [
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNoKey"
+          },
+          {
+            "name": "Notification Number",
+            "dataType": "string",
+            "sourceColumn": "NotificationNoKey"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "SBlock Quantity",
+            "dataType": "double",
+            "sourceColumn": "SBlockQuantityValue",
+            "formatString": "0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "SBlock Amount",
+            "dataType": "double",
+            "sourceColumn": "SBlockAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "QBlock Quantity",
+            "dataType": "double",
+            "sourceColumn": "QBlockQuantityValue",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "QBlock Amount",
+            "dataType": "double",
+            "sourceColumn": "QBlockAmountUSD",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "_Values",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Notification Text",
+            "dataType": "string",
+            "sourceColumn": "NotificationText"
+          },
+          {
+            "name": "Notification Code",
+            "dataType": "string",
+            "sourceColumn": "NotificationCode"
+          },
+          {
+            "name": "Notification Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "NotificationEnterDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Notification Author",
+            "dataType": "string",
+            "sourceColumn": "NotificationAuthor"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"ARLPBI_STAGE\",",
+                "    dbo_VW_INVENTORY_BLOCK = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_BLOCK\"]}[Data]",
+                "in",
+                "    dbo_VW_INVENTORY_BLOCK"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -10043,14 +10034,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "Notification Number",
-        "toTable": "Hold Tag Documents",
-        "toColumn": "Notification Number",
-        "isActive": false
-      },
-      {
         "name": "3f9dd1f7-3ac5-4bce-b233-68a54ac9862f",
         "fromTable": "Blocked Inventory Snapshots",
         "fromColumn": "Snapshot Date",
@@ -10079,13 +10062,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "MaterialNoKey",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
         "name": "75f7059e-5891-4145-8c3b-08cf13009c2f",
         "fromTable": "Expired Inventory",
         "fromColumn": "Material Number",
@@ -10096,13 +10072,6 @@
         "name": "64d69090-8c95-4cfd-bae5-098fdca2fd7c",
         "fromTable": "Complaint Documents",
         "fromColumn": "PlantNoKey",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
-        "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
       },
@@ -10347,14 +10316,6 @@
         "fromColumn": "Snapshot Date",
         "toTable": "Calendar",
         "toColumn": "Date"
-      },
-      {
-        "name": "56e0be47-1a9b-4c43-8428-32b03121860a",
-        "fromTable": "Backorder Snapshots",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant",
-        "crossFilteringBehavior": "bothDirections"
       },
       {
         "name": "c8527d3a-4ba0-4eee-b9b7-2e8ab62b7327",
@@ -10719,56 +10680,42 @@
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "Notification Number",
+        "toTable": "Hold Tag Documents",
+        "toColumn": "Notification Number",
+        "isActive": false
+      },
+      {
+        "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "56e0be47-1a9b-4c43-8428-32b03121860a",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
       {
         "name": "QA Dashboard",
         "tables": [
-          {
-            "name": "Blocked Inventory",
-            "columns": [
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "QBlock Amount"
-              },
-              {
-                "name": "QBlock Quantity"
-              },
-              {
-                "name": "SBlock Amount"
-              },
-              {
-                "name": "SBlock Quantity"
-              },
-              {
-                "name": "Storage Location"
-              },
-              {
-                "name": "Notification Code"
-              },
-              {
-                "name": "Notification Text"
-              },
-              {
-                "name": "Notification Number"
-              },
-              {
-                "name": "Notification Enter Date"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "Notification Author"
-              },
-              {
-                "name": "Plant"
-              }
-            ]
-          },
           {
             "name": "Blocked Inventory Snapshots",
             "columns": [
@@ -11069,13 +11016,7 @@
                 "name": "Enter Date"
               },
               {
-                "name": "Notification Code"
-              },
-              {
                 "name": "Notification Number"
-              },
-              {
-                "name": "Notification Text"
               },
               {
                 "name": "Notification Type"
@@ -11097,6 +11038,12 @@
               },
               {
                 "name": "Process Order Number"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Text"
               }
             ]
           },
@@ -11221,6 +11168,35 @@
             "columns": [
               {
                 "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Blocked Inventory",
+            "columns": [
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "QBlock Amount"
+              },
+              {
+                "name": "QBlock Quantity"
+              },
+              {
+                "name": "SBlock Amount"
+              },
+              {
+                "name": "SBlock Quantity"
+              },
+              {
+                "name": "Storage Location"
               }
             ]
           }
@@ -17353,13 +17329,7 @@
                 "name": "MaterialNoKey"
               },
               {
-                "name": "Notification Code"
-              },
-              {
                 "name": "Notification Number"
-              },
-              {
-                "name": "Notification Text"
               },
               {
                 "name": "Notification Type"
@@ -17375,6 +17345,12 @@
               },
               {
                 "name": "Process Order Number"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Text"
               }
             ]
           },

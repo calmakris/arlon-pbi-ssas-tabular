@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -4113,6 +4112,11 @@
               "CALCULATE(",
               "    [MTD Inventory Balance],",
               "    'Inventory Balance (Items)'[Movement Type Category] = \"Transfers\"",
+              ") +",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Document Type] IN {\"AB\", \"ZA\"},",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"\"",
               ")"
             ],
             "formatString": "#,0.00",
@@ -4161,6 +4165,11 @@
               "CALCULATE(",
               "    [MTD Inventory Balance],",
               "    'Inventory Balance (Items)'[Movement Type Category] = \"Accruals\"",
+              ") +",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Document Type] = \"SA\",",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"\"",
               ")"
             ],
             "formatString": "#,0.00",
@@ -4185,6 +4194,11 @@
               "CALCULATE(",
               "    [MTD Inventory Balance],",
               "    'Inventory Balance (Items)'[Movement Type Category] = \"PPV\"",
+              ") +",
+              "CALCULATE(",
+              "    [MTD Inventory Balance],",
+              "    'Inventory Balance (Items)'[Document Type] = \"PR\",",
+              "    'Inventory Balance (Items)'[Movement Type Category] = \"\"",
               ")"
             ],
             "formatString": "#,0.00",

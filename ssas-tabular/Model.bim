@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "Username": "DOMAIN\\PBI-ETL",
@@ -3325,7 +3324,7 @@
               "IF(",
               "    [SO Allocated Quantity] < [Current Unrestricted Stock Quantity],",
               "    [Current Unrestricted Stock Quantity] - [SO Allocated Quantity],",
-              "    0",
+              "    BLANK()",
               ")"
             ],
             "formatString": "#,##0.00;-#,##0.00;\"-\"",
@@ -9563,40 +9562,48 @@
       },
       {
         "name": "Inventory Balance (Items)",
+        "description": "Accounting document items posted to inventory balance G/L accounts in the last 3 fiscal years. SAP Source: BSIS, BSAS, BKPF, ACCTIT, and EKKO",
         "columns": [
           {
             "name": "Company Code",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BUKRS",
             "sourceColumn": "CompanyCode"
           },
           {
             "name": "G/L Account Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.HKONT",
             "sourceColumn": "GLAccountNoKey"
           },
           {
             "name": "Plant",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.WERKS",
             "sourceColumn": "PlantNoKey"
           },
           {
             "name": "Accounting Document Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BELNR",
             "sourceColumn": "DocumentNo"
           },
           {
             "name": "Accounting Document Line Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BUZEI",
             "sourceColumn": "DocumentLineNo"
           },
           {
             "name": "Document Type",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.BLART",
             "sourceColumn": "DocumentType"
           },
           {
             "name": "Document Date",
             "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.BLDAT",
             "sourceColumn": "DocumentDate",
             "formatString": "Short Date",
             "annotations": [
@@ -9609,6 +9616,7 @@
           {
             "name": "Posting Date",
             "dataType": "dateTime",
+            "description": "SAP Source: BSIS/BSAS.BUDAT",
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
             "annotations": [
@@ -9621,47 +9629,56 @@
           {
             "name": "Fiscal Year",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.GJAHR",
             "sourceColumn": "FiscalYear"
           },
           {
             "name": "Fiscal Period",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.MONAT",
             "sourceColumn": "FiscalPeriod"
           },
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.MATNR",
             "sourceColumn": "MaterialNoKey"
           },
           {
             "name": "Valuation Class",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.BKLAS",
             "sourceColumn": "ValuationClass"
           },
           {
             "name": "Movement Type",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.BWART",
             "sourceColumn": "MovementType"
           },
           {
             "name": "Movement Type Category",
             "dataType": "string",
+            "description": "Custom value assigned per movement type; Values are from RFAUST's inventory roll forward reference spreadsheet",
             "sourceColumn": "MovementTypeCategory"
           },
           {
             "name": "Quantity",
             "dataType": "double",
+            "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.ERFME",
             "sourceColumn": "UnitOfMeasure"
           },
           {
             "name": "Amount (Document Currency)",
             "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.WRBTR (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "AmountInDocCurrency",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -9670,11 +9687,13 @@
           {
             "name": "Document Currency",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.WAERS",
             "sourceColumn": "DocCurrency"
           },
           {
             "name": "Amount (Local Currency)",
             "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.DMBTR (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "AmountInLocalCurrency",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -9683,11 +9702,13 @@
           {
             "name": "Local Currency",
             "dataType": "string",
+            "description": "SAP Source: BKPF.HWAER",
             "sourceColumn": "LocalCurrency"
           },
           {
             "name": "Amount (Local Currency 2)",
             "dataType": "double",
+            "description": "SAP Source: BSIS/BSAS.DMBE2 (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "AmountInLocalCurrency2",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -9696,16 +9717,19 @@
           {
             "name": "Local Currency 2",
             "dataType": "string",
+            "description": "SAP Source: BKPF.HWAE2",
             "sourceColumn": "LocalCurrency2"
           },
           {
             "name": "Purchase Order Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.EBELN",
             "sourceColumn": "PurchaseOrderNo"
           },
           {
             "name": "Purchase Order Line Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.EBELP",
             "sourceColumn": "PurchaseOrderLineNo"
           },
           {
@@ -9717,26 +9741,31 @@
           {
             "name": "Vendor Number",
             "dataType": "string",
+            "description": "SAP Source: EKKO.LIFNR",
             "sourceColumn": "VendorNoKey"
           },
           {
             "name": "Customer Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.KUNNR",
             "sourceColumn": "CustomerNoKey"
           },
           {
             "name": "Process Order Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.AUFNR",
             "sourceColumn": "ProcessOrderNo"
           },
           {
             "name": "Reference Document Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.XBLNR",
             "sourceColumn": "RefDocNo"
           },
           {
             "name": "Item Text",
             "dataType": "string",
+            "description": "SAP Source: BSIS/BSAS.SGTXT",
             "sourceColumn": "ItemText"
           },
           {
@@ -9765,6 +9794,7 @@
       },
       {
         "name": "Inventory Balance (Totals)",
+        "description": "Unpivotted version of SAP table FAGLFLEXT. Only the columns HSLxx are extracted as values. Filters: RCLNT = '105'; RLDNR = '0L'; HKONT = inventory balance accounts ",
         "columns": [
           {
             "name": "Fiscal Year",
@@ -10479,14 +10509,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "db31a6cf-aa59-456a-9f13-dd196ad9c0ff",
-        "fromTable": "Expired Inventory",
-        "fromColumn": "Expiration Date",
-        "toTable": "Calendar",
-        "toColumn": "Date",
-        "isActive": false
-      },
-      {
         "name": "75fd0308-cb04-42b6-bae3-c8567bd4ca01",
         "fromTable": "Sales Order Documents",
         "fromColumn": "Material Number",
@@ -10708,14 +10730,6 @@
         "toColumn": "Plant"
       },
       {
-        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "Notification Number",
-        "toTable": "Hold Tag Documents",
-        "toColumn": "Notification Number",
-        "isActive": false
-      },
-      {
         "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
         "fromTable": "Blocked Inventory",
         "fromColumn": "MaterialNoKey",
@@ -10735,6 +10749,22 @@
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "db31a6cf-aa59-456a-9f13-dd196ad9c0ff",
+        "fromTable": "Expired Inventory",
+        "fromColumn": "Expiration Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
+        "fromTable": "Blocked Inventory",
+        "fromColumn": "Notification Number",
+        "toTable": "Hold Tag Documents",
+        "toColumn": "Notification Number",
+        "isActive": false
       }
     ],
     "perspectives": [

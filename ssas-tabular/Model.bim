@@ -19,6 +19,8 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1625,7 +1627,7 @@
               "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Sales Orders"
           },
           {
@@ -1654,7 +1656,7 @@
             "name": "SO Ordered Quantity",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": "SUM( 'Sales Order Documents'[Order Quantity] )",
-            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
@@ -1662,12 +1664,15 @@
             "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
             "expression": [
               " ",
-              "CALCULATE(",
-              "    SUM( 'Sales Order Documents'[Allocated Quantity] ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
-              ")"
+              "VAR alloc = ",
+              "    CALCULATE(",
+              "        SUM( 'Sales Order Documents'[Allocated Quantity] ),",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              "    )",
+              "RETURN",
+              "    IF( alloc, alloc, BLANK() )"
             ],
-            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {
@@ -1680,7 +1685,7 @@
               "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
               ")"
             ],
-            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
           },
           {

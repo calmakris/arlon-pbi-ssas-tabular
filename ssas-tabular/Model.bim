@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3318,7 +3317,7 @@
               "    AVERAGE('Current Inventory'[Safety Stock Quantity])",
               ")"
             ],
-            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "formatString": "#,0.00",
             "displayFolder": "Inventory"
           },
           {
@@ -9179,7 +9178,7 @@
                 "            'Upstream Schedule',",
                 "            'Upstream Schedule'[Plan Finish Date] >= [Report Production Date] - 14",
                 "                && 'Upstream Schedule'[Plan Start Date] < [Report Production Date] + 14",
-                "                && 'Upstream Schedule'[Publish Date] < [Report Production Date] + 1",
+                "                && 'Upstream Schedule'[Publish Date] <= [Now Date]",
                 "                && 'Upstream Schedule'[Ranking Desc] = 1",
                 "                && 'Upstream Schedule'[Target Quantity] > 0",
                 "        ),",
@@ -9359,7 +9358,7 @@
                 "            ISBLANK( MIN( 'Machine Status - Prep'[Actual Start] ) )",
                 "                && NOT(ISBLANK( MIN( 'Machine Status - Prep'[Plan Start] ) ) )",
                 "                && MAX( 'Machine Status - Prep'[Plan Stop] ) >= [Report Production Date]",
-                "                && MIN( 'Machine Status - Prep'[Plan Start] ) <= [Now Date], 0,",
+                "                && MAX( 'Machine Status - Prep'[Plan Stop] ) <= [Now Date], 0,",
                 "            NOT(ISBLANK( MIN( 'Machine Status - Prep'[Actual Start] ) ) )",
                 "                && NOT(ISBLANK( MIN( 'Machine Status - Prep'[Plan Start] ) ) )",
                 "                && MAX( 'Machine Status - Prep'[Actual Stop] ) >= [Report Production Date]",

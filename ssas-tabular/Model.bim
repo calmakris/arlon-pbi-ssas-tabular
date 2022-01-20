@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIPRD",
+            "server": "ARLPBIDEV",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -18183,6 +18183,10 @@
           {
             "memberName": "DOMAIN\\lkemp",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           }
         ]
       },
@@ -18438,10 +18442,6 @@
           {
             "memberName": "DOMAIN\\BDiaz",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3188"
-          },
-          {
-            "memberName": "DOMAIN\\pbitest1",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           },
           {
             "memberName": "DOMAIN\\pbitest2",

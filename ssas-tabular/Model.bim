@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -700,6 +701,13 @@
           {
             "type": "calculated",
             "name": "Machine Status",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Sample Requests",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -4262,6 +4270,44 @@
             "expression": "MAX( 'Machine Status'[Status] )",
             "formatString": "0",
             "displayFolder": "Machine Status"
+          },
+          {
+            "name": "Sample Request Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DISTINCTCOUNT( 'Sales Order Documents'[Order Number] ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Sample Category] <> \"Not Applicable\"",
+              "    )",
+              ") +",
+              "DISTINCTCOUNT( 'Odoo Sample Requests (Open)'[Ticket Number] )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sample Requests"
+          },
+          {
+            "name": "Sample Request Cost Amount",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Cost Amount] ),",
+              "    FILTER(",
+              "        'Sales Order Documents',",
+              "        'Sales Order Documents'[Sample Category] <> \"Not Applicable\"",
+              "    )",
+              ") +",
+              "SUM( 'Odoo Sample Requests (Open)'[Cost Amount] )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Sample Requests",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ]
       },
@@ -6584,7 +6630,6 @@
       },
       {
         "name": "Sales Region",
-        "isHidden": true,
         "columns": [
           {
             "name": "Sales Region",
@@ -6616,7 +6661,6 @@
       },
       {
         "name": "Sales Territory",
-        "isHidden": true,
         "columns": [
           {
             "name": "Sales Territory",
@@ -10056,6 +10100,141 @@
             }
           }
         ]
+      },
+      {
+        "name": "Odoo Sample Requests (Open)",
+        "columns": [
+          {
+            "name": "Ticket Number",
+            "dataType": "int64",
+            "sourceColumn": "TicketNo"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "StatusName"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Entered By",
+            "dataType": "string",
+            "sourceColumn": "EnteredBy"
+          },
+          {
+            "name": "Assigned To",
+            "dataType": "string",
+            "sourceColumn": "AssignedTo"
+          },
+          {
+            "name": "Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "EnterDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Company Name",
+            "dataType": "string",
+            "sourceColumn": "CompanyName"
+          },
+          {
+            "name": "Sales Region",
+            "dataType": "string",
+            "sourceColumn": "SalesRegion"
+          },
+          {
+            "name": "Sales Territory",
+            "dataType": "string",
+            "sourceColumn": "SalesTerritory"
+          },
+          {
+            "name": "Ticket Description",
+            "dataType": "string",
+            "sourceColumn": "SampleText"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "sourceColumn": "MaterialDescription"
+          },
+          {
+            "name": "Unit Cost",
+            "dataType": "double",
+            "sourceColumn": "UnitCost",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Cost Amount",
+            "dataType": "double",
+            "sourceColumn": "CostAmount",
+            "formatString": "#,0.00",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_SAMPLEREQUEST_OPEN_ODOO = Source{[Schema=\"dbo\",Item=\"VW_SAMPLEREQUEST_OPEN_ODOO\"]}[Data]",
+                "in",
+                "    dbo_VW_SAMPLEREQUEST_OPEN_ODOO"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Sample Category",
+        "columns": [
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_zSAMPLE_CATEGORY = Source{[Schema=\"dbo\",Item=\"zSAMPLE_CATEGORY\"]}[Data]",
+                "in",
+                "    dbo_zSAMPLE_CATEGORY"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -10770,6 +10949,48 @@
         "toTable": "Hold Tag Documents",
         "toColumn": "Notification Number",
         "isActive": false
+      },
+      {
+        "name": "de55efee-f414-4fd4-ac01-40cda075e4a8",
+        "fromTable": "Odoo Sample Requests (Open)",
+        "fromColumn": "Enter Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "c6c95f64-58b7-4f76-a10a-45457fe3e0db",
+        "fromTable": "Odoo Sample Requests (Open)",
+        "fromColumn": "Sales Region",
+        "toTable": "Sales Region",
+        "toColumn": "Sales Region"
+      },
+      {
+        "name": "2438a1ab-8937-4e85-a1f5-d980e2d96609",
+        "fromTable": "Odoo Sample Requests (Open)",
+        "fromColumn": "Sales Territory",
+        "toTable": "Sales Territory",
+        "toColumn": "Sales Territory"
+      },
+      {
+        "name": "5f253841-6767-45ca-aea6-e69e887e1f75",
+        "fromTable": "Odoo Sample Requests (Open)",
+        "fromColumn": "MaterialNoKey",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "b3ec39da-bf21-470a-925c-5b91d827d998",
+        "fromTable": "Odoo Sample Requests (Open)",
+        "fromColumn": "Category",
+        "toTable": "_Sample Category",
+        "toColumn": "Category"
+      },
+      {
+        "name": "bfa66b5a-4915-428d-8974-17c99c685303",
+        "fromTable": "Sales Order Documents",
+        "fromColumn": "Sample Category",
+        "toTable": "_Sample Category",
+        "toColumn": "Category"
       }
     ],
     "perspectives": [
@@ -11829,6 +12050,12 @@
               },
               {
                 "name": "Report Date"
+              },
+              {
+                "name": "Sample Request Cost Amount"
+              },
+              {
+                "name": "Sample Request Count"
               }
             ]
           },
@@ -11986,6 +12213,86 @@
               },
               {
                 "name": "Sales Territory"
+              }
+            ]
+          },
+          {
+            "name": "Odoo Sample Requests (Open)",
+            "columns": [
+              {
+                "name": "Assigned To"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Company Name"
+              },
+              {
+                "name": "Cost Amount"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Status"
+              },
+              {
+                "name": "Ticket Description"
+              },
+              {
+                "name": "Ticket Number"
+              },
+              {
+                "name": "Unit Cost"
+              }
+            ]
+          },
+          {
+            "name": "_Sample Category",
+            "columns": [
+              {
+                "name": "Category"
+              }
+            ]
+          },
+          {
+            "name": "Sales Region",
+            "columns": [
+              {
+                "name": "Sales Region"
+              },
+              {
+                "name": "Sales Region Name"
+              }
+            ]
+          },
+          {
+            "name": "Sales Territory",
+            "columns": [
+              {
+                "name": "Sales Territory"
+              },
+              {
+                "name": "Sales Territory Name"
               }
             ]
           }

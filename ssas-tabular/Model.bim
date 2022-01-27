@@ -543,6 +543,19 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "Year_Week_Sort_Key"
+          },
+          {
+            "name": "Start of Month",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "Start_Of_Month",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -555,8 +568,8 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Day_Of_Week\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\"})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Day_Of_Week\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -3360,10 +3373,11 @@
               "",
               "CALCULATE(",
               "    AVERAGE(Support_MthlyConsume[ConsumptionQty]),",
-              "    FILTER(",
-              "        Support_MthlyConsume,",
-              "        Support_MthlyConsume[CalendarTimeKey] >= FORMAT([Helper_12MoAgo], \"0\")",
-              "            && Support_MthlyConsume[CalendarTimeKey] < FORMAT([Helper_CurrMo], \"0\")",
+              "    DATESINPERIOD(",
+              "        'Calendar'[Start of Month],",
+              "        [Beginning of Last Month],",
+              "        -12,",
+              "        MONTH",
               "    )",
               ")"
             ],
@@ -4311,6 +4325,39 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Beginning of Last Month",
+            "expression": "EDATE([Beginning of Month], -1)",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Average Monthly Consumption (Last 3 Months)",
+            "expression": [
+              "",
+              "VAR NumOfMonths = 3",
+              "RETURN",
+              "    DIVIDE(",
+              "        CALCULATE(",
+              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            DATESINPERIOD(",
+              "                'Calendar'[Start of Month],",
+              "                [Beginning of Last Month],",
+              "                -NumOfMonths,",
+              "                MONTH)",
+              "        ),",
+              "        NumOfMonths",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
           }
         ]
       },
@@ -10238,6 +10285,129 @@
             }
           }
         ]
+      },
+      {
+        "name": "Inventory Consumption",
+        "columns": [
+          {
+            "name": "Material Document Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialDocNo"
+          },
+          {
+            "name": "Material Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialDocItemNo"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "sourceColumn": "MovementType"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNoKey"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "Storage Bin",
+            "dataType": "string",
+            "sourceColumn": "StorageBin"
+          },
+          {
+            "name": "Storage Type",
+            "dataType": "string",
+            "sourceColumn": "StorageType"
+          },
+          {
+            "name": "Posted By",
+            "dataType": "string",
+            "sourceColumn": "PostingUsername"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: MSEG.BUDAT_MKPF",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Posting Time",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "formatString": "0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_TRANSACTIONS_CONSUMPTION = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_CONSUMPTION\"]}[Data]",
+                "in",
+                "    dbo_VW_TRANSACTIONS_CONSUMPTION"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -10994,6 +11164,27 @@
         "fromColumn": "Sample Category",
         "toTable": "_Sample Category",
         "toColumn": "Category"
+      },
+      {
+        "name": "125ee949-3779-48ac-be35-91c4ecd577d1",
+        "fromTable": "Inventory Consumption",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "6cf878d5-6db1-43b5-958d-72a06c81444a",
+        "fromTable": "Inventory Consumption",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "c8dcceac-17e9-4c4a-aed7-c2e642757d24",
+        "fromTable": "Inventory Consumption",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -11109,6 +11300,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -11578,6 +11772,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -11869,6 +12066,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -12059,6 +12259,9 @@
               },
               {
                 "name": "Sample Request Count"
+              },
+              {
+                "name": "Sales Order Line Count"
               }
             ]
           },
@@ -12415,6 +12618,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -13052,6 +13258,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -14217,6 +14426,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -14543,6 +14755,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -14866,6 +15081,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -15305,6 +15523,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -15789,6 +16010,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -16056,6 +16280,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -16766,6 +16993,9 @@
               },
               {
                 "name": "MTD Inventory Balance"
+              },
+              {
+                "name": "Average Monthly Consumption (Last 3 Months)"
               }
             ]
           },
@@ -16922,6 +17152,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [
@@ -17499,6 +17732,62 @@
                 "name": "Valuation Class"
               }
             ]
+          },
+          {
+            "name": "Inventory Consumption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posted By"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Posting Time"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Unit of Measure"
+              }
+            ]
           }
         ]
       },
@@ -17616,6 +17905,9 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Start of Month"
               }
             ],
             "hierarchies": [

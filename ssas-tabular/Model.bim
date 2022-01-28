@@ -3343,15 +3343,8 @@
           },
           {
             "name": "Current Available Quantity",
-            "description": "Difference between 'Current Unrestricted Stock Quantity' and 'SO Allocated Quantity'",
-            "expression": [
-              " ",
-              "IF(",
-              "    [SO Allocated Quantity] < [Current Unrestricted Stock Quantity],",
-              "    [Current Unrestricted Stock Quantity] - [SO Allocated Quantity],",
-              "    BLANK()",
-              ")"
-            ],
+            "description": "Difference between 'Current Unrestricted Stock Quantity', 'SO Allocated Quantity', and 'SO Customer Open Quantity'",
+            "expression": " [Current Unrestricted Stock Quantity] - [SO Allocated Quantity] - [SO Customer Open Quantity]",
             "formatString": "#,##0.00;-#,##0.00;\"-\"",
             "displayFolder": "Inventory"
           },
@@ -17242,6 +17235,9 @@
               },
               {
                 "name": "Inventory On Hand (in 36 Months)"
+              },
+              {
+                "name": "SO Customer Open Quantity"
               }
             ]
           },

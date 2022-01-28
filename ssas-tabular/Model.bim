@@ -3368,23 +3368,6 @@
             "displayFolder": ".Helpers"
           },
           {
-            "name": "Average Monthly Consumption",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    AVERAGE(Support_MthlyConsume[ConsumptionQty]),",
-              "    DATESINPERIOD(",
-              "        'Calendar'[Start of Month],",
-              "        [Beginning of Last Month],",
-              "        -12,",
-              "        MONTH",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0.00",
-            "displayFolder": "Inventory"
-          },
-          {
             "name": "PO Goods Receipt Quantity",
             "expression": " SUM( 'Stock Transfer Orders'[Goods Receipt Quantity] )",
             "formatString": "#,0.00",
@@ -4343,7 +4326,8 @@
             "expression": [
               "",
               "VAR NumOfMonths = 3",
-              "RETURN",
+              "VAR Age = DATEDIFF( MAX( 'Material Master'[Created Date] ), [Report Date], MONTH )",
+              "VAR Result = ",
               "    DIVIDE(",
               "        CALCULATE(",
               "            SUM('Inventory Consumption'[Quantity] ),",
@@ -4352,8 +4336,202 @@
               "                [Beginning of Last Month],",
               "                -NumOfMonths,",
               "                MONTH)",
-              "        ),",
+              "        ) + 0,",
               "        NumOfMonths",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        (Result || [Current Unrestricted Stock Quantity]) && Age >= NumOfMonths,",
+              "        ABS( Result ),",
+              "        BLANK() ",
+              "    )"
+            ],
+            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Average Monthly Consumption (Last 6 Months)",
+            "expression": [
+              "",
+              "VAR NumOfMonths = 6",
+              "VAR Age = DATEDIFF( MAX( 'Material Master'[Created Date] ), [Report Date], MONTH )",
+              "VAR Result = ",
+              "    DIVIDE(",
+              "        CALCULATE(",
+              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            DATESINPERIOD(",
+              "                'Calendar'[Start of Month],",
+              "                [Beginning of Last Month],",
+              "                -NumOfMonths,",
+              "                MONTH)",
+              "        ) + 0,",
+              "        NumOfMonths",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        (Result || [Current Unrestricted Stock Quantity]) && Age >= NumOfMonths,",
+              "        ABS( Result ),",
+              "        BLANK() ",
+              "    )"
+            ],
+            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Average Monthly Consumption (Last 12 Months)",
+            "expression": [
+              "",
+              "VAR NumOfMonths = 12",
+              "VAR Age = DATEDIFF( MAX( 'Material Master'[Created Date] ), [Report Date], MONTH )",
+              "VAR Result = ",
+              "    DIVIDE(",
+              "        CALCULATE(",
+              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            DATESINPERIOD(",
+              "                'Calendar'[Start of Month],",
+              "                [Beginning of Last Month],",
+              "                -NumOfMonths,",
+              "                MONTH)",
+              "        ) + 0,",
+              "        NumOfMonths",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        (Result || [Current Unrestricted Stock Quantity]) && Age >= NumOfMonths,",
+              "        ABS( Result ),",
+              "        BLANK() ",
+              "    )"
+            ],
+            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Average Monthly Consumption (Last 24 Months)",
+            "expression": [
+              "",
+              "VAR NumOfMonths = 24",
+              "VAR Age = DATEDIFF( MAX( 'Material Master'[Created Date] ), [Report Date], MONTH )",
+              "VAR Result = ",
+              "    DIVIDE(",
+              "        CALCULATE(",
+              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            DATESINPERIOD(",
+              "                'Calendar'[Start of Month],",
+              "                [Beginning of Last Month],",
+              "                -NumOfMonths,",
+              "                MONTH)",
+              "        ) + 0,",
+              "        NumOfMonths",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        (Result || [Current Unrestricted Stock Quantity]) && Age >= NumOfMonths,",
+              "        ABS( Result ),",
+              "        BLANK() ",
+              "    )"
+            ],
+            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Average Monthly Consumption (Last 36 Months)",
+            "expression": [
+              "",
+              "VAR NumOfMonths = 36",
+              "VAR Age = DATEDIFF( MAX( 'Material Master'[Created Date] ), [Report Date], MONTH )",
+              "VAR Result = ",
+              "    DIVIDE(",
+              "        CALCULATE(",
+              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            DATESINPERIOD(",
+              "                'Calendar'[Start of Month],",
+              "                [Beginning of Last Month],",
+              "                -NumOfMonths,",
+              "                MONTH)",
+              "        ) + 0,",
+              "        NumOfMonths",
+              "    )",
+              "RETURN",
+              "    IF(",
+              "        (Result || [Current Unrestricted Stock Quantity]) && Age >= NumOfMonths,",
+              "        ABS( Result ),",
+              "        BLANK() ",
+              "    )"
+            ],
+            "formatString": "#,##0.00;-#,##0.00;\"-\"",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory Time Supply",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Current Unrestricted Stock Quantity],",
+              "    [Average Monthly Consumption (Last 12 Months)]",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory On Hand (in 12 Months)",
+            "expression": [
+              "",
+              "IF(",
+              "    [Inventory Time Supply] < 12,",
+              "    [Current Unrestricted Stock Quantity],",
+              "    [Average Monthly Consumption (Last 12 Months)] * 12",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory On Hand (in 24 Months)",
+            "expression": [
+              "",
+              "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
+              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory On Hand (in 12 Months)]",
+              "RETURN",
+              "    SWITCH(",
+              "        TRUE(),",
+              "        [Current Unrestricted Stock Quantity] = [Inventory On Hand (in 12 Months)], BLANK(),",
+              "        Usage < Net, Usage,",
+              "        Net",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory On Hand (in 36 Months)",
+            "expression": [
+              "",
+              "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
+              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory On Hand (in 12 Months)] - [Inventory On Hand (in 24 Months)]",
+              "RETURN",
+              "    SWITCH(",
+              "        TRUE(),",
+              "        [Current Unrestricted Stock Quantity] = ([Inventory On Hand (in 12 Months)] + [Inventory On Hand (in 24 Months)]), BLANK(),",
+              "        Usage < Net, Usage,",
+              "        Net",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory On Hand (Beyond 36 Months)",
+            "expression": [
+              "",
+              "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
+              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory On Hand (in 12 Months)] - [Inventory On Hand (in 24 Months)] - [Inventory On Hand (in 36 Months)]",
+              "RETURN",
+              "    SWITCH(",
+              "        TRUE(),",
+              "        [Current Unrestricted Stock Quantity] = ([Inventory On Hand (in 12 Months)] + [Inventory On Hand (in 24 Months)] + [Inventory On Hand (in 36 Months)]), BLANK(),",
+              "        Usage < Net, Usage,",
+              "        Net",
               "    )"
             ],
             "formatString": "#,0.00",
@@ -5112,6 +5290,20 @@
             "description": "SAP Source: T134T.MTBEZ",
             "sourceColumn": "MaterialTypeText",
             "displayFolder": "Master"
+          },
+          {
+            "name": "Created Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: MARA.ERSDA",
+            "sourceColumn": "CreatedDate",
+            "formatString": "Short Date",
+            "displayFolder": "Master",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -11602,6 +11794,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -12201,6 +12396,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -12926,6 +13124,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -13623,6 +13824,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -14153,6 +14357,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -14950,6 +15157,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -15378,6 +15588,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -15748,6 +15961,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -16371,6 +16587,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -16880,6 +17099,9 @@
               },
               {
                 "name": "Material Type Text"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -16927,9 +17149,6 @@
               },
               {
                 "name": "Current Available Quantity"
-              },
-              {
-                "name": "Average Monthly Consumption"
               },
               {
                 "name": "PO Delivered Quantity"
@@ -16996,6 +17215,33 @@
               },
               {
                 "name": "Average Monthly Consumption (Last 3 Months)"
+              },
+              {
+                "name": "Average Monthly Consumption (Last 12 Months)"
+              },
+              {
+                "name": "Average Monthly Consumption (Last 6 Months)"
+              },
+              {
+                "name": "Average Monthly Consumption (Last 24 Months)"
+              },
+              {
+                "name": "Average Monthly Consumption (Last 36 Months)"
+              },
+              {
+                "name": "Inventory On Hand (in 12 Months)"
+              },
+              {
+                "name": "Inventory On Hand (in 24 Months)"
+              },
+              {
+                "name": "Inventory Time Supply"
+              },
+              {
+                "name": "Inventory On Hand (Beyond 36 Months)"
+              },
+              {
+                "name": "Inventory On Hand (in 36 Months)"
               }
             ]
           },
@@ -18093,6 +18339,9 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Created Date"
               }
             ]
           },
@@ -18856,6 +19105,10 @@
           {
             "memberName": "DOMAIN\\pplessis",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2848"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           }
         ],
         "tablePermissions": [

@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIDEV",
+            "server": "ARLPBIPRD",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3865,7 +3863,18 @@
           {
             "name": "MStat Net Hours Loss/Gain",
             "description": "Difference between [Last Actual Start Time] and [Last Plan Start Time] measures in hours.",
-            "expression": "DATEDIFF( [MStat Last Actual Start Time], [MStat Last Plan Start Time], MINUTE) / 60",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DATEDIFF( [MStat Last Actual Start Time], [MStat Last Plan Start Time], MINUTE) / 60,",
+              "    FILTER(",
+              "        'Machine Status',",
+              "        'Machine Status'[Plan Start Time] <> BLANK()",
+              "            && 'Machine Status'[Actual Stop Time] >= [Report Production Date]",
+              "            && 'Machine Status'[Actual Start Time] <= [Now Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0.0 \"hr\"",
             "displayFolder": "Machine Status"
           },

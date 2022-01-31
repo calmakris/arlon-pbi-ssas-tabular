@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -4467,7 +4468,7 @@
             "displayFolder": "Inventory"
           },
           {
-            "name": "Inventory On Hand (in 12 Months)",
+            "name": "Inventory Annual Consumption (Next 12 Months)",
             "expression": [
               "",
               "IF(",
@@ -4480,15 +4481,15 @@
             "displayFolder": "Inventory"
           },
           {
-            "name": "Inventory On Hand (in 24 Months)",
+            "name": "Inventory Annual Consumption (After 12th Month)",
             "expression": [
               "",
               "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
-              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory On Hand (in 12 Months)]",
+              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory Annual Consumption (Next 12 Months)]",
               "RETURN",
               "    SWITCH(",
               "        TRUE(),",
-              "        [Current Unrestricted Stock Quantity] = [Inventory On Hand (in 12 Months)], BLANK(),",
+              "        [Current Unrestricted Stock Quantity] = [Inventory Annual Consumption (Next 12 Months)], BLANK(),",
               "        Usage < Net, Usage,",
               "        Net",
               "    )"
@@ -4497,15 +4498,15 @@
             "displayFolder": "Inventory"
           },
           {
-            "name": "Inventory On Hand (in 36 Months)",
+            "name": "Inventory Annual Consumption (After 24th Month)",
             "expression": [
               "",
               "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
-              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory On Hand (in 12 Months)] - [Inventory On Hand (in 24 Months)]",
+              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory Annual Consumption (Next 12 Months)] - [Inventory Annual Consumption (After 12th Month)]",
               "RETURN",
               "    SWITCH(",
               "        TRUE(),",
-              "        [Current Unrestricted Stock Quantity] = ([Inventory On Hand (in 12 Months)] + [Inventory On Hand (in 24 Months)]), BLANK(),",
+              "        [Current Unrestricted Stock Quantity] = ([Inventory Annual Consumption (Next 12 Months)] + [Inventory Annual Consumption (After 12th Month)]), BLANK(),",
               "        Usage < Net, Usage,",
               "        Net",
               "    )"
@@ -4514,15 +4515,15 @@
             "displayFolder": "Inventory"
           },
           {
-            "name": "Inventory On Hand (Beyond 36 Months)",
+            "name": "Inventory Annual Consumption (After 36th Month)",
             "expression": [
               "",
               "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
-              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory On Hand (in 12 Months)] - [Inventory On Hand (in 24 Months)] - [Inventory On Hand (in 36 Months)]",
+              "VAR Net = [Current Unrestricted Stock Quantity] - [Inventory Annual Consumption (Next 12 Months)] - [Inventory Annual Consumption (After 12th Month)] - [Inventory Annual Consumption (After 24th Month)]",
               "RETURN",
               "    SWITCH(",
               "        TRUE(),",
-              "        [Current Unrestricted Stock Quantity] = ([Inventory On Hand (in 12 Months)] + [Inventory On Hand (in 24 Months)] + [Inventory On Hand (in 36 Months)]), BLANK(),",
+              "        [Current Unrestricted Stock Quantity] = ([Inventory Annual Consumption (Next 12 Months)] + [Inventory Annual Consumption (After 12th Month)] + [Inventory Annual Consumption (After 24th Month)]), BLANK(),",
               "        Usage < Net, Usage,",
               "        Net",
               "    )"
@@ -10563,7 +10564,7 @@
             "name": "Quantity",
             "dataType": "double",
             "sourceColumn": "Quantity",
-            "formatString": "0.00"
+            "formatString": "#,0.00"
           },
           {
             "name": "Currency",
@@ -10574,7 +10575,7 @@
             "name": "Amount",
             "dataType": "double",
             "sourceColumn": "Amount",
-            "formatString": "0.00"
+            "formatString": "#,0.00"
           }
         ],
         "partitions": [
@@ -17222,19 +17223,19 @@
                 "name": "Average Monthly Consumption (Last 36 Months)"
               },
               {
-                "name": "Inventory On Hand (in 12 Months)"
+                "name": "Inventory Annual Consumption (Next 12 Months)"
               },
               {
-                "name": "Inventory On Hand (in 24 Months)"
+                "name": "Inventory Annual Consumption (After 12th Month)"
               },
               {
                 "name": "Inventory Time Supply"
               },
               {
-                "name": "Inventory On Hand (Beyond 36 Months)"
+                "name": "Inventory Annual Consumption (After 36th Month)"
               },
               {
-                "name": "Inventory On Hand (in 36 Months)"
+                "name": "Inventory Annual Consumption (After 24th Month)"
               },
               {
                 "name": "SO Customer Open Quantity"

@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbiprd;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3342,8 +3343,8 @@
           },
           {
             "name": "Current Available Quantity",
-            "description": "Difference between 'Current Unrestricted Stock Quantity', 'SO Allocated Quantity', and 'SO Customer Open Quantity'",
-            "expression": " [Current Unrestricted Stock Quantity] - [SO Allocated Quantity] - [SO Customer Open Quantity]",
+            "description": "Difference between 'Current Unrestricted Stock Quantity', 'SO Allocated Quantity', 'SO Allocated Quantity', and 'SO Internal Open Quantity'",
+            "expression": " [Current Unrestricted Stock Quantity] - [SO Allocated Quantity] - [SO Internal Open Quantity]",
             "formatString": "#,##0.00;-#,##0.00;\"-\"",
             "displayFolder": "Inventory"
           },

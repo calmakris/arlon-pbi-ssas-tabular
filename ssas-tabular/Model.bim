@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIDEV",
+            "server": "ARLPBIPRD",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,

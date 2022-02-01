@@ -11,16 +11,17 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIPRD",
+            "server": "ARLPBIDEV",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
-          "path": "arlpbiprd;ARLPBI_STAGE",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -2675,15 +2676,38 @@
           },
           {
             "name": "Current Expired Quantity",
+            "description": "Sum of 'Expired Inventory'[Stock Amount] where the [Expiration Date] is less than or equal to [Report Date]. Can be toggled between quantity and amount values (default = quantity)",
             "expression": [
               "",
-              "CALCULATE(",
-              "    SUM( 'Expired Inventory'[Stock Quantity] ),",
-              "    FILTER(",
-              "        ALL( 'Expired Inventory'[Expiration Date] ),",
-              "        'Expired Inventory'[Expiration Date] <= [Report Date]",
+              "VAR Qty =",
+              "    CALCULATE(",
+              "        SUM( 'Expired Inventory'[Stock Quantity] ),",
+              "        FILTER(",
+              "            ALL( 'Expired Inventory'[Expiration Date] ),",
+              "            'Expired Inventory'[Expiration Date] <= [Report Date]",
+              "        )",
               "    )",
-              ")"
+              "",
+              "VAR Amt =",
+              "    CALCULATE(",
+              "        SUM( 'Expired Inventory'[Stock Amount] ),",
+              "        FILTER(",
+              "            ALL( 'Expired Inventory'[Expiration Date] ),",
+              "            'Expired Inventory'[Expiration Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    IF(",
+              "        HASONEVALUE( '_Value to Use'[Value] ),",
+              "        SWITCH(",
+              "            VALUES( '_Value to Use'[Value] ),",
+              "            \"Quantity\", Qty,",
+              "            \"Amount\", Amt,",
+              "            Qty",
+              "        ),",
+              "        Qty",
+              "    )"
             ],
             "formatString": "#,##0.00;-#,##0.00;\"-\"",
             "displayFolder": "Inventory"
@@ -3324,8 +3348,24 @@
           },
           {
             "name": "Current Unrestricted Stock Quantity",
-            "description": "Sum of 'Current Inventory'[Unrestricted Stock Quantity']",
-            "expression": " SUM('Current Inventory'[Unrestricted Stock Quantity])",
+            "description": "Sum of 'Current Inventory'[Unrestricted Stock Quantity']. Can be toggled between quantity and amount values (default = quantity)",
+            "expression": [
+              "",
+              "VAR Qty = SUM('Current Inventory'[Unrestricted Stock Quantity])",
+              "VAR Amt = SUM('Current Inventory'[Unrestricted Stock Amount (USD)])",
+              "RETURN",
+              "    IF(",
+              "        HASONEVALUE( '_Value to Use'[Value] ),",
+              "        SWITCH(",
+              "            VALUES( '_Value to Use'[Value] ),",
+              "            \"Quantity\", Qty,",
+              "            \"Amount\", Amt,",
+              "            Qty",
+              "        ),",
+              "        Qty",
+              "    )",
+              ""
+            ],
             "formatString": "#,##0.00;-#,##0.00;\"-\"",
             "displayFolder": "Inventory"
           },
@@ -4327,6 +4367,7 @@
           },
           {
             "name": "Average Monthly Consumption (Last 3 Months)",
+            "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 3 calendar months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR NumOfMonths = 3",
@@ -4334,7 +4375,7 @@
               "VAR Result = ",
               "    DIVIDE(",
               "        CALCULATE(",
-              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            [Inventory Consumption (Dynamic)],",
               "            DATESINPERIOD(",
               "                'Calendar'[Start of Month],",
               "                [Beginning of Last Month],",
@@ -4355,6 +4396,7 @@
           },
           {
             "name": "Average Monthly Consumption (Last 6 Months)",
+            "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 6 calendar months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR NumOfMonths = 6",
@@ -4362,7 +4404,7 @@
               "VAR Result = ",
               "    DIVIDE(",
               "        CALCULATE(",
-              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            [Inventory Consumption (Dynamic)],",
               "            DATESINPERIOD(",
               "                'Calendar'[Start of Month],",
               "                [Beginning of Last Month],",
@@ -4383,6 +4425,7 @@
           },
           {
             "name": "Average Monthly Consumption (Last 12 Months)",
+            "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 12 calendar months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR NumOfMonths = 12",
@@ -4390,7 +4433,7 @@
               "VAR Result = ",
               "    DIVIDE(",
               "        CALCULATE(",
-              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            [Inventory Consumption (Dynamic)],",
               "            DATESINPERIOD(",
               "                'Calendar'[Start of Month],",
               "                [Beginning of Last Month],",
@@ -4411,6 +4454,7 @@
           },
           {
             "name": "Average Monthly Consumption (Last 24 Months)",
+            "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 24 calendar months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR NumOfMonths = 24",
@@ -4418,7 +4462,7 @@
               "VAR Result = ",
               "    DIVIDE(",
               "        CALCULATE(",
-              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            [Inventory Consumption (Dynamic)],",
               "            DATESINPERIOD(",
               "                'Calendar'[Start of Month],",
               "                [Beginning of Last Month],",
@@ -4439,6 +4483,7 @@
           },
           {
             "name": "Average Monthly Consumption (Last 36 Months)",
+            "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 36 calendar months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR NumOfMonths = 36",
@@ -4446,7 +4491,7 @@
               "VAR Result = ",
               "    DIVIDE(",
               "        CALCULATE(",
-              "            SUM('Inventory Consumption'[Quantity] ),",
+              "            [Inventory Consumption (Dynamic)],",
               "            DATESINPERIOD(",
               "                'Calendar'[Start of Month],",
               "                [Beginning of Last Month],",
@@ -4467,6 +4512,7 @@
           },
           {
             "name": "Inventory Time Supply",
+            "description": "[Current Unrestricted Stock Quantity] divided by [Average Monthly Consumption (Last 12 Months)]. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "DIVIDE(",
@@ -4479,6 +4525,7 @@
           },
           {
             "name": "Inventory Annual Consumption (Next 12 Months)",
+            "description": "If time supply < 12, then [Current Unrestricted Stock Quantity], else, [Average Monthly Consumption (Last 12 Months)] * 12. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "IF(",
@@ -4492,6 +4539,7 @@
           },
           {
             "name": "Inventory Annual Consumption (After 12th Month)",
+            "description": "If unrestricted stock is equal to consumption in the next 12 months, then 0. Else if consumption in the last 12 months is the same as the difference of current stock and consumption in the next 12 months, then value is the consumption in the next 12 months. Otherwise, value is the difference between current stock and consumption in the next 12 months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
@@ -4509,6 +4557,7 @@
           },
           {
             "name": "Inventory Annual Consumption (After 24th Month)",
+            "description": "If unrestricted stock is equal to consumption in the next 24 months, then 0. Else if consumption in the last 12 months is the same as the difference of current stock and consumption in the next 24 months, then value is the consumption in the next 24 months. Otherwise, value is the difference between current stock and consumption in the next 24 months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
@@ -4526,6 +4575,7 @@
           },
           {
             "name": "Inventory Annual Consumption (After 36th Month)",
+            "description": "If unrestricted stock is equal to consumption in the next 36 months, then 0. Else if consumption in the last 12 months is the same as the difference of current stock and consumption in the next 36 months, then value is the consumption in the next 36 months. Otherwise, value is the difference between current stock and consumption in the next 36 months. Can be toggled between quantity and amount values (default = quantity).",
             "expression": [
               "",
               "VAR Usage = [Average Monthly Consumption (Last 12 Months)] * 12",
@@ -4539,6 +4589,29 @@
               "    )"
             ],
             "formatString": "#,0.00",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory Consumption (Dynamic)",
+            "description": "Sum of 'Inventory Consumption'[Quantity].Can be toggled between quantity and amount values (default = quantity)",
+            "expression": [
+              "",
+              "VAR Qty = SUM( 'Inventory Consumption'[Quantity] )",
+              "VAR Amt = SUM( 'Inventory Consumption'[Amount (In Current Price)] )",
+              "RETURN",
+              "    IF(",
+              "        HASONEVALUE( '_Value to Use'[Value] ),",
+              "        SWITCH(",
+              "            VALUES( '_Value to Use'[Value] ),",
+              "            \"Quantity\", Qty,",
+              "            \"Amount\", Amt,",
+              "            Qty",
+              "        ),",
+              "        Qty",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "isHidden": true,
             "displayFolder": "Inventory"
           }
         ]
@@ -10592,6 +10665,13 @@
             "dataType": "double",
             "sourceColumn": "Amount",
             "formatString": "#,0.00"
+          },
+          {
+            "name": "Amount (In Current Price)",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "AmountInCurrentPrice",
+            "formatString": "#,0.00"
           }
         ],
         "partitions": [
@@ -10607,6 +10687,28 @@
                 "in",
                 "    dbo_VW_TRANSACTIONS_CONSUMPTION"
               ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Value to Use",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Value",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "{\"Amount\", \"Quantity\"}"
             }
           }
         ]
@@ -18045,6 +18147,52 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Amount (In Current Price)"
+              }
+            ]
+          },
+          {
+            "name": "_Value to Use",
+            "columns": [
+              {
+                "name": "Value"
+              }
+            ]
+          },
+          {
+            "name": "Expired Inventory",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Expiration Date"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Manufacturing Date"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Stock Amount"
+              },
+              {
+                "name": "Stock Quantity"
               }
             ]
           }

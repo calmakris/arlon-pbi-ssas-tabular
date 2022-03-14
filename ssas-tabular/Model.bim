@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -528,6 +529,7 @@
           {
             "name": "Is Recent Weeks",
             "dataType": "boolean",
+            "description": "True if date is between 8 weeks ago and 2 weeks forward (relative to today)",
             "sourceColumn": "Is_Recent_Weeks",
             "displayFolder": "Helper Attributes"
           },
@@ -698,7 +700,7 @@
           },
           {
             "type": "calculated",
-            "name": "Absorption Measure",
+            "name": "Absorption Measures",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -2473,7 +2475,6 @@
               "    FILTER(",
               "        'Goods Issues and Receipts',",
               "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
-              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"555\", \"700\" }",
               "    )",
               ")"
             ],
@@ -5010,6 +5011,299 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Testing"
+          },
+          {
+            "name": "CW Absorption",
+            "description": "Current week's total absorption (relative to [Report Date])",
+            "expression": [
+              "",
+              "VAR BegDate = ([Report Date]) - WEEKDAY( [Report Date] )",
+              "VAR EndDate = BegDate + 7",
+              "RETURN",
+              "CALCULATE(",
+              "    [Absorption],",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] >= BegDate",
+              "            && 'Calendar'[Date] <= EndDate",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              "CALCULATE( [Absorption], DATESYTD('Calendar'[Date], \"09/30\") )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD PY Absorption",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": "CALCULATE( [FYTD Absorption], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD Absorption Hours",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " CALCULATE( [Absorption Hours], DATESMTD( 'Calendar'[Date] ) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Absorption Hours",
+            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "expression": [
+              " CALCULATE( [MTD Absorption Hours], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "CONV Linear Footage",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GR Linear Footage],",
+              "    FILTER(",
+              "        'Goods Issues and Receipts',",
+              "        'Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}",
+              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "S/O Future Scheduled Output by Month End (Upstream)",
+            "description": "Total target quantity of scheduled shop orders after today until end of month (relative to [Report Date]). Scheduled data is the from the latest schedule published by Planning.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [S/O Scheduled Quantity (Upstream)],",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Upstream Schedule'[PlanFinishDateAltKey] ),",
+              "    ALL( 'Calendar'[Date] ),",
+              "    FILTER(",
+              "        ALL( 'Upstream Schedule'[PlanFinishDateAltKey] ),",
+              "        'Upstream Schedule'[PlanFinishDateAltKey] > [Report Date]",
+              "            && 'Upstream Schedule'[PlanFinishDateAltKey] <= [End of Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption (Projected)"
+          },
+          {
+            "name": "Absorption per Output (Last 3 Months)",
+            "description": "Total absorption posted in the last 3 calendar months divided by the total output of departments. Casting and coating output is from machine data, Converting output is GR transaction, and others are delivered quantity of shop orders that ended in the last 3 months.",
+            "expression": [
+              "",
+              "VAR BegDate = EDATE([Beginning of Month], -3)",
+              "VAR Upstream_Out = ",
+              "    CALCULATE(",
+              "        [Upstream Actual Production Footage],",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Upstream Logs - Simplified'[Start Time] ),",
+              "            'Upstream Logs - Simplified'[Start Time] >= BegDate",
+              "                && 'Upstream Logs - Simplified'[Start Time] < [Beginning of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR Conv_Out = ",
+              "    CALCULATE(",
+              "        [CONV Linear Footage],",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Goods Issues and Receipts'[Posting Date] ),",
+              "            'Goods Issues and Receipts'[Posting Date] >= BegDate",
+              "                && 'Goods Issues and Receipts'[Posting Date] < [Beginning of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR Other_Out = ",
+              "    CALCULATE(",
+              "        SUM('Shop Orders'[Delivered Quantity] ),",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Shop Orders'[End Date Key] ),",
+              "            'Shop Orders'[End Date Key] >= BegDate",
+              "                && 'Shop Orders'[End Date Key] < [Beginning of Month]",
+              "        ),",
+              "        'Shop Orders'[Close Indicator] = \"X\"",
+              "    )",
+              "",
+              "RETURN",
+              "DIVIDE(",
+              "    CALCULATE(",
+              "        [Absorption],",
+              "        FILTER(",
+              "            ALL( 'Calendar'[Date] ),",
+              "            'Calendar'[Date] >= BegDate",
+              "                && 'Calendar'[Date] < [Beginning of Month]",
+              "        )",
+              "    ),",
+              "    SWITCH(",
+              "        SELECTEDVALUE( '_Departments'[Department] ),",
+              "        \"CONV\", Conv_Out,",
+              "        \"CAST\", Upstream_Out,",
+              "        \"COAT\", Upstream_Out,",
+              "        Other_Out",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption (Projected)"
+          },
+          {
+            "name": "Actual Production Start Datetime",
+            "description": "Actual datetime the production per department started since the beginning of the month. This value is from machine data. If not available, the beginning of month datetime is used.",
+            "expression": [
+              "",
+              "VAR StartTime = ",
+              "    CALCULATE(",
+              "        MIN( 'Upstream Logs - Simplified'[Start Time] ),",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Upstream Logs - Simplified'[Start Time] ),",
+              "            'Upstream Logs - Simplified'[Start Time] >= [Beginning of Month]",
+              "        ),",
+              "        'Upstream Logs - Simplified'[Category] = \"Production\"",
+              "    )",
+              "",
+              "RETURN",
+              "IF( ISBLANK(StartTime) && [MTD Absorption] <> BLANK(), [Beginning of Month] + TIME(0, 0, 0), StartTime )"
+            ],
+            "formatString": "MM/dd/yyyy HH:mm:ss",
+            "displayFolder": "Absorption (Projected)",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralLongDateTime\" FormatString=\"MM/dd/yyyy HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Scheduled Production Stop Datetime",
+            "description": "The last scheduled finish date available in the schedule data. If not available, the value used is today's end datetime before midnight.",
+            "expression": [
+              "",
+              "VAR SchedEnd = ",
+              "    CALCULATE(",
+              "        MAX( 'Upstream Schedule'[Plan Finish Date] ),",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Upstream Schedule'[PlanFinishDateAltKey] ),",
+              "        ALL( 'Calendar'[Date] )",
+              "    )",
+              "",
+              "RETURN",
+              "IF( ISBLANK(SchedEnd) && [MTD Absorption] <> BLANK(), [Report Date] + TIME(23, 59, 59), SchedEnd )"
+            ],
+            "formatString": "MM/dd/yyyy HH:mm:ss",
+            "displayFolder": "Absorption (Projected)",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralLongDateTime\" FormatString=\"MM/dd/yyyy HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Estimated Absorption based on Scheduled Output by Month End",
+            "description": "[MTD Absorption] plus the product of [S/O Future Scheduled Output by Month End (Upstream)] and the average absorption per output in the last 3 calendar months ([Absorption per Output (Last 3 Months)])",
+            "expression": [
+              "",
+              "SUMX( VALUES('_Departments'[Department]), [MTD Absorption] + ([S/O Future Scheduled Output by Month End (Upstream)] * [Absorption per Output (Last 3 Months)]) )",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption (Projected)"
+          },
+          {
+            "name": "Average Daily Absorption based on Estimate",
+            "description": "[Estimated Absorption based on Scheduled Output by Month End] divided by the number of days between [Actual Production Start Datetime] and [Scheduled Production Stop Datetime]",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Estimated Absorption based on Scheduled Output by Month End],",
+              "    DATEDIFF( [Actual Production Start Datetime], [Scheduled Production Stop Datetime], MINUTE ) / 1440",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption (Projected)"
+          },
+          {
+            "name": "Projected Absorption",
+            "description": "[Average Daily Absorption based on Estimate] multiplied by the number of days between [Actual Product Start Datetime] and an end date. If current date is before 15th day of the month, the end date is the calendar month end datetime before midnight. Otherwise, it is the [Scheduled Production Stop Datetime].",
+            "expression": [
+              "",
+              "VAR EndDate = ",
+              "    IF(",
+              "        DAY( [Report Date] ) >= 15,",
+              "        [Scheduled Production Stop Datetime],",
+              "        [End of Month] + TIME(23, 59, 59)",
+              "    )",
+              "",
+              "VAR MinVisibleDate = MIN('Calendar'[Date])",
+              "",
+              "VAR Proj =",
+              "    SUMX( ",
+              "        VALUES('_Departments'[Department]), ",
+              "        [Average Daily Absorption based on Estimate] * ((DATEDIFF([Actual Production Start Datetime], EndDate, MINUTE ) - ([Future Off Hours by Month End] * 60)) / 1440) ",
+              "    )",
+              "",
+              "RETURN",
+              "-- Only project current month",
+              "-- Display MTD of previous month only. Otherwise, blank",
+              "IF(",
+              "    ISFILTERED( 'Calendar' ),",
+              "    IF(",
+              "        MinVisibleDate < [Beginning of Last Month],",
+              "        BLANK(),",
+              "        IF(",
+              "            MinVisibleDate < [Beginning of Month],",
+              "            [MTD Absorption],",
+              "            Proj",
+              "        )",
+              "    ),",
+              "    Proj",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption (Projected)"
+          },
+          {
+            "name": "Future Off Hours by Month End",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Upstream Off Days'[Off Hours] ),",
+              "    ALL( 'Calendar'[Date] ),",
+              "    FILTER(",
+              "        ALL( 'Upstream Off Days'[Date] ),",
+              "        'Upstream Off Days'[Date] > [Report Date]",
+              "            && 'Upstream Off Days'[Date] <= [End of Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption (Projected)"
+          },
+          {
+            "name": "Absorption Hours",
+            "expression": "SUM( Absorption[Quantity] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption"
           }
         ]
       },
@@ -7374,6 +7668,18 @@
             "sourceColumn": "CustomerOpenWeight",
             "formatString": "#,0.00",
             "displayFolder": "_Values"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: VBFA.VBELN",
+            "sourceColumn": "PurchaseOrderNo"
+          },
+          {
+            "name": "Purchase Order Line Number",
+            "dataType": "string",
+            "description": "SAP Source: VBFA.POSNN",
+            "sourceColumn": "PurchaseOrderLineNo"
           }
         ],
         "partitions": [
@@ -8209,7 +8515,6 @@
           {
             "name": "Process Order Number",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "ProcessOrderNoKey"
           },
           {
@@ -8217,6 +8522,12 @@
             "dataType": "double",
             "sourceColumn": "AmountValue",
             "formatString": "0.00"
+          },
+          {
+            "name": "HighestBomKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "HighestBomKey"
           }
         ],
         "partitions": [
@@ -9822,6 +10133,19 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "RankingDesc"
+          },
+          {
+            "name": "PlanFinishDateAltKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "PlanFinishDateAltKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -11660,7 +11984,7 @@
         ]
       },
       {
-        "name": "Support_FG2FilmLink",
+        "name": "Support_FG2FilmLink_Testing",
         "isHidden": true,
         "columns": [
           {
@@ -11669,9 +11993,9 @@
             "sourceColumn": "MaterialNo"
           },
           {
-            "name": "CoatBomKey",
+            "name": "HighestBomKey",
             "dataType": "string",
-            "sourceColumn": "CoatBomKey"
+            "sourceColumn": "HighestBomKey"
           }
         ],
         "partitions": [
@@ -11684,7 +12008,7 @@
                 "let",
                 "    Source = ARLPBI_STAGE,",
                 "    dbo_VW_FG2FILM_BOMLINK = Source{[Schema=\"dbo\",Item=\"VW_FG2FILM_BOMLINK\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_FG2FILM_BOMLINK,{\"MaterialNo\", \"CoatBomKey\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_FG2FILM_BOMLINK,{\"MaterialNo\", \"HighestBomKey\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -11953,6 +12277,117 @@
                 "    dbo_VW_MATERIAL_BOM_FACESTOCK = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_BOM_FACESTOCK\"]}[Data]",
                 "in",
                 "    dbo_VW_MATERIAL_BOM_FACESTOCK"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Support_FG2FilmLink_Absorption",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "MaterialNo",
+            "dataType": "string",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "HighestBomKey",
+            "dataType": "string",
+            "sourceColumn": "HighestBomKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_FG2FILM_BOMLINK = Source{[Schema=\"dbo\",Item=\"VW_FG2FILM_BOMLINK\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_FG2FILM_BOMLINK,{\"MaterialNo\", \"HighestBomKey\"})",
+                "in",
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Departments",
+        "columns": [
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "DepartmentKey",
+            "sortByColumn": "SortKey"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          },
+          {
+            "name": "SortKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "SortKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_DEPARTMENTS = Source{[Schema=\"dbo\",Item=\"VW_DEPARTMENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_DEPARTMENTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Upstream Off Days",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DateKey"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Off Hours",
+            "dataType": "double",
+            "sourceColumn": "OffHours",
+            "formatString": "0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_DEPARTMENTS_OFFDAYS = Source{[Schema=\"dbo\",Item=\"VW_DEPARTMENTS_OFFDAYS\"]}[Data]",
+                "in",
+                "    dbo_VW_DEPARTMENTS_OFFDAYS"
               ]
             }
           }
@@ -12500,15 +12935,6 @@
         "isActive": false
       },
       {
-        "name": "ae6ad895-860e-4659-a084-69992bb07400",
-        "toCardinality": "many",
-        "fromTable": "Upstream Logs - Simplified",
-        "fromColumn": "Process Order Number",
-        "toTable": "Shop Orders",
-        "toColumn": "Process Order Number",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "9e3d8325-575b-4183-9f36-c00277724088",
         "fromTable": "Upstream Schedule",
         "fromColumn": "Plan Production Date",
@@ -12521,14 +12947,6 @@
         "fromColumn": "Machine Name",
         "toTable": "_Machines",
         "toColumn": "Machine Name"
-      },
-      {
-        "name": "ef834f87-34f7-4a20-8caa-012402592f76",
-        "toCardinality": "many",
-        "fromTable": "Upstream Schedule",
-        "fromColumn": "Process Order Number",
-        "toTable": "Shop Orders",
-        "toColumn": "Process Order Number"
       },
       {
         "name": "658d9e4a-953d-40c9-bd24-176d803ed9bd",
@@ -12809,7 +13227,7 @@
       },
       {
         "name": "6d0e8d43-0e5b-497a-b2ee-a7c35c42aa16",
-        "fromTable": "Support_FG2FilmLink",
+        "fromTable": "Support_FG2FilmLink_Testing",
         "fromColumn": "MaterialNo",
         "toTable": "Material Master",
         "toColumn": "Material Number"
@@ -12820,15 +13238,6 @@
         "fromColumn": "Test Name",
         "toTable": "_Test Names",
         "toColumn": "TestNameKey"
-      },
-      {
-        "name": "d2b87b14-17f7-4acf-bf81-a72cfe37ca2e",
-        "toCardinality": "many",
-        "fromTable": "Testing Results",
-        "fromColumn": "CoatBomKey",
-        "toTable": "Support_FG2FilmLink",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
       },
       {
         "name": "4b749270-1754-4ee6-b32b-fd47dcdd8887",
@@ -12863,6 +13272,74 @@
         "toTable": "Testing Results",
         "toColumn": "CoatBomKey",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "71e73ae0-d271-4eca-999c-e1189b2dffed",
+        "toCardinality": "many",
+        "fromTable": "Testing Results",
+        "fromColumn": "CoatBomKey",
+        "toTable": "Support_FG2FilmLink_Testing",
+        "toColumn": "HighestBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "55834398-f79e-44c8-8293-312a3d27462f",
+        "toCardinality": "many",
+        "fromTable": "Absorption",
+        "fromColumn": "HighestBomKey",
+        "toTable": "Support_FG2FilmLink_Absorption",
+        "toColumn": "HighestBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "f03144f1-1946-4ce0-a175-e737bebd6926",
+        "fromTable": "Support_FG2FilmLink_Absorption",
+        "fromColumn": "MaterialNo",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "bd6c2dc5-52cb-4bb0-8c2e-4f5c566cc8d2",
+        "fromTable": "Shop Orders",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "c0270be3-3c6b-448a-a3c3-9d5a1fdf85c1",
+        "fromTable": "Upstream Schedule",
+        "fromColumn": "PlanFinishDateAltKey",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "a56ef07b-71d5-4c0d-9d9d-480f99a5d2bc",
+        "fromTable": "_Machines",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
+      },
+      {
+        "name": "43d9454b-1030-4290-8210-eb1e5a4cce0e",
+        "fromTable": "Cost Center Names",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
+      },
+      {
+        "name": "f62e6263-5dd5-4966-9c15-4458042b2ff0",
+        "fromTable": "Upstream Off Days",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
+      },
+      {
+        "name": "3f06226d-bea6-43eb-956c-a55e1b441f87",
+        "fromTable": "Upstream Off Days",
+        "fromColumn": "Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -15762,6 +16239,12 @@
               },
               {
                 "name": "Customer Open Weight"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
               }
             ]
           },
@@ -15831,6 +16314,9 @@
               },
               {
                 "name": "Quantity"
+              },
+              {
+                "name": "HighestBomKey"
               }
             ]
           }
@@ -16236,6 +16722,12 @@
               },
               {
                 "name": "Customer Open Weight"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
               }
             ]
           },
@@ -17341,217 +17833,6 @@
         ]
       },
       {
-        "name": "Absorption",
-        "tables": [
-          {
-            "name": "_Refresh Date",
-            "columns": [
-              {
-                "name": "Refresh Date"
-              },
-              {
-                "name": "Report Name"
-              }
-            ]
-          },
-          {
-            "name": "Absorption",
-            "columns": [
-              {
-                "name": "Amount"
-              },
-              {
-                "name": "Business Transaction Type"
-              },
-              {
-                "name": "Cost Center"
-              },
-              {
-                "name": "Cost Element"
-              },
-              {
-                "name": "Posting Date"
-              },
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Quantity"
-              }
-            ]
-          },
-          {
-            "name": "Calendar",
-            "columns": [
-              {
-                "name": "Calendar Month Number"
-              },
-              {
-                "name": "Calendar Quarter Name"
-              },
-              {
-                "name": "Calendar Week Number"
-              },
-              {
-                "name": "Calendar Year Number"
-              },
-              {
-                "name": "Date"
-              },
-              {
-                "name": "Day"
-              },
-              {
-                "name": "Fiscal Period"
-              },
-              {
-                "name": "Fiscal Quarter Name"
-              },
-              {
-                "name": "Fiscal Year Number"
-              },
-              {
-                "name": "Is Calendar YTD"
-              },
-              {
-                "name": "Is Current Fiscal Year"
-              },
-              {
-                "name": "Is Current Month"
-              },
-              {
-                "name": "Is Fiscal YTD"
-              },
-              {
-                "name": "Is Last 13 Months"
-              },
-              {
-                "name": "Is Last 2 Calendar Years"
-              },
-              {
-                "name": "Is Last 2 Fiscal Years"
-              },
-              {
-                "name": "Is MTD"
-              },
-              {
-                "name": "Is Weekday"
-              },
-              {
-                "name": "Month Name"
-              },
-              {
-                "name": "Year_Month_Sort_Key"
-              },
-              {
-                "name": "Fiscal Year Month Name"
-              },
-              {
-                "name": "Month Name (Calendar)"
-              },
-              {
-                "name": "Is Last 3 Fiscal Years"
-              },
-              {
-                "name": "Is Last 3 Calendar Years"
-              },
-              {
-                "name": "Week Group"
-              },
-              {
-                "name": "Is Next 3 Months"
-              },
-              {
-                "name": "Is Recent Weeks"
-              },
-              {
-                "name": "Weekday"
-              },
-              {
-                "name": "Year_Week_Sort_Key"
-              },
-              {
-                "name": "Start of Month"
-              },
-              {
-                "name": "Weekday Name"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Calendar Hierarchy"
-              },
-              {
-                "name": "Fiscal Hierarchy"
-              }
-            ]
-          },
-          {
-            "name": "Cost Center Names",
-            "columns": [
-              {
-                "name": "Cost Center"
-              },
-              {
-                "name": "Cost Center Name"
-              },
-              {
-                "name": "Department"
-              },
-              {
-                "name": "DepartmentSortKey"
-              },
-              {
-                "name": "Operations Category"
-              }
-            ]
-          },
-          {
-            "name": "Cost Element Names",
-            "columns": [
-              {
-                "name": "Category"
-              },
-              {
-                "name": "Category Renamed"
-              },
-              {
-                "name": "Company Category"
-              },
-              {
-                "name": "Cost Element"
-              },
-              {
-                "name": "Cost Element Name"
-              },
-              {
-                "name": "Sub Category"
-              }
-            ]
-          },
-          {
-            "name": "DAX Measures",
-            "measures": [
-              {
-                "name": "Absorption"
-              },
-              {
-                "name": "Earned Labor"
-              },
-              {
-                "name": "Earned Overhead"
-              },
-              {
-                "name": "MTD Absorption"
-              },
-              {
-                "name": "MTD PY Absorption"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "Sales Orders",
         "tables": [
           {
@@ -17885,6 +18166,12 @@
               },
               {
                 "name": "Customer Open Weight"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
               }
             ]
           },
@@ -18487,6 +18774,9 @@
               },
               {
                 "name": "Upstream Overall Equipment Efficiency (Target Var)"
+              },
+              {
+                "name": "CONV Linear Footage"
               }
             ]
           },
@@ -19522,6 +19812,12 @@
               },
               {
                 "name": "Customer Open Weight"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
               }
             ]
           },
@@ -20401,6 +20697,96 @@
               },
               {
                 "name": "MStat Indicator"
+              },
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Absorption (Budget)"
+              },
+              {
+                "name": "Earned Labor"
+              },
+              {
+                "name": "Earned Labor (Budget)"
+              },
+              {
+                "name": "Earned Overhead"
+              },
+              {
+                "name": "Earned Overhead (Budget)"
+              },
+              {
+                "name": "FYTD Absorption (Budget)"
+              },
+              {
+                "name": "FYTD Earned Labor (Budget)"
+              },
+              {
+                "name": "FYTD Earned Overhead (Budget)"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD Absorption (Budget)"
+              },
+              {
+                "name": "MTD Earned Labor"
+              },
+              {
+                "name": "MTD Earned Labor (Budget)"
+              },
+              {
+                "name": "MTD Earned Overhead"
+              },
+              {
+                "name": "MTD Earned Overhead (Budget)"
+              },
+              {
+                "name": "MTD PY Absorption"
+              },
+              {
+                "name": "CW Absorption"
+              },
+              {
+                "name": "FYTD Absorption"
+              },
+              {
+                "name": "FYTD PY Absorption"
+              },
+              {
+                "name": "MTD Absorption Hours"
+              },
+              {
+                "name": "MTD PY Absorption Hours"
+              },
+              {
+                "name": "Absorption per Output (Last 3 Months)"
+              },
+              {
+                "name": "S/O Future Scheduled Output by Month End (Upstream)"
+              },
+              {
+                "name": "Actual Production Start Datetime"
+              },
+              {
+                "name": "Estimated Absorption based on Scheduled Output by Month End"
+              },
+              {
+                "name": "Scheduled Production Stop Datetime"
+              },
+              {
+                "name": "Average Daily Absorption based on Estimate"
+              },
+              {
+                "name": "Projected Absorption"
+              },
+              {
+                "name": "Future Off Hours by Month End"
+              },
+              {
+                "name": "Absorption Hours"
               }
             ]
           },
@@ -20726,6 +21112,9 @@
               },
               {
                 "name": "Ranking Desc"
+              },
+              {
+                "name": "PlanFinishDateAltKey"
               }
             ]
           },
@@ -20808,6 +21197,107 @@
               },
               {
                 "name": "Shortage Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center Names",
+            "columns": [
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "DepartmentSortKey"
+              },
+              {
+                "name": "Operations Category"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Sub Category"
+              },
+              {
+                "name": "Is Supplies"
+              },
+              {
+                "name": "Is Labor"
+              },
+              {
+                "name": "Is Controllable Expense"
+              },
+              {
+                "name": "CustomOrder"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Category"
+              }
+            ]
+          },
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Business Transaction Type"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "HighestBomKey"
+              }
+            ]
+          },
+          {
+            "name": "_Departments",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "SortKey"
               }
             ]
           }
@@ -21317,6 +21807,12 @@
               },
               {
                 "name": "Customer Open Weight"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
               }
             ]
           },
@@ -22258,6 +22754,14 @@
           {
             "memberName": "DOMAIN\\sdiederich",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20472"
+          },
+          {
+            "memberName": "DOMAIN\\cchan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7267"
+          },
+          {
+            "memberName": "DOMAIN\\jnguyen",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8575"
           }
         ],
         "tablePermissions": [

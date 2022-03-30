@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -564,6 +565,12 @@
             "sourceColumn": "Weekday_Name",
             "sortByColumn": "Weekday",
             "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Is After 13 Months Ago",
+            "dataType": "boolean",
+            "sourceColumn": "Is_After_13MonthsAgo",
+            "displayFolder": "Helper Attributes"
           }
         ],
         "partitions": [
@@ -577,7 +584,7 @@
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_After_13MonthsAgo\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -728,7 +735,7 @@
           },
           {
             "type": "calculated",
-            "name": "Sample Requests",
+            "name": "Odoo",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -4650,6 +4657,7 @@
               "        FILTER(",
               "            'Inventory Consumption',",
               "            'Inventory Consumption'[Movement Type] IN { \"601\", \"641\", \"643\", \"Z43\" }",
+              "                && 'Inventory Consumption'[Posting Date] <= [Last Working Day]",
               "        )",
               "    )",
               ")"
@@ -5029,7 +5037,7 @@
               "    )",
               ")"
             ],
-            "formatString": "0.00",
+            "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
           {
@@ -5203,7 +5211,11 @@
               "    CALCULATE(",
               "        MAX( 'Upstream Schedule'[Plan Finish Date] ),",
               "        USERELATIONSHIP( 'Calendar'[Date], 'Upstream Schedule'[PlanFinishDateAltKey] ),",
-              "        ALL( 'Calendar'[Date] )",
+              "        ALL( 'Calendar'[Date] ),",
+              "        FILTER(",
+              "            'Upstream Schedule',",
+              "            'Upstream Schedule'[PlanFinishDateAltKey] <= [End of Month]",
+              "        )",
               "    )",
               "",
               "RETURN",
@@ -5247,19 +5259,15 @@
             "description": "[Average Daily Absorption based on Estimate] multiplied by the number of days between [Actual Product Start Datetime] and an end date. If current date is before 15th day of the month, the end date is the calendar month end datetime before midnight. Otherwise, it is the [Scheduled Production Stop Datetime].",
             "expression": [
               "",
-              "VAR EndDate = ",
-              "    IF(",
-              "        DAY( [Report Date] ) >= 15,",
-              "        [Scheduled Production Stop Datetime],",
-              "        [End of Month] + TIME(23, 59, 59)",
-              "    )",
+              "VAR EndDate = [End of Month] + TIME(23, 59, 59)",
               "",
               "VAR MinVisibleDate = MIN('Calendar'[Date])",
               "",
               "VAR Proj =",
               "    SUMX( ",
               "        VALUES('_Departments'[Department]), ",
-              "        [Average Daily Absorption based on Estimate] * ((DATEDIFF([Actual Production Start Datetime], EndDate, MINUTE ) - ([Future Off Hours by Month End] * 60)) / 1440) ",
+              "        [Estimated Absorption based on Scheduled Output by Month End]",
+              "            + ([Average Daily Absorption based on Estimate] * ((DATEDIFF([Scheduled Production Stop Datetime], EndDate, MINUTE) - ([Future Off Hours After Schedule End] * 60)) / 1440)) ",
               "    )",
               "",
               "RETURN",
@@ -5283,20 +5291,28 @@
             "displayFolder": "Absorption (Projected)"
           },
           {
-            "name": "Future Off Hours by Month End",
+            "name": "Future Off Hours After Schedule End",
             "expression": [
               "",
+              "VAR BegDate = ",
+              "    DATE(",
+              "        YEAR( [Scheduled Production Stop Datetime] ),",
+              "        MONTH( [Scheduled Production Stop Datetime] ),",
+              "        DAY( [Scheduled Production Stop Datetime])",
+              "    )",
+              "",
+              "RETURN",
               "CALCULATE(",
               "    SUM( 'Upstream Off Days'[Off Hours] ),",
               "    ALL( 'Calendar'[Date] ),",
               "    FILTER(",
               "        ALL( 'Upstream Off Days'[Date] ),",
-              "        'Upstream Off Days'[Date] > [Report Date]",
+              "        'Upstream Off Days'[Date] > BegDate",
               "            && 'Upstream Off Days'[Date] <= [End of Month]",
               "    )",
               ")"
             ],
-            "formatString": "#,0",
+            "formatString": "0.00",
             "displayFolder": "Absorption (Projected)"
           },
           {
@@ -5304,6 +5320,352 @@
             "expression": "SUM( Absorption[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Absorption"
+          },
+          {
+            "name": "WH Shipment Quantity",
+            "description": "Total weight of material transactions with 601, 641, 643, and Z43 movement types. Weight is given in the material master data.",
+            "expression": [
+              "",
+              "ABS(",
+              "    CALCULATE(",
+              "        SUM( 'Inventory Consumption'[Quantity] ),",
+              "        FILTER(",
+              "            'Inventory Consumption',",
+              "            'Inventory Consumption'[Movement Type] IN { \"601\", \"641\", \"643\", \"Z43\" }",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH Future Shipment Amount",
+            "expression": [
+              "",
+              "VAR MinVisibleDate = MIN('Calendar'[Date])",
+              "",
+              "RETURN",
+              "-- Show previous month as actual ship amount",
+              "-- Current and future shows actual ship plus customer open",
+              "IF(",
+              "    MinVisibleDate < [Beginning of Last Month],",
+              "    BLANK(),",
+              "    IF(",
+              "        MinVisibleDate < [Beginning of Month],",
+              "        [WH Shipment Amount],",
+              "        [WH Shipment Amount] + [SO Customer Open Amount]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Warehouse",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Line Count (By First Ship Date)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Line Count],",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "WH Effective On Time Shipment",
+            "description": "Daily average ratio of the number of on time lines plus exempted late lines divided by the number of lines. Date grouping: 'Sales Order Documents'[First Delivery Date].",
+            "expression": [
+              "",
+              "VAR OTS = ",
+              "    DIVIDE(",
+              "        [WH SO Line Count (On Time)] + [WH SO Line Count (Exempt)],",
+              "        [WH SO Line Count (All)]",
+              "    )",
+              "",
+              "RETURN -- Weighted average by line count",
+              "    DIVIDE(",
+              "        SUMX(",
+              "            VALUES( 'Calendar'[Date] ),",
+              "            [WH SO Line Count (All)] * OTS",
+              "        ),",
+              "        [WH SO Line Count (All)]",
+              "    )"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH Effective On Time Shipment (Target)",
+            "description": "Data Source: KPI Targets SharePoint List. If there is no value available, the default values are 95% for OTS and 100% for T1 OTS.",
+            "expression": [
+              "",
+              "VAR KeyVal =",
+              "    IF(",
+              "        HASONEVALUE( 'Sales Order Documents'[Tier] )",
+              "            && SELECTEDVALUE( 'Sales Order Documents'[Tier] ) = \"A\",",
+              "        \"OTS_T1\",",
+              "        \"OTS\"",
+              "    )",
+              "",
+              "VAR Target =",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = KeyVal,",
+              "        FILTER(",
+              "            ALL( Target_KPI[CalendarTimeKey] ),",
+              "            CONTAINS(",
+              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "                'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
+              "            )",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    ISBLANK( Target ),",
+              "    SWITCH(",
+              "        KeyVal,",
+              "        \"OTS\", 0.95,",
+              "        \"OTS_T1\", 1.00,",
+              "        0.95",
+              "    ),",
+              "    Target",
+              ")",
+              ""
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH Complete On Time",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    SUMX(",
+              "        VALUES( 'Calendar'[Date] ),",
+              "        [WH Complete On Time (Hidden)] * [WH SO Line Count (All)]",
+              "    ),",
+              "    [WH SO Line Count (All)]",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH SO Line Count (All)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Line Count (By First Ship Date)],",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Last Working Day]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH SO Line Count (On Time)",
+            "expression": [
+              "",
+              "VAR OnTime =",
+              "    CALCULATE(",
+              "        [Sales Order Line Count (By First Ship Date)],",
+              "        'Sales Order Documents'[Late Indicator] = 0,",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Last Working Day]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "-- Days with lines but no on time should show 0",
+              "IF(",
+              "    [WH SO Line Count (All)] <> BLANK(),",
+              "    OnTime + 0,",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH SO Line Count (Exempt)",
+            "expression": [
+              "",
+              "VAR Exempt =",
+              "    CALCULATE(",
+              "        [Sales Order Line Count (By First Ship Date)],",
+              "        'Sales Order Documents'[Late Indicator] = 1,",
+              "        'Sales Order Documents'[Reason Type for Late Shipment] = \"3rd Party\",",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Last Working Day]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    [WH SO Line Count (All)] <> BLANK(),",
+              "    Exempt + 0,",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH Complete On Time (Target)",
+            "description": "Data Source: KPI Targets SharePoint List. If there is no value available, the default value is 90%.",
+            "expression": [
+              "",
+              "VAR Target =",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"COT\",",
+              "        FILTER(",
+              "            ALL( Target_KPI[CalendarTimeKey] ),",
+              "            CONTAINS(",
+              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "                'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
+              "            )",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    ISBLANK( Target ),",
+              "    0.90,",
+              "    Target",
+              ")",
+              ""
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "WH Shipment Calendar List",
+            "expression": [
+              "",
+              "CONCATENATEX( ",
+              "    'Shipment Calendar', ",
+              "    LEFT([Customer Name], 15) & UNICHAR(10) & \"#\" & VALUE([Order Number]) & \" (\" & [Order Type] & \")\",",
+              "    UNICHAR(10),",
+              "    [Order Amount], DESC",
+              ")"
+            ],
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "Last Working Day",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    MAX( 'Calendar'[Date] ),",
+              "    FILTER(",
+              "        ALL( 'Calendar' ),",
+              "        'Calendar'[Date] <= [Report Date]",
+              "            && 'Calendar'[Is Weekday]",
+              "    )",
+              ")"
+            ],
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "WH Complete On Time (Hidden)",
+            "expression": [
+              "",
+              "AVERAGEX(",
+              "    VALUES( 'Customer Master'[Customer Name] ),",
+              "    IF(",
+              "        [WH SO Line Count (All)] = BLANK(),",
+              "        BLANK(),",
+              "        IF(",
+              "            [WH SO Line Count (All)] = ( [WH SO Line Count (On Time)] + [WH SO Line Count (Exempt)] ),",
+              "            1,",
+              "            0",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isHidden": true,
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "SO Late Quantity",
+            "description": "Difference between [SO Order Quantity] and [SO Shipped On Time Quantity]",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Sales Order Documents'[Late Quantity] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "WH Days of Perfect On Time Shipment",
+            "description": "Number of days when [WH Effective On Time Shipment] equals to 100%",
+            "expression": [
+              "",
+              "VAR CountPerfectDays =",
+              "    COUNTROWS(",
+              "        FILTER(",
+              "            VALUES('Calendar'[Date]),",
+              "            [WH Effective On Time Shipment] >= 1",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "CALCULATE(",
+              "    CountPerfectDays + 0,",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Last Working Day]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Warehouse"
+          },
+          {
+            "name": "Sales Discount",
+            "description": "Sum of CE110US.KWKDRB",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Discount Amount] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents',  'Sales Invoice Documents'[Discount Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Discount Amount] )",
+              "    ),",
+              "    SUM('Sales Invoice Documents'[Discount Amount] )    ",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales"
           }
         ]
       },
@@ -6732,12 +7094,34 @@
             },
             {
               "name": "MTD",
-              "expression": "CALCULATE( SELECTEDMEASURE(), DATESMTD('Calendar'[Date]) )",
+              "expression": [
+                "CALCULATE(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        DATESMTD( 'Calendar'[Date] )",
+                "    ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Report Date]",
+                "    )",
+                ")"
+              ],
               "ordinal": 4
             },
             {
               "name": "YTD",
-              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date]) )",
+              "expression": [
+                "CALCULATE(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        DATESYTD('Calendar'[Date])",
+                "    ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Report Date]",
+                "    )",
+                ")"
+              ],
               "ordinal": 7
             },
             {
@@ -6769,7 +7153,18 @@
             },
             {
               "name": "FYTD",
-              "expression": "CALCULATE( SELECTEDMEASURE(), DATESYTD('Calendar'[Date], \"09/30\") )",
+              "expression": [
+                "CALCULATE(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        DATESYTD('Calendar'[Date], \"09/30\")",
+                "    ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Report Date]",
+                "    )",
+                ")"
+              ],
               "ordinal": 10
             },
             {
@@ -6806,10 +7201,10 @@
               "expression": [
                 "CALCULATE(",
                 "    SELECTEDMEASURE(),",
-                "    LASTDATE( 'Calendar'[Date] ),",
                 "    FILTER(",
                 "        'Calendar',",
-                "        'Calendar'[Date] <= [Report Date]",
+                "        'Calendar'[Date] <= [Last Working Day]",
+                "            && 'Calendar'[Date] = LASTDATE( ALLSELECTED('Calendar'[Date]) )",
                 "    )",
                 ")"
               ],
@@ -7680,6 +8075,36 @@
             "dataType": "string",
             "description": "SAP Source: VBFA.POSNN",
             "sourceColumn": "PurchaseOrderLineNo"
+          },
+          {
+            "name": "Late Indicator",
+            "dataType": "int64",
+            "sourceColumn": "LateIndicator",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Reason for Late Shipment",
+            "dataType": "string",
+            "sourceColumn": "LateReasonText"
+          },
+          {
+            "name": "Reason Type for Late Shipment",
+            "dataType": "string",
+            "sourceColumn": "LateReasonType"
+          },
+          {
+            "name": "Late Exclude Indicator",
+            "dataType": "string",
+            "description": "Value is 'X' if this line is indicated to be excluded in On Time Shipping metrics.",
+            "sourceColumn": "LateExcludeIndicator"
+          },
+          {
+            "name": "Late Quantity",
+            "dataType": "double",
+            "description": "Difference between [Order Quantity] and [Shipped On Time Quantity]",
+            "sourceColumn": "LateQuantity",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities"
           }
         ],
         "partitions": [
@@ -12392,6 +12817,73 @@
             }
           }
         ]
+      },
+      {
+        "name": "Shipment Calendar",
+        "description": "A specialized tabled used to visualize Shipping department's shipment schedule of sales orders. [First Scheduled Ship Date] is used as columns and [Shipment Rank] as rows while values are concatenated strings of customer name, and order number/type.",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "First Scheduled Ship Date",
+            "dataType": "dateTime",
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Customer Name",
+            "dataType": "string",
+            "sourceColumn": "CustomerName"
+          },
+          {
+            "name": "Order Number",
+            "dataType": "string",
+            "sourceColumn": "OrderNoKey"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNoKey"
+          },
+          {
+            "name": "Order Amount",
+            "dataType": "double",
+            "sourceColumn": "OrderAmountUSD",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Shipment Rank",
+            "dataType": "int64",
+            "sourceColumn": "ShipmentRank",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Order Type",
+            "dataType": "string",
+            "sourceColumn": "OrderType"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_SALES_SHIPCAL = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES_SHIPCAL\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_SALES_SHIPCAL"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -13340,6 +13832,20 @@
         "fromColumn": "Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "fcc869c7-9d1b-40ed-b3f5-d6ded66e06f3",
+        "fromTable": "Shipment Calendar",
+        "fromColumn": "First Scheduled Ship Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "a9bcafad-8953-41cb-8cd3-060a40d99f86",
+        "fromTable": "Shipment Calendar",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -13461,6 +13967,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -14108,6 +14617,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -14405,6 +14917,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -14966,6 +15481,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -15191,6 +15709,15 @@
               },
               {
                 "name": "YTD PY Var% Gross Sales"
+              },
+              {
+                "name": "Sales Discount"
+              },
+              {
+                "name": "Net Margin"
+              },
+              {
+                "name": "Net Sales"
               }
             ]
           },
@@ -15615,6 +16142,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -15897,6 +16427,12 @@
               },
               {
                 "name": "MTD Earned Overhead"
+              },
+              {
+                "name": "Net Margin"
+              },
+              {
+                "name": "Net Sales"
               }
             ]
           },
@@ -16245,6 +16781,21 @@
               },
               {
                 "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Quantity"
               }
             ]
           },
@@ -16728,6 +17279,21 @@
               },
               {
                 "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Quantity"
               }
             ]
           },
@@ -16837,6 +17403,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -17175,6 +17744,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -17510,6 +18082,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -18172,6 +18747,21 @@
               },
               {
                 "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Quantity"
               }
             ]
           },
@@ -18270,6 +18860,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -18543,6 +19136,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -19460,6 +20056,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -19818,6 +20417,21 @@
               },
               {
                 "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Quantity"
               }
             ]
           },
@@ -20298,6 +20912,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -20783,7 +21400,7 @@
                 "name": "Projected Absorption"
               },
               {
-                "name": "Future Off Hours by Month End"
+                "name": "Future Off Hours After Schedule End"
               },
               {
                 "name": "Absorption Hours"
@@ -21412,6 +22029,9 @@
               },
               {
                 "name": "Weekday Name"
+              },
+              {
+                "name": "Is After 13 Months Ago"
               }
             ],
             "hierarchies": [
@@ -21813,6 +22433,21 @@
               },
               {
                 "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Quantity"
               }
             ]
           },
@@ -22073,6 +22708,72 @@
               },
               {
                 "name": "WH Storage Bin Quantity"
+              },
+              {
+                "name": "Last Backorder Snapshot Amount"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "WH Shipment Quantity"
+              },
+              {
+                "name": "WH Future Shipment Amount"
+              },
+              {
+                "name": "Sales Order Line Count"
+              },
+              {
+                "name": "MTD Sales Order Line Count"
+              },
+              {
+                "name": "WH Effective On Time Shipment"
+              },
+              {
+                "name": "Sales Order Line Count (By First Ship Date)"
+              },
+              {
+                "name": "WH Effective On Time Shipment (Target)"
+              },
+              {
+                "name": "WH Complete On Time"
+              },
+              {
+                "name": "WH SO Line Count (All)"
+              },
+              {
+                "name": "WH SO Line Count (Exempt)"
+              },
+              {
+                "name": "WH SO Line Count (On Time)"
+              },
+              {
+                "name": "WH Complete On Time (Target)"
+              },
+              {
+                "name": "WH Shipment Calendar List"
+              },
+              {
+                "name": "SO Allocated Quantity"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "SO Internal Open Quantity"
+              },
+              {
+                "name": "SO Ordered Quantity"
+              },
+              {
+                "name": "SO Shipped Quantity"
+              },
+              {
+                "name": "SO Late Quantity"
+              },
+              {
+                "name": "WH Days of Perfect On Time Shipment"
               }
             ]
           },
@@ -22172,6 +22873,79 @@
               },
               {
                 "name": "Storage Type Description"
+              }
+            ]
+          },
+          {
+            "name": "Backorder Snapshots",
+            "columns": [
+              {
+                "name": "Incoming Amount"
+              },
+              {
+                "name": "Incoming Quantity"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Outgoing Amount"
+              },
+              {
+                "name": "Outgoing Quantity"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Remaining by Month End Transit Stock Amount"
+              },
+              {
+                "name": "Remaining by Month End Transit Stock Quantity"
+              },
+              {
+                "name": "Shortage Amount"
+              },
+              {
+                "name": "Shortage Quantity"
+              },
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Unrestricted Stock Amount"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Valuation Class"
+              }
+            ]
+          },
+          {
+            "name": "Shipment Calendar",
+            "columns": [
+              {
+                "name": "Customer Name"
+              },
+              {
+                "name": "First Scheduled Ship Date"
+              },
+              {
+                "name": "Order Amount"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Shipment Rank"
+              },
+              {
+                "name": "Order Type"
               }
             ]
           }

@@ -7224,7 +7224,7 @@
                 "    SELECTEDMEASURE(),",
                 "    FILTER(",
                 "        'Calendar',",
-                "        'Calendar'[Date] <= [Last Working Day]",
+                "        'Calendar'[Date] <= [Report Date]",
                 "            && 'Calendar'[Date] = LASTDATE( ALLSELECTED('Calendar'[Date]) )",
                 "    )",
                 ")"

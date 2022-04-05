@@ -5586,7 +5586,7 @@
               "CALCULATE(",
               "    MAX( 'Calendar'[Date] ),",
               "    FILTER(",
-              "        ALL( 'Calendar' ),",
+              "        ALLSELECTED( 'Calendar' ),",
               "        'Calendar'[Date] <= [Report Date]",
               "            && 'Calendar'[Is Weekday]",
               "    )",
@@ -7282,6 +7282,19 @@
                 ")"
               ],
               "ordinal": 12
+            },
+            {
+              "name": "CD Weekday",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Last Working Day]",
+                "            && 'Calendar'[Date] = LASTDATE( ALLSELECTED('Calendar'[Date]) )",
+                "    )",
+                ")"
+              ]
             }
           ]
         },

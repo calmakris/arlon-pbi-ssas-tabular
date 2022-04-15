@@ -30,6 +30,7 @@
     "tables": [
       {
         "name": "Customer Master",
+        "description": "Contains data per customer account. Mainly used for analyzing commercial data like sales invoices and sales orders.",
         "columns": [
           {
             "name": "Customer Number",
@@ -5768,7 +5769,7 @@
             "name": "Cost of Goods Sold",
             "description": "Sum of amount of line items posted under 0057020000 G/L account",
             "expression": "SUM( 'Daily Cost of Goods Sold'[Amount] )",
-            "formatString": "#,0.00",
+            "formatString": "#,0",
             "displayFolder": "General"
           },
           {
@@ -5778,18 +5779,27 @@
               "VAR PO_Scrap =",
               "    CALCULATE(",
               "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
-              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"},",
-              "        'Goods Issues and Receipts'[Reason Code for Movement] <> \"0000\",",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Posting Date] )",
+              "        FILTER(",
+              "            '_Scrap Category',",
+              "            '_Scrap Category'[Category] = \"Process Order Scrap\"",
+              "        )",
               "    )",
               "",
+              "-- Use G/L account items instead because it has correct debit/credit indicators",
               "VAR NonPO_Scrap =",
               "    CALCULATE(",
-              "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
-              "        'Goods Issues and Receipts'[Movement Type] IN {\"551\", \"552\"},",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Posting Date] )",
+              "        SUM( 'Scrap Usage Transactions'[Amount] ),",
+              "        FILTER(",
+              "            '_Scrap Category',",
+              "            '_Scrap Category'[Category] = \"Non Process Order Scrap\"",
+              "        ),",
+              "        FILTER(",
+              "            'Cost Element Names',",
+              "            'Cost Element Names'[Is Operations Scrap]",
+              "        )",
               "    )",
               "",
+              "-- ZSCRAP tcode only has confirmations on CAST orders",
               "VAR Scrap_Conf = SUM( 'Scrap Confirmations'[Amount] )",
               "",
               "VAR Inv_Reserve =",
@@ -5798,8 +5808,9 @@
               "        FILTER(",
               "            'Cost Element Names',",
               "            'Cost Element Names'[Category] = \"Inventory Reserve\"",
+              "                && 'Cost Element Names'[Is Operations Scrap]",
               "        ),",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Posting Date] )",
+              "        ALL( Plant[Plant] )",
               "    )",
               "",
               "RETURN",
@@ -5816,7 +5827,7 @@
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
-            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Converting"
           },
           {
@@ -5830,6 +5841,43 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Converting"
+          },
+          {
+            "name": "Operations Scrap as % of COGS",
+            "expression": "DIVIDE( [Operations Scrap Amount], [Cost of Goods Sold] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Operations Scrap"
+          },
+          {
+            "name": "Operations Scrap as % of GR",
+            "expression": [
+              "",
+              "VAR GR = ",
+              "    CALCULATE(",
+              "        ABS(SUM( 'Goods Issues and Receipts'[Amount] )),",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"},",
+              "        'Goods Issues and Receipts'[Reason Code for Movement] = \"0000\"",
+              "    )",
+              "",
+              "RETURN",
+              "DIVIDE( [Operations Scrap Amount], GR )"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Operations Scrap"
+          },
+          {
+            "name": "Scrap P&L Amount",
+            "description": "Sum of 'Scrap Usage Transactions'[Amount] and 'Absorption'[Amount]",
+            "expression": [
+              "",
+              "VAR Scrap = SUM( 'Scrap Usage Transactions'[Amount] )",
+              "VAR Absorb = [Absorption]",
+              "",
+              "RETURN",
+              "Scrap + Absorb"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Scrap P&L"
           }
         ]
       },
@@ -6410,7 +6458,7 @@
       },
       {
         "name": "Material Master",
-        "description": "SAP Source: MARA, MAKT, and AUSP",
+        "description": "SAP Source: MARA, MAKT, and AUSP. Contains data per material number. This table is related to most tables with [Material Number] fields.",
         "columns": [
           {
             "name": "Material Number",
@@ -10912,7 +10960,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -10928,7 +10975,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -10944,7 +10990,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -10960,7 +11005,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11073,6 +11117,7 @@
       },
       {
         "name": "Machine Status",
+        "description": "Calculated table that compiles schedule and machine data and compares the planned and actual start times and quantities per process order.",
         "columns": [
           {
             "type": "calculatedTableColumn",
@@ -11080,6 +11125,7 @@
             "dataType": "string",
             "isNameInferred": true,
             "isDataTypeInferred": true,
+            "isHidden": true,
             "sourceColumn": "Machine Status - Prep[Machine Name]"
           },
           {
@@ -13307,20 +13353,24 @@
       },
       {
         "name": "Scrap Usage Transactions",
+        "description": "SAP Source: BSIS, ACCTIT, and MSEG. Filters BSIS via HKONT with scrap/usage accounts. ACCTIT and MSEG tables are used for quantities and material data.",
         "columns": [
           {
             "name": "Document Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS.BELNR",
             "sourceColumn": "DocNo"
           },
           {
             "name": "Document Line Number",
             "dataType": "string",
+            "description": "SAP Source: BSIS.BUZEI",
             "sourceColumn": "DocLineNo"
           },
           {
             "name": "Document Type",
             "dataType": "string",
+            "description": "SAP Source: BSIS.BLART",
             "sourceColumn": "DocType"
           },
           {
@@ -13338,16 +13388,19 @@
           {
             "name": "Reference Document Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.ZEILE",
             "sourceColumn": "RefDocNo"
           },
           {
             "name": "Reference Document Line Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.AWREF",
             "sourceColumn": "RefDocLineNo"
           },
           {
             "name": "Movement Type",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.BWART",
             "sourceColumn": "MvmtType"
           },
           {
@@ -13359,6 +13412,7 @@
           {
             "name": "Batch Number",
             "dataType": "string",
+            "description": "SAP Source: MSEG.CHARG",
             "sourceColumn": "BatchNo"
           },
           {
@@ -13370,11 +13424,13 @@
           {
             "name": "Process Order Number",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.AUFNR",
             "sourceColumn": "ProcessOrderNo"
           },
           {
             "name": "Posting Date",
             "dataType": "dateTime",
+            "description": "SAP Source: BSIS.BUDAT",
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
             "annotations": [
@@ -13387,11 +13443,13 @@
           {
             "name": "Quantity Unit",
             "dataType": "string",
+            "description": "SAP Source: ACCTIT.ERFME",
             "sourceColumn": "QuantityUnit"
           },
           {
             "name": "Quantity",
             "dataType": "double",
+            "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -13399,6 +13457,7 @@
           {
             "name": "Amount",
             "dataType": "double",
+            "description": "SAP Source: BSIS.DMBE2 (negated if BSIS.SHKZH = 'H')",
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -13406,6 +13465,7 @@
           {
             "name": "Reason Code for Movement",
             "dataType": "string",
+            "description": "SAP Source: MSEG.GRUND",
             "sourceColumn": "MvmtReasonCode"
           },
           {
@@ -13440,6 +13500,7 @@
       },
       {
         "name": "_Scrap Category",
+        "description": "Contains manually assigned categories given the [ScrapID] - mainly the cost element except for goods issues where it uses the movement types.",
         "columns": [
           {
             "name": "ScrapID",
@@ -13477,25 +13538,30 @@
       },
       {
         "name": "Scrap Confirmations",
+        "description": "SAP Source: AFRU, AFKO, MBEW, and CRHD. Scrap confirmations per process order excluding postings from RFCUSER.",
         "columns": [
           {
             "name": "Material Number",
             "dataType": "string",
+            "description": "SAP Source: AFKO.PLNBEZ",
             "sourceColumn": "MaterialNo"
           },
           {
             "name": "Process Order Number",
             "dataType": "string",
+            "description": "SAP Source: AFRU.AUFNR",
             "sourceColumn": "ProcessOrderNo"
           },
           {
             "name": "Plant Number",
             "dataType": "string",
+            "description": "SAP Source: AFRU.WERKS",
             "sourceColumn": "PlantNo"
           },
           {
             "name": "Reason Code for Movement",
             "dataType": "string",
+            "description": "SAP Source: AFRU.GRUND",
             "sourceColumn": "MvmtReasonCode"
           },
           {
@@ -13513,6 +13579,7 @@
           {
             "name": "Posting Date",
             "dataType": "dateTime",
+            "description": "SAP Source: AFRU.BUDAT",
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
             "annotations": [
@@ -13525,11 +13592,13 @@
           {
             "name": "Quantity Unit",
             "dataType": "string",
+            "description": "SAP Source: AFRU.GMEIN",
             "sourceColumn": "QuantityUnit"
           },
           {
             "name": "Quantity",
             "dataType": "double",
+            "description": "SAP Source: AFRU.XMNGA",
             "sourceColumn": "Quantity",
             "formatString": "0.00",
             "summarizeBy": "none"
@@ -13537,9 +13606,16 @@
           {
             "name": "Amount",
             "dataType": "double",
+            "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
             "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "0.00"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MachineName"
           }
         ],
         "partitions": [
@@ -14609,6 +14685,20 @@
         "toTable": "Testing Results",
         "toColumn": "CoatBomKey",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "77952195-6c6e-438e-9736-e3c62c34a164",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "c21eb85a-f753-4ab1-b6ae-96af0881ab31",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "Plant Number",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -24203,6 +24293,111 @@
               },
               {
                 "name": "Operations Scrap Amount"
+              },
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Absorption (Budget)"
+              },
+              {
+                "name": "Absorption Hours"
+              },
+              {
+                "name": "Absorption per Output (Last 3 Months)"
+              },
+              {
+                "name": "Actual Production Start Datetime"
+              },
+              {
+                "name": "Average Daily Absorption based on Estimate"
+              },
+              {
+                "name": "CW Absorption"
+              },
+              {
+                "name": "Earned Labor"
+              },
+              {
+                "name": "Earned Labor (Budget)"
+              },
+              {
+                "name": "Earned Overhead"
+              },
+              {
+                "name": "Earned Overhead (Budget)"
+              },
+              {
+                "name": "End of Month"
+              },
+              {
+                "name": "Estimated Absorption based on Scheduled Output by Month End"
+              },
+              {
+                "name": "Future Off Hours After Schedule End"
+              },
+              {
+                "name": "FYTD Absorption"
+              },
+              {
+                "name": "FYTD Absorption (Budget)"
+              },
+              {
+                "name": "FYTD Earned Labor (Budget)"
+              },
+              {
+                "name": "FYTD Earned Overhead (Budget)"
+              },
+              {
+                "name": "FYTD PY Absorption"
+              },
+              {
+                "name": "FYTD PY S/O Completed Count"
+              },
+              {
+                "name": "FYTD S/O Completed Count"
+              },
+              {
+                "name": "FYTD S/O Scheduled Count"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD Absorption (Budget)"
+              },
+              {
+                "name": "MTD Absorption Hours"
+              },
+              {
+                "name": "MTD Earned Labor"
+              },
+              {
+                "name": "MTD Earned Labor (Budget)"
+              },
+              {
+                "name": "MTD Earned Overhead"
+              },
+              {
+                "name": "MTD Earned Overhead (Budget)"
+              },
+              {
+                "name": "MTD PY Absorption"
+              },
+              {
+                "name": "MTD PY Absorption Hours"
+              },
+              {
+                "name": "Operations Scrap as % of COGS"
+              },
+              {
+                "name": "Operations Scrap as % of GR"
+              },
+              {
+                "name": "Scheduled Production Stop Datetime"
+              },
+              {
+                "name": "Scrap P&L Amount"
               }
             ]
           },
@@ -24311,6 +24506,9 @@
               },
               {
                 "name": "ScrapCategoryKey"
+              },
+              {
+                "name": "Machine Name"
               }
             ]
           },
@@ -24354,6 +24552,31 @@
               },
               {
                 "name": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "_Departments",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "SortKey"
+              }
+            ]
+          },
+          {
+            "name": "_Machines",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
               }
             ]
           }
@@ -24972,6 +25195,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

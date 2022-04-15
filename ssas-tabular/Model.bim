@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -232,6 +233,7 @@
           {
             "name": "Complaint Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "ComplaintValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -246,6 +248,7 @@
           {
             "name": "Credit Issued Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "CreditIssueValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -260,6 +263,7 @@
           {
             "name": "Open Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "OpenValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -288,6 +292,7 @@
             "name": "Cycle Time",
             "dataType": "int64",
             "isDataTypeInferred": true,
+            "isHidden": true,
             "expression": " IF([Last Credit Date], DATEDIFF('Complaint Documents'[Enter Date], [Last Credit Date], DAY), BLANK())"
           },
           {
@@ -472,7 +477,8 @@
             "name": "Day",
             "dataType": "int64",
             "sourceColumn": "Day_Of_Month",
-            "displayFolder": "Individual Attributes"
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
           },
           {
             "name": "Is Weekday",
@@ -536,7 +542,8 @@
             "name": "Weekday",
             "dataType": "int64",
             "sourceColumn": "Day_Of_Week",
-            "displayFolder": "Individual Attributes"
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
           },
           {
             "name": "Year_Week_Sort_Key",
@@ -748,6 +755,20 @@
           {
             "type": "calculated",
             "name": "Testing",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Operations",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "General",
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
@@ -2514,7 +2535,7 @@
               "        'Goods Issues and Receipts',",
               "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"551\", \"262\", \"552\"}",
               "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\"}",
-              "            && 'Goods Issues and Receipts'[Reason Code] <> \"0000\"",
+              "            && 'Goods Issues and Receipts'[Reason Code for Movement] <> \"0000\"",
               "    )",
               ")"
             ],
@@ -2612,7 +2633,15 @@
           {
             "name": "CONV Square Feet per Man Hour",
             "description": "Total number of square footage over total production hours in Converting",
-            "expression": " DIVIDE( [GR Square Footage], [CONV Production Hours] )",
+            "expression": [
+              " DIVIDE(",
+              "    CALCULATE(",
+              "        [GR Square Footage],",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
+              "    ),",
+              "    [CONV Production Hours]",
+              " )"
+            ],
             "formatString": "#,0",
             "displayFolder": "Converting"
           },
@@ -2649,7 +2678,7 @@
           },
           {
             "name": "CONV Uptime Hours",
-            "expression": " SUM( 'Converting Uptime'[Uptime Seconds] ) / 60 / 60",
+            "expression": " DIVIDE( DIVIDE( SUM( 'Converting Uptime'[Uptime Seconds] ), 60 ), 60 )",
             "formatString": "#,0.00",
             "displayFolder": "Converting"
           },
@@ -2672,23 +2701,41 @@
             "displayFolder": "Converting"
           },
           {
-            "name": "PD GR Linear Footage",
+            "name": "PD CONV Linear Footage",
             "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
-            "expression": " CALCULATE( [GR Linear Footage],PREVIOUSDAY('Calendar'[Date]) )",
+            "expression": [
+              "",
+              "CALCULATE( ",
+              "    [CONV Linear Footage],",
+              "    PREVIOUSDAY('Calendar'[Date])",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "PD GI Linear Footage",
+            "name": "PD CONV Scrap Footage",
             "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
-            "expression": " CALCULATE( [GI Linear Footage], PREVIOUSDAY( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [CONV Scrap Footage],",
+              "    PREVIOUSDAY( 'Calendar'[Date] )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
-            "name": "PD GI Scrap Rate",
+            "name": "PD CONV Scrap Rate",
             "description": "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
-            "expression": " CALCULATE( [GI Scrap Rate], PREVIOUSDAY( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [CONV Scrap Rate],",
+              "    PREVIOUSDAY( 'Calendar'[Date] )",
+              ")"
+            ],
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Time Intelligence"
           },
@@ -3043,7 +3090,7 @@
               "SWITCH(TRUE(),",
               "    \"CAST\" IN ALLSELECTED('_Machines'[Department]), [CAST Overall Equipment Efficiency (Target)],",
               "    \"COAT\" IN ALLSELECTED(_Machines[Department]), [COAT Overall Equipment Efficiency (Target)],",
-              "    ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]) / 2",
+              "    DIVIDE( ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]), 2 )",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
@@ -3105,7 +3152,7 @@
               "SWITCH(TRUE(),",
               "    \"CAST\" IN ALLSELECTED('_Machines'[Department]), [CAST First Pass Reliability (Target)],",
               "    \"COAT\" IN ALLSELECTED(_Machines[Department]), [COAT First Pass Reliability (Target)],",
-              "    ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]) / 2",
+              "    DIVIDE( ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]), 2 )",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
@@ -3709,19 +3756,49 @@
           },
           {
             "name": "S/O Count",
-            "expression": "DISTINCTCOUNT( 'Shop Orders'[Process Order Number] )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DISTINCTCOUNT( 'Shop Orders'[Process Order Number] ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Shop Orders'[End Date Key] )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Shop Orders"
           },
           {
             "name": "S/O Ordered Quantity",
-            "expression": " SUM( 'Shop Orders'[Order Quantity] )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Shop Orders'[Order Quantity] ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Shop Orders'[End Date Key] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Shop Orders"
           },
           {
             "name": "S/O Delivered Quantity",
-            "expression": " SUM( 'Shop Orders'[Delivered Quantity] )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Shop Orders'[Delivered Quantity] ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Shop Orders'[End Date Key] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Shop Orders"
           },
@@ -3730,7 +3807,11 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [S/O Count],",
+              "    DISTINCTCOUNT( 'Shop Orders'[Process Order Number] ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    ),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Shop Orders'[Basic Start Date] )",
               ")"
             ],
@@ -3743,10 +3824,7 @@
               "",
               "CALCULATE(",
               "    [S/O Count],",
-              "    FILTER(",
-              "        'Shop Orders',",
-              "        'Shop Orders'[Close Indicator] = \"X\"",
-              "    )",
+              "    'Shop Orders'[Close Indicator] = \"X\"",
               ")"
             ],
             "formatString": "#,0",
@@ -3758,13 +3836,10 @@
               "",
               "CALCULATE(",
               "    [S/O Count],",
-              "    FILTER(",
-              "        'Shop Orders',",
-              "        'Shop Orders'[Notification Number] <> BLANK()",
-              "    )",
+              "    'Shop Orders'[Notification Number] <> BLANK()",
               ")"
             ],
-            "formatString": "0",
+            "formatString": "#,0",
             "displayFolder": "Shop Orders"
           },
           {
@@ -3937,7 +4012,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    DATEDIFF( [MStat Last Actual Start Time], [MStat Last Plan Start Time], MINUTE) / 60,",
+              "    DIVIDE( DATEDIFF( [MStat Last Actual Start Time], [MStat Last Plan Start Time], MINUTE), 60 ),",
               "    FILTER(",
               "        'Machine Status',",
               "        'Machine Status'[Plan Start Time] <> BLANK()",
@@ -4011,7 +4086,7 @@
             "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
             "expression": [
               "",
-              "VAR Required = DATEDIFF([Prior Production Date], [Now Date], SECOND) / 60",
+              "VAR Required = DIVIDE( DATEDIFF([Prior Production Date], [Now Date], SECOND), 60 )",
               "VAR Actual = ",
               "    CALCULATE(",
               "        SUM( 'Upstream Logs - Simplified'[Duration Minutes] ),",
@@ -5085,7 +5160,8 @@
               "        'Goods Issues and Receipts',",
               "        'Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}",
               "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}",
-              "    )",
+              "    ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
             "formatString": "#,0",
@@ -5246,7 +5322,7 @@
               "",
               "DIVIDE(",
               "    [Estimated Absorption based on Scheduled Output by Month End],",
-              "    DATEDIFF( [Actual Production Start Datetime], [Scheduled Production Stop Datetime], MINUTE ) / 1440",
+              "    DIVIDE( DATEDIFF( [Actual Production Start Datetime], [Scheduled Production Stop Datetime], MINUTE ), 1440 )",
               ")"
             ],
             "formatString": "#,0",
@@ -5265,7 +5341,7 @@
               "    SUMX( ",
               "        VALUES('_Departments'[Department]), ",
               "        [Estimated Absorption based on Scheduled Output by Month End]",
-              "            + ([Average Daily Absorption based on Estimate] * ((DATEDIFF([Scheduled Production Stop Datetime], EndDate, MINUTE) - ([Future Off Hours After Schedule End] * 60)) / 1440)) ",
+              "            + ([Average Daily Absorption based on Estimate] * DIVIDE((DATEDIFF([Scheduled Production Stop Datetime], EndDate, MINUTE) - ([Future Off Hours After Schedule End] * 60)), 1440)) ",
               "    )",
               "",
               "RETURN",
@@ -5687,6 +5763,73 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Sales"
+          },
+          {
+            "name": "Cost of Goods Sold",
+            "description": "Sum of amount of line items posted under 0057020000 G/L account",
+            "expression": "SUM( 'Daily Cost of Goods Sold'[Amount] )",
+            "formatString": "#,0.00",
+            "displayFolder": "General"
+          },
+          {
+            "name": "Operations Scrap Amount",
+            "expression": [
+              "",
+              "VAR PO_Scrap =",
+              "    CALCULATE(",
+              "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"},",
+              "        'Goods Issues and Receipts'[Reason Code for Movement] <> \"0000\",",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Posting Date] )",
+              "    )",
+              "",
+              "VAR NonPO_Scrap =",
+              "    CALCULATE(",
+              "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
+              "        'Goods Issues and Receipts'[Movement Type] IN {\"551\", \"552\"},",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Posting Date] )",
+              "    )",
+              "",
+              "VAR Scrap_Conf = SUM( 'Scrap Confirmations'[Amount] )",
+              "",
+              "VAR Inv_Reserve =",
+              "    CALCULATE(",
+              "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
+              "        FILTER(",
+              "            'Cost Element Names',",
+              "            'Cost Element Names'[Category] = \"Inventory Reserve\"",
+              "        ),",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Posting Date] )",
+              "    )",
+              "",
+              "RETURN",
+              "PO_Scrap + NonPO_Scrap + Scrap_Conf + Inv_Reserve"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Operations Scrap"
+          },
+          {
+            "name": "CONV Scrap Rate",
+            "expression": [
+              "CALCULATE(",
+              "    [GI Scrap Rate],",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
+              ")"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Scrap Footage",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GI Linear Footage],",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Converting"
           }
         ]
       },
@@ -5741,6 +5884,7 @@
             "name": "Quantity",
             "dataType": "double",
             "description": "SAP Source: CE110US.ABSMG",
+            "isHidden": true,
             "sourceColumn": "QuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -5750,6 +5894,7 @@
             "name": "Gross Sales Amount",
             "dataType": "double",
             "description": "SAP Source: CE110US.ERLOS",
+            "isHidden": true,
             "sourceColumn": "GrossSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -5765,6 +5910,7 @@
             "name": "Net Sales Amount",
             "dataType": "double",
             "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
+            "isHidden": true,
             "sourceColumn": "NetSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -5780,6 +5926,7 @@
             "name": "Overall Cost Amount",
             "dataType": "double",
             "description": "SAP Source: VBRP.WAVWR",
+            "isHidden": true,
             "sourceColumn": "CostValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -5795,10 +5942,11 @@
             "name": "Material Cost Amount",
             "dataType": "double",
             "description": "SAP Source: CE110US.VVMEP",
+            "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -5810,6 +5958,7 @@
             "name": "Discount Amount",
             "dataType": "double",
             "description": "SAP Source: CE110US.KWKDRB",
+            "isHidden": true,
             "sourceColumn": "DiscountValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "_Values",
@@ -5870,7 +6019,8 @@
             "dataType": "double",
             "description": "SAP Source: CE110US.KURSF",
             "sourceColumn": "ExchangeRate",
-            "formatString": "0.0000"
+            "formatString": "0.0000",
+            "summarizeBy": "none"
           },
           {
             "name": "Currency",
@@ -5883,12 +6033,14 @@
             "dataType": "int64",
             "description": "Indicates whether the material is less than or equal to 3 years as of the invoice posting date from Commercialization Date",
             "sourceColumn": "WasNewProduct",
-            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "summarizeBy": "none"
           },
           {
             "name": "Gross Margin Amount",
             "dataType": "double",
             "description": "Difference between gross sales and cost value",
+            "isHidden": true,
             "sourceColumn": "GrossMarginValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -5976,6 +6128,7 @@
           {
             "name": "Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "HoldQuantityValue",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -5984,6 +6137,7 @@
           {
             "name": "Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "HoldValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -6102,7 +6256,7 @@
             "sourceColumn": "ExpiredQuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Amount",
@@ -6110,7 +6264,7 @@
             "sourceColumn": "ExpiredAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -6121,6 +6275,7 @@
           {
             "name": "Stock Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "StockQuantityValue",
             "formatString": "#,0.00",
             "displayFolder": "_Values"
@@ -6128,6 +6283,7 @@
           {
             "name": "Stock Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "StockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -6183,7 +6339,7 @@
             "dataType": "double",
             "sourceColumn": "SBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -6196,7 +6352,7 @@
             "dataType": "double",
             "sourceColumn": "QBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -6209,7 +6365,7 @@
             "dataType": "double",
             "sourceColumn": "ExpiredValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -6224,6 +6380,7 @@
             "isDataTypeInferred": true,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -6381,7 +6538,8 @@
             "description": "Indicates whether the material is less than or equal to 3 years as of today from Commercialization Date",
             "sourceColumn": "IsNewProduct",
             "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
-            "displayFolder": "Classification"
+            "displayFolder": "Classification",
+            "summarizeBy": "none"
           },
           {
             "name": "Length (ft)",
@@ -6389,7 +6547,8 @@
             "description": "SAP Source: MARM.LAENG OR MARM.UMREN; Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "LengthValue",
             "formatString": "#,0",
-            "displayFolder": "Dimensions"
+            "displayFolder": "Dimensions",
+            "summarizeBy": "none"
           },
           {
             "name": "Width (in)",
@@ -6397,7 +6556,8 @@
             "description": "SAP Source: MARM.BREIT. Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "WidthValue",
             "formatString": "#,0.00",
-            "displayFolder": "Dimensions"
+            "displayFolder": "Dimensions",
+            "summarizeBy": "none"
           },
           {
             "name": "Square Feet",
@@ -6405,7 +6565,8 @@
             "description": "Product of length and width (in to ft). Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "SquareFeetValue",
             "formatString": "#,0",
-            "displayFolder": "Dimensions"
+            "displayFolder": "Dimensions",
+            "summarizeBy": "none"
           },
           {
             "name": "Color Name",
@@ -6462,6 +6623,20 @@
             "description": "The next 2nd to 5th characters of the [Material Number]. Applies to those with FERT, HAWA, and HALB (coated only) material types",
             "sourceColumn": "MaterialNoPrefix",
             "displayFolder": "Other"
+          },
+          {
+            "name": "Material Group Text",
+            "dataType": "string",
+            "description": "SAP Source: T023T.WGBEZ60",
+            "sourceColumn": "MaterialGroupText",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "SAP Source: MARA.ZEINR",
+            "sourceColumn": "SpecNo",
+            "displayFolder": "Master"
           }
         ],
         "partitions": [
@@ -6600,6 +6775,16 @@
             "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomOrder"
+          },
+          {
+            "name": "Is Operations Scrap",
+            "dataType": "boolean",
+            "sourceColumn": "IsOperationsScrap"
+          },
+          {
+            "name": "Is Scrap Usage Account",
+            "dataType": "boolean",
+            "sourceColumn": "IsScrapUsageAcct"
           }
         ],
         "partitions": [
@@ -6612,10 +6797,9 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_COST_ELEMENT_NAMES = Source{[Schema=\"dbo\",Item=\"VW_COST_ELEMENT_NAMES\"]}[Data],",
-                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_ELEMENT_NAMES, \"CustomOrder\", each if [SubCategory] = \"Labor\" then 1 else if [SubCategory] = \"Setup\" then 2 else if [SubCategory] = \"Overhead\" then 3 else 0, type number),",
-                "    #\"Removed Errors\" = Table.RemoveRowsWithErrors(#\"Added Custom\", {\"SubCategory\"})",
+                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_COST_ELEMENT_NAMES, \"CustomOrder\", each if [SubCategory] = \"Labor\" then 1 else if [SubCategory] = \"Setup\" then 2 else if [SubCategory] = \"Overhead\" then 3 else 0, type number)",
                 "in",
-                "    #\"Removed Errors\""
+                "    #\"Added Custom\""
               ]
             }
           }
@@ -6840,6 +7024,7 @@
             "name": "Amount",
             "dataType": "double",
             "description": "Expenses amount are in company currency while Open POs are already converted to USD",
+            "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "sum",
@@ -6960,7 +7145,8 @@
             "name": "Unit Price",
             "dataType": "double",
             "description": "SAP Source: EKPO.NETPR",
-            "sourceColumn": "UnitPrice"
+            "sourceColumn": "UnitPrice",
+            "summarizeBy": "none"
           },
           {
             "name": "Unit of Measure",
@@ -7027,6 +7213,7 @@
             "name": "Ordered Quantity",
             "dataType": "double",
             "description": "SAP Source: EKPO.MENGE",
+            "isHidden": true,
             "sourceColumn": "OrderedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities"
@@ -7035,6 +7222,7 @@
             "name": "Ordered Amount",
             "dataType": "double",
             "description": "SAP Source: EKPO.NETWR",
+            "isHidden": true,
             "sourceColumn": "OrderedAmount",
             "formatString": "#,0.00",
             "displayFolder": "_Values"
@@ -7045,7 +7233,8 @@
             "description": "Difference between the ordered and delivered quantity. SAP Source: EKPO.MENGE and EKET.WEMNG",
             "sourceColumn": "OpenQuantity",
             "formatString": "#,0.00",
-            "displayFolder": "_Quantities"
+            "displayFolder": "_Quantities",
+            "summarizeBy": "none"
           },
           {
             "name": "Open Amount",
@@ -7053,7 +7242,8 @@
             "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
             "sourceColumn": "OpenAmount",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
           },
           {
             "name": "Purchase Order Unit",
@@ -7070,6 +7260,7 @@
           {
             "name": "Goods Receipt Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "GoodsReceiptQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -7078,6 +7269,7 @@
           {
             "name": "Goods Receipt Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "GoodsReceiptAmount",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -7383,6 +7575,7 @@
           {
             "name": "TargetValue",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "TargetValue"
           }
         ],
@@ -7547,6 +7740,7 @@
           {
             "name": "Credit Issued Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "CreditIssueValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "annotations": [
@@ -7592,6 +7786,7 @@
           {
             "name": "TargetValue",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "TargetValue"
           }
         ],
@@ -7755,6 +7950,7 @@
             "name": "Order Quantity",
             "dataType": "double",
             "description": "SAP Source: VBAP.KWMENG",
+            "isHidden": true,
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -7770,6 +7966,7 @@
             "name": "Order Amount",
             "dataType": "double",
             "description": "SAP Source: VBAP.NETWR; Converted to USD using the exchange rate",
+            "isHidden": true,
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -7785,6 +7982,7 @@
             "name": "Cost Amount",
             "dataType": "double",
             "description": "SAP Source: VBAP.WAVWR; Converted to USD using the exchange rate",
+            "isHidden": true,
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -7806,6 +8004,7 @@
             "name": "Allocated Quantity",
             "dataType": "double",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued without an actual PGI date yet",
+            "isHidden": true,
             "sourceColumn": "AllocatedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -7815,6 +8014,7 @@
             "name": "Shipped Quantity",
             "dataType": "double",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with actual PGI date set",
+            "isHidden": true,
             "sourceColumn": "ShippedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -7827,12 +8027,13 @@
             "sourceColumn": "OnTimeShippedQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Internal Open Quantity",
             "dataType": "double",
             "description": "Order quantity minus allocated and shipped quantity",
+            "isHidden": true,
             "sourceColumn": "InternalOpenQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -7842,6 +8043,7 @@
             "name": "Customer Open Quantity",
             "dataType": "double",
             "description": "Order quantity minus shipped quantity",
+            "isHidden": true,
             "sourceColumn": "CustomerOpenQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -7851,14 +8053,16 @@
             "name": "Unit Price",
             "dataType": "double",
             "description": "SAP Source: VBAP.NETPR",
-            "sourceColumn": "UnitPrice"
+            "sourceColumn": "UnitPrice",
+            "summarizeBy": "none"
           },
           {
             "name": "Exchange Rate",
             "dataType": "double",
             "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
             "sourceColumn": "ExchangeRate",
-            "formatString": "0.0000"
+            "formatString": "0.0000",
+            "summarizeBy": "none"
           },
           {
             "name": "Cost Amount Local",
@@ -7877,12 +8081,13 @@
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
             "displayFolder": "_Local Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Internal Open Amount Local",
             "dataType": "double",
             "description": "Total value of internal open quantity",
+            "isHidden": true,
             "sourceColumn": "InternalOpenAmount",
             "formatString": "#,0",
             "displayFolder": "_Local Values",
@@ -7892,6 +8097,7 @@
             "name": "Internal Open Amount",
             "dataType": "double",
             "description": "Total value of internal open quantity",
+            "isHidden": true,
             "sourceColumn": "InternalOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -7906,6 +8112,7 @@
           {
             "name": "Customer Open Amount Local",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "CustomerOpenAmount",
             "formatString": "#,0",
             "displayFolder": "_Local Values",
@@ -7914,6 +8121,7 @@
           {
             "name": "Customer Open Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "CustomerOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -7929,6 +8137,7 @@
             "name": "Margin Amount Local",
             "dataType": "double",
             "description": "Net of order and cost amount",
+            "isHidden": true,
             "sourceColumn": "MarginAmount",
             "formatString": "#,0",
             "displayFolder": "_Local Values",
@@ -7938,6 +8147,7 @@
             "name": "Margin Amount",
             "dataType": "double",
             "description": "Net of order and cost amount",
+            "isHidden": true,
             "sourceColumn": "MarginAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_USD Values",
@@ -8020,6 +8230,7 @@
           {
             "name": "Allocated Amount Local",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "AllocatedAmount",
             "formatString": "#,0",
             "displayFolder": "_Values",
@@ -8028,6 +8239,7 @@
           {
             "name": "Allocated Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "AllocatedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -8042,6 +8254,7 @@
           {
             "name": "Shipped Amount Local",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "ShippedAmount",
             "formatString": "#,0",
             "displayFolder": "_Values",
@@ -8050,6 +8263,7 @@
           {
             "name": "Shipped Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "ShippedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -8082,18 +8296,21 @@
             "name": "Gross Weight",
             "dataType": "double",
             "sourceColumn": "GrossWeight",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Shipped Weight",
             "dataType": "double",
             "sourceColumn": "ShippedWeight",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
           },
           {
             "name": "Customer Open Weight",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "CustomerOpenWeight",
             "formatString": "#,0.00",
             "displayFolder": "_Values"
@@ -8114,7 +8331,8 @@
             "name": "Late Indicator",
             "dataType": "int64",
             "sourceColumn": "LateIndicator",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "summarizeBy": "none"
           },
           {
             "name": "Reason for Late Shipment",
@@ -8136,6 +8354,7 @@
             "name": "Late Quantity",
             "dataType": "double",
             "description": "Difference between [Order Quantity] and [Shipped On Time Quantity]",
+            "isHidden": true,
             "sourceColumn": "LateQuantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities"
@@ -8311,6 +8530,7 @@
           {
             "name": "GrossSales",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "GrossSales",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "annotations": [
@@ -8323,12 +8543,14 @@
           {
             "name": "GrossMarginMTD",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "GrossMarginMTD",
             "formatString": "0.00%;-0.00%;0.00%"
           },
           {
             "name": "GrossMarginYTD",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "GrossMarginYTD",
             "formatString": "0.00%;-0.00%;0.00%"
           }
@@ -8455,6 +8677,7 @@
             "name": "Delivered Quantity",
             "dataType": "double",
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'U'",
+            "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
             "displayFolder": "_Quantities"
           },
@@ -8463,12 +8686,14 @@
             "dataType": "double",
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptQuantity",
-            "displayFolder": "_Quantities"
+            "displayFolder": "_Quantities",
+            "summarizeBy": "none"
           },
           {
             "name": "In Transit Quantity",
             "dataType": "double",
             "description": "Net of delivered and goods receipt",
+            "isHidden": true,
             "sourceColumn": "InTransitQuantity",
             "displayFolder": "_Quantities"
           },
@@ -8477,19 +8702,22 @@
             "dataType": "double",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'U'",
             "sourceColumn": "DeliveredAmount",
-            "displayFolder": "_Values"
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
           },
           {
             "name": "Goods Receipt Amount",
             "dataType": "double",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptAmount",
-            "displayFolder": "_Values"
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
           },
           {
             "name": "In Transit Amount",
             "dataType": "double",
             "description": "Net of delivered and goods receipt",
+            "isHidden": true,
             "sourceColumn": "InTransitAmount",
             "displayFolder": "_Values"
           },
@@ -8635,6 +8863,7 @@
             "name": "Quantity",
             "dataType": "double",
             "description": "SAP Source: ACCTIT.ERFMG",
+            "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -8654,7 +8883,7 @@
             "sourceColumn": "AmountInDocCurrency",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Document Currency",
@@ -8670,7 +8899,7 @@
             "sourceColumn": "AmountInLocalCurrency",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Local Currency",
@@ -8686,7 +8915,7 @@
             "sourceColumn": "AmountInLocalCurrency2",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Local Currency 2",
@@ -8767,7 +8996,8 @@
           {
             "name": "PostingRank",
             "dataType": "int64",
-            "sourceColumn": "PostingRank"
+            "sourceColumn": "PostingRank",
+            "summarizeBy": "none"
           },
           {
             "name": "PurchaseOrderLineKey",
@@ -8873,6 +9103,7 @@
             "name": "Quantity",
             "dataType": "double",
             "description": "SAP Source: EKBE.BPMNG; Value is in purchase order unit (see 'Purchase Orders' table)",
+            "isHidden": true,
             "sourceColumn": "InvoiceQty",
             "formatString": "#,0.00"
           },
@@ -8886,6 +9117,7 @@
             "name": "Amount",
             "dataType": "double",
             "description": "SAP Source: EKBE.REEWR",
+            "isHidden": true,
             "sourceColumn": "InvoiceValue",
             "formatString": "#,0.00"
           },
@@ -8968,6 +9200,7 @@
           {
             "name": "Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "QuantityValue",
             "formatString": "0.00"
           },
@@ -8979,6 +9212,7 @@
           {
             "name": "Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "AmountValue",
             "formatString": "0.00"
           },
@@ -9126,12 +9360,14 @@
           {
             "name": "Open Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "OpenQuantity",
             "formatString": "#,0.00"
           },
           {
             "name": "Open Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "OpenAmount",
             "formatString": "#,0.00"
           },
@@ -9201,6 +9437,7 @@
           {
             "name": "Incoming Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "IncomingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "summarizeBy": "sum",
@@ -9214,6 +9451,7 @@
           {
             "name": "Outgoing Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "OutgoingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "summarizeBy": "sum",
@@ -9229,7 +9467,7 @@
             "dataType": "double",
             "sourceColumn": "UnrestrictStockAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -9242,7 +9480,7 @@
             "dataType": "double",
             "sourceColumn": "TransitStockEOMAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "summarizeBy": "sum",
+            "summarizeBy": "none",
             "annotations": [
               {
                 "name": "Format",
@@ -9255,32 +9493,33 @@
             "dataType": "double",
             "sourceColumn": "IncomingQty",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Outgoing Quantity",
             "dataType": "double",
             "sourceColumn": "OutgoingQty",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Unrestricted Stock Quantity",
             "dataType": "double",
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Remaining by Month End Transit Stock Quantity",
             "dataType": "double",
             "sourceColumn": "TransitStockEOMQty",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Shortage Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "ShortageAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "summarizeBy": "sum",
@@ -9296,7 +9535,7 @@
             "dataType": "double",
             "sourceColumn": "ShortageQty",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -9342,6 +9581,7 @@
             "name": "Production Hours",
             "dataType": "double",
             "description": "The number of hours across all converting employees when they are producing material",
+            "isHidden": true,
             "sourceColumn": "ProductionHours",
             "formatString": "0.00",
             "summarizeBy": "sum"
@@ -9352,12 +9592,13 @@
             "description": "The total number of hours across all converting employees when they are doing trainings, FEs, and other non-production activities",
             "sourceColumn": "NonProductionHours",
             "formatString": "0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Available Hours",
             "dataType": "double",
             "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
+            "isHidden": true,
             "sourceColumn": "AvailableHours",
             "formatString": "0.00",
             "summarizeBy": "sum"
@@ -9409,6 +9650,7 @@
           {
             "name": "Uptime Seconds",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "UptimeSeconds"
           }
         ],
@@ -9442,7 +9684,7 @@
           {
             "name": "Job Index",
             "dataType": "int64",
-            "description": "Source: jobindex.JobIndex",
+            "description": "Source: jobdata.JobIndex",
             "sourceColumn": "JobIndex",
             "summarizeBy": "none"
           },
@@ -9478,7 +9720,7 @@
             "description": "Source: jobdata.LastRollFt",
             "sourceColumn": "Footage",
             "formatString": "#,0",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Ideal Footage",
@@ -9486,7 +9728,7 @@
             "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
             "sourceColumn": "IdealFootage",
             "formatString": "#,0",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Category",
@@ -9541,7 +9783,8 @@
             "name": "Production Shift",
             "dataType": "int64",
             "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
-            "sourceColumn": "ShiftNum"
+            "sourceColumn": "ShiftNum",
+            "summarizeBy": "none"
           },
           {
             "name": "Specification Linespeed",
@@ -9555,7 +9798,8 @@
             "name": "Actual Linespeed",
             "dataType": "int64",
             "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
-            "sourceColumn": "ActualLinespeed"
+            "sourceColumn": "ActualLinespeed",
+            "summarizeBy": "none"
           },
           {
             "name": "Duration Minutes",
@@ -9563,7 +9807,7 @@
             "description": "Duration between [Start Time] and [Stop Time] in minutes",
             "sourceColumn": "DurationMinutes",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -9624,6 +9868,7 @@
             "name": "Duration Minutes",
             "dataType": "double",
             "description": "Duration between 'Start Time' and 'Stop Time' in minutes",
+            "isHidden": true,
             "sourceColumn": "DurationMinute",
             "formatString": "#,0.00"
           },
@@ -9631,6 +9876,7 @@
             "name": "Footage",
             "dataType": "int64",
             "description": "Source: jobdata.LastRollFt",
+            "isHidden": true,
             "sourceColumn": "Footage",
             "formatString": "#,0"
           },
@@ -9638,6 +9884,7 @@
             "name": "Ideal Footage",
             "dataType": "int64",
             "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+            "isHidden": true,
             "sourceColumn": "IdealFootage",
             "formatString": "#,0"
           },
@@ -9645,6 +9892,7 @@
             "name": "Scrap Footage",
             "dataType": "int64",
             "description": "Total footage of caliper or setup scrap during clean ups",
+            "isHidden": true,
             "sourceColumn": "ScrapFootage",
             "formatString": "#,0"
           },
@@ -9718,7 +9966,8 @@
             "name": "Production Shift",
             "dataType": "int64",
             "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
-            "sourceColumn": "ShiftNum"
+            "sourceColumn": "ShiftNum",
+            "summarizeBy": "none"
           },
           {
             "name": "Specification Linespeed",
@@ -9732,7 +9981,8 @@
             "name": "Actual Linespeed",
             "dataType": "int64",
             "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
-            "sourceColumn": "ActualLinespeed"
+            "sourceColumn": "ActualLinespeed",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -9834,6 +10084,7 @@
             "name": "Unrestricted Stock Quantity",
             "dataType": "double",
             "description": "SAP Source: MARD.LABST",
+            "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -9843,6 +10094,7 @@
             "name": "Safety Stock Quantity",
             "dataType": "double",
             "description": "SAP Source: MARC.EISBE",
+            "isHidden": true,
             "sourceColumn": "SafetyStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -9880,7 +10132,7 @@
             "sourceColumn": "InspectionStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Blocked Stock Quantity",
@@ -9889,7 +10141,7 @@
             "sourceColumn": "BlockedStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "MaterialPlantKey",
@@ -9911,7 +10163,7 @@
             "sourceColumn": "UnrestrictStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Inspection Stock Amount (USD)",
@@ -9919,7 +10171,7 @@
             "sourceColumn": "InspectionStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Blocked Stock Amount (USD)",
@@ -9927,7 +10179,7 @@
             "sourceColumn": "BlockedStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Standard Price (USD)",
@@ -10024,12 +10276,14 @@
           {
             "name": "Labor",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "Labor",
             "formatString": "#,0.00"
           },
           {
             "name": "Overhead",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "Overhead",
             "formatString": "#,0.00"
           },
@@ -10132,11 +10386,13 @@
             "name": "Quantity",
             "dataType": "double",
             "sourceColumn": "Quantity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Net Cost Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "NetCostVal",
             "formatString": "#,0.00"
           }
@@ -10192,11 +10448,13 @@
             "name": "Quantity",
             "dataType": "double",
             "sourceColumn": "Quantity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "AmountUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "annotations": [
@@ -10416,6 +10674,7 @@
             "name": "Order Quantity",
             "dataType": "double",
             "description": "SAP Source: AFKO.GAMNG",
+            "isHidden": true,
             "sourceColumn": "OrderQty",
             "formatString": "#,0.00",
             "summarizeBy": "sum"
@@ -10424,6 +10683,7 @@
             "name": "Delivered Quantity",
             "dataType": "double",
             "description": "SAP Source: AFPO.WEMNG",
+            "isHidden": true,
             "sourceColumn": "DeliverQty",
             "formatString": "#,0.00",
             "summarizeBy": "sum"
@@ -10530,6 +10790,7 @@
           {
             "name": "Processing Hour",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "ProcessingHour",
             "formatString": "#,0.000"
           },
@@ -10561,6 +10822,7 @@
           {
             "name": "Target Quantity",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "TargetQuantity",
             "formatString": "#,0"
           },
@@ -10568,7 +10830,8 @@
             "name": "Adhesive Quantity",
             "dataType": "int64",
             "sourceColumn": "AdhesiveQuantity",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "summarizeBy": "none"
           },
           {
             "name": "Remake Code Text",
@@ -10893,6 +11156,7 @@
             "dataType": "int64",
             "isNameInferred": true,
             "isDataTypeInferred": true,
+            "isHidden": true,
             "sourceColumn": "[Plan Footage]",
             "formatString": "#,0",
             "summarizeBy": "sum"
@@ -10903,6 +11167,7 @@
             "dataType": "int64",
             "isNameInferred": true,
             "isDataTypeInferred": true,
+            "isHidden": true,
             "sourceColumn": "[Actual Footage]",
             "formatString": "#,0",
             "summarizeBy": "sum"
@@ -10913,6 +11178,7 @@
             "dataType": "double",
             "isNameInferred": true,
             "isDataTypeInferred": true,
+            "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "sum"
@@ -10925,7 +11191,7 @@
             "isDataTypeInferred": true,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "type": "calculatedTableColumn",
@@ -11001,12 +11267,6 @@
             "sourceColumn": "MaterialDocItemNo"
           },
           {
-            "name": "Fiscal Year",
-            "dataType": "string",
-            "description": "SAP Source: MKPF.MJAHR",
-            "sourceColumn": "FiscalYear"
-          },
-          {
             "name": "Movement Type",
             "dataType": "string",
             "description": "SAP Source: MSEG.BWART",
@@ -11023,7 +11283,6 @@
             "name": "Process Order Number",
             "dataType": "string",
             "description": "SAP Source: MSEG.AUFNR",
-            "isHidden": true,
             "sourceColumn": "ProcessOrderNoKey"
           },
           {
@@ -11036,6 +11295,7 @@
             "name": "Plant",
             "dataType": "string",
             "description": "SAP Source: MSEG.WERKS",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -11057,7 +11317,7 @@
             "sourceColumn": "StorageType"
           },
           {
-            "name": "Reason Code",
+            "name": "Reason Code for Movement",
             "dataType": "string",
             "description": "SAP Source: MSEG.GRUND",
             "sourceColumn": "ReasonCode"
@@ -11129,6 +11389,7 @@
             "name": "Quantity",
             "dataType": "double",
             "description": "SAP Source: MSEG.ERFMG",
+            "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -11154,10 +11415,29 @@
             "name": "Amount",
             "dataType": "double",
             "description": "SAP Source: MSEG.DMBTR",
+            "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "sum"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.SAKTO",
+            "sourceColumn": "CostElement"
+          },
+          {
+            "name": "MvmtReasonKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MvmtReasonKey"
+          },
+          {
+            "name": "ScrapCategoryKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ScrapCategoryKey"
           }
         ],
         "partitions": [
@@ -11169,9 +11449,9 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_VW_TRANSACTIONS_MATERIAL = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_MATERIAL\"]}[Data]",
+                "    dbo_VW_TRANSACTIONS_GIR = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_GIR\"]}[Data]",
                 "in",
-                "    dbo_VW_TRANSACTIONS_MATERIAL"
+                "    dbo_VW_TRANSACTIONS_GIR"
               ]
             }
           }
@@ -11284,7 +11564,8 @@
             "dataType": "double",
             "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Unit of Measure",
@@ -11299,7 +11580,7 @@
             "sourceColumn": "AmountInDocCurrency",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Document Currency",
@@ -11314,7 +11595,7 @@
             "sourceColumn": "AmountInLocalCurrency",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Local Currency",
@@ -11329,7 +11610,7 @@
             "sourceColumn": "AmountInLocalCurrency2",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Local Currency 2",
@@ -11423,7 +11704,8 @@
             "name": "Fiscal Period",
             "dataType": "int64",
             "description": "Calculated column after unpivoting HSLxx columns in FAGLFLEXT.",
-            "sourceColumn": "FiscalPeriod"
+            "sourceColumn": "FiscalPeriod",
+            "summarizeBy": "none"
           },
           {
             "name": "Ledger",
@@ -11454,7 +11736,8 @@
             "dataType": "double",
             "description": "SAP Source: FAGLFLEXT.HSL01 to HSL12",
             "sourceColumn": "AmountInGroup",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "MonthDateKey",
@@ -11583,6 +11866,7 @@
           {
             "name": "SBlock Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "SBlockQuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -11591,6 +11875,7 @@
           {
             "name": "SBlock Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "SBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -11605,6 +11890,7 @@
           {
             "name": "QBlock Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "QBlockQuantityValue",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -11613,6 +11899,7 @@
           {
             "name": "QBlock Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "QBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -11675,7 +11962,8 @@
           {
             "name": "Ticket Number",
             "dataType": "int64",
-            "sourceColumn": "TicketNo"
+            "sourceColumn": "TicketNo",
+            "summarizeBy": "none"
           },
           {
             "name": "Status",
@@ -11744,21 +12032,22 @@
             "name": "Unit Cost",
             "dataType": "double",
             "sourceColumn": "UnitCost",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Quantity",
             "dataType": "double",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Cost Amount",
             "dataType": "double",
             "sourceColumn": "CostAmount",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -11895,6 +12184,7 @@
           {
             "name": "Quantity",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00"
           },
@@ -11906,6 +12196,7 @@
           {
             "name": "Amount",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "#,0.00"
           },
@@ -11924,6 +12215,7 @@
           {
             "name": "Gross Weight",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00"
           }
@@ -12058,7 +12350,7 @@
             "description": "SAP Source: LTAP.VSOLM",
             "sourceColumn": "QtyVal",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Weight Unit of Measure",
@@ -12072,7 +12364,7 @@
             "description": "SAP Source: LTAP.BRGEW",
             "sourceColumn": "WeightVal",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "SrcStorageKey",
@@ -12119,7 +12411,8 @@
             "dataType": "int64",
             "description": "SAP Source: LAGP.KZLER",
             "sourceColumn": "EmptyIndicator",
-            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "summarizeBy": "none"
           },
           {
             "name": "MaterialNoKey",
@@ -12166,7 +12459,7 @@
             "description": "SAP Source: LQUA.GESME",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Amount in USD",
@@ -12174,7 +12467,7 @@
             "description": "Calculated column based on the quantity and standard price of material (by plant and converted to USD using today's exchange rate)",
             "sourceColumn": "AmountUSD",
             "formatString": "#,0.00",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "type": "calculated",
@@ -12182,7 +12475,8 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "description": "Calculated column between [Goods Receipt Date] and today",
-            "expression": "DATEDIFF( 'Current Inventory (Bins)'[Goods Receipt Date], [Report Date], DAY )"
+            "expression": "DATEDIFF( 'Current Inventory (Bins)'[Goods Receipt Date], [Report Date], DAY )",
+            "summarizeBy": "none"
           },
           {
             "type": "calculated",
@@ -12252,13 +12546,15 @@
             "name": "Cell Group Number",
             "dataType": "int64",
             "description": "Numerical value in the [Cell Group]",
-            "sourceColumn": "CellGroupNo"
+            "sourceColumn": "CellGroupNo",
+            "summarizeBy": "none"
           },
           {
             "name": "Cell Height Number",
             "dataType": "int64",
             "description": "Last character in the storage bin name (assuming it follows the FG rack name format)",
-            "sourceColumn": "CellHeightNo"
+            "sourceColumn": "CellHeightNo",
+            "summarizeBy": "none"
           },
           {
             "name": "Cell Row",
@@ -12270,7 +12566,8 @@
             "name": "Cell Column",
             "dataType": "int64",
             "description": "A custom value assigned to order cell groups in order from left to right (X18 to X00)",
-            "sourceColumn": "CellColumn"
+            "sourceColumn": "CellColumn",
+            "summarizeBy": "none"
           },
           {
             "name": "StorageKey",
@@ -12296,6 +12593,7 @@
             "name": "Capacity",
             "dataType": "double",
             "description": "SAP Source: LAGP.LKAPV",
+            "isHidden": true,
             "sourceColumn": "Capacity",
             "formatString": "#,0.00"
           },
@@ -12304,7 +12602,8 @@
             "dataType": "double",
             "description": "SAP Source: LAGP.RKAPV",
             "sourceColumn": "RemainCapacity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Storage Bin Type Description",
@@ -12444,16 +12743,18 @@
       },
       {
         "name": "Support_FG2FilmLink_Testing",
+        "description": "Allows to filter tables with WIP part numbers such as 'Testing Results' table using FG fields. The link between WIP and FG is based on BOM.",
         "isHidden": true,
         "columns": [
           {
-            "name": "MaterialNo",
+            "name": "Material Number",
             "dataType": "string",
             "sourceColumn": "MaterialNo"
           },
           {
             "name": "HighestBomKey",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "HighestBomKey"
           }
         ],
@@ -12534,24 +12835,28 @@
           {
             "name": "Result Value",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "ResultValue",
             "formatString": "#,0.00"
           },
           {
             "name": "Specification Lower Limit",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "SpecLowerLimit",
             "formatString": "#,0.00"
           },
           {
             "name": "Specification Upper Limit",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "SpecUpperLimit",
             "formatString": "#,0.00"
           },
           {
             "name": "Is Pass",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "IsPass",
             "formatString": "0"
           },
@@ -12610,7 +12915,8 @@
           {
             "name": "Specimen Number",
             "dataType": "int64",
-            "sourceColumn": "SpecimenNo"
+            "sourceColumn": "SpecimenNo",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -12742,18 +13048,53 @@
         ]
       },
       {
-        "name": "Support_FG2FilmLink_Absorption",
-        "isHidden": true,
+        "name": "FG Filters for Absorption",
         "columns": [
           {
-            "name": "MaterialNo",
+            "name": "Material Number",
             "dataType": "string",
             "sourceColumn": "MaterialNo"
           },
           {
             "name": "HighestBomKey",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "HighestBomKey"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "sourceColumn": "MaterialType"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "Product Series",
+            "dataType": "string",
+            "sourceColumn": "ProductSeries"
+          },
+          {
+            "name": "Film Type",
+            "dataType": "string",
+            "sourceColumn": "FilmType"
+          },
+          {
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL1"
+          },
+          {
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL2"
+          },
+          {
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL3"
           }
         ],
         "partitions": [
@@ -12766,7 +13107,7 @@
                 "let",
                 "    Source = ARLPBI_STAGE,",
                 "    dbo_VW_FG2FILM_BOMLINK = Source{[Schema=\"dbo\",Item=\"VW_FG2FILM_BOMLINK\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_FG2FILM_BOMLINK,{\"MaterialNo\", \"HighestBomKey\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_FG2FILM_BOMLINK,{\"MaterialNo\", \"HighestBomKey\", \"MaterialType\", \"MaterialGroup\", \"ProductSeries\", \"FilmType\", \"ProductHierarchyDescriptionL1\", \"ProductHierarchyDescriptionL2\", \"ProductHierarchyDescriptionL3\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -12831,6 +13172,7 @@
           {
             "name": "Off Hours",
             "dataType": "double",
+            "isHidden": true,
             "sourceColumn": "OffHours",
             "formatString": "0.00"
           }
@@ -12914,6 +13256,304 @@
                 "    dbo_VW_ORDER_SALES_SHIPCAL = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES_SHIPCAL\"]}[Data]",
                 "in",
                 "    dbo_VW_ORDER_SALES_SHIPCAL"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Daily Cost of Goods Sold",
+        "description": "Cost of goods sold aggregated by posting date. Only 0057020000 G/L account is filtered.",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "isUnique": true,
+            "isKey": true,
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "Amount",
+            "formatString": "0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_COGS = Source{[Schema=\"dbo\",Item=\"VW_COGS\"]}[Data]",
+                "in",
+                "    dbo_VW_COGS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Scrap Usage Transactions",
+        "columns": [
+          {
+            "name": "Document Number",
+            "dataType": "string",
+            "sourceColumn": "DocNo"
+          },
+          {
+            "name": "Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "DocLineNo"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "sourceColumn": "DocType"
+          },
+          {
+            "name": "Cost Element",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElement"
+          },
+          {
+            "name": "Cost Center",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenter"
+          },
+          {
+            "name": "Reference Document Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocNo"
+          },
+          {
+            "name": "Reference Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "RefDocLineNo"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "sourceColumn": "MvmtType"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Quantity Unit",
+            "dataType": "string",
+            "sourceColumn": "QuantityUnit"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Reason Code for Movement",
+            "dataType": "string",
+            "sourceColumn": "MvmtReasonCode"
+          },
+          {
+            "name": "MvmtReasonKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MvmtReasonKey"
+          },
+          {
+            "name": "ScrapCategoryKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ScrapCategoryKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_TRANSACTIONS_SCRAPUSAGE = Source{[Schema=\"dbo\",Item=\"VW_TRANSACTIONS_SCRAPUSAGE\"]}[Data]",
+                "in",
+                "    dbo_VW_TRANSACTIONS_SCRAPUSAGE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Scrap Category",
+        "columns": [
+          {
+            "name": "ScrapID",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ScrapID"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Sub Category",
+            "dataType": "string",
+            "sourceColumn": "SubCategory"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_CATEGORY_SCRAP = Source{[Schema=\"dbo\",Item=\"VW_CATEGORY_SCRAP\"]}[Data]",
+                "in",
+                "    dbo_VW_CATEGORY_SCRAP"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Scrap Confirmations",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Plant Number",
+            "dataType": "string",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Reason Code for Movement",
+            "dataType": "string",
+            "sourceColumn": "MvmtReasonCode"
+          },
+          {
+            "name": "MvmtReasonKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MvmtReasonKey"
+          },
+          {
+            "name": "ScrapCategoryKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ScrapCategoryKey"
+          },
+          {
+            "name": "Posting Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PostingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Quantity Unit",
+            "dataType": "string",
+            "sourceColumn": "QuantityUnit"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "sourceColumn": "Quantity",
+            "formatString": "0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "Amount",
+            "formatString": "0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PROCESS_SCRAPCONF = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PROCESS_SCRAPCONF\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PROCESS_SCRAPCONF"
               ]
             }
           }
@@ -13248,13 +13888,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "55be127a-f081-4dd0-ae15-9cea0b6b081c",
-        "fromTable": "Goods Issues and Receipts",
-        "fromColumn": "Production Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
         "name": "92d76df7-af86-4843-9820-c0dc4d79be5d",
         "fromTable": "Converting Man Hours",
         "fromColumn": "Production Date",
@@ -13267,15 +13900,6 @@
         "fromColumn": "Production Date",
         "toTable": "Calendar",
         "toColumn": "Date"
-      },
-      {
-        "name": "fbe75965-0259-4a21-9f85-7ec85969c6b3",
-        "toCardinality": "many",
-        "fromTable": "Converting Uptime",
-        "fromColumn": "Machine Name",
-        "toTable": "Goods Issues and Receipts",
-        "toColumn": "Machine Name",
-        "crossFilteringBehavior": "bothDirections"
       },
       {
         "name": "2a7d8317-b122-4a81-b5ba-c855ebccc8c2",
@@ -13437,20 +14061,6 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
-      },
-      {
-        "name": "4b317c1f-63e0-4239-9ebb-797489c7b214",
-        "fromTable": "Shop Orders",
-        "fromColumn": "End Date Key",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
-        "name": "e19a146a-9bb5-4d0b-917c-89dbb52fa2c6",
-        "fromTable": "Shop Orders",
-        "fromColumn": "Process Order Number",
-        "toTable": "Open WIP",
-        "toColumn": "Process Order Number"
       },
       {
         "name": "1fe727ce-d640-4f9b-9406-0e31ca90416e",
@@ -13752,13 +14362,6 @@
         "toColumn": "StorageKey"
       },
       {
-        "name": "6d0e8d43-0e5b-497a-b2ee-a7c35c42aa16",
-        "fromTable": "Support_FG2FilmLink_Testing",
-        "fromColumn": "MaterialNo",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
         "name": "2e995f2d-e7ae-43f5-978c-e1d12483227d",
         "fromTable": "Testing Results",
         "fromColumn": "Test Name",
@@ -13773,33 +14376,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "66b3a37a-1be3-4e8b-8afe-ba494c06b724",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Adhesive)",
-        "fromColumn": "BomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "d58ad0be-49b0-4ac2-9b5a-0955712676ff",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Liner)",
-        "fromColumn": "BomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "1abcb04d-2002-47b5-ad22-b3380eb0796d",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Facestock)",
-        "fromColumn": "BomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "71e73ae0-d271-4eca-999c-e1189b2dffed",
         "toCardinality": "many",
         "fromTable": "Testing Results",
@@ -13807,29 +14383,6 @@
         "toTable": "Support_FG2FilmLink_Testing",
         "toColumn": "HighestBomKey",
         "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "55834398-f79e-44c8-8293-312a3d27462f",
-        "toCardinality": "many",
-        "fromTable": "Absorption",
-        "fromColumn": "HighestBomKey",
-        "toTable": "Support_FG2FilmLink_Absorption",
-        "toColumn": "HighestBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "f03144f1-1946-4ce0-a175-e737bebd6926",
-        "fromTable": "Support_FG2FilmLink_Absorption",
-        "fromColumn": "MaterialNo",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
-        "name": "bd6c2dc5-52cb-4bb0-8c2e-4f5c566cc8d2",
-        "fromTable": "Shop Orders",
-        "fromColumn": "Cost Center",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center"
       },
       {
         "name": "c0270be3-3c6b-448a-a3c3-9d5a1fdf85c1",
@@ -13880,6 +14433,182 @@
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "6911637b-0574-492b-8ac5-d18b9754e36f",
+        "toCardinality": "many",
+        "fromTable": "Testing Results",
+        "fromColumn": "Process Order Number",
+        "toTable": "Shop Orders",
+        "toColumn": "Process Order Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "3e41e512-8f01-4a73-9078-6bcd75912b48",
+        "fromTable": "Shop Orders",
+        "fromColumn": "End Date Key",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "dab96cdb-20bf-4038-bcc5-adf8c50a6f0a",
+        "toCardinality": "many",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "Process Order Number",
+        "toTable": "Shop Orders",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "5661235d-c473-42f5-a90d-4f033e58a1f2",
+        "fromTable": "Support_FG2FilmLink_Testing",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "21764f5f-1d6d-4ff2-8861-9ee6b673ce23",
+        "fromTable": "Converting Uptime",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "cadcbb5d-7078-40c2-b40a-ba9d901ee072",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "c68141b0-2957-4c72-bc09-272a132b383b",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Cost Element",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "5f267808-1a47-4e96-b428-5e220dd9d001",
+        "fromCardinality": "one",
+        "fromTable": "Daily Cost of Goods Sold",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "473152dc-30ff-403f-927e-eede69b227a4",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Cost Element",
+        "toTable": "Cost Element Names",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "dd525bca-e14b-4006-aa1b-3ad84116990c",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "d50deb5b-70b8-429c-afdd-b588e210fc9c",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "e605dd55-4c52-411d-b85f-117c9dbb4d3e",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "1b3782a5-dac8-4588-841b-f26fbeab1f07",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "ScrapCategoryKey",
+        "toTable": "_Scrap Category",
+        "toColumn": "ScrapID"
+      },
+      {
+        "name": "f5ee620f-bad5-4d4f-bc65-e827719fe761",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "ScrapCategoryKey",
+        "toTable": "_Scrap Category",
+        "toColumn": "ScrapID"
+      },
+      {
+        "name": "9cc4c770-4faf-48bd-9dbb-0d4ea22bee43",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7fc18d45-0937-471a-8186-1b4faaf2dbbc",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "ScrapCategoryKey",
+        "toTable": "_Scrap Category",
+        "toColumn": "ScrapID"
+      },
+      {
+        "name": "7dd9be9e-3889-49ce-9415-89ba500c267d",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "1ab172f7-2297-44bf-bb4d-1aee39171e88",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Production Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "64fc728d-2e0e-4e65-9e7e-a5817523f274",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "a9b8fe61-bff0-4dab-a9d3-a43a62ff7a22",
+        "toCardinality": "many",
+        "fromTable": "Absorption",
+        "fromColumn": "HighestBomKey",
+        "toTable": "FG Filters for Absorption",
+        "toColumn": "HighestBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "ff172ea9-efc8-43f2-b974-d1972676d520",
+        "toCardinality": "many",
+        "fromTable": "Bill of Material (Facestock)",
+        "fromColumn": "BomKey",
+        "toTable": "Testing Results",
+        "toColumn": "CoatBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "2e82c335-c370-4385-8806-3249023c9605",
+        "toCardinality": "many",
+        "fromTable": "Bill of Material (Liner)",
+        "fromColumn": "BomKey",
+        "toTable": "Testing Results",
+        "toColumn": "CoatBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "58b566f9-3d13-4594-8ee5-958a8f69c61d",
+        "toCardinality": "many",
+        "fromTable": "Bill of Material (Adhesive)",
+        "fromColumn": "BomKey",
+        "toTable": "Testing Results",
+        "toColumn": "CoatBomKey",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -14345,6 +15074,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -14545,6 +15280,17 @@
               },
               {
                 "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Support_FG2FilmLink_Testing",
+            "columns": [
+              {
+                "name": "HighestBomKey"
               },
               {
                 "name": "Material Number"
@@ -15092,6 +15838,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -15838,6 +16590,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -16553,6 +17311,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -17125,6 +17889,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -17979,6 +18749,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -18425,6 +19201,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -18593,6 +19375,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -19267,6 +20055,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -19322,13 +20116,13 @@
                 "name": "CONV Uptime Hours"
               },
               {
-                "name": "PD GI Linear Footage"
+                "name": "PD CONV Scrap Footage"
               },
               {
-                "name": "PD GI Scrap Rate"
+                "name": "PD CONV Scrap Rate"
               },
               {
-                "name": "PD GR Linear Footage"
+                "name": "PD CONV Linear Footage"
               },
               {
                 "name": "Upstream Actual Production Footage"
@@ -19407,6 +20201,12 @@
               },
               {
                 "name": "CONV Linear Footage"
+              },
+              {
+                "name": "CONV Scrap Rate"
+              },
+              {
+                "name": "CONV Scrap Footage"
               }
             ]
           },
@@ -19611,9 +20411,6 @@
                 "name": "Batch Number"
               },
               {
-                "name": "Fiscal Year"
-              },
-              {
                 "name": "Linear Feet"
               },
               {
@@ -19656,7 +20453,7 @@
                 "name": "Quantity"
               },
               {
-                "name": "Reason Code"
+                "name": "Reason Code for Movement"
               },
               {
                 "name": "Square Feet"
@@ -19672,6 +20469,15 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "MvmtReasonKey"
+              },
+              {
+                "name": "ScrapCategoryKey"
               }
             ]
           }
@@ -19785,6 +20591,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -21140,6 +21952,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -21906,6 +22724,12 @@
               },
               {
                 "name": "Category"
+              },
+              {
+                "name": "Is Operations Scrap"
+              },
+              {
+                "name": "Is Scrap Usage Account"
               }
             ]
           },
@@ -21949,6 +22773,38 @@
               },
               {
                 "name": "SortKey"
+              }
+            ]
+          },
+          {
+            "name": "FG Filters for Absorption",
+            "columns": [
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "HighestBomKey"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
               }
             ]
           }
@@ -22132,6 +22988,12 @@
               },
               {
                 "name": "Sub Category"
+              },
+              {
+                "name": "Is Operations Scrap"
+              },
+              {
+                "name": "Is Scrap Usage Account"
               }
             ]
           },
@@ -22268,6 +23130,12 @@
               },
               {
                 "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -22984,6 +23852,512 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Operations",
+        "tables": [
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Start of Month"
+              },
+              {
+                "name": "Week Group"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Weekday Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "CustomOrder"
+              },
+              {
+                "name": "Is Controllable Expense"
+              },
+              {
+                "name": "Is Labor"
+              },
+              {
+                "name": "Is Supplies"
+              },
+              {
+                "name": "Sub Category"
+              },
+              {
+                "name": "Is Operations Scrap"
+              },
+              {
+                "name": "Is Scrap Usage Account"
+              }
+            ]
+          },
+          {
+            "name": "Goods Issues and Receipts",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Linear Feet"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Material Document Header Text"
+              },
+              {
+                "name": "Material Document Line Number"
+              },
+              {
+                "name": "Material Document Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posted By"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Posting Time"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Date"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Reason Code for Movement"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "MvmtReasonKey"
+              },
+              {
+                "name": "ScrapCategoryKey"
+              }
+            ]
+          },
+          {
+            "name": "Material Master",
+            "columns": [
+              {
+                "name": "Brand"
+              },
+              {
+                "name": "Color Name"
+              },
+              {
+                "name": "Color Number"
+              },
+              {
+                "name": "Commercialization Date"
+              },
+              {
+                "name": "Created By"
+              },
+              {
+                "name": "Created Date"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Is New Product"
+              },
+              {
+                "name": "Length (ft)"
+              },
+              {
+                "name": "Liner"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Group Text"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Number - Description"
+              },
+              {
+                "name": "Material Number Prefix"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Type Text"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Size Code"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Square Feet"
+              },
+              {
+                "name": "Type Code"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Width (in)"
+              },
+              {
+                "name": "X Distribution Status"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Cost of Goods Sold"
+              },
+              {
+                "name": "GIR Amount"
+              },
+              {
+                "name": "GIR Quantity"
+              },
+              {
+                "name": "Operations Scrap Amount"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Description"
+              },
+              {
+                "name": "Plant"
+              }
+            ]
+          },
+          {
+            "name": "Scrap Usage Transactions",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Document Line Number"
+              },
+              {
+                "name": "Document Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Reference Document Line Number"
+              },
+              {
+                "name": "Reference Document Number"
+              },
+              {
+                "name": "Reason Code for Movement"
+              },
+              {
+                "name": "MvmtReasonKey"
+              },
+              {
+                "name": "ScrapCategoryKey"
+              }
+            ]
+          },
+          {
+            "name": "Scrap Confirmations",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "MvmtReasonKey"
+              },
+              {
+                "name": "Plant Number"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Reason Code for Movement"
+              },
+              {
+                "name": "ScrapCategoryKey"
+              }
+            ]
+          },
+          {
+            "name": "_Scrap Category",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "ScrapID"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Business Transaction Type"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "HighestBomKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              }
+            ]
+          }
+        ]
       }
     ],
     "roles": [
@@ -23592,6 +24966,10 @@
       {
         "name": "ClientCompatibilityLevel",
         "value": "600"
+      },
+      {
+        "name": "BestPracticeAnalyzer_IgnoreRules",
+        "value": "{\"RuleIDs\":[]}"
       }
     ]
   },

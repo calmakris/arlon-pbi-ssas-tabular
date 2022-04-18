@@ -14746,6 +14746,13 @@
         "fromColumn": "MvmtReasonKey",
         "toTable": "Reason for Movement",
         "toColumn": "MvmtReasonKey"
+      },
+      {
+        "name": "bf6ee90c-7566-44b3-8465-4849b5d7ad34",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "MvmtReasonKey",
+        "toTable": "Reason for Movement",
+        "toColumn": "MvmtReasonKey"
       }
     ],
     "perspectives": [

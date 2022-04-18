@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -24729,6 +24728,10 @@
           {
             "memberName": "DOMAIN\\pbitest1",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
+          },
+          {
+            "memberName": "DOMAIN\\clopez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
           }
         ]
       },
@@ -25048,10 +25051,6 @@
           {
             "memberName": "DOMAIN\\cgarcia",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2747"
-          },
-          {
-            "memberName": "DOMAIN\\clopez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
           },
           {
             "memberName": "DOMAIN\\cpham",

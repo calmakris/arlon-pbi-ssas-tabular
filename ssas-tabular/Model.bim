@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -5839,15 +5841,7 @@
             "name": "Operations Scrap as % of GR",
             "expression": [
               "",
-              "VAR GR = ",
-              "    CALCULATE(",
-              "        ABS(SUM( 'Goods Issues and Receipts'[Amount] )),",
-              "        KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"}),",
-              "        KEEPFILTERS('Goods Issues and Receipts'[Reason Code for Movement] = \"0000\")",
-              "    )",
-              "",
-              "RETURN",
-              "DIVIDE( [Operations Scrap Amount], GR )"
+              "DIVIDE( [Operations Scrap Amount], [Operations Goods Receipt Amount] )"
             ],
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Operations Scrap"
@@ -5865,6 +5859,39 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Scrap P&L"
+          },
+          {
+            "name": "Operations Scrap as % of GR (Target)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE( Target_KPI[TargetValue] ),",
+              "    Target_KPI[KpiKey] = \"ScrapGR\",",
+              "    FILTER(",
+              "        ALL( Target_KPI[CalendarTimeKey] ),",
+              "        CONTAINS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Operations Scrap"
+          },
+          {
+            "name": "Operations Goods Receipt Amount",
+            "description": "Sum of 'Goods Issues and Receipts'[Amount] with 261 and 262 movement types with non-0000 reason codes",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    ABS(SUM( 'Goods Issues and Receipts'[Amount] )),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Reason Code for Movement] = \"0000\")",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Operations Scrap"
           }
         ]
       },
@@ -24469,6 +24496,12 @@
               },
               {
                 "name": "Scrap P&L Amount"
+              },
+              {
+                "name": "Operations Scrap as % of GR (Target)"
+              },
+              {
+                "name": "Operations Goods Receipt Amount"
               }
             ]
           },

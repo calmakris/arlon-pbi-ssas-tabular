@@ -5779,24 +5779,16 @@
               "VAR PO_Scrap =",
               "    CALCULATE(",
               "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
-              "        FILTER(",
-              "            '_Scrap Category',",
-              "            '_Scrap Category'[Category] = \"Process Order Scrap\"",
-              "        )",
+              "        KEEPFILTERS('_Scrap Category'[Category] = \"Process Order Scrap\")",
               "    )",
               "",
               "-- Use G/L account items instead because it has correct debit/credit indicators",
               "VAR NonPO_Scrap =",
               "    CALCULATE(",
               "        SUM( 'Scrap Usage Transactions'[Amount] ),",
-              "        FILTER(",
-              "            '_Scrap Category',",
-              "            '_Scrap Category'[Category] = \"Non Process Order Scrap\"",
-              "        ),",
-              "        FILTER(",
-              "            'Cost Element Names',",
-              "            'Cost Element Names'[Is Operations Scrap]",
-              "        )",
+              "        kEEPFILTERS('Cost Element Names'[Category] = \"Scrap\"),",
+              "        KEEPFILTERS('Cost Element Names'[Sub Category] = \"Non-PO Scrap\"),",
+              "        KEEPFILTERS('Cost Element Names'[Is Operations Scrap])",
               "    )",
               "",
               "-- ZSCRAP tcode only has confirmations on CAST orders",
@@ -5805,12 +5797,8 @@
               "VAR Inv_Reserve =",
               "    CALCULATE(",
               "        SUM( 'Goods Issues and Receipts'[Amount] ) * -1,",
-              "        FILTER(",
-              "            'Cost Element Names',",
-              "            'Cost Element Names'[Category] = \"Inventory Reserve\"",
-              "                && 'Cost Element Names'[Is Operations Scrap]",
-              "        ),",
-              "        ALL( Plant[Plant] )",
+              "        KEEPFILTERS('Cost Element Names'[Category] = \"Inventory Reserve\"),",
+              "        KEEPFILTERS('Cost Element Names'[Is Operations Scrap])",
               "    )",
               "",
               "RETURN",
@@ -5855,8 +5843,8 @@
               "VAR GR = ",
               "    CALCULATE(",
               "        ABS(SUM( 'Goods Issues and Receipts'[Amount] )),",
-              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"},",
-              "        'Goods Issues and Receipts'[Reason Code for Movement] = \"0000\"",
+              "        KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"}),",
+              "        KEEPFILTERS('Goods Issues and Receipts'[Reason Code for Movement] = \"0000\")",
               "    )",
               "",
               "RETURN",
@@ -10960,6 +10948,7 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -10975,6 +10964,7 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -10990,6 +10980,7 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11005,6 +10996,7 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13634,6 +13626,48 @@
             }
           }
         ]
+      },
+      {
+        "name": "Reason for Movement",
+        "columns": [
+          {
+            "name": "MvmtReasonKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MvmtReasonKey"
+          },
+          {
+            "name": "Movement Type",
+            "dataType": "string",
+            "sourceColumn": "MovementType"
+          },
+          {
+            "name": "Reason Code",
+            "dataType": "string",
+            "sourceColumn": "ReasonCodeForMovement"
+          },
+          {
+            "name": "Reason Text for Movement",
+            "dataType": "string",
+            "sourceColumn": "ReasonTextForMovement"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_REASON4MOVEMENT = Source{[Schema=\"dbo\",Item=\"VW_REASON4MOVEMENT\"]}[Data]",
+                "in",
+                "    dbo_VW_REASON4MOVEMENT"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -14587,13 +14621,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "d50deb5b-70b8-429c-afdd-b588e210fc9c",
-        "fromTable": "Scrap Usage Transactions",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "e605dd55-4c52-411d-b85f-117c9dbb4d3e",
         "fromTable": "Scrap Usage Transactions",
         "fromColumn": "Material Number",
@@ -14699,6 +14726,27 @@
         "fromColumn": "Plant Number",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "19b4955c-cdee-4cdf-a24b-96644cd51e38",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "b15dcdc8-72ed-47ba-b760-301ab00960db",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "MvmtReasonKey",
+        "toTable": "Reason for Movement",
+        "toColumn": "MvmtReasonKey"
+      },
+      {
+        "name": "6ec77e2b-00a9-4dbf-a4f7-dd69e87cab73",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "MvmtReasonKey",
+        "toTable": "Reason for Movement",
+        "toColumn": "MvmtReasonKey"
       }
     ],
     "perspectives": [
@@ -24579,6 +24627,23 @@
                 "name": "Machine Name"
               }
             ]
+          },
+          {
+            "name": "Reason for Movement",
+            "columns": [
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "MvmtReasonKey"
+              },
+              {
+                "name": "Reason Code"
+              },
+              {
+                "name": "Reason Text for Movement"
+              }
+            ]
           }
         ]
       }
@@ -25195,5 +25260,6 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

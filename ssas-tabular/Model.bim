@@ -20624,6 +20624,23 @@
                 "name": "ScrapCategoryKey"
               }
             ]
+          },
+          {
+            "name": "Reason for Movement",
+            "columns": [
+              {
+                "name": "Movement Type"
+              },
+              {
+                "name": "MvmtReasonKey"
+              },
+              {
+                "name": "Reason Code"
+              },
+              {
+                "name": "Reason Text for Movement"
+              }
+            ]
           }
         ]
       },

@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -2500,10 +2499,7 @@
               "",
               "CALCULATE(",
               "    SUM( 'Goods Issues and Receipts'[Linear Feet] ),",
-              "    FILTER(",
-              "        'Goods Issues and Receipts',",
-              "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
-              "    )",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"})",
               ")"
             ],
             "formatString": "#,0",
@@ -2516,11 +2512,7 @@
               "",
               "CALCULATE(",
               "    SUM( 'Goods Issues and Receipts'[Square Feet] ),",
-              "    FILTER(",
-              "        'Goods Issues and Receipts',",
-              "        'Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"}",
-              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"555\", \"700\" }",
-              "    )",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"})",
               ")"
             ],
             "formatString": "#,0",
@@ -2533,12 +2525,9 @@
               "",
               "CALCULATE(",
               "    ABS( SUM( 'Goods Issues and Receipts'[Linear Feet] ) ),",
-              "    FILTER(",
-              "        'Goods Issues and Receipts',",
-              "        'Goods Issues and Receipts'[Movement Type] IN {\"261\", \"551\", \"262\", \"552\"}",
-              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\"}",
-              "            && 'Goods Issues and Receipts'[Reason Code for Movement] <> \"0000\"",
-              "    )",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"261\", \"551\", \"262\", \"552\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Reason Code for Movement] <> \"0000\")",
               ")"
             ],
             "formatString": "#,0",
@@ -2635,15 +2624,7 @@
           {
             "name": "CONV Square Feet per Man Hour",
             "description": "Total number of square footage over total production hours in Converting",
-            "expression": [
-              " DIVIDE(",
-              "    CALCULATE(",
-              "        [GR Square Footage],",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
-              "    ),",
-              "    [CONV Production Hours]",
-              " )"
-            ],
+            "expression": "DIVIDE( [CONV Square Footage], [CONV Production Hours] )",
             "formatString": "#,0",
             "displayFolder": "Converting"
           },
@@ -5158,11 +5139,8 @@
               "",
               "CALCULATE(",
               "    [GR Linear Footage],",
-              "    FILTER(",
-              "        'Goods Issues and Receipts',",
-              "        'Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}",
-              "            && 'Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}",
-              "    ),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
@@ -5813,6 +5791,8 @@
             "expression": [
               "CALCULATE(",
               "    [GI Scrap Rate],",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
@@ -5825,6 +5805,8 @@
               "",
               "CALCULATE(",
               "    [GI Linear Footage],",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
@@ -5892,6 +5874,33 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Operations Scrap"
+          },
+          {
+            "name": "Upstream Avg Scanned Tag Value",
+            "description": "Average of 'Upstream Logs - Process Data'[Tag Value]",
+            "expression": "AVERAGE( 'Process Logs'[Tag Value] )",
+            "formatString": "#,0",
+            "displayFolder": "Upstream Process Data"
+          },
+          {
+            "name": "CONV Square Footage",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [GR Square Footage],",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "Upstream Avg Cross Web Value",
+            "expression": "AVERAGE( 'NDC Profiles'[Average Cross Web Value] )",
+            "formatString": "#,0.00000",
+            "displayFolder": "Upstream Process Data"
           }
         ]
       },
@@ -6847,6 +6856,11 @@
             "name": "Is Scrap Usage Account",
             "dataType": "boolean",
             "sourceColumn": "IsScrapUsageAcct"
+          },
+          {
+            "name": "Cost Element & Name",
+            "dataType": "string",
+            "sourceColumn": "CostElementNoName"
           }
         ],
         "partitions": [
@@ -9870,6 +9884,12 @@
             "sourceColumn": "DurationMinutes",
             "formatString": "#,0.00",
             "summarizeBy": "none"
+          },
+          {
+            "name": "MachineJobIndex",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MachineJobIndex"
           }
         ],
         "partitions": [
@@ -10790,6 +10810,24 @@
             "dataType": "string",
             "description": "Custom value assigned per work center",
             "sourceColumn": "Department"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "SAP Source: MARA.ZEINR",
+            "sourceColumn": "SpecNo"
+          },
+          {
+            "name": "Bill of Material",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.STLNR",
+            "sourceColumn": "BomKey"
+          },
+          {
+            "name": "LeadOrderBomKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "LeadOrderBomKey"
           }
         ],
         "partitions": [
@@ -12806,7 +12844,7 @@
         ]
       },
       {
-        "name": "Support_FG2FilmLink_Testing",
+        "name": "FG Filters for Testing Results",
         "description": "Allows to filter tables with WIP part numbers such as 'Testing Results' table using FG fields. The link between WIP and FG is based on BOM.",
         "isHidden": true,
         "columns": [
@@ -13002,6 +13040,7 @@
       },
       {
         "name": "Bill of Material (Adhesive)",
+        "description": "Adhesive used by the leading process order. Related to 'Shop Orders' table by the BOM of the leading process order.",
         "columns": [
           {
             "name": "BomKey",
@@ -13039,6 +13078,7 @@
       },
       {
         "name": "Bill of Material (Liner)",
+        "description": "Liner used by the leading process order. Related to 'Shop Orders' table by the BOM of the leading process order.",
         "columns": [
           {
             "name": "BomKey",
@@ -13076,6 +13116,7 @@
       },
       {
         "name": "Bill of Material (Facestock)",
+        "description": "Facestock used by the leading process order. Related to 'Shop Orders' table by the BOM of the leading process order.",
         "columns": [
           {
             "name": "BomKey",
@@ -13692,6 +13733,297 @@
                 "    dbo_VW_REASON4MOVEMENT"
               ]
             }
+          }
+        ]
+      },
+      {
+        "name": "Process Logs",
+        "description": "Related to job index of 'Upstream Logs - Raw' table.",
+        "columns": [
+          {
+            "name": "MachineJobIndexKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MachineJobIndexKey"
+          },
+          {
+            "name": "Scan Timestamp",
+            "dataType": "dateTime",
+            "sourceColumn": "DateTimestamp",
+            "formatString": "MM/dd/yyyy HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralLongDateTime\" FormatString=\"MM/dd/yyyy HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Scan Date",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ScanDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Scan Hour",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ScanHour",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Scan Minute",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ScanMinute",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Tag Name",
+            "dataType": "string",
+            "sourceColumn": "TagName"
+          },
+          {
+            "name": "Tag Value",
+            "dataType": "int64",
+            "sourceColumn": "TagValue",
+            "formatString": "#,0"
+          },
+          {
+            "name": "MachineTagNameKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MachineTagNameKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_PROCESSDATA = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_PROCESSDATA\"]}[Data]",
+                "in",
+                "    dbo_VW_UPSTREAM_PROCESSDATA"
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Scan Timestamp Hierarchy",
+            "levels": [
+              {
+                "name": "Date",
+                "ordinal": 0,
+                "column": "Scan Date"
+              },
+              {
+                "name": "Hour",
+                "ordinal": 1,
+                "column": "Scan Hour"
+              },
+              {
+                "name": "Minute",
+                "ordinal": 2,
+                "column": "Scan Minute"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "_Machine Tag Names",
+        "columns": [
+          {
+            "name": "MachineTagNameKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MachineTagNameKey"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "MachineName"
+          },
+          {
+            "name": "Tag Name",
+            "dataType": "string",
+            "sourceColumn": "TagName"
+          },
+          {
+            "name": "Tag Rename",
+            "dataType": "string",
+            "sourceColumn": "TagRename"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_TAG_NAMES = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_TAG_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_UPSTREAM_TAG_NAMES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Work Centers",
+        "columns": [
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "sourceColumn": "WorkCenter"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "Machine"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_WORK_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_WORK_CENTER_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_WORK_CENTER_NAMES"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "NDC Profiles",
+        "description": "Related to job index of 'Upstream Logs - Raw' table.",
+        "columns": [
+          {
+            "name": "MachineJobIndexKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MachineJobIndexKey"
+          },
+          {
+            "name": "Job Index",
+            "dataType": "int64",
+            "sourceColumn": "JobIndex",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Scan Timestamp",
+            "dataType": "dateTime",
+            "sourceColumn": "DateTimestamp",
+            "formatString": "MM/dd/yyyy HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralLongDateTime\" FormatString=\"MM/dd/yyyy HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Average Cross Web Value",
+            "dataType": "double",
+            "description": "Average of the NDC/Net/Adjusted Profile columns in the NDC or Profile tables",
+            "sourceColumn": "CrossWebValue",
+            "formatString": "0.00000",
+            "summarizeBy": "average"
+          },
+          {
+            "name": "Scan Date",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ScanDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Scan Hour",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ScanHour",
+            "formatString": "0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Scan Minute",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ScanMinute",
+            "formatString": "0",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_PROFILES = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_PROFILES\"]}[Data]",
+                "in",
+                "    dbo_VW_UPSTREAM_PROFILES"
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Scan Timestamp Hierarchy",
+            "levels": [
+              {
+                "name": "Date",
+                "ordinal": 0,
+                "column": "Scan Date"
+              },
+              {
+                "name": "Hour",
+                "ordinal": 1,
+                "column": "Scan Hour"
+              },
+              {
+                "name": "Minute",
+                "ordinal": 2,
+                "column": "Scan Minute"
+              }
+            ]
           }
         ]
       }
@@ -14512,15 +14844,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "71e73ae0-d271-4eca-999c-e1189b2dffed",
-        "toCardinality": "many",
-        "fromTable": "Testing Results",
-        "fromColumn": "CoatBomKey",
-        "toTable": "Support_FG2FilmLink_Testing",
-        "toColumn": "HighestBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "c0270be3-3c6b-448a-a3c3-9d5a1fdf85c1",
         "fromTable": "Upstream Schedule",
         "fromColumn": "PlanFinishDateAltKey",
@@ -14594,13 +14917,6 @@
         "fromColumn": "Process Order Number",
         "toTable": "Shop Orders",
         "toColumn": "Process Order Number"
-      },
-      {
-        "name": "5661235d-c473-42f5-a90d-4f033e58a1f2",
-        "fromTable": "Support_FG2FilmLink_Testing",
-        "fromColumn": "Material Number",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
       },
       {
         "name": "21764f5f-1d6d-4ff2-8861-9ee6b673ce23",
@@ -14713,33 +15029,6 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "ff172ea9-efc8-43f2-b974-d1972676d520",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Facestock)",
-        "fromColumn": "BomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "2e82c335-c370-4385-8806-3249023c9605",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Liner)",
-        "fromColumn": "BomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "58b566f9-3d13-4594-8ee5-958a8f69c61d",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Adhesive)",
-        "fromColumn": "BomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "77952195-6c6e-438e-9736-e3c62c34a164",
         "fromTable": "Scrap Confirmations",
         "fromColumn": "Machine Name",
@@ -14780,6 +15069,88 @@
         "fromColumn": "MvmtReasonKey",
         "toTable": "Reason for Movement",
         "toColumn": "MvmtReasonKey"
+      },
+      {
+        "name": "bbf3b046-bc32-4c38-8d24-e4c0aa872f55",
+        "toCardinality": "many",
+        "fromTable": "Upstream Logs - Raw",
+        "fromColumn": "MachineJobIndex",
+        "toTable": "Process Logs",
+        "toColumn": "MachineJobIndexKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "c88064c9-8b2a-41a2-9373-88b32d4c8954",
+        "fromTable": "Process Logs",
+        "fromColumn": "MachineTagNameKey",
+        "toTable": "_Machine Tag Names",
+        "toColumn": "MachineTagNameKey"
+      },
+      {
+        "name": "7e9757b6-99fd-4364-a80d-c74e3e3ac767",
+        "toCardinality": "many",
+        "fromTable": "FG Filters for Testing Results",
+        "fromColumn": "HighestBomKey",
+        "toTable": "Testing Results",
+        "toColumn": "CoatBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "35aa2b83-3731-42cc-a851-1b5355a35e75",
+        "fromTable": "FG Filters for Testing Results",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "a1a26610-ae9e-4c77-b196-f5f099c13f08",
+        "fromTable": "_Work Centers",
+        "fromColumn": "Machine Name",
+        "toTable": "_Machines",
+        "toColumn": "Machine Name"
+      },
+      {
+        "name": "0ada833e-dbf6-4c68-a750-2ee5c4b29441",
+        "fromTable": "Shop Orders",
+        "fromColumn": "Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "09605f92-8033-4f14-a82a-a31ee432ee08",
+        "toCardinality": "many",
+        "fromTable": "Bill of Material (Adhesive)",
+        "fromColumn": "BomKey",
+        "toTable": "Shop Orders",
+        "toColumn": "LeadOrderBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "ea43ce13-978b-43b8-834b-04f7bcee9906",
+        "toCardinality": "many",
+        "fromTable": "Bill of Material (Liner)",
+        "fromColumn": "BomKey",
+        "toTable": "Shop Orders",
+        "toColumn": "LeadOrderBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "eba64548-450b-4960-93be-2e3ea9ebf397",
+        "toCardinality": "many",
+        "fromTable": "Bill of Material (Facestock)",
+        "fromColumn": "BomKey",
+        "toTable": "Shop Orders",
+        "toColumn": "LeadOrderBomKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "e6cb894c-c90d-440b-835e-af0e55e8c5ac",
+        "toCardinality": "many",
+        "fromTable": "NDC Profiles",
+        "fromColumn": "MachineJobIndexKey",
+        "toTable": "Upstream Logs - Raw",
+        "toColumn": "MachineJobIndex",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -15458,7 +15829,7 @@
             ]
           },
           {
-            "name": "Support_FG2FilmLink_Testing",
+            "name": "FG Filters for Testing Results",
             "columns": [
               {
                 "name": "HighestBomKey"
@@ -20378,6 +20749,51 @@
               },
               {
                 "name": "CONV Scrap Footage"
+              },
+              {
+                "name": "Testing 15min Dwell Adhesion Avg Result"
+              },
+              {
+                "name": "Testing 24hr Dwell Adhesion Avg Result"
+              },
+              {
+                "name": "Testing Average Result"
+              },
+              {
+                "name": "Testing Failed Specimen Count"
+              },
+              {
+                "name": "Testing Maximum Result"
+              },
+              {
+                "name": "Testing Minimum Result"
+              },
+              {
+                "name": "Testing Passed Specimen Count"
+              },
+              {
+                "name": "Testing Passing Rate"
+              },
+              {
+                "name": "Testing Sample Count"
+              },
+              {
+                "name": "Testing Specification Lower Limit"
+              },
+              {
+                "name": "Testing Specification Upper Limit"
+              },
+              {
+                "name": "Testing Standard Deviation Result"
+              },
+              {
+                "name": "Upstream Avg Scanned Tag Value"
+              },
+              {
+                "name": "CONV Square Footage"
+              },
+              {
+                "name": "Upstream Avg Cross Web Value"
               }
             ]
           },
@@ -20482,6 +20898,9 @@
               },
               {
                 "name": "Duration Minutes"
+              },
+              {
+                "name": "MachineJobIndex"
               }
             ]
           },
@@ -20666,6 +21085,290 @@
               },
               {
                 "name": "Reason Text for Movement"
+              }
+            ]
+          },
+          {
+            "name": "Shop Orders",
+            "columns": [
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Close Indicator"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Deliver Indicator"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Document Group"
+              },
+              {
+                "name": "End Date Key"
+              },
+              {
+                "name": "Final Deliver Indicator"
+              },
+              {
+                "name": "Item Number"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Same Day Indicator"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Work Center"
+              },
+              {
+                "name": "Bill of Material"
+              },
+              {
+                "name": "LeadOrderBomKey"
+              }
+            ]
+          },
+          {
+            "name": "Testing Results",
+            "columns": [
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "CoatBomKey"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Inspection Date"
+              },
+              {
+                "name": "Inspection Lot Number"
+              },
+              {
+                "name": "Inspector Name"
+              },
+              {
+                "name": "Is Pass"
+              },
+              {
+                "name": "Manufacturing Date"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Result Key"
+              },
+              {
+                "name": "Result Unit of Measure"
+              },
+              {
+                "name": "Result Value"
+              },
+              {
+                "name": "Specification Lower Limit"
+              },
+              {
+                "name": "Specification Upper Limit"
+              },
+              {
+                "name": "Specimen Number"
+              },
+              {
+                "name": "Test Category"
+              },
+              {
+                "name": "Test Name"
+              },
+              {
+                "name": "Work Center"
+              }
+            ]
+          },
+          {
+            "name": "_Test Names",
+            "columns": [
+              {
+                "name": "Shorter Name"
+              },
+              {
+                "name": "SortKey"
+              },
+              {
+                "name": "Test Rename"
+              },
+              {
+                "name": "Test Unit"
+              },
+              {
+                "name": "TestNameKey"
+              }
+            ]
+          },
+          {
+            "name": "Process Logs",
+            "columns": [
+              {
+                "name": "MachineJobIndexKey"
+              },
+              {
+                "name": "Scan Date"
+              },
+              {
+                "name": "Scan Minute"
+              },
+              {
+                "name": "Scan Timestamp"
+              },
+              {
+                "name": "Scan Hour"
+              },
+              {
+                "name": "Tag Name"
+              },
+              {
+                "name": "Tag Value"
+              },
+              {
+                "name": "MachineTagNameKey"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Scan Timestamp Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "_Machine Tag Names",
+            "columns": [
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "MachineTagNameKey"
+              },
+              {
+                "name": "Tag Name"
+              },
+              {
+                "name": "Tag Rename"
+              }
+            ]
+          },
+          {
+            "name": "FG Filters for Testing Results",
+            "columns": [
+              {
+                "name": "HighestBomKey"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "_Work Centers",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Work Center"
+              }
+            ]
+          },
+          {
+            "name": "NDC Profiles",
+            "columns": [
+              {
+                "name": "MachineJobIndexKey"
+              },
+              {
+                "name": "Job Index"
+              },
+              {
+                "name": "Scan Timestamp"
+              },
+              {
+                "name": "Average Cross Web Value"
+              },
+              {
+                "name": "Scan Date"
+              },
+              {
+                "name": "Scan Hour"
+              },
+              {
+                "name": "Scan Minute"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Scan Timestamp Hierarchy"
               }
             ]
           }
@@ -22722,6 +23425,12 @@
               },
               {
                 "name": "Department"
+              },
+              {
+                "name": "Bill of Material"
+              },
+              {
+                "name": "LeadOrderBomKey"
               }
             ]
           },
@@ -22918,6 +23627,9 @@
               },
               {
                 "name": "Is Scrap Usage Account"
+              },
+              {
+                "name": "Cost Element & Name"
               }
             ]
           },
@@ -23182,6 +23894,9 @@
               },
               {
                 "name": "Is Scrap Usage Account"
+              },
+              {
+                "name": "Cost Element & Name"
               }
             ]
           },
@@ -24202,6 +24917,9 @@
               },
               {
                 "name": "Is Scrap Usage Account"
+              },
+              {
+                "name": "Cost Element & Name"
               }
             ]
           },
@@ -24950,6 +25668,10 @@
           {
             "memberName": "DOMAIN\\GDebes",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1711"
+          },
+          {
+            "memberName": "DOMAIN\\jrossi",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20480"
           }
         ],
         "tablePermissions": [
@@ -25288,6 +26010,10 @@
           {
             "memberName": "DOMAIN\\jnguyen",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8575"
+          },
+          {
+            "memberName": "DOMAIN\\vguardado",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21515"
           }
         ],
         "tablePermissions": [

@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -12844,7 +12843,7 @@
         ]
       },
       {
-        "name": "FG Filters for Testing Results",
+        "name": "FG Filters for Shop Orders",
         "description": "Allows to filter tables with WIP part numbers such as 'Testing Results' table using FG fields. The link between WIP and FG is based on BOM.",
         "isHidden": true,
         "columns": [
@@ -15087,17 +15086,8 @@
         "toColumn": "MachineTagNameKey"
       },
       {
-        "name": "7e9757b6-99fd-4364-a80d-c74e3e3ac767",
-        "toCardinality": "many",
-        "fromTable": "FG Filters for Testing Results",
-        "fromColumn": "HighestBomKey",
-        "toTable": "Testing Results",
-        "toColumn": "CoatBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "35aa2b83-3731-42cc-a851-1b5355a35e75",
-        "fromTable": "FG Filters for Testing Results",
+        "fromTable": "FG Filters for Shop Orders",
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
@@ -15150,6 +15140,15 @@
         "fromColumn": "MachineJobIndexKey",
         "toTable": "Upstream Logs - Raw",
         "toColumn": "MachineJobIndex",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "7cbb62cc-4a41-4ae5-9fff-e2799dc81b1f",
+        "toCardinality": "many",
+        "fromTable": "FG Filters for Shop Orders",
+        "fromColumn": "HighestBomKey",
+        "toTable": "Shop Orders",
+        "toColumn": "LeadOrderBomKey",
         "crossFilteringBehavior": "bothDirections"
       }
     ],
@@ -15829,7 +15828,7 @@
             ]
           },
           {
-            "name": "FG Filters for Testing Results",
+            "name": "FG Filters for Shop Orders",
             "columns": [
               {
                 "name": "HighestBomKey"
@@ -21317,7 +21316,7 @@
             ]
           },
           {
-            "name": "FG Filters for Testing Results",
+            "name": "FG Filters for Shop Orders",
             "columns": [
               {
                 "name": "HighestBomKey"

@@ -21370,6 +21370,48 @@
                 "name": "Scan Timestamp Hierarchy"
               }
             ]
+          },
+          {
+            "name": "Bill of Material (Adhesive)",
+            "columns": [
+              {
+                "name": "BomKey"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Bill of Material (Facestock)",
+            "columns": [
+              {
+                "name": "BomKey"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Bill of Material (Liner)",
+            "columns": [
+              {
+                "name": "BomKey"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
           }
         ]
       },
@@ -25415,6 +25457,48 @@
               },
               {
                 "name": "Reason Text for Movement"
+              }
+            ]
+          },
+          {
+            "name": "Bill of Material (Adhesive)",
+            "columns": [
+              {
+                "name": "BomKey"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Bill of Material (Facestock)",
+            "columns": [
+              {
+                "name": "BomKey"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Bill of Material (Liner)",
+            "columns": [
+              {
+                "name": "BomKey"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
               }
             ]
           }

@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -13985,6 +13987,11 @@
             "sourceColumn": "ScanMinute",
             "formatString": "0",
             "summarizeBy": "none"
+          },
+          {
+            "name": "Tag Name",
+            "dataType": "string",
+            "sourceColumn": "TagName"
           }
         ],
         "partitions": [
@@ -21363,6 +21370,9 @@
               },
               {
                 "name": "Scan Minute"
+              },
+              {
+                "name": "Tag Name"
               }
             ],
             "hierarchies": [

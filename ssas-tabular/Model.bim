@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7385,7 +7383,7 @@
             {
               "name": "MTD",
               "expression": [
-                "CALCULATE(",
+                "CALCULATE( ",
                 "    CALCULATE(",
                 "        SELECTEDMEASURE(),",
                 "        DATESMTD( 'Calendar'[Date] )",
@@ -7564,6 +7562,22 @@
                 "    )",
                 ")"
               ]
+            },
+            {
+              "name": "MTD Weekday",
+              "expression": [
+                "CALCULATE( ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        DATESMTD( 'Calendar'[Date] )",
+                "    ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Last Working Day]",
+                "    )",
+                ")"
+              ],
+              "ordinal": 4
             }
           ]
         },

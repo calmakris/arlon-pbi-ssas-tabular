@@ -10383,6 +10383,12 @@
             "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "none"
+          },
+          {
+            "name": "MaterialPlantKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialPlantKey"
           }
         ],
         "partitions": [
@@ -22224,6 +22230,9 @@
               },
               {
                 "name": "Transfer Stock Amount (USD)"
+              },
+              {
+                "name": "MaterialPlantKey"
               }
             ]
           },
@@ -23248,6 +23257,9 @@
               },
               {
                 "name": "Transfer Stock Amount (USD)"
+              },
+              {
+                "name": "MaterialPlantKey"
               }
             ]
           },

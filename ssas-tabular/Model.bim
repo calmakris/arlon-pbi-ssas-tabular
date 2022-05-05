@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7977,6 +7979,8 @@
             "name": "OrderNoLineKey",
             "dataType": "string",
             "isHidden": true,
+            "isUnique": true,
+            "isKey": true,
             "sourceColumn": "OrderNoLineKey"
           },
           {
@@ -10312,12 +10316,6 @@
             "summarizeBy": "none"
           },
           {
-            "name": "MaterialPlantKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialPlantKey"
-          },
-          {
             "name": "Standard Price",
             "dataType": "double",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
@@ -10363,6 +10361,28 @@
             "dataType": "string",
             "description": "SAP Source: MBEW.BKLAS",
             "sourceColumn": "ValuationClass"
+          },
+          {
+            "name": "Component Scrap",
+            "dataType": "double",
+            "sourceColumn": "ComponentScrapPerc",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Transfer Stock Quantity",
+            "dataType": "double",
+            "sourceColumn": "TransferStockQty",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Transfer Stock Amount (USD)",
+            "dataType": "double",
+            "sourceColumn": "TransferStockAmtUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -10375,10 +10395,9 @@
                 "let",
                 "    Source = ARLPBI_STAGE,",
                 "    dbo_VW_INVENTORY_CURRENT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_CURRENT\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_INVENTORY_CURRENT,{{\"ExpirationDate\", type date}}),",
-                "    #\"Sorted Rows\" = Table.Sort(#\"Changed Type\",{{\"MaterialPlantKey\", Order.Ascending}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_INVENTORY_CURRENT,{{\"ExpirationDate\", type date}})",
                 "in",
-                "    #\"Sorted Rows\""
+                "    #\"Changed Type\""
               ]
             }
           }
@@ -14417,6 +14436,38 @@
             "formatString": "#,0"
           }
         ]
+      },
+      {
+        "name": "Related Shop Orders",
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNoKey"
+          },
+          {
+            "name": "SalesOrderNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SalesOrderNoKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PROCESS_SALESORDER = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PROCESS_SALESORDER\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PROCESS_SALESORDER"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -15549,6 +15600,13 @@
         "fromColumn": "Date",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "b34d8123-0e0d-4455-b3fd-aa14a76c03ce",
+        "fromTable": "Related Shop Orders",
+        "fromColumn": "SalesOrderNoKey",
+        "toTable": "Sales Order Documents",
+        "toColumn": "OrderNoLineKey"
       }
     ],
     "perspectives": [
@@ -19368,6 +19426,17 @@
                 "name": "Plant"
               }
             ]
+          },
+          {
+            "name": "Related Shop Orders",
+            "columns": [
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "SalesOrderNoKey"
+              }
+            ]
           }
         ]
       },
@@ -20786,6 +20855,17 @@
                 "name": "OrderNoKey"
               }
             ]
+          },
+          {
+            "name": "Related Shop Orders",
+            "columns": [
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "SalesOrderNoKey"
+              }
+            ]
           }
         ]
       },
@@ -22119,9 +22199,6 @@
                 "name": "Blocked Stock Quantity"
               },
               {
-                "name": "MaterialPlantKey"
-              },
-              {
                 "name": "Standard Price"
               },
               {
@@ -22138,6 +22215,15 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Component Scrap"
+              },
+              {
+                "name": "Transfer Stock Quantity"
+              },
+              {
+                "name": "Transfer Stock Amount (USD)"
               }
             ]
           },
@@ -23137,9 +23223,6 @@
                 "name": "Blocked Stock Quantity"
               },
               {
-                "name": "MaterialPlantKey"
-              },
-              {
                 "name": "Standard Price"
               },
               {
@@ -23156,6 +23239,15 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Component Scrap"
+              },
+              {
+                "name": "Transfer Stock Quantity"
+              },
+              {
+                "name": "Transfer Stock Amount (USD)"
               }
             ]
           },

@@ -772,6 +772,13 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true
+          },
+          {
+            "type": "calculated",
+            "name": "Marketing",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -5900,6 +5907,70 @@
             "expression": "AVERAGE( 'NDC Profiles'[Average Cross Web Value] )",
             "formatString": "#,0.00000",
             "displayFolder": "Upstream Process Data"
+          },
+          {
+            "name": "Website Users",
+            "description": "Sum of 'Website Traffic'[Users]",
+            "expression": "SUM( 'Website Traffic'[Users] )",
+            "formatString": "#,0",
+            "displayFolder": "Marketing"
+          },
+          {
+            "name": "Website Sessions",
+            "description": "Sum of 'Website Traffic'[Sessions]",
+            "expression": "SUM( 'Website Traffic'[Sessions] )",
+            "formatString": "#,0",
+            "displayFolder": "Marketing"
+          },
+          {
+            "name": "Website New Users",
+            "description": "Sum of 'Website Traffic'[New Users]",
+            "expression": "SUM( 'Website Traffic'[New Users] )",
+            "formatString": "#,0",
+            "displayFolder": "Marketing"
+          },
+          {
+            "name": "Website Bounce Rate",
+            "description": "Sum of 'Website Traffic'[Bounces] divided by the sum of 'Website Traffic'[Sessions]",
+            "expression": "DIVIDE( SUM( 'Website Traffic'[Bounces] ), [Website Sessions] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Marketing"
+          },
+          {
+            "name": "Website Average Session Duration",
+            "description": "Sum of 'Website Traffic'[Session Duration] divided by the sum of 'Website Traffic'[Sessions]",
+            "expression": [
+              "",
+              "VAR Avg_Secs = DIVIDE( SUM( 'Website Traffic'[Session Duration] ), [Website Sessions] )",
+              "VAR hh = INT( DIVIDE( Avg_Secs , 3600 ) )",
+              "VAR mm = INT( DIVIDE( MOD( Avg_Secs - (hh * 3600), 3600 ), 60 ) )",
+              "VAR ss = Avg_Secs - (hh * 3600) - (mm * 60)",
+              "",
+              "RETURN",
+              "TIME(hh, mm, ss)"
+            ],
+            "formatString": "HH:mm:ss",
+            "displayFolder": "Marketing",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Email Open Rate",
+            "description": "Open rate is the percentage of people who opened your email out of the people who were delivered your email.",
+            "expression": "DIVIDE( [Email Open Count], [Email Delivered Count] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Marketing"
+          },
+          {
+            "name": "Email Click Through Rate",
+            "description": "This is the percentage of people who clicked a link in your email out of the people who opened your email.",
+            "expression": "DIVIDE( [Email Click Count], [Email Open Count] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Marketing"
           }
         ]
       },
@@ -14046,6 +14117,306 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Website Traffic",
+        "description": "Daily website traffic statistics in the last 90 days",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Continent",
+            "dataType": "string",
+            "sourceColumn": "Continent",
+            "dataCategory": "Continent"
+          },
+          {
+            "name": "Sub Continent",
+            "dataType": "string",
+            "sourceColumn": "SubContinent"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country",
+            "dataCategory": "Country"
+          },
+          {
+            "name": "Users",
+            "dataType": "int64",
+            "sourceColumn": "Users",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "New Users",
+            "dataType": "int64",
+            "sourceColumn": "NewUsers",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Sessions",
+            "dataType": "int64",
+            "sourceColumn": "Sessions",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Bounces",
+            "dataType": "int64",
+            "sourceColumn": "Bounces",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Session Duration",
+            "dataType": "int64",
+            "sourceColumn": "SessionDuration",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_GA_TRAFFIC_DAILY = Source{[Schema=\"dbo\",Item=\"VW_GA_TRAFFIC_DAILY\"]}[Data]",
+                "in",
+                "    dbo_VW_GA_TRAFFIC_DAILY"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Website Pageviews",
+        "description": "Top pages in the Arlon website by views in the last 7 days",
+        "columns": [
+          {
+            "name": "Page Path",
+            "dataType": "string",
+            "sourceColumn": "PagePath"
+          },
+          {
+            "name": "Page Views",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "PageViews",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_GA_PAGEVIEWS = Source{[Schema=\"dbo\",Item=\"VW_GA_PAGEVIEWS\"]}[Data]",
+                "in",
+                "    dbo_VW_GA_PAGEVIEWS"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Page View Count",
+            "expression": "SUM( 'Website Pageviews'[Page Views] )",
+            "formatString": "#,0"
+          }
+        ]
+      },
+      {
+        "name": "Website Keywords",
+        "description": "Top keywords to find the Arlon website in the last 7 days",
+        "columns": [
+          {
+            "name": "Keyword",
+            "dataType": "string",
+            "sourceColumn": "Keyword"
+          },
+          {
+            "name": "Users",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Users",
+            "formatString": "#,0",
+            "summarizeBy": "sum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_GA_CAMPAIGN_KEYWORDS = Source{[Schema=\"dbo\",Item=\"VW_GA_CAMPAIGN_KEYWORDS\"]}[Data]",
+                "in",
+                "    dbo_VW_GA_CAMPAIGN_KEYWORDS"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Keyword User Count",
+            "expression": "SUM( 'Website Keywords'[Users] )",
+            "formatString": "#,0"
+          }
+        ]
+      },
+      {
+        "name": "Website Referrers",
+        "description": "Top referrers to Arlon website in the last 7 days",
+        "columns": [
+          {
+            "name": "Full Referrer",
+            "dataType": "string",
+            "sourceColumn": "FullReferrer"
+          },
+          {
+            "name": "Users",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Users",
+            "formatString": "#,0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_GA_TRAFFIC_REFERRERS = Source{[Schema=\"dbo\",Item=\"VW_GA_TRAFFIC_REFERRERS\"]}[Data]",
+                "in",
+                "    dbo_VW_GA_TRAFFIC_REFERRERS"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Referrer User Count",
+            "expression": "SUM( 'Website Referrers'[Users] )",
+            "formatString": "#,0"
+          }
+        ]
+      },
+      {
+        "name": "Marketing Emails",
+        "columns": [
+          {
+            "name": "Campaign Name",
+            "dataType": "string",
+            "sourceColumn": "CampaignName"
+          },
+          {
+            "name": "Created Date",
+            "dataType": "dateTime",
+            "sourceColumn": "CreatedDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Delivered",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DeliverCount",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Open",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "OpenCount",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Click",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ClickCount",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Email Name",
+            "dataType": "string",
+            "sourceColumn": "EmailName"
+          },
+          {
+            "name": "Email Subject",
+            "dataType": "string",
+            "sourceColumn": "EmailSubject"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_HUB_EMAILS_MARKETING = Source{[Schema=\"dbo\",Item=\"VW_HUB_EMAILS_MARKETING\"]}[Data]",
+                "in",
+                "    dbo_VW_HUB_EMAILS_MARKETING"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Email Delivered Count",
+            "description": "The number of emails succesfully delivered to an inbox",
+            "expression": "SUM( 'Marketing Emails'[Delivered] )",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Email Open Count",
+            "description": "The total number of unique opens",
+            "expression": "SUM( 'Marketing Emails'[Open] )",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Email Click Count",
+            "description": "The number of unique recipients who clicked on any link in your email, excluding the Unsubscribe and Subscription Preferences links.",
+            "expression": "SUM( 'Marketing Emails'[Click] )",
+            "formatString": "#,0"
+          }
+        ]
       }
     ],
     "relationships": [
@@ -15171,6 +15542,13 @@
         "toTable": "Shop Orders",
         "toColumn": "LeadOrderBomKey",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "56b529a4-2015-4b1d-93da-dc1b3769a6e2",
+        "fromTable": "Website Traffic",
+        "fromColumn": "Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -25523,6 +25901,274 @@
               },
               {
                 "name": "Material Number"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Marketing",
+        "tables": [
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Ordinal"
+              },
+              {
+                "name": "Time Calculation"
+              }
+            ]
+          },
+          {
+            "name": "Calendar",
+            "columns": [
+              {
+                "name": "Calendar Month Number"
+              },
+              {
+                "name": "Calendar Quarter Name"
+              },
+              {
+                "name": "Calendar Week Number"
+              },
+              {
+                "name": "Calendar Year Number"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "Day"
+              },
+              {
+                "name": "Fiscal Period"
+              },
+              {
+                "name": "Fiscal Quarter Name"
+              },
+              {
+                "name": "Fiscal Year Month Name"
+              },
+              {
+                "name": "Fiscal Year Number"
+              },
+              {
+                "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Is Calendar YTD"
+              },
+              {
+                "name": "Is Current Fiscal Year"
+              },
+              {
+                "name": "Is Current Month"
+              },
+              {
+                "name": "Is Fiscal YTD"
+              },
+              {
+                "name": "Is Last 13 Months"
+              },
+              {
+                "name": "Is Last 2 Calendar Years"
+              },
+              {
+                "name": "Is Last 2 Fiscal Years"
+              },
+              {
+                "name": "Is Last 3 Calendar Years"
+              },
+              {
+                "name": "Is Last 3 Fiscal Years"
+              },
+              {
+                "name": "Is MTD"
+              },
+              {
+                "name": "Is Next 3 Months"
+              },
+              {
+                "name": "Is Recent Weeks"
+              },
+              {
+                "name": "Is Weekday"
+              },
+              {
+                "name": "Month Name"
+              },
+              {
+                "name": "Month Name (Calendar)"
+              },
+              {
+                "name": "Start of Month"
+              },
+              {
+                "name": "Week Group"
+              },
+              {
+                "name": "Weekday"
+              },
+              {
+                "name": "Weekday Name"
+              },
+              {
+                "name": "Year_Month_Sort_Key"
+              },
+              {
+                "name": "Year_Week_Sort_Key"
+              }
+            ],
+            "hierarchies": [
+              {
+                "name": "Calendar Hierarchy"
+              },
+              {
+                "name": "Fiscal Hierarchy"
+              }
+            ]
+          },
+          {
+            "name": "Website Traffic",
+            "columns": [
+              {
+                "name": "Bounces"
+              },
+              {
+                "name": "Continent"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "Date"
+              },
+              {
+                "name": "New Users"
+              },
+              {
+                "name": "Session Duration"
+              },
+              {
+                "name": "Sessions"
+              },
+              {
+                "name": "Sub Continent"
+              },
+              {
+                "name": "Users"
+              }
+            ]
+          },
+          {
+            "name": "DAX Measures",
+            "measures": [
+              {
+                "name": "Website Users"
+              },
+              {
+                "name": "Website Average Session Duration"
+              },
+              {
+                "name": "Website Bounce Rate"
+              },
+              {
+                "name": "Website New Users"
+              },
+              {
+                "name": "Website Sessions"
+              },
+              {
+                "name": "Email Click Through Rate"
+              },
+              {
+                "name": "Email Open Rate"
+              }
+            ]
+          },
+          {
+            "name": "Website Keywords",
+            "columns": [
+              {
+                "name": "Keyword"
+              },
+              {
+                "name": "Users"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Keyword User Count"
+              }
+            ]
+          },
+          {
+            "name": "Website Pageviews",
+            "columns": [
+              {
+                "name": "Page Path"
+              },
+              {
+                "name": "Page Views"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Page View Count"
+              }
+            ]
+          },
+          {
+            "name": "Website Referrers",
+            "columns": [
+              {
+                "name": "Full Referrer"
+              },
+              {
+                "name": "Users"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Referrer User Count"
+              }
+            ]
+          },
+          {
+            "name": "Marketing Emails",
+            "columns": [
+              {
+                "name": "Campaign Name"
+              },
+              {
+                "name": "Click"
+              },
+              {
+                "name": "Created Date"
+              },
+              {
+                "name": "Delivered"
+              },
+              {
+                "name": "Email Name"
+              },
+              {
+                "name": "Email Subject"
+              },
+              {
+                "name": "Open"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Email Click Count"
+              },
+              {
+                "name": "Email Delivered Count"
+              },
+              {
+                "name": "Email Open Count"
               }
             ]
           }

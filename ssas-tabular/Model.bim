@@ -7979,8 +7979,6 @@
             "name": "OrderNoLineKey",
             "dataType": "string",
             "isHidden": true,
-            "isUnique": true,
-            "isKey": true,
             "sourceColumn": "OrderNoLineKey"
           },
           {
@@ -15608,7 +15606,7 @@
         "toColumn": "Date"
       },
       {
-        "name": "b34d8123-0e0d-4455-b3fd-aa14a76c03ce",
+        "name": "b67b6e52-17e4-4487-a91e-a0ded95acba0",
         "fromTable": "Related Shop Orders",
         "fromColumn": "SalesOrderNoKey",
         "toTable": "Sales Order Documents",

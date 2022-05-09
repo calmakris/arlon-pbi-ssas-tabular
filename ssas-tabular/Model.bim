@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -5911,54 +5910,11 @@
             "displayFolder": "Upstream Process Data"
           },
           {
-            "name": "Website Users",
-            "description": "Sum of 'Website Traffic'[Users]",
-            "expression": "SUM( 'Website Traffic'[Users] )",
-            "formatString": "#,0",
-            "displayFolder": "Marketing"
-          },
-          {
-            "name": "Website Sessions",
-            "description": "Sum of 'Website Traffic'[Sessions]",
-            "expression": "SUM( 'Website Traffic'[Sessions] )",
-            "formatString": "#,0",
-            "displayFolder": "Marketing"
-          },
-          {
-            "name": "Website New Users",
-            "description": "Sum of 'Website Traffic'[New Users]",
-            "expression": "SUM( 'Website Traffic'[New Users] )",
-            "formatString": "#,0",
-            "displayFolder": "Marketing"
-          },
-          {
             "name": "Website Bounce Rate",
             "description": "Sum of 'Website Traffic'[Bounces] divided by the sum of 'Website Traffic'[Sessions]",
             "expression": "DIVIDE( SUM( 'Website Traffic'[Bounces] ), [Website Sessions] )",
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Marketing"
-          },
-          {
-            "name": "Website Average Session Duration",
-            "description": "Sum of 'Website Traffic'[Session Duration] divided by the sum of 'Website Traffic'[Sessions]",
-            "expression": [
-              "",
-              "VAR Avg_Secs = DIVIDE( SUM( 'Website Traffic'[Session Duration] ), [Website Sessions] )",
-              "VAR hh = INT( DIVIDE( Avg_Secs , 3600 ) )",
-              "VAR mm = INT( DIVIDE( MOD( Avg_Secs - (hh * 3600), 3600 ), 60 ) )",
-              "VAR ss = Avg_Secs - (hh * 3600) - (mm * 60)",
-              "",
-              "RETURN",
-              "TIME(hh, mm, ss)"
-            ],
-            "formatString": "HH:mm:ss",
-            "displayFolder": "Marketing",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
-              }
-            ]
           },
           {
             "name": "Email Open Rate",
@@ -6319,6 +6275,12 @@
             "name": "Notification Text",
             "dataType": "string",
             "sourceColumn": "NotificationText"
+          },
+          {
+            "name": "Plant for Material",
+            "dataType": "string",
+            "description": "SAP Source: QMEL.MAWERK",
+            "sourceColumn": "PlantMaterial"
           }
         ],
         "partitions": [
@@ -6331,7 +6293,7 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_HOLDTAGS = Source{[Schema=\"dbo\",Item=\"VW_HOLDTAGS\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"EnteredBy\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"OrderNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_HOLDTAGS,{\"NotificationNoKey\", \"NotificationType\", \"NotificationCode\", \"EnterDateKey\", \"EnteredBy\", \"ReferenceNo\", \"MaterialNoKey\", \"BatchNoKey\", \"PlantMaterial\", \"OrderNoKey\", \"NotificationText\", \"QuantityUoM\", \"HoldQuantityValue\", \"HoldValueUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -6355,6 +6317,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNo"
           },
           {
@@ -6960,6 +6923,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "description": "SAP Source: T001W.WERKS",
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "PlantNoKey"
@@ -6967,7 +6931,14 @@
           {
             "name": "Description",
             "dataType": "string",
+            "description": "SAP Source: T001W.NAME1",
             "sourceColumn": "PlantDescription"
+          },
+          {
+            "name": "CompCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompCode"
           }
         ],
         "partitions": [
@@ -8935,6 +8906,7 @@
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.BUKRS",
+            "isHidden": true,
             "sourceColumn": "CompanyCode"
           },
           {
@@ -9385,6 +9357,13 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "HighestBomKey"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: COBK.KOKRS",
+            "isHidden": true,
+            "sourceColumn": "CompCode"
           }
         ],
         "partitions": [
@@ -10248,6 +10227,7 @@
             "name": "Plant",
             "dataType": "string",
             "description": "SAP Source: MARD.WERKS",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -10565,6 +10545,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -10623,6 +10604,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -11676,6 +11658,7 @@
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.BUKRS",
+            "isHidden": true,
             "sourceColumn": "CompanyCode"
           },
           {
@@ -11688,6 +11671,7 @@
             "name": "Plant",
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.WERKS",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -11878,10 +11862,10 @@
             "sourceColumn": "ItemText"
           },
           {
-            "name": "CustomerOrgKey",
+            "name": "Customer Name",
             "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CustomerOrgKey"
+            "description": "SAP Source: KNA1.NAME1",
+            "sourceColumn": "CustomerName"
           }
         ],
         "partitions": [
@@ -11928,6 +11912,7 @@
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: FAGLFLEXT.RBUKRS",
+            "isHidden": true,
             "sourceColumn": "CompanyCode"
           },
           {
@@ -12582,6 +12567,12 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "SrcStrKey"
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey"
           }
         ],
         "partitions": [
@@ -13721,9 +13712,10 @@
             "sourceColumn": "ProcessOrderNo"
           },
           {
-            "name": "Plant Number",
+            "name": "Plant",
             "dataType": "string",
             "description": "SAP Source: AFRU.WERKS",
+            "isHidden": true,
             "sourceColumn": "PlantNo"
           },
           {
@@ -14177,6 +14169,7 @@
           {
             "name": "Users",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "Users",
             "formatString": "#,0",
             "summarizeBy": "none"
@@ -14184,6 +14177,7 @@
           {
             "name": "New Users",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "NewUsers",
             "formatString": "#,0",
             "summarizeBy": "none"
@@ -14191,6 +14185,7 @@
           {
             "name": "Sessions",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "Sessions",
             "formatString": "#,0",
             "summarizeBy": "none"
@@ -14198,6 +14193,7 @@
           {
             "name": "Bounces",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "Bounces",
             "formatString": "#,0",
             "summarizeBy": "none"
@@ -14205,6 +14201,7 @@
           {
             "name": "Session Duration",
             "dataType": "int64",
+            "isHidden": true,
             "sourceColumn": "SessionDuration",
             "formatString": "#,0",
             "summarizeBy": "none"
@@ -14225,6 +14222,43 @@
               ]
             }
           }
+        ],
+        "measures": [
+          {
+            "name": "Website Users",
+            "expression": "SUM( 'Website Traffic'[Users] )",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Website New Users",
+            "expression": "SUM( 'Website Traffic'[New Users] )",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Website Sessions",
+            "expression": "SUM( 'Website Traffic'[Sessions] )",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Website Average Session Duration",
+            "expression": [
+              "",
+              "VAR Avg_Secs = DIVIDE( SUM( 'Website Traffic'[Session Duration] ), [Website Sessions] )",
+              "VAR hh = INT( DIVIDE( Avg_Secs , 3600 ) )",
+              "VAR mm = INT( DIVIDE( MOD( Avg_Secs - (hh * 3600), 3600 ), 60 ) )",
+              "VAR ss = Avg_Secs - (hh * 3600) - (mm * 60)",
+              "",
+              "RETURN",
+              "TIME(hh, mm, ss)"
+            ],
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          }
         ]
       },
       {
@@ -14243,6 +14277,25 @@
             "sourceColumn": "PageViews",
             "formatString": "#,0",
             "summarizeBy": "sum"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "GeoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "GeoKey"
           }
         ],
         "partitions": [
@@ -14285,6 +14338,25 @@
             "sourceColumn": "Users",
             "formatString": "#,0",
             "summarizeBy": "sum"
+          },
+          {
+            "name": "GeoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "GeoKey"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -14326,6 +14398,25 @@
             "isHidden": true,
             "sourceColumn": "Users",
             "formatString": "#,0"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "GeoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "GeoKey"
           }
         ],
         "partitions": [
@@ -15048,13 +15139,6 @@
         "toColumn": "Vendor Number"
       },
       {
-        "name": "c027290f-a4f9-402e-b864-9e24d3be2c9c",
-        "fromTable": "Inventory Balance (Items)",
-        "fromColumn": "CustomerOrgKey",
-        "toTable": "Customer Master",
-        "toColumn": "CustomerOrgKey"
-      },
-      {
         "name": "a2d417b9-fe0d-4ef0-b1c0-5939f526a813",
         "fromTable": "Inventory Balance (Items)",
         "fromColumn": "Posting Date",
@@ -15484,7 +15568,7 @@
       {
         "name": "c21eb85a-f753-4ab1-b6ae-96af0881ab31",
         "fromTable": "Scrap Confirmations",
-        "fromColumn": "Plant Number",
+        "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
       },
@@ -15611,6 +15695,41 @@
         "fromColumn": "SalesOrderNoKey",
         "toTable": "Sales Order Documents",
         "toColumn": "OrderNoLineKey"
+      },
+      {
+        "name": "4445f4e4-c8b9-45ed-9d23-607e0fdaf192",
+        "fromTable": "Expenses",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "980f4f89-a0c9-489e-9179-15128bf619b6",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Organization",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "69f07afd-0a6c-46dd-b295-d854ad1c34a8",
+        "fromTable": "Transfer Orders (Shipping)",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "270f863c-da6a-48f5-8e9e-89890425d286",
+        "fromTable": "Goods and Invoice Receipts",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "a3c41932-18ad-4810-aa17-674b3b39a186",
+        "fromTable": "Absorption",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -15990,6 +16109,9 @@
               },
               {
                 "name": "Notification Text"
+              },
+              {
+                "name": "Plant for Material"
               }
             ]
           },
@@ -16093,6 +16215,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -16857,6 +16982,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -18668,6 +18796,9 @@
               },
               {
                 "name": "HighestBomKey"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -19428,6 +19559,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -22169,6 +22303,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -22709,56 +22846,6 @@
             ]
           },
           {
-            "name": "Customer Master",
-            "columns": [
-              {
-                "name": "Account Creation Date"
-              },
-              {
-                "name": "Country"
-              },
-              {
-                "name": "Customer Name"
-              },
-              {
-                "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
-              },
-              {
-                "name": "Default Ship Plant"
-              },
-              {
-                "name": "Is New Customer"
-              },
-              {
-                "name": "Price List Code"
-              },
-              {
-                "name": "Price List Name"
-              },
-              {
-                "name": "Sales Organization"
-              },
-              {
-                "name": "Sales Person"
-              },
-              {
-                "name": "Sales Region"
-              },
-              {
-                "name": "Sales Territory"
-              },
-              {
-                "name": "Sales Territory Name"
-              },
-              {
-                "name": "SalesRegionSortKey"
-              }
-            ]
-          },
-          {
             "name": "Current Inventory Snapshots",
             "columns": [
               {
@@ -22815,9 +22902,6 @@
               },
               {
                 "name": "Customer Number"
-              },
-              {
-                "name": "CustomerOrgKey"
               },
               {
                 "name": "Document Currency"
@@ -22887,6 +22971,9 @@
               },
               {
                 "name": "Vendor Number"
+              },
+              {
+                "name": "Customer Name"
               }
             ]
           },
@@ -23302,6 +23389,9 @@
               },
               {
                 "name": "Notification Text"
+              },
+              {
+                "name": "Plant for Material"
               }
             ]
           },
@@ -23738,6 +23828,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -24204,6 +24297,9 @@
               },
               {
                 "name": "HighestBomKey"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -24595,6 +24691,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -24848,6 +24947,9 @@
               },
               {
                 "name": "SrcStorageKey"
+              },
+              {
+                "name": "PlantNoKey"
               }
             ]
           },
@@ -25776,6 +25878,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           },
@@ -25854,7 +25959,7 @@
                 "name": "MvmtReasonKey"
               },
               {
-                "name": "Plant Number"
+                "name": "Plant"
               },
               {
                 "name": "Posting Date"
@@ -25919,6 +26024,9 @@
               },
               {
                 "name": "Quantity"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -26167,19 +26275,7 @@
             "name": "DAX Measures",
             "measures": [
               {
-                "name": "Website Users"
-              },
-              {
-                "name": "Website Average Session Duration"
-              },
-              {
                 "name": "Website Bounce Rate"
-              },
-              {
-                "name": "Website New Users"
-              },
-              {
-                "name": "Website Sessions"
               },
               {
                 "name": "Email Click Through Rate"
@@ -26197,6 +26293,12 @@
               },
               {
                 "name": "Users"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "GeoKey"
               }
             ],
             "measures": [
@@ -26213,6 +26315,12 @@
               },
               {
                 "name": "Page Views"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "GeoKey"
               }
             ],
             "measures": [
@@ -26229,6 +26337,12 @@
               },
               {
                 "name": "Users"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "GeoKey"
               }
             ],
             "measures": [

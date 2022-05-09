@@ -9565,6 +9565,7 @@
           {
             "name": "Plant",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNoKey"
           },
           {
@@ -14140,6 +14141,7 @@
           {
             "name": "Date",
             "dataType": "dateTime",
+            "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
             "annotations": [
@@ -14148,23 +14150,6 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
-          },
-          {
-            "name": "Continent",
-            "dataType": "string",
-            "sourceColumn": "Continent",
-            "dataCategory": "Continent"
-          },
-          {
-            "name": "Sub Continent",
-            "dataType": "string",
-            "sourceColumn": "SubContinent"
-          },
-          {
-            "name": "Country",
-            "dataType": "string",
-            "sourceColumn": "Country",
-            "dataCategory": "Country"
           },
           {
             "name": "Users",
@@ -14205,6 +14190,12 @@
             "sourceColumn": "SessionDuration",
             "formatString": "#,0",
             "summarizeBy": "none"
+          },
+          {
+            "name": "GeoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "GeoKey"
           }
         ],
         "partitions": [
@@ -14559,6 +14550,48 @@
                 "    dbo_VW_ORDER_PROCESS_SALESORDER = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PROCESS_SALESORDER\"]}[Data]",
                 "in",
                 "    dbo_VW_ORDER_PROCESS_SALESORDER"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Marketing Geo Network",
+        "columns": [
+          {
+            "name": "GeoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "GeoKey"
+          },
+          {
+            "name": "Continent",
+            "dataType": "string",
+            "sourceColumn": "Continent"
+          },
+          {
+            "name": "Sub Continent",
+            "dataType": "string",
+            "sourceColumn": "SubContinent"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_MARKETING_DIM_GEO = Source{[Schema=\"dbo\",Item=\"VW_MARKETING_DIM_GEO\"]}[Data]",
+                "in",
+                "    dbo_VW_MARKETING_DIM_GEO"
               ]
             }
           }
@@ -15730,6 +15763,55 @@
         "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "c1773f0b-baf7-4dff-b1f7-528b506f7da5",
+        "fromTable": "Website Pageviews",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "04e19aad-802b-4013-be31-8677e9356168",
+        "fromTable": "Website Keywords",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "1a23a239-a502-4be7-9530-105b2be8c29b",
+        "fromTable": "Website Referrers",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "286080ee-c1ee-4855-b556-057b6511e7c8",
+        "fromTable": "Website Traffic",
+        "fromColumn": "GeoKey",
+        "toTable": "Marketing Geo Network",
+        "toColumn": "GeoKey"
+      },
+      {
+        "name": "e8be9425-ca61-45b3-9b9e-cc4a73b13bc4",
+        "fromTable": "Website Pageviews",
+        "fromColumn": "GeoKey",
+        "toTable": "Marketing Geo Network",
+        "toColumn": "GeoKey"
+      },
+      {
+        "name": "bae4a45f-c2ea-4a81-8bd8-ef4ead2d430c",
+        "fromTable": "Website Keywords",
+        "fromColumn": "GeoKey",
+        "toTable": "Marketing Geo Network",
+        "toColumn": "GeoKey"
+      },
+      {
+        "name": "123b9d9f-7445-4cf1-9e97-498a28377d4d",
+        "fromTable": "Website Referrers",
+        "fromColumn": "GeoKey",
+        "toTable": "Marketing Geo Network",
+        "toColumn": "GeoKey"
       }
     ],
     "perspectives": [
@@ -26246,12 +26328,6 @@
                 "name": "Bounces"
               },
               {
-                "name": "Continent"
-              },
-              {
-                "name": "Country"
-              },
-              {
                 "name": "Date"
               },
               {
@@ -26264,10 +26340,24 @@
                 "name": "Sessions"
               },
               {
-                "name": "Sub Continent"
+                "name": "Users"
               },
               {
-                "name": "Users"
+                "name": "GeoKey"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Website Average Session Duration"
+              },
+              {
+                "name": "Website New Users"
+              },
+              {
+                "name": "Website Sessions"
+              },
+              {
+                "name": "Website Users"
               }
             ]
           },
@@ -26385,6 +26475,23 @@
               },
               {
                 "name": "Email Open Count"
+              }
+            ]
+          },
+          {
+            "name": "Marketing Geo Network",
+            "columns": [
+              {
+                "name": "Continent"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "GeoKey"
+              },
+              {
+                "name": "Sub Continent"
               }
             ]
           }

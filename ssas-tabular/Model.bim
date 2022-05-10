@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -14484,6 +14483,18 @@
             "name": "Email Subject",
             "dataType": "string",
             "sourceColumn": "EmailSubject"
+          },
+          {
+            "name": "Publish Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PublishDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -15723,13 +15734,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "b67b6e52-17e4-4487-a91e-a0ded95acba0",
-        "fromTable": "Related Shop Orders",
-        "fromColumn": "SalesOrderNoKey",
-        "toTable": "Sales Order Documents",
-        "toColumn": "OrderNoLineKey"
-      },
-      {
         "name": "4445f4e4-c8b9-45ed-9d23-607e0fdaf192",
         "fromTable": "Expenses",
         "fromColumn": "Company Code",
@@ -15812,6 +15816,13 @@
         "fromColumn": "GeoKey",
         "toTable": "Marketing Geo Network",
         "toColumn": "GeoKey"
+      },
+      {
+        "name": "0f7ab701-de2b-4038-abbb-488abf527839",
+        "fromTable": "Related Shop Orders",
+        "fromColumn": "SalesOrderNoKey",
+        "toTable": "Sales Order Documents",
+        "toColumn": "OrderNoLineKey"
       }
     ],
     "perspectives": [
@@ -26385,10 +26396,10 @@
                 "name": "Users"
               },
               {
-                "name": "DateKey"
+                "name": "GeoKey"
               },
               {
-                "name": "GeoKey"
+                "name": "DateKey"
               }
             ],
             "measures": [
@@ -26464,6 +26475,9 @@
               },
               {
                 "name": "Open"
+              },
+              {
+                "name": "Publish Date"
               }
             ],
             "measures": [

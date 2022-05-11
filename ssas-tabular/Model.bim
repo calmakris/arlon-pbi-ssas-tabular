@@ -16516,6 +16516,17 @@
                 "name": "Material Number"
               }
             ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
           }
         ]
       },
@@ -16795,6 +16806,17 @@
               },
               {
                 "name": "Refresh Date"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -17365,6 +17387,17 @@
               },
               {
                 "name": "Sales Territory Name"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -18030,6 +18063,17 @@
           {
             "name": "_Currency to Use",
             "columns": [
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
               {
                 "name": "Currency"
               }
@@ -18894,6 +18938,17 @@
                 "name": "Company Code"
               }
             ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
           }
         ]
       },
@@ -19668,6 +19723,17 @@
                 "name": "SalesOrderNoKey"
               }
             ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
           }
         ]
       },
@@ -20029,6 +20095,17 @@
               },
               {
                 "name": "GRIR Open Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -20458,6 +20535,17 @@
               },
               {
                 "name": "Report Name"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -21095,6 +21183,17 @@
               },
               {
                 "name": "SalesOrderNoKey"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -22123,6 +22222,17 @@
               },
               {
                 "name": "Material Number"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -24441,6 +24551,17 @@
                 "name": "Product Series"
               }
             ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
           }
         ]
       },
@@ -25493,6 +25614,17 @@
                 "name": "Order Type"
               }
             ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
           }
         ]
       },
@@ -26206,6 +26338,17 @@
                 "name": "Material Number"
               }
             ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
+              }
+            ]
           }
         ]
       },
@@ -26506,6 +26649,17 @@
               },
               {
                 "name": "Sub Continent"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }

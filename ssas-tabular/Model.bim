@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -14607,6 +14609,50 @@
             }
           }
         ]
+      },
+      {
+        "name": "RLS_CompanyCode",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "CompCodeKey",
+            "dataType": "string",
+            "sourceColumn": "CompCodeKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_RLS_COMPCODE = Source{[Schema=\"dbo\",Item=\"VW_RLS_COMPCODE\"]}[Data]",
+                "in",
+                "    dbo_VW_RLS_COMPCODE"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -15823,6 +15869,24 @@
         "fromColumn": "SalesOrderNoKey",
         "toTable": "Sales Order Documents",
         "toColumn": "OrderNoLineKey"
+      },
+      {
+        "name": "30757aab-b4bc-4056-b5cd-1181af0758b5",
+        "fromTable": "RLS_CompanyCode",
+        "fromColumn": "CompCodeKey",
+        "toTable": "Company Code",
+        "toColumn": "Company Code",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "46f2f5ed-7b36-4e6e-8b55-9c22ca70c5bb",
+        "toCardinality": "many",
+        "fromTable": "RLS_CompanyCode",
+        "fromColumn": "CompCodeKey",
+        "toTable": "Plant",
+        "toColumn": "CompCode",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -26685,26 +26749,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
           },
           {
-            "memberName": "DOMAIN\\jmilliken",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8848"
-          },
-          {
-            "memberName": "DOMAIN\\ahuddlestone",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7281"
-          },
-          {
-            "memberName": "DOMAIN\\amcneill",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7269"
-          },
-          {
-            "memberName": "DOMAIN\\CRussell",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1426"
-          },
-          {
-            "memberName": "DOMAIN\\abratter",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8513"
-          },
-          {
             "memberName": "DOMAIN\\mebin",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8453"
           },
@@ -26715,10 +26759,6 @@
           {
             "memberName": "DOMAIN\\jmcmanus",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
-          },
-          {
-            "memberName": "DOMAIN\\jjing",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
           },
           {
             "memberName": "DOMAIN\\bmoore",
@@ -26741,22 +26781,26 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
           },
           {
-            "memberName": "DOMAIN\\lkemp",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
+            "memberName": "DOMAIN\\PBI-ETL",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8888"
+          },
+          {
+            "memberName": "DOMAIN\\amcneill",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7269"
           },
           {
             "memberName": "DOMAIN\\pbitest1",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           },
           {
-            "memberName": "DOMAIN\\clopez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
+            "memberName": "DOMAIN\\dchamness",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21023"
           }
         ]
       },
       {
-        "name": "By Sales Region",
-        "description": "Reads data by sales region",
+        "name": "Company and Region",
+        "description": "Users who read data by company code and sales region",
         "modelPermission": "read",
         "members": [
           {
@@ -26818,10 +26862,6 @@
           {
             "memberName": "DOMAIN\\pplessis",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2848"
-          },
-          {
-            "memberName": "DOMAIN\\pbitest1",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           }
         ],
         "tablePermissions": [
@@ -26833,12 +26873,16 @@
           {
             "name": "RLS_Territory",
             "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CompanyCode",
+            "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
           }
         ]
       },
       {
-        "name": "By Sales Territory",
-        "description": "Reads data by sales region",
+        "name": "Company and Territory",
+        "description": "Users who read data by company code and sales region",
         "modelPermission": "read",
         "members": [
           {
@@ -26927,12 +26971,16 @@
           {
             "name": "RLS_Region",
             "metadataPermission": "none"
+          },
+          {
+            "name": "RLS_CompanyCode",
+            "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
           }
         ]
       },
       {
         "name": "Default",
-        "description": "Default; Reads data by cost center (mainly for expenses data)",
+        "description": "Default; Users who read data by company code and cost center (mainly for expenses data)",
         "modelPermission": "read",
         "members": [
           {
@@ -27258,6 +27306,10 @@
           {
             "memberName": "DOMAIN\\vguardado",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21515"
+          },
+          {
+            "memberName": "DOMAIN\\clopez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
           }
         ],
         "tablePermissions": [
@@ -27272,6 +27324,43 @@
           {
             "name": "RLS_CostCenter",
             "filterExpression": "RLS_CostCenter[DomainName]=USERNAME() && RLS_CostCenter[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_CompanyCode",
+            "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+          }
+        ]
+      },
+      {
+        "name": "Company",
+        "description": "Users who read data by company code only",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\CRussell",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1426"
+          },
+          {
+            "memberName": "DOMAIN\\ahuddlestone",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7281"
+          },
+          {
+            "memberName": "DOMAIN\\abratter",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8513"
+          },
+          {
+            "memberName": "DOMAIN\\jjing",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
+          },
+          {
+            "memberName": "DOMAIN\\lkemp",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "RLS_CompanyCode",
+            "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
           }
         ]
       }

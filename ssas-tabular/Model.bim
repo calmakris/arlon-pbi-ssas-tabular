@@ -27355,6 +27355,78 @@
           {
             "memberName": "DOMAIN\\lkemp",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8596"
+          },
+          {
+            "memberName": "DOMAIN\\prisinger",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21047"
+          },
+          {
+            "memberName": "DOMAIN\\mdean",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21048"
+          },
+          {
+            "memberName": "DOMAIN\\nthompson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21049"
+          },
+          {
+            "memberName": "DOMAIN\\mperez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21050"
+          },
+          {
+            "memberName": "DOMAIN\\jsadler",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21051"
+          },
+          {
+            "memberName": "DOMAIN\\phiggins",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21052"
+          },
+          {
+            "memberName": "DOMAIN\\frodriguez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21053"
+          },
+          {
+            "memberName": "DOMAIN\\cgalvan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21054"
+          },
+          {
+            "memberName": "DOMAIN\\mrubio",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21041"
+          },
+          {
+            "memberName": "DOMAIN\\achang",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21055"
+          },
+          {
+            "memberName": "DOMAIN\\grose",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21056"
+          },
+          {
+            "memberName": "DOMAIN\\jjimenez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21057"
+          },
+          {
+            "memberName": "DOMAIN\\vbahn",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21058"
+          },
+          {
+            "memberName": "DOMAIN\\jgonzales",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
+          },
+          {
+            "memberName": "DOMAIN\\mgrant",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21060"
+          },
+          {
+            "memberName": "DOMAIN\\pgonzales",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21061"
+          },
+          {
+            "memberName": "DOMAIN\\mnavejar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21062"
+          },
+          {
+            "memberName": "DOMAIN\\jstommel",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21063"
           }
         ],
         "tablePermissions": [

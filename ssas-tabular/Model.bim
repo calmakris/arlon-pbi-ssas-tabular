@@ -6010,7 +6010,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: CE110US.ABSMG",
             "isHidden": true,
             "sourceColumn": "QuantityValue",
@@ -6021,7 +6021,7 @@
           },
           {
             "name": "Gross Sales Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: CE110US.ERLOS",
             "isHidden": true,
             "sourceColumn": "GrossSalesValueUSD",
@@ -6038,7 +6038,7 @@
           },
           {
             "name": "Net Sales Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
             "isHidden": true,
             "sourceColumn": "NetSalesValueUSD",
@@ -6055,7 +6055,7 @@
           },
           {
             "name": "Overall Cost Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: VBRP.WAVWR",
             "isHidden": true,
             "sourceColumn": "CostValueUSD",
@@ -6072,7 +6072,7 @@
           },
           {
             "name": "Material Cost Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: CE110US.VVMEP",
             "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
@@ -6089,7 +6089,7 @@
           },
           {
             "name": "Discount Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: CE110US.KWKDRB",
             "isHidden": true,
             "sourceColumn": "DiscountValueUSD",
@@ -6150,7 +6150,7 @@
           },
           {
             "name": "Exchange Rate",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: CE110US.KURSF",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000",
@@ -6172,7 +6172,7 @@
           },
           {
             "name": "Gross Margin Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Difference between gross sales and cost value",
             "isHidden": true,
             "sourceColumn": "GrossMarginValueUSD",
@@ -6198,6 +6198,24 @@
             "dataType": "string",
             "description": "SAP Source: ADRC.CITY1",
             "sourceColumn": "ShipToCity"
+          },
+          {
+            "name": "Sales Order Number",
+            "dataType": "string",
+            "description": "SAP Source: CE110US.KAUFN",
+            "sourceColumn": "SalesOrderNo"
+          },
+          {
+            "name": "Sales Order Line Number",
+            "dataType": "string",
+            "description": "SAP Source: CE110US.KDPOS",
+            "sourceColumn": "SalesOrderLineNo"
+          },
+          {
+            "name": "External Purchase Order Number",
+            "dataType": "string",
+            "description": "SAP Source: VBAK.BSTNK",
+            "sourceColumn": "ExtPurchaseOrderNo"
           }
         ],
         "partitions": [
@@ -6209,10 +6227,9 @@
               "expression": [
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_SALES,{\"SaleDocNoKey\", \"SaleLineNo\", \"DocType\", \"DocTypeText\", \"CreateDate\", \"InvoiceDate\", \"PostingDateKey\", \"WasNewProduct\", \"MaterialNoKey\", \"CustomerNoKey\", \"CustomerOrgKey\", \"ShipToName\", \"ShipToCity\", \"QuantityUoM\", \"QuantityValue\", \"Currency\", \"ExchangeRate\", \"GrossSalesValueUSD\", \"NetSalesValueUSD\", \"CostValueUSD\", \"MaterialExtPriceUSD\", \"DiscountValueUSD\", \"GrossMarginValueUSD\"})",
+                "    dbo_VW_SALES = Source{[Schema=\"dbo\",Item=\"VW_SALES\"]}[Data]",
                 "in",
-                "    #\"Removed Other Columns\""
+                "    dbo_VW_SALES"
               ]
             }
           }
@@ -18294,6 +18311,15 @@
               },
               {
                 "name": "Ship To City"
+              },
+              {
+                "name": "Sales Order Number"
+              },
+              {
+                "name": "Sales Order Line Number"
+              },
+              {
+                "name": "External Purchase Order Number"
               }
             ]
           },
@@ -19026,6 +19052,15 @@
               },
               {
                 "name": "Was New Product"
+              },
+              {
+                "name": "Sales Order Number"
+              },
+              {
+                "name": "Sales Order Line Number"
+              },
+              {
+                "name": "External Purchase Order Number"
               }
             ]
           },

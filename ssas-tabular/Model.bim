@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -46,7 +45,8 @@
             "isHidden": true,
             "isUnique": true,
             "isKey": true,
-            "sourceColumn": "CustomerOrgKey"
+            "sourceColumn": "CustomerOrgKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Country",
@@ -124,9 +124,10 @@
           },
           {
             "name": "SalesRegionSortKey",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
-            "sourceColumn": "SalesRegionSortKey"
+            "sourceColumn": "SalesRegionSortKey",
+            "formatString": "#,0"
           },
           {
             "name": "Sales Territory Name",
@@ -212,70 +213,59 @@
             "name": "ReasonCodeKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ReasonCodeKey"
+            "sourceColumn": "ReasonCodeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CustomerOrgKey"
+            "sourceColumn": "CustomerOrgKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "PlantNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "MaterialNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Complaint Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ComplaintValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "summarizeBy": "sum"
           },
           {
             "name": "Credit Issued Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CreditIssueValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "summarizeBy": "sum"
           },
           {
             "name": "Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OpenValueUSD",
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "summarizeBy": "sum"
           },
           {
             "name": "Last Credit Date",
@@ -295,7 +285,8 @@
             "dataType": "int64",
             "isDataTypeInferred": true,
             "isHidden": true,
-            "expression": " IF([Last Credit Date], DATEDIFF('Complaint Documents'[Enter Date], [Last Credit Date], DAY), BLANK())"
+            "expression": " IF([Last Credit Date], DATEDIFF('Complaint Documents'[Enter Date], [Last Credit Date], DAY), BLANK())",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
@@ -318,7 +309,8 @@
             "name": "ComplaintLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ComplaintLineKey"
+            "sourceColumn": "ComplaintLineKey",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
@@ -455,7 +447,8 @@
             "name": "Calendar Week Number",
             "dataType": "int64",
             "isHidden": true,
-            "sourceColumn": "Week_Of_Year"
+            "sourceColumn": "Week_Of_Year",
+            "isAvailableInMdx": false
           },
           {
             "name": "Is Last 2 Fiscal Years",
@@ -559,6 +552,7 @@
             "isHidden": true,
             "sourceColumn": "Start_Of_Month",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -661,126 +655,144 @@
             "isNameInferred": false,
             "isDataTypeInferred": true,
             "isHidden": true,
-            "sourceColumn": "[Value]"
+            "sourceColumn": "[Value]",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Sales Invoice",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Complaints",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Inventory",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Expenses",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Sales Orders",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Purchase Orders",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "GRIR",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Absorption Measures",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Engineering",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Shop Orders",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Machine Status",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Odoo",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Warehouse",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Testing",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Operations",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "General",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           },
           {
             "type": "calculated",
             "name": "Marketing",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "isHidden": true
+            "isHidden": true,
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -927,14 +939,27 @@
           {
             "name": "PQ Complaint Count",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " CALCULATE( [Complaint Count], FILTER( 'Reason Code', 'Reason Code'[Department] = \"Q\") )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Complaint Count],",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"Q\" )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "PQ Complaint Value",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " CALCULATE( [Complaint Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Complaint Value],",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"Q\" ),",
+              "    KEEPFILTERS( LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\" )",
+              ")"
+            ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
             "annotations": [
@@ -947,7 +972,14 @@
           {
             "name": "PQ Credit Issued",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " CALCULATE( [Credit Issued], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Credit Issued],",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"Q\" ),",
+              "    KEEPFILTERS( LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\" )",
+              ")"
+            ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
             "annotations": [
@@ -960,7 +992,14 @@
           {
             "name": "PQ Open Value",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " CALCULATE( [Open Value], FILTER('Reason Code', 'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\") )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Open Value],",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"Q\" ),",
+              "    KEEPFILTERS( LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\")",
+              ")"
+            ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Complaints",
             "annotations": [
@@ -1103,10 +1142,8 @@
               "",
               "CALCULATE(",
               "    AVERAGE( 'Complaint Documents'[Cycle Time] ),",
-              "    FILTER(",
-              "        'Reason Code',",
-              "        'Reason Code'[Department] = \"Q\" && LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\"",
-              "    ),",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"Q\" ),",
+              "    KEEPFILTERS( LEFT('Reason Code'[Reason Code Description], 8) <> \"WARRANTY\" ),",
               "    USERELATIONSHIP('Calendar'[Date], 'Complaint Documents'[Last Credit Date])",
               ")"
             ],
@@ -1165,10 +1202,7 @@
               "",
               "CALCULATE(",
               "    [Complaint Count], ",
-              "    FILTER(",
-              "        'Reason Code', ",
-              "        'Reason Code'[Department] = \"S\"",
-              "    )",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"S\" )",
               ")"
             ],
             "formatString": "#,0",
@@ -1181,11 +1215,8 @@
               "",
               "CALCULATE(",
               "    SUM( 'Complaint Documents - Credited'[Credit Issued Amount] ) + 0,",
-              "    'Complaint Documents'[Billing Block Indicator] = \"\",",
-              "    FILTER(",
-              "        'Reason Code',",
-              "        'Reason Code'[Department] = \"S\"",
-              "    ),",
+              "    KEEPFILTERS( 'Complaint Documents'[Billing Block Indicator] = \"\" ),",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"S\" ),",
               "    USERELATIONSHIP(",
               "        'Calendar'[Date],",
               "        'Complaint Documents - Credited'[Credit Issued Date]",
@@ -1208,11 +1239,8 @@
               "",
               "CALCULATE(",
               "    SUM( 'Complaint Documents - Credited'[Credit Issued Amount] ) + 0,",
-              "    'Complaint Documents'[Billing Block Indicator] = \"\",",
-              "    FILTER(",
-              "        'Reason Code',",
-              "        'Reason Code'[Department] = \"S1\"",
-              "    ),",
+              "    KEEPFILTERS( 'Complaint Documents'[Billing Block Indicator] = \"\" ),",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"S1\" ),",
               "    USERELATIONSHIP(",
               "        'Calendar'[Date],",
               "        'Complaint Documents - Credited'[Credit Issued Date]",
@@ -1235,10 +1263,7 @@
               "",
               "CALCULATE(",
               "    [Complaint Count], ",
-              "    FILTER(",
-              "        'Reason Code', ",
-              "        'Reason Code'[Department] = \"S1\"",
-              "    )",
+              "    KEEPFILTERS( 'Reason Code'[Department] = \"S1\" )",
               ")"
             ],
             "formatString": "#,0",
@@ -2269,10 +2294,7 @@
               " ",
               "CALCULATE(",
               "    SUM( Absorption[Amount] ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Sub Category] IN {\"Labor\", \"Setup\"}",
-              "    )",
+              "    KEEPFILTERS( 'Cost Element Names'[Sub Category] IN {\"Labor\", \"Setup\"} )",
               ")"
             ],
             "formatString": "#,0",
@@ -2285,10 +2307,7 @@
               " ",
               "CALCULATE(",
               "    SUM( Absorption[Amount] ),",
-              "    FILTER(",
-              "        'Cost Element Names',",
-              "        'Cost Element Names'[Sub Category] = \"Overhead\"",
-              "    )",
+              "    KEEPFILTERS( 'Cost Element Names'[Sub Category] = \"Overhead\" )",
               ")"
             ],
             "formatString": "#,0",
@@ -2331,7 +2350,13 @@
           {
             "name": "Sales Order Lines Manual",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " CALCULATE( [Sales Order Line Count], FILTER( 'SAP Users', 'SAP Users'[Department] = \"CUSTOMER SERVICE\") )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Line Count],",
+              "    KEEPFILTERS( 'SAP Users'[Department] = \"CUSTOMER SERVICE\" )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Sales Orders"
           },
@@ -3631,7 +3656,13 @@
           },
           {
             "name": "Days Count",
-            "expression": " CALCULATE( COUNTROWS( 'Calendar' ), FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    COUNTROWS( 'Calendar' ), ",
+              "    KEEPFILTERS( 'Calendar'[Date] <= [Report Date] )",
+              ")"
+            ],
             "isHidden": true
           },
           {
@@ -3684,16 +3715,13 @@
               "VAR RefDate =",
               "    CALCULATE(",
               "        MAX('Calendar'[Date]),",
-              "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date])",
+              "        KEEPFILTERS( 'Calendar'[Date] <= [Report Date] )",
               "    )",
               "",
               "RETURN",
               "    CALCULATE(",
               "        SUM( 'Current Inventory Snapshots'[Amount] ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] = RefDate",
-              "        )",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
               "    )"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -3712,16 +3740,13 @@
               "VAR RefDate =",
               "    CALCULATE(",
               "        MAX('Calendar'[Date]),",
-              "        FILTER( 'Calendar', 'Calendar'[Date] < [Report Date])",
+              "        KEEPFILTERS( 'Calendar'[Date] < [Report Date] )",
               "    )",
               "",
               "RETURN",
               "    CALCULATE(",
               "        SUM( 'Current Inventory Snapshots'[Amount] ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] = RefDate",
-              "        )",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
               "    )"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -5966,37 +5991,42 @@
             "name": "Material Number",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Customer Number",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
+            "sourceColumn": "CustomerNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CustomerOrgKey"
+            "sourceColumn": "CustomerOrgKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.ABSMG",
             "isHidden": true,
             "sourceColumn": "QuantityValue",
             "formatString": "0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Gross Sales Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.ERLOS",
             "isHidden": true,
             "sourceColumn": "GrossSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -6008,11 +6038,12 @@
           },
           {
             "name": "Net Sales Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
             "isHidden": true,
             "sourceColumn": "NetSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -6024,11 +6055,12 @@
           },
           {
             "name": "Overall Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBRP.WAVWR",
             "isHidden": true,
             "sourceColumn": "CostValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -6040,11 +6072,12 @@
           },
           {
             "name": "Material Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.VVMEP",
             "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "none",
             "annotations": [
@@ -6056,11 +6089,12 @@
           },
           {
             "name": "Discount Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.KWKDRB",
             "isHidden": true,
             "sourceColumn": "DiscountValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -6116,7 +6150,7 @@
           },
           {
             "name": "Exchange Rate",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.KURSF",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000",
@@ -6138,11 +6172,12 @@
           },
           {
             "name": "Gross Margin Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between gross sales and cost value",
             "isHidden": true,
             "sourceColumn": "GrossMarginValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -6218,7 +6253,8 @@
             "name": "MaterialNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Batch Number",
@@ -6227,19 +6263,21 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "HoldQuantityValue",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "HoldValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -6319,7 +6357,8 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNo"
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "Manufacturing Date",
@@ -6359,7 +6398,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ExpiredQuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -6367,7 +6406,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ExpiredAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -6381,18 +6420,20 @@
           },
           {
             "name": "Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "StockQuantityValue",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
           {
             "name": "Stock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "StockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "annotations": [
               {
@@ -6439,11 +6480,12 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "SBlock Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "SBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -6456,7 +6498,7 @@
           },
           {
             "name": "QBlock Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "QBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -6469,7 +6511,7 @@
           },
           {
             "name": "Expired Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ExpiredValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -6483,8 +6525,8 @@
           {
             "type": "calculated",
             "name": "Blocked Inv Value",
-            "dataType": "double",
-            "isDataTypeInferred": true,
+            "dataType": "decimal",
+            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -6650,7 +6692,7 @@
           },
           {
             "name": "Length (ft)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARM.LAENG OR MARM.UMREN; Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "LengthValue",
             "formatString": "#,0",
@@ -6659,7 +6701,7 @@
           },
           {
             "name": "Width (in)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARM.BREIT. Some data cleanup is involved. Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "WidthValue",
             "formatString": "#,0.00",
@@ -6668,7 +6710,7 @@
           },
           {
             "name": "Square Feet",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Product of length and width (in to ft). Applies to 'FERT' and 'HAWA' materials only.",
             "sourceColumn": "SquareFeetValue",
             "formatString": "#,0",
@@ -6879,7 +6921,7 @@
           },
           {
             "name": "CustomOrder",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomOrder"
           },
@@ -6939,7 +6981,8 @@
             "name": "CompCode",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CompCode"
+            "sourceColumn": "CompCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -6966,18 +7009,21 @@
           {
             "name": "Approver Name",
             "dataType": "string",
-            "sourceColumn": "ApproverName"
+            "sourceColumn": "ApproverName",
+            "isAvailableInMdx": false
           },
           {
             "name": "Department",
             "dataType": "string",
-            "sourceColumn": "Department"
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
           },
           {
             "name": "Pending Count",
             "dataType": "int64",
             "sourceColumn": "PendingCount",
             "formatString": "0",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           }
         ],
@@ -7007,13 +7053,15 @@
             "name": "Cost Center",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CostCenterKey"
+            "sourceColumn": "CostCenterKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Cost Element",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CostElementKey"
+            "sourceColumn": "CostElementKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Document Type",
@@ -7029,7 +7077,8 @@
             "name": "PlantNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Posting Date",
@@ -7076,13 +7125,15 @@
             "name": "OffsetAcctNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "OffsetAcctNoKey"
+            "sourceColumn": "OffsetAcctNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "OffsetAcctType",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "OffsetAcctType"
+            "sourceColumn": "OffsetAcctType",
+            "isAvailableInMdx": false
           },
           {
             "name": "Document Number",
@@ -7123,7 +7174,8 @@
             "name": "PurchaseDocLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PurchaseDocLineKey"
+            "sourceColumn": "PurchaseDocLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Document Header Text",
@@ -7142,11 +7194,12 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Expenses amount are in company currency while Open POs are already converted to USD",
             "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum",
             "annotations": [
               {
@@ -7203,7 +7256,8 @@
             "isHidden": true,
             "isUnique": true,
             "isKey": true,
-            "sourceColumn": "PurchaseOrderLineKey"
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Purchase Order Number",
@@ -7235,7 +7289,8 @@
             "dataType": "string",
             "description": "SAP Source: EKKO.LIFNR",
             "isHidden": true,
-            "sourceColumn": "VendorNoKey"
+            "sourceColumn": "VendorNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Group",
@@ -7263,7 +7318,7 @@
           },
           {
             "name": "Unit Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKPO.NETPR",
             "sourceColumn": "UnitPrice",
             "summarizeBy": "none"
@@ -7331,25 +7386,27 @@
           },
           {
             "name": "Ordered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKPO.MENGE",
             "isHidden": true,
             "sourceColumn": "OrderedQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
           {
             "name": "Ordered Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKPO.NETWR",
             "isHidden": true,
             "sourceColumn": "OrderedAmount",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
           {
             "name": "Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between the ordered and delivered quantity. SAP Source: EKPO.MENGE and EKET.WEMNG",
             "sourceColumn": "OpenQuantity",
             "formatString": "#,0.00",
@@ -7358,7 +7415,7 @@
           },
           {
             "name": "Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
             "sourceColumn": "OpenAmount",
             "formatString": "#,0.00",
@@ -7379,19 +7436,21 @@
           },
           {
             "name": "Goods Receipt Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GoodsReceiptQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Goods Receipt Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GoodsReceiptAmount",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           }
@@ -7696,23 +7755,27 @@
           {
             "name": "CalendarTimeKey",
             "dataType": "string",
-            "sourceColumn": "CalendarTimeKey"
+            "sourceColumn": "CalendarTimeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CostCenterKey",
             "dataType": "string",
-            "sourceColumn": "CostCenterKey"
+            "sourceColumn": "CostCenterKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CostElementKey",
             "dataType": "string",
-            "sourceColumn": "CostElementKey"
+            "sourceColumn": "CostElementKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "TargetValue",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
-            "sourceColumn": "TargetValue"
+            "sourceColumn": "TargetValue",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -7804,7 +7867,8 @@
             "isHidden": true,
             "isUnique": true,
             "isKey": true,
-            "sourceColumn": "ReasonCodeKey"
+            "sourceColumn": "ReasonCodeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Reason Code Description",
@@ -7820,7 +7884,8 @@
             "name": "Class",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "Class"
+            "sourceColumn": "Class",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -7859,13 +7924,15 @@
           {
             "name": "ComplaintLineKey",
             "dataType": "string",
-            "sourceColumn": "ComplaintLineKey"
+            "sourceColumn": "ComplaintLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Credit Issued Date",
             "dataType": "dateTime",
             "sourceColumn": "CreditDateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -7875,10 +7942,11 @@
           },
           {
             "name": "Credit Issued Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CreditIssueValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -7912,18 +7980,21 @@
           {
             "name": "KpiKey",
             "dataType": "string",
-            "sourceColumn": "KpiKey"
+            "sourceColumn": "KpiKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CalendarTimeKey",
             "dataType": "string",
-            "sourceColumn": "CalendarTimeKey"
+            "sourceColumn": "CalendarTimeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "TargetValue",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
-            "sourceColumn": "TargetValue"
+            "sourceColumn": "TargetValue",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -7951,7 +8022,8 @@
             "name": "OrderNoLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "OrderNoLineKey"
+            "sourceColumn": "OrderNoLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Order Number",
@@ -8032,13 +8104,15 @@
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CustomerOrgKey"
+            "sourceColumn": "CustomerOrgKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CustomerNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
+            "sourceColumn": "CustomerNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Number",
@@ -8062,7 +8136,8 @@
             "name": "ReasonCodeKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ReasonCodeKey"
+            "sourceColumn": "ReasonCodeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Credit Block",
@@ -8084,11 +8159,12 @@
           },
           {
             "name": "Order Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.KWMENG",
             "isHidden": true,
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
@@ -8100,11 +8176,12 @@
           },
           {
             "name": "Order Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.NETWR; Converted to USD using the exchange rate",
             "isHidden": true,
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_USD Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8116,11 +8193,12 @@
           },
           {
             "name": "Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.WAVWR; Converted to USD using the exchange rate",
             "isHidden": true,
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_USD Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8138,27 +8216,29 @@
           },
           {
             "name": "Allocated Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued without an actual PGI date yet",
             "isHidden": true,
             "sourceColumn": "AllocatedQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
             "name": "Shipped Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with actual PGI date set",
             "isHidden": true,
             "sourceColumn": "ShippedQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
             "name": "Shipped On Time Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with PGI date on or before the first schedule delivery date",
             "sourceColumn": "OnTimeShippedQuantity",
             "formatString": "#,0.00",
@@ -8167,34 +8247,36 @@
           },
           {
             "name": "Internal Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Order quantity minus allocated and shipped quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
             "name": "Customer Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Order quantity minus shipped quantity",
             "isHidden": true,
             "sourceColumn": "CustomerOpenQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
             "name": "Unit Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.NETPR",
             "sourceColumn": "UnitPrice",
             "summarizeBy": "none"
           },
           {
             "name": "Exchange Rate",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000",
@@ -8202,17 +8284,18 @@
           },
           {
             "name": "Cost Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: WAVWR",
             "isHidden": true,
             "sourceColumn": "CostAmount",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Local Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Order Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: NETWR",
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
@@ -8221,21 +8304,23 @@
           },
           {
             "name": "Internal Open Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmount",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Local Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Internal Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_USD Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8247,19 +8332,21 @@
           },
           {
             "name": "Customer Open Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmount",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Local Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Customer Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_USD Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8271,21 +8358,23 @@
           },
           {
             "name": "Margin Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmount",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Local Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Margin Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_USD Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8324,20 +8413,23 @@
             "dataType": "int64",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
             "isHidden": true,
-            "sourceColumn": "InStockIndicator"
+            "sourceColumn": "InStockIndicator",
+            "isAvailableInMdx": false
           },
           {
             "name": "Has Changes (CS)",
             "dataType": "int64",
             "isHidden": true,
-            "sourceColumn": "HasChanges_CS"
+            "sourceColumn": "HasChanges_CS",
+            "isAvailableInMdx": false
           },
           {
             "name": "Customer Open Margin Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -8347,10 +8439,11 @@
           },
           {
             "name": "Customer Open Margin Amount (Local)",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmount",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Tier",
@@ -8365,19 +8458,21 @@
           },
           {
             "name": "Allocated Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedAmount",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Allocated Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8389,19 +8484,21 @@
           },
           {
             "name": "Shipped Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedAmount",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Shipped Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -8421,7 +8518,8 @@
             "name": "MaterialPlantKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialPlantKey"
+            "sourceColumn": "MaterialPlantKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Weight Unit",
@@ -8430,14 +8528,14 @@
           },
           {
             "name": "Gross Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Shipped Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ShippedWeight",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -8445,10 +8543,11 @@
           },
           {
             "name": "Customer Open Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenWeight",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
           {
@@ -8488,11 +8587,12 @@
           },
           {
             "name": "Late Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between [Order Quantity] and [Shipped On Time Quantity]",
             "isHidden": true,
             "sourceColumn": "LateQuantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           }
         ],
@@ -8582,17 +8682,20 @@
           {
             "name": "SalesTerritoryKey",
             "dataType": "string",
-            "sourceColumn": "SalesTerritoryKey"
+            "sourceColumn": "SalesTerritoryKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "DomainName",
             "dataType": "string",
-            "sourceColumn": "DomainName"
+            "sourceColumn": "DomainName",
+            "isAvailableInMdx": false
           },
           {
             "name": "InactiveDate",
             "dataType": "dateTime",
-            "sourceColumn": "InactiveDate"
+            "sourceColumn": "InactiveDate",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8619,17 +8722,20 @@
           {
             "name": "SalesRegionKey",
             "dataType": "string",
-            "sourceColumn": "SalesRegionKey"
+            "sourceColumn": "SalesRegionKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "DomainName",
             "dataType": "string",
-            "sourceColumn": "DomainName"
+            "sourceColumn": "DomainName",
+            "isAvailableInMdx": false
           },
           {
             "name": "InactiveDate",
             "dataType": "dateTime",
-            "sourceColumn": "InactiveDate"
+            "sourceColumn": "InactiveDate",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8656,19 +8762,22 @@
           {
             "name": "SalesTerritoryKey",
             "dataType": "string",
-            "sourceColumn": "SalesTerritoryKey"
+            "sourceColumn": "SalesTerritoryKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CalendarTimeKey",
             "dataType": "string",
-            "sourceColumn": "CalendarTimeKey"
+            "sourceColumn": "CalendarTimeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "GrossSales",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossSales",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -8678,17 +8787,19 @@
           },
           {
             "name": "GrossMarginMTD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossMarginMTD",
-            "formatString": "0.00%;-0.00%;0.00%"
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isAvailableInMdx": false
           },
           {
             "name": "GrossMarginYTD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossMarginYTD",
-            "formatString": "0.00%;-0.00%;0.00%"
+            "formatString": "0.00%;-0.00%;0.00%",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8715,17 +8826,20 @@
           {
             "name": "CostCenterKey",
             "dataType": "string",
-            "sourceColumn": "CostCenterKey"
+            "sourceColumn": "CostCenterKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "DomainName",
             "dataType": "string",
-            "sourceColumn": "DomainName"
+            "sourceColumn": "DomainName",
+            "isAvailableInMdx": false
           },
           {
             "name": "InactiveDate",
             "dataType": "dateTime",
-            "sourceColumn": "InactiveDate"
+            "sourceColumn": "InactiveDate",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8775,7 +8889,8 @@
             "name": "PurchaseOrderLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PurchaseOrderLineKey"
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Purchase Order Number",
@@ -8794,14 +8909,16 @@
             "dataType": "string",
             "description": "SAP Source: EKPO.MATNR",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Valuation Class",
             "dataType": "string",
             "description": "SAP Source: MBEW.BKLAS; This field is not directly related to the '_Valuation Class' table",
             "isHidden": true,
-            "sourceColumn": "ValuationClass"
+            "sourceColumn": "ValuationClass",
+            "isAvailableInMdx": false
           },
           {
             "name": "Batch Number",
@@ -8811,15 +8928,16 @@
           },
           {
             "name": "Delivered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'U'",
             "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
           {
             "name": "Goods Receipt Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptQuantity",
             "displayFolder": "_Quantities",
@@ -8827,15 +8945,16 @@
           },
           {
             "name": "In Transit Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of delivered and goods receipt",
             "isHidden": true,
             "sourceColumn": "InTransitQuantity",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
           {
             "name": "Delivered Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'U'",
             "sourceColumn": "DeliveredAmount",
             "displayFolder": "_Values",
@@ -8843,7 +8962,7 @@
           },
           {
             "name": "Goods Receipt Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptAmount",
             "displayFolder": "_Values",
@@ -8851,10 +8970,11 @@
           },
           {
             "name": "In Transit Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of delivered and goods receipt",
             "isHidden": true,
             "sourceColumn": "InTransitAmount",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
           {
@@ -8879,7 +8999,8 @@
             "name": "ValuationClassKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ValuationClassKey"
+            "sourceColumn": "ValuationClassKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8908,7 +9029,8 @@
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.BUKRS",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           },
           {
             "name": "G/L Account",
@@ -8998,11 +9120,12 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: ACCTIT.ERFMG",
             "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
@@ -9015,7 +9138,7 @@
           },
           {
             "name": "Amount (Document)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS/BSAS.WRBTR",
             "sourceColumn": "AmountInDocCurrency",
             "formatString": "#,0.00",
@@ -9031,7 +9154,7 @@
           },
           {
             "name": "Amount (Local)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS/BSAS.DMBTR",
             "sourceColumn": "AmountInLocalCurrency",
             "formatString": "#,0.00",
@@ -9047,7 +9170,7 @@
           },
           {
             "name": "Amount (Local2)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS/BSAS.DMBE2",
             "sourceColumn": "AmountInLocalCurrency2",
             "formatString": "#,0.00",
@@ -9121,14 +9244,16 @@
             "dataType": "string",
             "description": "SAP Source: EKKO.LIFNR",
             "isHidden": true,
-            "sourceColumn": "VendorNoKey"
+            "sourceColumn": "VendorNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Customer Number",
             "dataType": "string",
             "description": "SAP Source: ACCTIT.KUNNR",
             "isHidden": true,
-            "sourceColumn": "CustomerNoKey"
+            "sourceColumn": "CustomerNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "PostingRank",
@@ -9140,7 +9265,8 @@
             "name": "PurchaseOrderLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PurchaseOrderLineKey"
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -9203,7 +9329,8 @@
             "name": "PurchaseOrderLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PurchaseOrderLineKey"
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Document Number",
@@ -9234,15 +9361,17 @@
             "name": "PostingRank",
             "dataType": "int64",
             "isHidden": true,
-            "sourceColumn": "PostingRank"
+            "sourceColumn": "PostingRank",
+            "isAvailableInMdx": false
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKBE.BPMNG; Value is in purchase order unit (see 'Purchase Orders' table)",
             "isHidden": true,
             "sourceColumn": "InvoiceQty",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Currency",
@@ -9252,37 +9381,42 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKBE.REEWR",
             "isHidden": true,
             "sourceColumn": "InvoiceValue",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Amount at Last PY Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
-            "sourceColumn": "InvoiceValue_LastPYPrice"
+            "sourceColumn": "InvoiceValue_LastPYPrice",
+            "isAvailableInMdx": false
           },
           {
             "name": "Last PY Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
-            "sourceColumn": "LastInvoiceQty_PY"
+            "sourceColumn": "LastInvoiceQty_PY",
+            "isAvailableInMdx": false
           },
           {
             "name": "Last PY Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "LastInvoiceValue_PY",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Price Difference",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "PriceDifference",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -9309,13 +9443,15 @@
             "name": "Cost Center",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CostCenterKey"
+            "sourceColumn": "CostCenterKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Cost Element",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CostElementKey"
+            "sourceColumn": "CostElementKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Business Transaction Type",
@@ -9336,10 +9472,11 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "QuantityValue",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Process Order Number",
@@ -9348,23 +9485,26 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AmountValue",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "HighestBomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "HighestBomKey"
+            "sourceColumn": "HighestBomKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: COBK.KOKRS",
             "isHidden": true,
-            "sourceColumn": "CompCode"
+            "sourceColumn": "CompCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -9393,13 +9533,15 @@
             "name": "UsernameKey",
             "dataType": "string",
             "description": "SAP Source: USR21.BNAME",
-            "sourceColumn": "UsernameKey"
+            "sourceColumn": "UsernameKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Department",
             "dataType": "string",
             "description": "SAP Source: ADCP.DEPARTMENT",
-            "sourceColumn": "Department"
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -9428,7 +9570,8 @@
             "dataType": "string",
             "description": "SAP Source: CDHDR.OBJECTID",
             "isHidden": true,
-            "sourceColumn": "OrderNoKey"
+            "sourceColumn": "OrderNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Changed By",
@@ -9487,13 +9630,15 @@
           {
             "name": "PurchaseOrderLineKey",
             "dataType": "string",
-            "sourceColumn": "PurchaseOrderLineKey"
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -9503,30 +9648,34 @@
           },
           {
             "name": "Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OpenQuantity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OpenAmount",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Goods Receipt Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "GoodsReceiptQuantity",
             "formatString": "0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "name": "Goods Receipt Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "GoodsReceiptAmount",
             "formatString": "0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           }
         ],
@@ -9567,7 +9716,8 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Number",
@@ -9581,10 +9731,11 @@
           },
           {
             "name": "Incoming Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "IncomingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum",
             "annotations": [
               {
@@ -9595,10 +9746,11 @@
           },
           {
             "name": "Outgoing Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OutgoingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum",
             "annotations": [
               {
@@ -9609,7 +9761,7 @@
           },
           {
             "name": "Unrestricted Stock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "UnrestrictStockAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "summarizeBy": "none",
@@ -9622,7 +9774,7 @@
           },
           {
             "name": "Remaining by Month End Transit Stock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "TransitStockEOMAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "summarizeBy": "none",
@@ -9635,38 +9787,39 @@
           },
           {
             "name": "Incoming Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "IncomingQty",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Outgoing Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "OutgoingQty",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Remaining by Month End Transit Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "TransitStockEOMQty",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Shortage Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShortageAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum",
             "annotations": [
               {
@@ -9677,7 +9830,7 @@
           },
           {
             "name": "Shortage Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ShortageQty",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -9724,16 +9877,17 @@
           },
           {
             "name": "Production Hours",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "The number of hours across all converting employees when they are producing material",
             "isHidden": true,
             "sourceColumn": "ProductionHours",
             "formatString": "0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "name": "Non Production Hours",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "The total number of hours across all converting employees when they are doing trainings, FEs, and other non-production activities",
             "sourceColumn": "NonProductionHours",
             "formatString": "0.00",
@@ -9741,11 +9895,12 @@
           },
           {
             "name": "Available Hours",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
             "isHidden": true,
             "sourceColumn": "AvailableHours",
             "formatString": "0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
@@ -9796,7 +9951,8 @@
             "name": "Uptime Seconds",
             "dataType": "int64",
             "isHidden": true,
-            "sourceColumn": "UptimeSeconds"
+            "sourceColumn": "UptimeSeconds",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -9948,7 +10104,7 @@
           },
           {
             "name": "Duration Minutes",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Duration between [Start Time] and [Stop Time] in minutes",
             "sourceColumn": "DurationMinutes",
             "formatString": "#,0.00",
@@ -9958,7 +10114,8 @@
             "name": "MachineJobIndex",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MachineJobIndex"
+            "sourceColumn": "MachineJobIndex",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10017,11 +10174,12 @@
           },
           {
             "name": "Duration Minutes",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Duration between 'Start Time' and 'Stop Time' in minutes",
             "isHidden": true,
             "sourceColumn": "DurationMinute",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Footage",
@@ -10029,7 +10187,8 @@
             "description": "Source: jobdata.LastRollFt",
             "isHidden": true,
             "sourceColumn": "Footage",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Ideal Footage",
@@ -10037,7 +10196,8 @@
             "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
             "isHidden": true,
             "sourceColumn": "IdealFootage",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Scrap Footage",
@@ -10045,7 +10205,8 @@
             "description": "Total footage of caliper or setup scrap during clean ups",
             "isHidden": true,
             "sourceColumn": "ScrapFootage",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Category",
@@ -10230,25 +10391,28 @@
             "dataType": "string",
             "description": "SAP Source: MARD.WERKS",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARD.LABST",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
           {
             "name": "Safety Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARC.EISBE",
             "isHidden": true,
             "sourceColumn": "SafetyStockQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "sum"
           },
@@ -10279,7 +10443,7 @@
           },
           {
             "name": "Inspection Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MCHB.CINSM",
             "sourceColumn": "InspectionStockQty",
             "formatString": "#,0.00",
@@ -10288,7 +10452,7 @@
           },
           {
             "name": "Blocked Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MCHB.CSPEM",
             "sourceColumn": "BlockedStockQty",
             "formatString": "#,0.00",
@@ -10297,7 +10461,7 @@
           },
           {
             "name": "Standard Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
             "sourceColumn": "StandardPrice",
             "formatString": "#,0.00",
@@ -10305,7 +10469,7 @@
           },
           {
             "name": "Unrestricted Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "UnrestrictStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10313,7 +10477,7 @@
           },
           {
             "name": "Inspection Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "InspectionStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10321,7 +10485,7 @@
           },
           {
             "name": "Blocked Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "BlockedStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10329,7 +10493,7 @@
           },
           {
             "name": "Standard Price (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH * Today's exchange rate)",
             "sourceColumn": "StandardPriceUSD",
             "formatString": "#,0.00",
@@ -10344,13 +10508,13 @@
           },
           {
             "name": "Component Scrap",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ComponentScrapPerc",
             "formatString": "#,0.00"
           },
           {
             "name": "Transfer Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "TransferStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -10358,7 +10522,7 @@
           },
           {
             "name": "Transfer Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "TransferStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10368,7 +10532,8 @@
             "name": "MaterialPlantKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialPlantKey"
+            "sourceColumn": "MaterialPlantKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10396,23 +10561,27 @@
           {
             "name": "MaterialNoKey",
             "dataType": "string",
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "PlantNoKey",
             "dataType": "string",
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CalendarTimeKey",
             "dataType": "string",
-            "sourceColumn": "CalendarTimeKey"
+            "sourceColumn": "CalendarTimeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "ConsumptionQty",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ConsumptionQty",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10439,32 +10608,37 @@
           {
             "name": "CalendarTimeKey",
             "dataType": "string",
-            "sourceColumn": "CalendarTimeKey"
+            "sourceColumn": "CalendarTimeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "ForecastType",
             "dataType": "string",
-            "sourceColumn": "ForecastType"
+            "sourceColumn": "ForecastType",
+            "isAvailableInMdx": false
           },
           {
             "name": "Labor",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Labor",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Overhead",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Overhead",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "RawMaterial",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "RawMaterial",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10548,27 +10722,30 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "ValuationClassKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ValuationClassKey"
+            "sourceColumn": "ValuationClassKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Net Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "NetCostVal",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10607,7 +10784,8 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Valuation Class",
@@ -10621,17 +10799,18 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AmountUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -10847,20 +11026,22 @@
           },
           {
             "name": "Order Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: AFKO.GAMNG",
             "isHidden": true,
             "sourceColumn": "OrderQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "name": "Delivered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: AFPO.WEMNG",
             "isHidden": true,
             "sourceColumn": "DeliverQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
@@ -10920,7 +11101,8 @@
             "name": "LeadOrderBomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "LeadOrderBomKey"
+            "sourceColumn": "LeadOrderBomKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10982,10 +11164,11 @@
           },
           {
             "name": "Processing Hour",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ProcessingHour",
-            "formatString": "#,0.000"
+            "formatString": "#,0.000",
+            "isAvailableInMdx": false
           },
           {
             "name": "Plan Finish Date",
@@ -11005,6 +11188,7 @@
             "isHidden": true,
             "sourceColumn": "PlanProductionDate",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -11017,7 +11201,8 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "TargetQuantity",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Adhesive Quantity",
@@ -11047,7 +11232,8 @@
             "name": "Ranking Desc",
             "dataType": "int64",
             "isHidden": true,
-            "sourceColumn": "RankingDesc"
+            "sourceColumn": "RankingDesc",
+            "isAvailableInMdx": false
           },
           {
             "name": "PlanFinishDateAltKey",
@@ -11055,6 +11241,7 @@
             "isHidden": true,
             "sourceColumn": "PlanFinishDateAltKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -11090,7 +11277,8 @@
             "dataType": "string",
             "isNameInferred": true,
             "isDataTypeInferred": true,
-            "sourceColumn": "Upstream Logs - Raw[Machine Name]"
+            "sourceColumn": "Upstream Logs - Raw[Machine Name]",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculatedTableColumn",
@@ -11098,7 +11286,8 @@
             "dataType": "string",
             "isNameInferred": true,
             "isDataTypeInferred": true,
-            "sourceColumn": "Upstream Logs - Raw[Process Order Number]"
+            "sourceColumn": "Upstream Logs - Raw[Process Order Number]",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculatedTableColumn",
@@ -11109,6 +11298,7 @@
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -11125,6 +11315,7 @@
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -11141,6 +11332,7 @@
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -11157,6 +11349,7 @@
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -11172,7 +11365,8 @@
             "isDataTypeInferred": true,
             "isHidden": true,
             "sourceColumn": "[Plan Ft]",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculatedTableColumn",
@@ -11182,28 +11376,31 @@
             "isDataTypeInferred": true,
             "isHidden": true,
             "sourceColumn": "[Actual Ft]",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculatedTableColumn",
             "name": "Plan Dur",
-            "dataType": "double",
+            "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "type": "calculatedTableColumn",
             "name": "Actual Dur",
-            "dataType": "double",
+            "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           }
         ],
@@ -11275,7 +11472,8 @@
             "isNameInferred": true,
             "isDataTypeInferred": true,
             "isHidden": true,
-            "sourceColumn": "Machine Status - Prep[Machine Name]"
+            "sourceColumn": "Machine Status - Prep[Machine Name]",
+            "isAvailableInMdx": false
           },
           {
             "type": "calculatedTableColumn",
@@ -11354,6 +11552,7 @@
             "isHidden": true,
             "sourceColumn": "[Plan Footage]",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
@@ -11365,25 +11564,27 @@
             "isHidden": true,
             "sourceColumn": "[Actual Footage]",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "type": "calculatedTableColumn",
             "name": "Plan Duration Hour",
-            "dataType": "double",
+            "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "type": "calculatedTableColumn",
             "name": "Actual Duration Hour",
-            "dataType": "double",
+            "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": true,
+            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -11395,7 +11596,8 @@
             "isNameInferred": true,
             "isDataTypeInferred": true,
             "isHidden": true,
-            "sourceColumn": "[Status]"
+            "sourceColumn": "[Status]",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -11472,7 +11674,8 @@
             "dataType": "string",
             "description": "SAP Source: MSEG.MATNR",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Process Order Number",
@@ -11491,7 +11694,8 @@
             "dataType": "string",
             "description": "SAP Source: MSEG.WERKS",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Storage Location",
@@ -11582,37 +11786,41 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MSEG.ERFMG",
             "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "Linear Feet",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "LinearFeet",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
           {
             "name": "Square Feet",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SquareFeet",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MSEG.DMBTR",
             "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
@@ -11626,13 +11834,15 @@
             "name": "MvmtReasonKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MvmtReasonKey"
+            "sourceColumn": "MvmtReasonKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "ScrapCategoryKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ScrapCategoryKey"
+            "sourceColumn": "ScrapCategoryKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -11661,7 +11871,8 @@
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.BUKRS",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           },
           {
             "name": "G/L Account Number",
@@ -11674,7 +11885,8 @@
             "dataType": "string",
             "description": "SAP Source: BSIS/BSAS.WERKS",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Accounting Document Number",
@@ -11758,7 +11970,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -11772,7 +11984,7 @@
           },
           {
             "name": "Amount (Document Currency)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS/BSAS.WRBTR (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "AmountInDocCurrency",
             "formatString": "#,0.00",
@@ -11787,7 +11999,7 @@
           },
           {
             "name": "Amount (Local Currency)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS/BSAS.DMBTR (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "AmountInLocalCurrency",
             "formatString": "#,0.00",
@@ -11802,7 +12014,7 @@
           },
           {
             "name": "Amount (Local Currency 2)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS/BSAS.DMBE2 (negated if BSIS/BSAS.SHKZG = 'H')",
             "sourceColumn": "AmountInLocalCurrency2",
             "formatString": "#,0.00",
@@ -11831,7 +12043,8 @@
             "name": "PurchaseOrderLineKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PurchaseOrderLineKey"
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Vendor Number",
@@ -11915,7 +12128,8 @@
             "dataType": "string",
             "description": "SAP Source: FAGLFLEXT.RBUKRS",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           },
           {
             "name": "G/L Account Number",
@@ -11931,7 +12145,7 @@
           },
           {
             "name": "Amount (Group Currency)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: FAGLFLEXT.HSL01 to HSL12",
             "sourceColumn": "AmountInGroup",
             "formatString": "0.00",
@@ -11941,7 +12155,8 @@
             "name": "MonthDateKey",
             "dataType": "dateTime",
             "isHidden": true,
-            "sourceColumn": "MonthDateKey"
+            "sourceColumn": "MonthDateKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -12038,7 +12253,8 @@
             "name": "MaterialNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Batch Number",
@@ -12054,7 +12270,8 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNo"
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "Storage Location",
@@ -12063,19 +12280,21 @@
           },
           {
             "name": "SBlock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SBlockQuantityValue",
             "formatString": "0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "SBlock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -12087,19 +12306,21 @@
           },
           {
             "name": "QBlock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "QBlockQuantityValue",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
           },
           {
             "name": "QBlock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "QBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum",
             "annotations": [
@@ -12219,7 +12440,8 @@
             "name": "MaterialNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Description",
@@ -12228,21 +12450,21 @@
           },
           {
             "name": "Unit Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "UnitCost",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "CostAmount",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -12381,10 +12603,11 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Quantity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Currency",
@@ -12393,17 +12616,19 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Amount",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Amount (In Current Price)",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AmountInCurrentPrice",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Weight Unit",
@@ -12412,10 +12637,11 @@
           },
           {
             "name": "Gross Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossWeight",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -12478,7 +12704,8 @@
             "dataType": "string",
             "description": "SAP Source: LTAP.MATNR",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Confirm Date",
@@ -12544,7 +12771,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LTAP.VSOLM",
             "sourceColumn": "QtyVal",
             "formatString": "#,0.00",
@@ -12558,7 +12785,7 @@
           },
           {
             "name": "Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LTAP.BRGEW",
             "sourceColumn": "WeightVal",
             "formatString": "#,0.00",
@@ -12568,13 +12795,15 @@
             "name": "SrcStorageKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "SrcStrKey"
+            "sourceColumn": "SrcStrKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "PlantNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -12623,14 +12852,16 @@
             "dataType": "string",
             "description": "SAP Source: LQUA.MATNR",
             "isHidden": true,
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "PlantNoKey",
             "dataType": "string",
             "description": "SAP Source: LQUA.WERKS",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Batch Number",
@@ -12659,7 +12890,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LQUA.GESME",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -12667,7 +12898,7 @@
           },
           {
             "name": "Amount in USD",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Calculated column based on the quantity and standard price of material (by plant and converted to USD using today's exchange rate)",
             "sourceColumn": "AmountUSD",
             "formatString": "#,0.00",
@@ -12704,7 +12935,8 @@
             "name": "StorageKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "StorageKey"
+            "sourceColumn": "StorageKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -12779,7 +13011,8 @@
             "isHidden": true,
             "isUnique": true,
             "isKey": true,
-            "sourceColumn": "StorageKey"
+            "sourceColumn": "StorageKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CellGroupSort",
@@ -12795,15 +13028,16 @@
           },
           {
             "name": "Capacity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LAGP.LKAPV",
             "isHidden": true,
             "sourceColumn": "Capacity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Remaining Capacity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LAGP.RKAPV",
             "sourceColumn": "RemainCapacity",
             "formatString": "#,0.00",
@@ -12850,6 +13084,7 @@
             "description": "Date when the script is ran",
             "sourceColumn": "SnapshotDateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -12861,21 +13096,24 @@
             "name": "StorageKey",
             "dataType": "string",
             "description": "SAP Source: LAGP.LGTYP and LAGP.LGPLA",
-            "sourceColumn": "StorageKey"
+            "sourceColumn": "StorageKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Utilized",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LAGP.LKAPV and LAGP.RKAPV; Calculated by taking the difference between capacity and remaining capacity",
             "sourceColumn": "Utilized",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Capacity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LAGP.LKAPV",
             "sourceColumn": "Capacity",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -12903,7 +13141,8 @@
             "name": "TestNameKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "TestNameKey"
+            "sourceColumn": "TestNameKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Test Rename",
@@ -12953,13 +13192,15 @@
           {
             "name": "Material Number",
             "dataType": "string",
-            "sourceColumn": "MaterialNo"
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "HighestBomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "HighestBomKey"
+            "sourceColumn": "HighestBomKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13038,31 +13279,35 @@
           },
           {
             "name": "Result Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ResultValue",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Specification Lower Limit",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SpecLowerLimit",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Specification Upper Limit",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SpecUpperLimit",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Is Pass",
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "IsPass",
-            "formatString": "0"
+            "formatString": "0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Test Category",
@@ -13073,7 +13318,8 @@
             "name": "CoatBomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CoatBomKey"
+            "sourceColumn": "CoatBomKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Manufacturing Date",
@@ -13094,6 +13340,7 @@
             "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -13148,7 +13395,8 @@
             "name": "BomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "BomKey"
+            "sourceColumn": "BomKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Number",
@@ -13186,7 +13434,8 @@
             "name": "BomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "BomKey"
+            "sourceColumn": "BomKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Number",
@@ -13224,7 +13473,8 @@
             "name": "BomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "BomKey"
+            "sourceColumn": "BomKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Number",
@@ -13266,7 +13516,8 @@
             "name": "HighestBomKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "HighestBomKey"
+            "sourceColumn": "HighestBomKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Type",
@@ -13369,19 +13620,22 @@
           {
             "name": "Date",
             "dataType": "dateTime",
-            "sourceColumn": "DateKey"
+            "sourceColumn": "DateKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Department",
             "dataType": "string",
-            "sourceColumn": "Department"
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
           },
           {
             "name": "Off Hours",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OffHours",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13411,6 +13665,7 @@
             "dataType": "dateTime",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -13421,34 +13676,40 @@
           {
             "name": "Customer Name",
             "dataType": "string",
-            "sourceColumn": "CustomerName"
+            "sourceColumn": "CustomerName",
+            "isAvailableInMdx": false
           },
           {
             "name": "Order Number",
             "dataType": "string",
-            "sourceColumn": "OrderNoKey"
+            "sourceColumn": "OrderNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Plant",
             "dataType": "string",
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Order Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "OrderAmountUSD",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Shipment Rank",
             "dataType": "int64",
             "sourceColumn": "ShipmentRank",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Order Type",
             "dataType": "string",
-            "sourceColumn": "OrderType"
+            "sourceColumn": "OrderType",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13480,6 +13741,7 @@
             "isKey": true,
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -13489,10 +13751,11 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Amount",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13538,13 +13801,15 @@
             "name": "Cost Element",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CostElement"
+            "sourceColumn": "CostElement",
+            "isAvailableInMdx": false
           },
           {
             "name": "Cost Center",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CostCenter"
+            "sourceColumn": "CostCenter",
+            "isAvailableInMdx": false
           },
           {
             "name": "Reference Document Number",
@@ -13568,7 +13833,8 @@
             "name": "Material Number",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MaterialNo"
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "Batch Number",
@@ -13580,7 +13846,8 @@
             "name": "Plant",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "PlantNo"
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "Process Order Number",
@@ -13609,7 +13876,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -13617,7 +13884,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS.DMBE2 (negated if BSIS.SHKZH = 'H')",
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
@@ -13633,13 +13900,15 @@
             "name": "MvmtReasonKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MvmtReasonKey"
+            "sourceColumn": "MvmtReasonKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "ScrapCategoryKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ScrapCategoryKey"
+            "sourceColumn": "ScrapCategoryKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13667,7 +13936,8 @@
             "name": "ScrapID",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ScrapID"
+            "sourceColumn": "ScrapID",
+            "isAvailableInMdx": false
           },
           {
             "name": "Category",
@@ -13718,7 +13988,8 @@
             "dataType": "string",
             "description": "SAP Source: AFRU.WERKS",
             "isHidden": true,
-            "sourceColumn": "PlantNo"
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "Reason Code for Movement",
@@ -13730,13 +14001,15 @@
             "name": "MvmtReasonKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MvmtReasonKey"
+            "sourceColumn": "MvmtReasonKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "ScrapCategoryKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ScrapCategoryKey"
+            "sourceColumn": "ScrapCategoryKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Posting Date",
@@ -13759,7 +14032,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: AFRU.XMNGA",
             "sourceColumn": "Quantity",
             "formatString": "0.00",
@@ -13767,17 +14040,19 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
             "isHidden": true,
             "sourceColumn": "Amount",
-            "formatString": "0.00"
+            "formatString": "0.00",
+            "isAvailableInMdx": false
           },
           {
             "name": "Machine Name",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MachineName"
+            "sourceColumn": "MachineName",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13804,7 +14079,8 @@
             "name": "MvmtReasonKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MvmtReasonKey"
+            "sourceColumn": "MvmtReasonKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Movement Type",
@@ -13847,7 +14123,8 @@
             "name": "MachineJobIndexKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MachineJobIndexKey"
+            "sourceColumn": "MachineJobIndexKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Scan Timestamp",
@@ -13905,7 +14182,8 @@
             "name": "MachineTagNameKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MachineTagNameKey"
+            "sourceColumn": "MachineTagNameKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13954,7 +14232,8 @@
             "name": "MachineTagNameKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MachineTagNameKey"
+            "sourceColumn": "MachineTagNameKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Machine Name",
@@ -14033,7 +14312,8 @@
             "name": "MachineJobIndexKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "MachineJobIndexKey"
+            "sourceColumn": "MachineJobIndexKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Job Index",
@@ -14055,7 +14335,7 @@
           },
           {
             "name": "Average Cross Web Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Average of the NDC/Net/Adjusted Profile columns in the NDC or Profile tables",
             "sourceColumn": "CrossWebValue",
             "formatString": "0.00000",
@@ -14145,6 +14425,7 @@
             "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -14158,6 +14439,7 @@
             "isHidden": true,
             "sourceColumn": "Users",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
@@ -14166,6 +14448,7 @@
             "isHidden": true,
             "sourceColumn": "NewUsers",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
@@ -14174,6 +14457,7 @@
             "isHidden": true,
             "sourceColumn": "Sessions",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
@@ -14182,6 +14466,7 @@
             "isHidden": true,
             "sourceColumn": "Bounces",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
@@ -14190,13 +14475,15 @@
             "isHidden": true,
             "sourceColumn": "SessionDuration",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
             "name": "GeoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "GeoKey"
+            "sourceColumn": "GeoKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -14268,6 +14555,7 @@
             "isHidden": true,
             "sourceColumn": "PageViews",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
@@ -14276,6 +14564,7 @@
             "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -14287,7 +14576,8 @@
             "name": "GeoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "GeoKey"
+            "sourceColumn": "GeoKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -14329,13 +14619,15 @@
             "isHidden": true,
             "sourceColumn": "Users",
             "formatString": "#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "sum"
           },
           {
             "name": "GeoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "GeoKey"
+            "sourceColumn": "GeoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "DateKey",
@@ -14343,6 +14635,7 @@
             "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -14389,7 +14682,8 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "Users",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "DateKey",
@@ -14397,6 +14691,7 @@
             "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -14408,7 +14703,8 @@
             "name": "GeoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "GeoKey"
+            "sourceColumn": "GeoKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -14460,21 +14756,24 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "DeliverCount",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Open",
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "OpenCount",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Click",
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "ClickCount",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "isAvailableInMdx": false
           },
           {
             "name": "Email Name",
@@ -14548,7 +14847,8 @@
             "name": "SalesOrderNoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "SalesOrderNoKey"
+            "sourceColumn": "SalesOrderNoKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -14575,7 +14875,8 @@
             "name": "GeoKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "GeoKey"
+            "sourceColumn": "GeoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Continent",
@@ -14617,18 +14918,21 @@
           {
             "name": "CompCodeKey",
             "dataType": "string",
-            "sourceColumn": "CompCodeKey"
+            "sourceColumn": "CompCodeKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "DomainName",
             "dataType": "string",
-            "sourceColumn": "DomainName"
+            "sourceColumn": "DomainName",
+            "isAvailableInMdx": false
           },
           {
             "name": "InactiveDate",
             "dataType": "dateTime",
             "sourceColumn": "InactiveDate",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",

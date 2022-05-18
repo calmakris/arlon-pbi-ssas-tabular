@@ -3741,42 +3741,39 @@
             "name": "PD Inventory Amount",
             "expression": [
               "",
-              "VAR RefDate =",
-              "    CALCULATE(",
-              "        MAX('Calendar'[Date]),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] < [Report Date]",
-              "        )",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [Prior Report Date]",
               "    )",
-              "",
-              "RETURN",
-              "    CALCULATE(",
-              "        SUM( 'Current Inventory Snapshots'[Amount] ),",
-              "        FILTER( ",
-              "            'Calendar',",
-              "            'Calendar'[Date] = RefDate",
-              "        )",
-              "    )"
+              ")"
             ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "Time Intelligence",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
           {
             "name": "PD Var Inventory Amount",
-            "expression": " [Last Inventory Amount] - [PD Inventory Amount]",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "expression": [
+              "",
+              "IF(",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PD Inventory Amount] ) ),",
+              "    BLANK(),",
+              "    [Last Inventory Amount] - [PD Inventory Amount]",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "displayFolder": "Time Intelligence",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           },
@@ -5985,7 +5982,7 @@
               "CALCULATE(",
               "    MAX( 'Calendar'[Date] ),",
               "    FILTER(",
-              "        'Calendar',",
+              "        ALL('Calendar'),",
               "        'Calendar'[Date] < [Report Date]",
               "            && 'Calendar'[Weekday] = 6",
               "    )",
@@ -6009,6 +6006,86 @@
               {
                 "name": "Format",
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "PW Inventory Amount",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [Prior Week End Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PM Inventory Amount",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [End of Last Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PW Var Inventory Amount",
+            "expression": [
+              "",
+              "IF(",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PW Inventory Amount] ) ),",
+              "    BLANK(),",
+              "    [Last Inventory Amount] - [PW Inventory Amount]",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PM Var Inventory Amount",
+            "expression": [
+              "",
+              "IF(",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PM Inventory Amount] ) ),",
+              "    BLANK(),",
+              "    [Last Inventory Amount] - [PM Inventory Amount]",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
           }
@@ -24430,6 +24507,18 @@
               },
               {
                 "name": "Prior Week End Date"
+              },
+              {
+                "name": "PM Inventory Amount"
+              },
+              {
+                "name": "PM Var Inventory Amount"
+              },
+              {
+                "name": "PW Inventory Amount"
+              },
+              {
+                "name": "PW Var Inventory Amount"
               }
             ]
           },
@@ -27578,6 +27667,10 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4954"
           },
           {
+            "memberName": "DOMAIN\\htolla",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20437"
+          },
+          {
             "memberName": "DOMAIN\\iabarca",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8573"
           },
@@ -27674,6 +27767,10 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8901"
           },
           {
+            "memberName": "DOMAIN\\lmota",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21494"
+          },
+          {
             "memberName": "DOMAIN\\LTorres",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
           },
@@ -27736,6 +27833,10 @@
           {
             "memberName": "DOMAIN\\schio",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8653"
+          },
+          {
+            "memberName": "DOMAIN\\sdiederich",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20472"
           },
           {
             "memberName": "DOMAIN\\skline",

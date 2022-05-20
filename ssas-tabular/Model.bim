@@ -6462,6 +6462,13 @@
             "dataType": "string",
             "description": "SAP Source: VBAK.BSTNK",
             "sourceColumn": "ExtPurchaseOrderNo"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "description": "SAP Source: CE110US.BUKRS",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -16504,6 +16511,13 @@
         "fromColumn": "Receiving Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "1d432609-263e-49c4-b196-9fcc5bce8462",
+        "fromTable": "Sales Invoice Documents",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -18605,6 +18619,9 @@
               },
               {
                 "name": "External Purchase Order Number"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -19346,6 +19363,9 @@
               },
               {
                 "name": "External Purchase Order Number"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },

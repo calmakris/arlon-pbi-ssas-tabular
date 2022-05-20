@@ -3670,13 +3670,14 @@
             "name": "Current Inventory Amount",
             "expression": [
               "",
-              "SUMX(",
-              "    'Current Inventory',",
-              "    'Current Inventory'[Unrestricted Stock Amount (USD)]",
-              "        + 'Current Inventory'[Blocked Stock Amount (USD)]",
-              "        + 'Current Inventory'[Inspection Stock Amount (USD)]",
+              "-- valuated inventory",
+              "SUM( 'Current Inventory'[Total Stock Amount (USD)] ) +",
+              "-- open stock transfer purchase orders",
+              "CALCULATE(",
+              "    [PO In Transit Amount],",
+              "    KEEPFILTERS( 'Purchase Orders'[Receiving Plant] <> \"1001\" )",
               ") +",
-              "[PO In Transit Amount] +",
+              "-- open WIP process orders",
               "[Current Open WIP Value]"
             ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -6010,7 +6011,7 @@
             ]
           },
           {
-            "name": "PW Inventory Amount",
+            "name": "PW Closing Inventory Amount",
             "expression": [
               "",
               "CALCULATE(",
@@ -6031,7 +6032,7 @@
             ]
           },
           {
-            "name": "PM Inventory Amount",
+            "name": "PM Closing Inventory Amount",
             "expression": [
               "",
               "CALCULATE(",
@@ -6056,9 +6057,9 @@
             "expression": [
               "",
               "IF(",
-              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PW Inventory Amount] ) ),",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PW Closing Inventory Amount] ) ),",
               "    BLANK(),",
-              "    [Last Inventory Amount] - [PW Inventory Amount]",
+              "    [Last Inventory Amount] - [PW Closing Inventory Amount]",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -6075,9 +6076,121 @@
             "expression": [
               "",
               "IF(",
-              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PM Inventory Amount] ) ),",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PM Closing Inventory Amount] ) ),",
               "    BLANK(),",
-              "    [Last Inventory Amount] - [PM Inventory Amount]",
+              "    [Last Inventory Amount] - [PM Closing Inventory Amount]",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Inventory Material Cost",
+            "expression": "SUM( 'Current Inventory'[Material Cost (USD)] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Inventory Labor Cost",
+            "expression": "SUM( 'Current Inventory'[Labor Cost (USD)] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Inventory Overhead Cost",
+            "expression": "SUM( 'Current Inventory'[Overhead Cost (USD)] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Inventory Setup Cost",
+            "expression": "SUM( 'Current Inventory'[Setup Cost (USD)] )",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Unrestricted Stock Amount",
+            "expression": "SUM('Current Inventory'[Unrestricted Stock Amount (USD)])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "End of Last Year",
+            "expression": "DATE(YEAR([Report Date])-1, 12, 31)",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "PY Closing Inventory Amount",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [End of Last Year]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "PY Var Inventory Amount",
+            "expression": [
+              "",
+              "IF(",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PY Closing Inventory Amount] ) ),",
+              "    BLANK(),",
+              "    [Last Inventory Amount] - [PY Closing Inventory Amount]",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -7321,13 +7434,6 @@
             "sourceColumn": "IsReversed"
           },
           {
-            "name": "PurchaseDocLineKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "PurchaseDocLineKey",
-            "isAvailableInMdx": false
-          },
-          {
             "name": "Document Header Text",
             "dataType": "string",
             "sourceColumn": "DocHeaderText"
@@ -7344,7 +7450,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Expenses amount are in company currency while Open POs are already converted to USD",
             "isHidden": true,
             "sourceColumn": "Amount",
@@ -7378,6 +7484,26 @@
             "name": "Material Description",
             "dataType": "string",
             "sourceColumn": "MaterialName"
+          },
+          {
+            "name": "Purchase Document Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseDocNo"
+          },
+          {
+            "name": "Purchase Document Line Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseDocLineNo"
+          },
+          {
+            "name": "Purchase Order Item Text",
+            "dataType": "string",
+            "sourceColumn": "PurchaseItemText"
+          },
+          {
+            "name": "Purchase Requisition Track Number",
+            "dataType": "string",
+            "sourceColumn": "PurchaseReqTrackNo"
           }
         ],
         "partitions": [
@@ -7468,7 +7594,7 @@
           },
           {
             "name": "Unit Price",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: EKPO.NETPR",
             "sourceColumn": "UnitPrice",
             "summarizeBy": "none"
@@ -7536,7 +7662,7 @@
           },
           {
             "name": "Ordered Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: EKPO.MENGE",
             "isHidden": true,
             "sourceColumn": "OrderedQuantity",
@@ -7546,7 +7672,7 @@
           },
           {
             "name": "Ordered Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: EKPO.NETWR",
             "isHidden": true,
             "sourceColumn": "OrderedAmount",
@@ -7556,7 +7682,7 @@
           },
           {
             "name": "Open Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Difference between the ordered and delivered quantity. SAP Source: EKPO.MENGE and EKET.WEMNG",
             "sourceColumn": "OpenQuantity",
             "formatString": "#,0.00",
@@ -7565,7 +7691,7 @@
           },
           {
             "name": "Open Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
             "sourceColumn": "OpenAmount",
             "formatString": "#,0.00",
@@ -7586,7 +7712,7 @@
           },
           {
             "name": "Goods Receipt Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GoodsReceiptQuantity",
             "formatString": "#,0.00",
@@ -7596,13 +7722,19 @@
           },
           {
             "name": "Goods Receipt Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GoodsReceiptAmount",
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "sum"
+          },
+          {
+            "name": "ValuationClassKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ValuationClassKey"
           }
         ],
         "partitions": [
@@ -10547,18 +10679,17 @@
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: MARD.LABST",
-            "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "Safety Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: MARC.EISBE",
             "isHidden": true,
             "sourceColumn": "SafetyStockQty",
@@ -10594,7 +10725,7 @@
           },
           {
             "name": "Inspection Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: MCHB.CINSM",
             "sourceColumn": "InspectionStockQty",
             "formatString": "#,0.00",
@@ -10603,7 +10734,7 @@
           },
           {
             "name": "Blocked Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: MCHB.CSPEM",
             "sourceColumn": "BlockedStockQty",
             "formatString": "#,0.00",
@@ -10612,7 +10743,7 @@
           },
           {
             "name": "Standard Price",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
             "sourceColumn": "StandardPrice",
             "formatString": "#,0.00",
@@ -10620,7 +10751,7 @@
           },
           {
             "name": "Unrestricted Stock Amount (USD)",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "UnrestrictStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10628,7 +10759,7 @@
           },
           {
             "name": "Inspection Stock Amount (USD)",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "InspectionStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10636,7 +10767,7 @@
           },
           {
             "name": "Blocked Stock Amount (USD)",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "BlockedStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10644,7 +10775,7 @@
           },
           {
             "name": "Standard Price (USD)",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH * Today's exchange rate)",
             "sourceColumn": "StandardPriceUSD",
             "formatString": "#,0.00",
@@ -10659,13 +10790,13 @@
           },
           {
             "name": "Component Scrap",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "ComponentScrapPerc",
             "formatString": "#,0.00"
           },
           {
             "name": "Transfer Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "TransferStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -10673,7 +10804,7 @@
           },
           {
             "name": "Transfer Stock Amount (USD)",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "TransferStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10685,6 +10816,54 @@
             "isHidden": true,
             "sourceColumn": "MaterialPlantKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Total Stock Quantity",
+            "dataType": "double",
+            "description": "Sum of unrestricted, blocked, inspection, and transfer quantity",
+            "sourceColumn": "TotalStockQty",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Total Stock Amount (USD)",
+            "dataType": "double",
+            "description": "Sum of unrestricted, blocked, inspection, and transfer amount in USD. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
+            "sourceColumn": "TotalStockAmtUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Material Cost (USD)",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST001. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
+            "sourceColumn": "MaterialCostUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Labor Cost (USD)",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST003. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
+            "sourceColumn": "LaborCostUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Overhead Cost (USD)",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST005. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
+            "sourceColumn": "OverheadCostUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "Setup Cost (USD)",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST007. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
+            "sourceColumn": "SetupCostUSD",
+            "formatString": "#,0.00",
+            "displayFolder": "_Values"
           }
         ],
         "partitions": [
@@ -15542,13 +15721,6 @@
         "toColumn": "Valuation Class"
       },
       {
-        "name": "8bb9fd92-a42c-4ac4-984a-03efddb6b978",
-        "fromTable": "Stock Transfer Orders",
-        "fromColumn": "ValuationClassKey",
-        "toTable": "_Valuation Class",
-        "toColumn": "Valuation Class"
-      },
-      {
         "name": "9c9472c7-7f2d-4c47-8494-4c48136d7537",
         "fromTable": "Open WIP",
         "fromColumn": "Plant",
@@ -15809,13 +15981,6 @@
         "fromColumn": "MaterialNoKey",
         "toTable": "Material Master",
         "toColumn": "Material Number"
-      },
-      {
-        "name": "e2cd18b1-4914-469d-98a2-86f65e9cdbb6",
-        "fromTable": "Expenses",
-        "fromColumn": "PurchaseDocLineKey",
-        "toTable": "Purchase Orders",
-        "toColumn": "PurchaseOrderLineKey"
       },
       {
         "name": "38bd7d9e-00ca-4269-9665-ab39abff8b56",
@@ -16316,6 +16481,27 @@
         "name": "33f5242b-0746-4687-816d-48823d723be2",
         "fromTable": "Complaint Documents",
         "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "8db5c5cb-9dcf-4a87-b1cf-901a7c8e2aab",
+        "fromTable": "Open WIP",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "3b7125d9-4045-49ee-ba0f-186e4ec1ed23",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "ValuationClassKey",
+        "toTable": "_Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "fe589058-e599-4cb0-a92c-ea2e6d85844a",
+        "fromTable": "Purchase Orders",
+        "fromColumn": "Receiving Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
       }
@@ -17198,9 +17384,6 @@
                 "name": "Posting Date"
               },
               {
-                "name": "PurchaseDocLineKey"
-              },
-              {
                 "name": "Referenced Document Line Number"
               },
               {
@@ -17220,6 +17403,18 @@
               },
               {
                 "name": "Material Description"
+              },
+              {
+                "name": "Purchase Document Number"
+              },
+              {
+                "name": "Purchase Document Line Number"
+              },
+              {
+                "name": "Purchase Order Item Text"
+              },
+              {
+                "name": "Purchase Requisition Track Number"
               }
             ]
           },
@@ -17251,26 +17446,6 @@
               },
               {
                 "name": "Category"
-              }
-            ]
-          },
-          {
-            "name": "Purchase Orders",
-            "columns": [
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Purchase Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Req Track Number"
               }
             ]
           },
@@ -20151,6 +20326,9 @@
               },
               {
                 "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -20860,6 +21038,9 @@
               },
               {
                 "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -23008,6 +23189,24 @@
               },
               {
                 "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "Current Inventory Amount"
+              },
+              {
+                "name": "Current Inventory Labor Cost"
+              },
+              {
+                "name": "Current Inventory Material Cost"
+              },
+              {
+                "name": "Current Inventory Overhead Cost"
+              },
+              {
+                "name": "Current Inventory Setup Cost"
+              },
+              {
+                "name": "Current Unrestricted Stock Amount"
               }
             ]
           },
@@ -23084,6 +23283,24 @@
               },
               {
                 "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Total Stock Quantity"
+              },
+              {
+                "name": "Total Stock Amount (USD)"
+              },
+              {
+                "name": "Material Cost (USD)"
+              },
+              {
+                "name": "Labor Cost (USD)"
+              },
+              {
+                "name": "Overhead Cost (USD)"
+              },
+              {
+                "name": "Setup Cost (USD)"
               }
             ]
           },
@@ -23279,6 +23496,9 @@
               },
               {
                 "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -24061,6 +24281,24 @@
               },
               {
                 "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Total Stock Quantity"
+              },
+              {
+                "name": "Total Stock Amount (USD)"
+              },
+              {
+                "name": "Material Cost (USD)"
+              },
+              {
+                "name": "Labor Cost (USD)"
+              },
+              {
+                "name": "Overhead Cost (USD)"
+              },
+              {
+                "name": "Setup Cost (USD)"
               }
             ]
           },
@@ -24509,16 +24747,40 @@
                 "name": "Prior Week End Date"
               },
               {
-                "name": "PM Inventory Amount"
+                "name": "PM Closing Inventory Amount"
               },
               {
                 "name": "PM Var Inventory Amount"
               },
               {
-                "name": "PW Inventory Amount"
+                "name": "PW Closing Inventory Amount"
               },
               {
                 "name": "PW Var Inventory Amount"
+              },
+              {
+                "name": "Current Inventory Labor Cost"
+              },
+              {
+                "name": "Current Inventory Material Cost"
+              },
+              {
+                "name": "Current Inventory Overhead Cost"
+              },
+              {
+                "name": "Current Inventory Setup Cost"
+              },
+              {
+                "name": "Current Unrestricted Stock Amount"
+              },
+              {
+                "name": "End of Last Year"
+              },
+              {
+                "name": "PY Closing Inventory Amount"
+              },
+              {
+                "name": "PY Var Inventory Amount"
               }
             ]
           },
@@ -24671,6 +24933,9 @@
               },
               {
                 "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -25784,6 +26049,9 @@
               },
               {
                 "name": "Goods Receipt Amount"
+              },
+              {
+                "name": "ValuationClassKey"
               }
             ]
           },
@@ -27561,10 +27829,6 @@
           {
             "memberName": "DOMAIN\\aarzate",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4946"
-          },
-          {
-            "memberName": "DOMAIN\\aboal",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8718"
           },
           {
             "memberName": "DOMAIN\\agonzalez",

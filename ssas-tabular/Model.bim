@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -3739,7 +3738,7 @@
             ]
           },
           {
-            "name": "PD Inventory Amount",
+            "name": "Closing Inventory Amount (Prior Day)",
             "expression": [
               "",
               "CALCULATE(",
@@ -3760,13 +3759,13 @@
             ]
           },
           {
-            "name": "PD Var Inventory Amount",
+            "name": "Closing Inventory Amount (Prior Day Var)",
             "expression": [
               "",
               "IF(",
-              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PD Inventory Amount] ) ),",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [Closing Inventory Amount (Prior Day)] ) ),",
               "    BLANK(),",
-              "    [Last Inventory Amount] - [PD Inventory Amount]",
+              "    [Last Inventory Amount] - [Closing Inventory Amount (Prior Day)]",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -5977,29 +5976,7 @@
             ]
           },
           {
-            "name": "Prior Week End Date",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    MAX( 'Calendar'[Date] ),",
-              "    FILTER(",
-              "        ALL('Calendar'),",
-              "        'Calendar'[Date] < [Report Date]",
-              "            && 'Calendar'[Weekday] = 6",
-              "    )",
-              ")"
-            ],
-            "formatString": "Short Date",
-            "displayFolder": ".Dates",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "End of Last Month",
+            "name": "End of Prior Month",
             "expression": "EOMONTH([Report Date], -1)",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
@@ -6011,14 +5988,14 @@
             ]
           },
           {
-            "name": "PW Closing Inventory Amount",
+            "name": "Closing Inventory Amount (Prior Month)",
             "expression": [
               "",
               "CALCULATE(",
               "    SUM( 'Current Inventory Snapshots'[Amount] ),",
               "    FILTER( ",
               "        'Calendar',",
-              "        'Calendar'[Date] = [Prior Week End Date]",
+              "        'Calendar'[Date] = [End of Prior Month]",
               "    )",
               ")"
             ],
@@ -6032,15 +6009,13 @@
             ]
           },
           {
-            "name": "PM Closing Inventory Amount",
+            "name": "Opening Inventory Amount (Prior Week Var)",
             "expression": [
               "",
-              "CALCULATE(",
-              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
-              "    FILTER( ",
-              "        'Calendar',",
-              "        'Calendar'[Date] = [End of Last Month]",
-              "    )",
+              "IF(",
+              "    OR( ISBLANK( [Opening Inventory Amount (Current Week)] ), ISBLANK( [Opening Inventory Amount (Prior Week)] ) ),",
+              "    BLANK(),",
+              "    [Opening Inventory Amount (Current Week)] - [Opening Inventory Amount (Prior Week)]",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -6053,32 +6028,13 @@
             ]
           },
           {
-            "name": "PW Var Inventory Amount",
+            "name": "Closing Inventory Amount (Prior 2 Months Var)",
             "expression": [
               "",
               "IF(",
-              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PW Closing Inventory Amount] ) ),",
+              "    OR( ISBLANK( [Closing Inventory Amount (Prior Month)] ), ISBLANK( [Closing Inventory Amount (2 Months Ago)] ) ),",
               "    BLANK(),",
-              "    [Last Inventory Amount] - [PW Closing Inventory Amount]",
-              ")"
-            ],
-            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "displayFolder": "Time Intelligence",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "PM Var Inventory Amount",
-            "expression": [
-              "",
-              "IF(",
-              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PM Closing Inventory Amount] ) ),",
-              "    BLANK(),",
-              "    [Last Inventory Amount] - [PM Closing Inventory Amount]",
+              "    [Closing Inventory Amount (Prior Month)] - [Closing Inventory Amount (2 Months Ago)]",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -6151,7 +6107,7 @@
             ]
           },
           {
-            "name": "End of Last Year",
+            "name": "End of Prior Year",
             "expression": "DATE(YEAR([Report Date])-1, 12, 31)",
             "formatString": "Short Date",
             "displayFolder": ".Dates",
@@ -6163,19 +6119,19 @@
             ]
           },
           {
-            "name": "PY Closing Inventory Amount",
+            "name": "Closing Inventory Amount (Prior Year)",
             "expression": [
               "",
               "CALCULATE(",
               "    SUM( 'Current Inventory Snapshots'[Amount] ),",
               "    FILTER( ",
               "        'Calendar',",
-              "        'Calendar'[Date] = [End of Last Year]",
+              "        'Calendar'[Date] = [End of Prior Year]",
               "    )",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
-            "displayFolder": "Inventory",
+            "displayFolder": "Time Intelligence",
             "annotations": [
               {
                 "name": "Format",
@@ -6184,13 +6140,122 @@
             ]
           },
           {
-            "name": "PY Var Inventory Amount",
+            "name": "Closing Inventory Amount (Prior Year Var)",
             "expression": [
               "",
               "IF(",
-              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [PY Closing Inventory Amount] ) ),",
+              "    OR( ISBLANK( [Last Inventory Amount] ), ISBLANK( [Closing Inventory Amount (Prior Year)] ) ),",
               "    BLANK(),",
-              "    [Last Inventory Amount] - [PY Closing Inventory Amount]",
+              "    [Last Inventory Amount] - [Closing Inventory Amount (Prior Year)]",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sunday of Current Week",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    MAX( 'Calendar'[Date] ),",
+              "    FILTER(",
+              "        ALL('Calendar'),",
+              "        'Calendar'[Date] <= [Report Date]",
+              "            && 'Calendar'[Weekday] = 7",
+              "    )",
+              ")"
+            ],
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Opening Inventory Amount (Current Week)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [Sunday of Current Week]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Closing Inventory Amount (2 Months Ago)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [End of 2 Months Ago]",
+              "    )",
+              ")"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "End of 2 Months Ago",
+            "expression": "EOMONTH([Report Date], -2)",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Sunday of Prior Week",
+            "expression": "([Sunday of Current Week] - 7) + TIME(0,0,0)",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Opening Inventory Amount (Prior Week)",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Current Inventory Snapshots'[Amount] ),",
+              "    FILTER( ",
+              "        'Calendar',",
+              "        'Calendar'[Date] = [Sunday of Prior Week]",
+              "    )",
               ")"
             ],
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -24575,10 +24640,10 @@
                 "name": "Last Inventory Amount"
               },
               {
-                "name": "PD Inventory Amount"
+                "name": "Closing Inventory Amount (Prior Day)"
               },
               {
-                "name": "PD Var Inventory Amount"
+                "name": "Closing Inventory Amount (Prior Day Var)"
               },
               {
                 "name": "S/O Count"
@@ -24758,25 +24823,19 @@
                 "name": "Absorption Hours"
               },
               {
-                "name": "End of Last Month"
+                "name": "End of Prior Month"
               },
               {
                 "name": "Prior Report Date"
               },
               {
-                "name": "Prior Week End Date"
+                "name": "Closing Inventory Amount (Prior Month)"
               },
               {
-                "name": "PM Closing Inventory Amount"
+                "name": "Closing Inventory Amount (Prior 2 Months Var)"
               },
               {
-                "name": "PM Var Inventory Amount"
-              },
-              {
-                "name": "PW Closing Inventory Amount"
-              },
-              {
-                "name": "PW Var Inventory Amount"
+                "name": "Opening Inventory Amount (Prior Week Var)"
               },
               {
                 "name": "Current Inventory Labor Cost"
@@ -24794,13 +24853,31 @@
                 "name": "Current Unrestricted Stock Amount"
               },
               {
-                "name": "End of Last Year"
+                "name": "End of Prior Year"
               },
               {
-                "name": "PY Closing Inventory Amount"
+                "name": "Closing Inventory Amount (Prior Year)"
               },
               {
-                "name": "PY Var Inventory Amount"
+                "name": "Closing Inventory Amount (Prior Year Var)"
+              },
+              {
+                "name": "Sunday of Current Week"
+              },
+              {
+                "name": "Opening Inventory Amount (Current Week)"
+              },
+              {
+                "name": "Closing Inventory Amount (2 Months Ago)"
+              },
+              {
+                "name": "End of 2 Months Ago"
+              },
+              {
+                "name": "Opening Inventory Amount (Prior Week)"
+              },
+              {
+                "name": "Sunday of Prior Week"
               }
             ]
           },

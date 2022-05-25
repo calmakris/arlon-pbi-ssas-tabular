@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -10734,6 +10735,7 @@
       },
       {
         "name": "Current Inventory",
+        "description": "Current inventory in quantity, amount, standard prices, and MLO costs based on unrestricted quantity. USD amounts are converted using current day's exchange rate.",
         "columns": [
           {
             "name": "Material Number",
@@ -10752,7 +10754,7 @@
           {
             "name": "Unrestricted Stock Quantity",
             "dataType": "double",
-            "description": "SAP Source: MARD.LABST",
+            "description": "SAP Source: MARD.LABST, MSLB.LBLAB, MCHB.CLABS",
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
@@ -10798,7 +10800,7 @@
           {
             "name": "Inspection Stock Quantity",
             "dataType": "double",
-            "description": "SAP Source: MCHB.CINSM",
+            "description": "SAP Source: MCHB.CINSM, MSLB.LBINS, MARD.INSME",
             "sourceColumn": "InspectionStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -10807,7 +10809,7 @@
           {
             "name": "Blocked Stock Quantity",
             "dataType": "double",
-            "description": "SAP Source: MCHB.CSPEM",
+            "description": "SAP Source: MCHB.CSPEM, MARD.SPEME",
             "sourceColumn": "BlockedStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -10819,11 +10821,13 @@
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
             "sourceColumn": "StandardPrice",
             "formatString": "#,0.00",
+            "displayFolder": "_Standard Prices\\Local",
             "summarizeBy": "none"
           },
           {
             "name": "Unrestricted Stock Amount (USD)",
             "dataType": "double",
+            "description": "Calculated column derived from unrestricted stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "UnrestrictStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10832,6 +10836,7 @@
           {
             "name": "Inspection Stock Amount (USD)",
             "dataType": "double",
+            "description": "Calculated column derived from inspection stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "InspectionStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10840,6 +10845,7 @@
           {
             "name": "Blocked Stock Amount (USD)",
             "dataType": "double",
+            "description": "Calculated column derived from blocked stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "BlockedStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10851,7 +10857,7 @@
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH * Today's exchange rate)",
             "sourceColumn": "StandardPriceUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Values",
+            "displayFolder": "_Standard Prices\\USD",
             "summarizeBy": "none"
           },
           {
@@ -10863,12 +10869,14 @@
           {
             "name": "Component Scrap",
             "dataType": "double",
+            "description": "SAP Source: MARC.KAUSF. Value is in precentage but displayed as decimal.",
             "sourceColumn": "ComponentScrapPerc",
             "formatString": "#,0.00"
           },
           {
             "name": "Transfer Stock Quantity",
             "dataType": "double",
+            "description": "SAP Source: MARD.UMLME, MSLB.LBUML, MCHB.CUMLM",
             "sourceColumn": "TransferStockQty",
             "formatString": "#,0.00",
             "displayFolder": "_Quantities",
@@ -10877,6 +10885,7 @@
           {
             "name": "Transfer Stock Amount (USD)",
             "dataType": "double",
+            "description": "Calculated column derived from transfer stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "TransferStockAmtUSD",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10911,7 +10920,7 @@
             "description": "SAP Source: KEPH.KST001. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "MaterialCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Standard Prices\\USD"
           },
           {
             "name": "Labor Cost (USD)",
@@ -10919,7 +10928,7 @@
             "description": "SAP Source: KEPH.KST003. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "LaborCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Standard Prices\\USD"
           },
           {
             "name": "Overhead Cost (USD)",
@@ -10927,7 +10936,7 @@
             "description": "SAP Source: KEPH.KST005. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "OverheadCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Standard Prices\\USD"
           },
           {
             "name": "Setup Cost (USD)",
@@ -10935,7 +10944,43 @@
             "description": "SAP Source: KEPH.KST007. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "SetupCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Standard Prices\\USD"
+          },
+          {
+            "name": "Material Cost",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST001",
+            "sourceColumn": "MaterialCost",
+            "formatString": "#,0.00",
+            "displayFolder": "_Standard Prices\\Local",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Labor Cost",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST003",
+            "sourceColumn": "LaborCost",
+            "formatString": "#,0.00",
+            "displayFolder": "_Standard Prices\\Local",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Overhead Cost",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST005",
+            "sourceColumn": "OverheadCost",
+            "formatString": "#,0.00",
+            "displayFolder": "_Standard Prices\\Local",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Setup Cost",
+            "dataType": "double",
+            "description": "SAP Source: KEPH.KST007",
+            "sourceColumn": "SetupCost",
+            "formatString": "#,0.00",
+            "displayFolder": "_Standard Prices\\Local",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -23386,6 +23431,18 @@
               },
               {
                 "name": "Setup Cost (USD)"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },
@@ -24384,6 +24441,18 @@
               },
               {
                 "name": "Setup Cost (USD)"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },

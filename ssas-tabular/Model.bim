@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3661,7 +3659,10 @@
               "",
               "CALCULATE(",
               "    COUNTROWS( 'Calendar' ), ",
-              "    KEEPFILTERS( 'Calendar'[Date] <= [Report Date] )",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
               ")"
             ],
             "isHidden": true
@@ -3712,6 +3713,7 @@
           },
           {
             "name": "Last Inventory Amount",
+            "description": "Last inventory snapshot on report date",
             "expression": [
               "",
               "VAR RefDate =",
@@ -6049,6 +6051,7 @@
           },
           {
             "name": "Current Inventory Material Cost",
+            "description": "Product of unrestricted stock quantity and current material cost per unit",
             "expression": "SUM( 'Current Inventory'[Material Cost (USD)] )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Inventory",
@@ -6061,6 +6064,7 @@
           },
           {
             "name": "Current Inventory Labor Cost",
+            "description": "Product of unrestricted stock quantity and current labor cost per unit",
             "expression": "SUM( 'Current Inventory'[Labor Cost (USD)] )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Inventory",
@@ -6073,6 +6077,7 @@
           },
           {
             "name": "Current Inventory Overhead Cost",
+            "description": "Product of unrestricted stock quantity and current overhead cost per unit",
             "expression": "SUM( 'Current Inventory'[Overhead Cost (USD)] )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Inventory",
@@ -6085,6 +6090,7 @@
           },
           {
             "name": "Current Inventory Setup Cost",
+            "description": "Product of unrestricted stock quantity and current setup cost per unit",
             "expression": "SUM( 'Current Inventory'[Setup Cost (USD)] )",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Inventory",
@@ -6322,7 +6328,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.ABSMG",
             "isHidden": true,
             "sourceColumn": "QuantityValue",
@@ -6333,7 +6339,7 @@
           },
           {
             "name": "Gross Sales Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.ERLOS",
             "isHidden": true,
             "sourceColumn": "GrossSalesValueUSD",
@@ -6350,7 +6356,7 @@
           },
           {
             "name": "Net Sales Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
             "isHidden": true,
             "sourceColumn": "NetSalesValueUSD",
@@ -6367,7 +6373,7 @@
           },
           {
             "name": "Overall Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBRP.WAVWR",
             "isHidden": true,
             "sourceColumn": "CostValueUSD",
@@ -6384,7 +6390,7 @@
           },
           {
             "name": "Material Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.VVMEP",
             "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
@@ -6401,7 +6407,7 @@
           },
           {
             "name": "Discount Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.KWKDRB",
             "isHidden": true,
             "sourceColumn": "DiscountValueUSD",
@@ -6462,7 +6468,7 @@
           },
           {
             "name": "Exchange Rate",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: CE110US.KURSF",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000",
@@ -6484,7 +6490,7 @@
           },
           {
             "name": "Gross Margin Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between gross sales and cost value",
             "isHidden": true,
             "sourceColumn": "GrossMarginValueUSD",
@@ -6534,7 +6540,8 @@
             "dataType": "string",
             "description": "SAP Source: CE110US.BUKRS",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -6862,7 +6869,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -7523,7 +7529,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Expenses amount are in company currency while Open POs are already converted to USD",
             "isHidden": true,
             "sourceColumn": "Amount",
@@ -7667,7 +7673,7 @@
           },
           {
             "name": "Unit Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKPO.NETPR",
             "sourceColumn": "UnitPrice",
             "summarizeBy": "none"
@@ -7735,7 +7741,7 @@
           },
           {
             "name": "Ordered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKPO.MENGE",
             "isHidden": true,
             "sourceColumn": "OrderedQuantity",
@@ -7745,7 +7751,7 @@
           },
           {
             "name": "Ordered Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: EKPO.NETWR",
             "isHidden": true,
             "sourceColumn": "OrderedAmount",
@@ -7755,7 +7761,7 @@
           },
           {
             "name": "Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between the ordered and delivered quantity. SAP Source: EKPO.MENGE and EKET.WEMNG",
             "sourceColumn": "OpenQuantity",
             "formatString": "#,0.00",
@@ -7764,7 +7770,7 @@
           },
           {
             "name": "Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
             "sourceColumn": "OpenAmount",
             "formatString": "#,0.00",
@@ -7785,7 +7791,7 @@
           },
           {
             "name": "Goods Receipt Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GoodsReceiptQuantity",
             "formatString": "#,0.00",
@@ -7795,7 +7801,7 @@
           },
           {
             "name": "Goods Receipt Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GoodsReceiptAmount",
             "formatString": "#,0.00",
@@ -7807,7 +7813,8 @@
             "name": "ValuationClassKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ValuationClassKey"
+            "sourceColumn": "ValuationClassKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8454,7 +8461,8 @@
             "dataType": "string",
             "description": "SAP Source: VBAP.WERKS",
             "isHidden": true,
-            "sourceColumn": "PlantNoKey"
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "CustomerOrgKey",
@@ -10753,7 +10761,7 @@
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARD.LABST, MSLB.LBLAB, MCHB.CLABS",
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
@@ -10763,7 +10771,7 @@
           },
           {
             "name": "Safety Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARC.EISBE",
             "isHidden": true,
             "sourceColumn": "SafetyStockQty",
@@ -10799,7 +10807,7 @@
           },
           {
             "name": "Inspection Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MCHB.CINSM, MSLB.LBINS, MARD.INSME",
             "sourceColumn": "InspectionStockQty",
             "formatString": "#,0.00",
@@ -10808,7 +10816,7 @@
           },
           {
             "name": "Blocked Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MCHB.CSPEM, MARD.SPEME",
             "sourceColumn": "BlockedStockQty",
             "formatString": "#,0.00",
@@ -10817,7 +10825,7 @@
           },
           {
             "name": "Standard Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
             "sourceColumn": "StandardPrice",
             "formatString": "#,0.00",
@@ -10826,7 +10834,7 @@
           },
           {
             "name": "Unrestricted Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Calculated column derived from unrestricted stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "UnrestrictStockAmtUSD",
             "formatString": "#,0.00",
@@ -10835,7 +10843,7 @@
           },
           {
             "name": "Inspection Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Calculated column derived from inspection stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "InspectionStockAmtUSD",
             "formatString": "#,0.00",
@@ -10844,7 +10852,7 @@
           },
           {
             "name": "Blocked Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Calculated column derived from blocked stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "BlockedStockAmtUSD",
             "formatString": "#,0.00",
@@ -10853,7 +10861,7 @@
           },
           {
             "name": "Standard Price (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH * Today's exchange rate)",
             "sourceColumn": "StandardPriceUSD",
             "formatString": "#,0.00",
@@ -10868,14 +10876,15 @@
           },
           {
             "name": "Component Scrap",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARC.KAUSF. Value is in precentage but displayed as decimal.",
             "sourceColumn": "ComponentScrapPerc",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           },
           {
             "name": "Transfer Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MARD.UMLME, MSLB.LBUML, MCHB.CUMLM",
             "sourceColumn": "TransferStockQty",
             "formatString": "#,0.00",
@@ -10884,7 +10893,7 @@
           },
           {
             "name": "Transfer Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Calculated column derived from transfer stock quantity, standard price, and current day's exchange rate.",
             "sourceColumn": "TransferStockAmtUSD",
             "formatString": "#,0.00",
@@ -10900,55 +10909,61 @@
           },
           {
             "name": "Total Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Sum of unrestricted, blocked, inspection, and transfer quantity",
             "sourceColumn": "TotalStockQty",
             "formatString": "#,0.00",
-            "displayFolder": "_Quantities"
+            "displayFolder": "_Quantities",
+            "summarizeBy": "none"
           },
           {
             "name": "Total Stock Amount (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Sum of unrestricted, blocked, inspection, and transfer amount in USD. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "TotalStockAmtUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Values"
+            "displayFolder": "_Values",
+            "summarizeBy": "none"
           },
           {
             "name": "Material Cost (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST001. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "MaterialCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Standard Prices\\USD"
+            "displayFolder": "_Standard Prices\\USD",
+            "summarizeBy": "none"
           },
           {
             "name": "Labor Cost (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST003. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "LaborCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Standard Prices\\USD"
+            "displayFolder": "_Standard Prices\\USD",
+            "summarizeBy": "none"
           },
           {
             "name": "Overhead Cost (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST005. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "OverheadCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Standard Prices\\USD"
+            "displayFolder": "_Standard Prices\\USD",
+            "summarizeBy": "none"
           },
           {
             "name": "Setup Cost (USD)",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST007. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
             "sourceColumn": "SetupCostUSD",
             "formatString": "#,0.00",
-            "displayFolder": "_Standard Prices\\USD"
+            "displayFolder": "_Standard Prices\\USD",
+            "summarizeBy": "none"
           },
           {
             "name": "Material Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST001",
             "sourceColumn": "MaterialCost",
             "formatString": "#,0.00",
@@ -10957,7 +10972,7 @@
           },
           {
             "name": "Labor Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST003",
             "sourceColumn": "LaborCost",
             "formatString": "#,0.00",
@@ -10966,7 +10981,7 @@
           },
           {
             "name": "Overhead Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST005",
             "sourceColumn": "OverheadCost",
             "formatString": "#,0.00",
@@ -10975,7 +10990,7 @@
           },
           {
             "name": "Setup Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: KEPH.KST007",
             "sourceColumn": "SetupCost",
             "formatString": "#,0.00",
@@ -11741,7 +11756,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11758,7 +11772,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11775,7 +11788,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11792,7 +11804,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11831,7 +11842,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -11843,7 +11853,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -12019,7 +12028,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -12031,7 +12039,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -15403,6 +15410,142 @@
             }
           }
         ]
+      },
+      {
+        "name": "Material Costing History",
+        "description": "SAP Source: KEKO, KEPH, CKHS. Costing postings without errors, not lower level, no link for currency type, and are main component cost split.",
+        "columns": [
+          {
+            "name": "MateriaNo",
+            "dataType": "string",
+            "description": "SAP Source: KEKO.MATNR",
+            "isHidden": true,
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "PlantNo",
+            "dataType": "string",
+            "description": "SAP Source: KEKO.WERKS",
+            "isHidden": true,
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Costing Start Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: KEKO.KADAT",
+            "sourceColumn": "CostingStartDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Costing End Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: KEKO.BIDAT",
+            "sourceColumn": "CostingEndDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Unit of Measure",
+            "dataType": "string",
+            "description": "SAP Source: KEKO.MEINS",
+            "sourceColumn": "UnitOfMeasure"
+          },
+          {
+            "name": "Costing Lot Size",
+            "dataType": "decimal",
+            "description": "SAP Source: KEKO.LOSGR",
+            "sourceColumn": "CostLotSize"
+          },
+          {
+            "name": "Costing By",
+            "dataType": "string",
+            "description": "SAP Source: KEKO.ERFNM",
+            "sourceColumn": "CostingBy"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "description": "SAP Source: KEKO.FWAER_KPF",
+            "sourceColumn": "Currency"
+          },
+          {
+            "name": "Total Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: CKHS.FWGES",
+            "sourceColumn": "TotalCost",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Material Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST001",
+            "sourceColumn": "MaterialCost",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Labor Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST003",
+            "sourceColumn": "LaborCost",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Overhead Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST005",
+            "sourceColumn": "OverheadCost",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Setup Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST007",
+            "sourceColumn": "SetupCost",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "LatestRank",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "LatestRank",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_MATERIAL_COSTING_HISTORY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_COSTING_HISTORY\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_COSTING_HISTORY"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -16628,6 +16771,20 @@
         "fromColumn": "CompanyCode",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "037ca128-5949-419a-b85b-e25fd7b6e74c",
+        "fromTable": "Material Costing History",
+        "fromColumn": "MateriaNo",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "f18e033f-cd8d-481b-a011-d88f56bbfe53",
+        "fromTable": "Material Costing History",
+        "fromColumn": "PlantNo",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -24227,6 +24384,53 @@
                 "name": "Value"
               }
             ]
+          },
+          {
+            "name": "Material Costing History",
+            "columns": [
+              {
+                "name": "Costing By"
+              },
+              {
+                "name": "Costing End Date"
+              },
+              {
+                "name": "Costing Start Date"
+              },
+              {
+                "name": "Costing Lot Size"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "LatestRank"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "MateriaNo"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "PlantNo"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Total Cost"
+              },
+              {
+                "name": "Unit of Measure"
+              }
+            ]
           }
         ]
       },
@@ -28319,6 +28523,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -18751,6 +18750,15 @@
               },
               {
                 "name": "Net Sales"
+              },
+              {
+                "name": "SO Customer Open Amount (By Enter Date)"
+              },
+              {
+                "name": "SO Customer Open Margin"
+              },
+              {
+                "name": "SO Customer Open Quantity (By Enter Date)"
               }
             ]
           },

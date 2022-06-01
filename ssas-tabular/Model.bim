@@ -18759,6 +18759,18 @@
               },
               {
                 "name": "SO Customer Open Quantity (By Enter Date)"
+              },
+              {
+                "name": "MTD PY Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var Sales Order Amount"
+              },
+              {
+                "name": "MTD PY Var% Sales Order Amount"
+              },
+              {
+                "name": "MTD Sales Order Amount"
               }
             ]
           },

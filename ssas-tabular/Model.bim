@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -6899,7 +6901,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -11787,7 +11788,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11804,7 +11804,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11821,7 +11820,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11838,7 +11836,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11877,7 +11874,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -11889,7 +11885,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -12065,7 +12060,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -12077,7 +12071,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -15585,6 +15578,85 @@
             }
           }
         ]
+      },
+      {
+        "name": "Sales Order Shipments",
+        "columns": [
+          {
+            "name": "OrderNoLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OrderNoLineKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Delivery Note",
+            "dataType": "string",
+            "description": "SAP Source: LIPS.VBELN",
+            "sourceColumn": "DeliveryNoteNo"
+          },
+          {
+            "name": "Shipment Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTK.TKNUM",
+            "sourceColumn": "ShipmentNo"
+          },
+          {
+            "name": "Actual Shipment Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: VTTK.DALBG",
+            "sourceColumn": "ActualShipmentDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Delivered Quantity",
+            "dataType": "decimal",
+            "description": "SAP Source: LIPS.LFIMG",
+            "isHidden": true,
+            "sourceColumn": "DeliveredQuantity",
+            "formatString": "0.00",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_SALES_SHIPMENTS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES_SHIPMENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_SALES_SHIPMENTS"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Delivery Note Quantity",
+            "expression": [
+              "",
+              "IF(",
+              "    ISFILTERED( 'Sales Order Shipments' ),",
+              "    SUMX(",
+              "        VALUES( 'Sales Order Shipments'[OrderNoLineKey] ),",
+              "        SUM( 'Sales Order Shipments'[Delivered Quantity] )",
+              "    ),",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "#,0.00"
+          }
+        ]
       }
     ],
     "relationships": [
@@ -16824,6 +16896,15 @@
         "fromColumn": "PlantNo",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "defa914c-319b-4223-87eb-6fde4acb151e",
+        "toCardinality": "many",
+        "fromTable": "Sales Order Shipments",
+        "fromColumn": "OrderNoLineKey",
+        "toTable": "Sales Order Documents",
+        "toColumn": "OrderNoLineKey",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -18388,6 +18469,31 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
               }
             ]
           }
@@ -20778,6 +20884,31 @@
                 "name": "Currency"
               }
             ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
+              }
+            ]
           }
         ]
       },
@@ -22247,6 +22378,31 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
               }
             ]
           }
@@ -28595,6 +28751,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

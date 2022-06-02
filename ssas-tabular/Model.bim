@@ -28157,6 +28157,10 @@
           {
             "memberName": "DOMAIN\\sterenzi",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8498"
+          },
+          {
+            "memberName": "DOMAIN\\maybinder",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7141"
           }
         ],
         "tablePermissions": [
@@ -28230,10 +28234,6 @@
           {
             "memberName": "DOMAIN\\LBurke",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3178"
-          },
-          {
-            "memberName": "DOMAIN\\maybinder",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7141"
           },
           {
             "memberName": "DOMAIN\\pvangelder",

@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -6964,7 +6966,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -9420,6 +9421,7 @@
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'U'",
             "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
@@ -9428,6 +9430,7 @@
             "dataType": "decimal",
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptQuantity",
+            "formatString": "#,0.00",
             "displayFolder": "_Quantities",
             "summarizeBy": "none"
           },
@@ -9437,6 +9440,7 @@
             "description": "Net of delivered and goods receipt",
             "isHidden": true,
             "sourceColumn": "InTransitQuantity",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
@@ -9445,6 +9449,7 @@
             "dataType": "decimal",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'U'",
             "sourceColumn": "DeliveredAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -9453,6 +9458,7 @@
             "dataType": "decimal",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -9462,6 +9468,7 @@
             "description": "Net of delivered and goods receipt",
             "isHidden": true,
             "sourceColumn": "InTransitAmount",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
@@ -9500,9 +9507,10 @@
               "expression": [
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data]",
+                "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_INTRANSIT,{\"PurchaseOrderLineKey\", \"PurchaseOrderNoKey\", \"PurchaseOrderLineNo\", \"ReferencedDocumentNo\", \"ShipmentDocumentNo\", \"ShipmentLineNo\", \"MaterialNoKey\", \"ValuationClass\", \"ValuationClassKey\", \"BatchNo\", \"DeliveredQuantity\", \"GoodsReceiptQuantity\", \"InTransitQuantity\", \"DeliveredAmount\", \"GoodsReceiptAmount\", \"InTransitAmount\"})",
                 "in",
-                "    dbo_VW_INVENTORY_INTRANSIT"
+                "    #\"Removed Other Columns\""
               ]
             }
           }
@@ -11880,7 +11888,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11897,7 +11904,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11914,7 +11920,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11931,7 +11936,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11970,7 +11974,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -11982,7 +11985,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -12158,7 +12160,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -12170,7 +12171,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -28868,6 +28868,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

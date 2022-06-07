@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -851,11 +852,11 @@
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", SUM( 'Sales Invoice Documents'[Overall Cost Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overall Cost Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
-              "        SUM('Sales Invoice Documents'[Overall Cost Amount] )",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Total Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Total Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Total Cost] )",
               "    ),",
-              "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
+              "    SUM('Sales Invoice Documents'[Total Cost] )    ",
               ")"
             ],
             "formatString": "#,0",
@@ -6304,6 +6305,23 @@
               ")"
             ],
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Current Inventory Quantity",
+            "expression": [
+              "",
+              "-- valuated inventory",
+              "SUM( 'Current Inventory'[Total Stock Quantity] ) +",
+              "-- open stock transfer purchase orders",
+              "CALCULATE(",
+              "    [PO In Transit Quantity],",
+              "    KEEPFILTERS( 'Purchase Orders'[Receiving Plant] <> \"1001\" )",
+              ") +",
+              "-- open WIP process orders",
+              "SUM( 'Open WIP'[Quantity] )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
           }
         ]
       },
@@ -6403,7 +6421,7 @@
             ]
           },
           {
-            "name": "Overall Cost Amount",
+            "name": "Total Cost",
             "dataType": "decimal",
             "description": "SAP Source: VBRP.WAVWR",
             "isHidden": true,
@@ -6420,9 +6438,9 @@
             ]
           },
           {
-            "name": "Material Cost Amount",
+            "name": "Material Cost",
             "dataType": "decimal",
-            "description": "SAP Source: CE110US.VVMEP",
+            "description": "SAP Source: KEPH.KST001",
             "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -6573,6 +6591,54 @@
             "isHidden": true,
             "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Labor Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST003",
+            "isHidden": true,
+            "sourceColumn": "LaborCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Overhead Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST005",
+            "isHidden": true,
+            "sourceColumn": "OverheadCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Setup Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST007",
+            "isHidden": true,
+            "sourceColumn": "SetupCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -6900,7 +6966,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -11816,7 +11881,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11833,7 +11897,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11850,7 +11913,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11867,7 +11929,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11906,7 +11967,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -11918,7 +11978,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -12094,7 +12153,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -12106,7 +12164,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -15588,14 +15645,6 @@
             "sourceColumn": "SetupCost",
             "formatString": "#,0.00",
             "summarizeBy": "none"
-          },
-          {
-            "name": "LatestRank",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "LatestRank",
-            "formatString": "#,0",
-            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -15607,9 +15656,10 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_VW_MATERIAL_COSTING_HISTORY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_COSTING_HISTORY\"]}[Data]",
+                "    dbo_VW_MATERIAL_COSTING_HISTORY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_COSTING_HISTORY\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_MATERIAL_COSTING_HISTORY,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"UnitOfMeasure\", \"CostLotSize\", \"CostingBy\", \"Currency\", \"TotalCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\"})",
                 "in",
-                "    dbo_VW_MATERIAL_COSTING_HISTORY"
+                "    #\"Removed Other Columns\""
               ]
             }
           }
@@ -19030,7 +19080,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Cost Amount"
+                "name": "Material Cost"
               },
               {
                 "name": "Material Number"
@@ -19039,7 +19089,7 @@
                 "name": "Net Sales Amount"
               },
               {
-                "name": "Overall Cost Amount"
+                "name": "Total Cost"
               },
               {
                 "name": "Posting Date"
@@ -19091,6 +19141,15 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },
@@ -19792,7 +19851,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Cost Amount"
+                "name": "Material Cost"
               },
               {
                 "name": "Material Number"
@@ -19801,7 +19860,7 @@
                 "name": "Net Sales Amount"
               },
               {
-                "name": "Overall Cost Amount"
+                "name": "Total Cost"
               },
               {
                 "name": "Posting Date"
@@ -19835,6 +19894,15 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },
@@ -23758,6 +23826,9 @@
               },
               {
                 "name": "Current Unrestricted Stock Amount"
+              },
+              {
+                "name": "Current Inventory Quantity"
               }
             ]
           },
@@ -24671,9 +24742,6 @@
                 "name": "Labor Cost"
               },
               {
-                "name": "LatestRank"
-              },
-              {
                 "name": "Material Cost"
               },
               {
@@ -25415,6 +25483,9 @@
               },
               {
                 "name": "Sunday of Prior Week"
+              },
+              {
+                "name": "Current Inventory Quantity"
               }
             ]
           },
@@ -28787,6 +28858,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

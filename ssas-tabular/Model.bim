@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -857,7 +859,7 @@
               "    SUM('Sales Invoice Documents'[Total Cost] )    ",
               ")"
             ],
-            "formatString": "#,0",
+            "formatString": "#,0.00",
             "displayFolder": "Sales"
           },
           {
@@ -4393,7 +4395,13 @@
           },
           {
             "name": "MTD Inventory Balance",
-            "expression": "CALCULATE( [Inventory Balance], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Inventory Balance],",
+              "    DATESMTD( 'Calendar'[Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Inventory Balance"
           },
@@ -6339,6 +6347,78 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Sales Labor Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Labor Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Labor Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Labor Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Labor Cost] ) ",
+              ")"
+            ],
+            "formatString": "0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Overhead Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Overhead Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overhead Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Overhead Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Overhead Cost] ) ",
+              ")"
+            ],
+            "formatString": "0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Setup Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Setup Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Setup Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Setup Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Setup Cost] ) ",
+              ")"
+            ],
+            "formatString": "0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Material Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Material Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Material Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Material Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Material Cost] ) ",
+              ")"
+            ],
+            "formatString": "0.00",
+            "displayFolder": "Sales\\.MLOS"
           }
         ]
       },
@@ -6617,6 +6697,7 @@
             "sourceColumn": "LaborCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "isAvailableInMdx": false,
+            "displayFolder": "_Values",
             "summarizeBy": "none",
             "annotations": [
               {
@@ -6633,6 +6714,7 @@
             "sourceColumn": "OverheadCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "isAvailableInMdx": false,
+            "displayFolder": "_Values",
             "summarizeBy": "none",
             "annotations": [
               {
@@ -6649,6 +6731,7 @@
             "sourceColumn": "SetupCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
             "isAvailableInMdx": false,
+            "displayFolder": "_Values",
             "summarizeBy": "none",
             "annotations": [
               {
@@ -6656,6 +6739,12 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Sales Order Type",
+            "dataType": "string",
+            "description": "SAP Source: VBAK.AUART",
+            "sourceColumn": "SalesOrderType"
           }
         ],
         "partitions": [
@@ -6983,7 +7072,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -11906,7 +11994,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11923,7 +12010,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11940,7 +12026,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11957,7 +12042,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -11996,7 +12080,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -12008,7 +12091,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -12184,7 +12266,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -12196,7 +12277,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -15574,18 +15654,16 @@
         "description": "SAP Source: KEKO, KEPH, CKHS. Costing postings without errors, not lower level, no link for currency type, and are main component cost split.",
         "columns": [
           {
-            "name": "MateriaNo",
+            "name": "Material Number",
             "dataType": "string",
             "description": "SAP Source: KEKO.MATNR",
-            "isHidden": true,
             "sourceColumn": "MaterialNo",
             "isAvailableInMdx": false
           },
           {
-            "name": "PlantNo",
+            "name": "Plant",
             "dataType": "string",
             "description": "SAP Source: KEKO.WERKS",
-            "isHidden": true,
             "sourceColumn": "PlantNo",
             "isAvailableInMdx": false
           },
@@ -17005,14 +17083,14 @@
       {
         "name": "037ca128-5949-419a-b85b-e25fd7b6e74c",
         "fromTable": "Material Costing History",
-        "fromColumn": "MateriaNo",
+        "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
       },
       {
         "name": "f18e033f-cd8d-481b-a011-d88f56bbfe53",
         "fromTable": "Material Costing History",
-        "fromColumn": "PlantNo",
+        "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
       },
@@ -18996,6 +19074,18 @@
               },
               {
                 "name": "MTD Sales Order Amount"
+              },
+              {
+                "name": "Sales Labor Cost"
+              },
+              {
+                "name": "Sales Material Cost"
+              },
+              {
+                "name": "Sales Overhead Cost"
+              },
+              {
+                "name": "Sales Setup Cost"
               }
             ]
           },
@@ -19183,6 +19273,9 @@
               },
               {
                 "name": "Setup Cost"
+              },
+              {
+                "name": "Sales Order Type"
               }
             ]
           },
@@ -19333,6 +19426,50 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Material Costing History",
+            "columns": [
+              {
+                "name": "Costing By"
+              },
+              {
+                "name": "Costing End Date"
+              },
+              {
+                "name": "Costing Lot Size"
+              },
+              {
+                "name": "Costing Start Date"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Total Cost"
+              },
+              {
+                "name": "Unit of Measure"
               }
             ]
           }
@@ -19936,6 +20073,9 @@
               },
               {
                 "name": "Setup Cost"
+              },
+              {
+                "name": "Sales Order Type"
               }
             ]
           },
@@ -24784,13 +24924,13 @@
                 "name": "Material Cost"
               },
               {
-                "name": "MateriaNo"
+                "name": "Material Number"
               },
               {
                 "name": "Overhead Cost"
               },
               {
-                "name": "PlantNo"
+                "name": "Plant"
               },
               {
                 "name": "Setup Cost"
@@ -28876,6 +29016,10 @@
           {
             "memberName": "DOMAIN\\YOrdiano",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1432"
+          },
+          {
+            "memberName": "DOMAIN\\lproano",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21046"
           }
         ],
         "tablePermissions": [
@@ -28900,6 +29044,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

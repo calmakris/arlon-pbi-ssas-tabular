@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -6490,6 +6489,177 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Last Inventory Material Cost",
+            "description": "Material cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Material Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Labor Cost",
+            "description": "Labor cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Labor Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Overhead Cost",
+            "description": "Overhead cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Overhead Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Setup Cost",
+            "description": "Setup cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Setup Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory MLOS Cost",
+            "description": "Material, labor, overhead, and setup cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "[Last Inventory Material Cost]",
+              "    + [Last Inventory Labor Cost]",
+              "    + [Last Inventory Overhead Cost]",
+              "    + [Last Inventory Setup Cost]"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Quantity",
+            "description": "Last total inventory quantity at [Report Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Quantity] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Sales MLOS Current Cost",
+            "description": "Total of [Sales Material/Labor/Overhead/Setup Current Cost]",
+            "expression": [
+              "",
+              "[Sales Material Current Cost]",
+              "    + [Sales Labor Current Cost]",
+              "    + [Sales Overhead Current Cost]",
+              "    + [Sales Setup Current Cost]"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
           }
         ]
       },
@@ -11653,6 +11823,66 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Material Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "MatCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Labor Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "LaborCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Overhead Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "OverheadCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Setup Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "SetupCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -11664,8 +11894,8 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_zDAILY_INVENTORY = Source{[Schema=\"dbo\",Item=\"zDAILY_INVENTORY\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_zDAILY_INVENTORY,{{\"SnapshotDateKey\", type date}})",
+                "    dbo_VW_DAILY_INVENTORY = Source{[Schema=\"dbo\",Item=\"VW_DAILY_INVENTORY\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_DAILY_INVENTORY,{{\"SnapshotDateKey\", type date}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -19251,6 +19481,9 @@
               },
               {
                 "name": "Sales Setup Current Cost"
+              },
+              {
+                "name": "Sales MLOS Current Cost"
               }
             ]
           },
@@ -24200,6 +24433,24 @@
               },
               {
                 "name": "Current Inventory MLOS Cost"
+              },
+              {
+                "name": "Last Inventory Labor Cost"
+              },
+              {
+                "name": "Last Inventory Material Cost"
+              },
+              {
+                "name": "Last Inventory Overhead Cost"
+              },
+              {
+                "name": "Last Inventory Setup Cost"
+              },
+              {
+                "name": "Last Inventory MLOS Cost"
+              },
+              {
+                "name": "Last Inventory Quantity"
               }
             ]
           },
@@ -24806,6 +25057,18 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },
@@ -26064,6 +26327,18 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },

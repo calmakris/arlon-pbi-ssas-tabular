@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -7072,6 +7071,7 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
+            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -11994,6 +11994,7 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -12010,6 +12011,7 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -12026,6 +12028,7 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -12042,6 +12045,7 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -12080,6 +12084,7 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -12091,6 +12096,7 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -12266,6 +12272,7 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -12277,6 +12284,7 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -15703,7 +15711,8 @@
             "name": "Costing Lot Size",
             "dataType": "decimal",
             "description": "SAP Source: KEKO.LOSGR",
-            "sourceColumn": "CostLotSize"
+            "sourceColumn": "CostLotSize",
+            "formatString": "#,0.00"
           },
           {
             "name": "Costing By",
@@ -15756,6 +15765,14 @@
             "sourceColumn": "SetupCost",
             "formatString": "#,0.00",
             "summarizeBy": "none"
+          },
+          {
+            "name": "Standard Price",
+            "dataType": "decimal",
+            "description": "Calculated column: [Total Cost] divided by [Costing Lot Size]",
+            "sourceColumn": "StandardPrice",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -15768,7 +15785,7 @@
                 "let",
                 "    Source = ARLPBI_STAGE,",
                 "    dbo_VW_MATERIAL_COSTING_HISTORY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_COSTING_HISTORY\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_MATERIAL_COSTING_HISTORY,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"UnitOfMeasure\", \"CostLotSize\", \"CostingBy\", \"Currency\", \"TotalCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_MATERIAL_COSTING_HISTORY,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"UnitOfMeasure\", \"CostLotSize\", \"CostingBy\", \"Currency\", \"TotalCost\", \"StandardPrice\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -19470,6 +19487,9 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Standard Price"
               }
             ]
           }
@@ -24940,6 +24960,9 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Standard Price"
               }
             ]
           }
@@ -29044,5 +29067,6 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

@@ -6348,7 +6348,7 @@
             ]
           },
           {
-            "name": "Sales Labor Cost",
+            "name": "Sales Labor Frozen Cost",
             "expression": [
               "",
               "IF(",
@@ -6362,11 +6362,11 @@
               "    SUM( 'Sales Invoice Documents'[Labor Cost] ) ",
               ")"
             ],
-            "formatString": "0.00",
+            "formatString": "#,0.00",
             "displayFolder": "Sales\\.MLOS"
           },
           {
-            "name": "Sales Overhead Cost",
+            "name": "Sales Overhead Frozen Cost",
             "expression": [
               "",
               "IF(",
@@ -6380,11 +6380,11 @@
               "    SUM( 'Sales Invoice Documents'[Overhead Cost] ) ",
               ")"
             ],
-            "formatString": "0.00",
+            "formatString": "#,0.00",
             "displayFolder": "Sales\\.MLOS"
           },
           {
-            "name": "Sales Setup Cost",
+            "name": "Sales Setup Frozen Cost",
             "expression": [
               "",
               "IF(",
@@ -6398,11 +6398,11 @@
               "    SUM( 'Sales Invoice Documents'[Setup Cost] ) ",
               ")"
             ],
-            "formatString": "0.00",
+            "formatString": "#,0.00",
             "displayFolder": "Sales\\.MLOS"
           },
           {
-            "name": "Sales Material Cost",
+            "name": "Sales Material Frozen Cost",
             "expression": [
               "",
               "IF(",
@@ -6416,7 +6416,79 @@
               "    SUM( 'Sales Invoice Documents'[Material Cost] ) ",
               ")"
             ],
-            "formatString": "0.00",
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Material Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Material Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Material Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Material Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Material Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Labor Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Labor Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Labor Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Labor Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Labor Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Overhead Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Overhead Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Overhead Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Overhead Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Overhead Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Setup Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Setup Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Setup Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Setup Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Setup Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
             "displayFolder": "Sales\\.MLOS"
           }
         ]
@@ -6744,6 +6816,70 @@
             "dataType": "string",
             "description": "SAP Source: VBAK.AUART",
             "sourceColumn": "SalesOrderType"
+          },
+          {
+            "name": "Current Material Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "MaterialCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Labor Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "LaborCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Overhead Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "OverheadCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Setup Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "SetupCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -19093,16 +19229,28 @@
                 "name": "MTD Sales Order Amount"
               },
               {
-                "name": "Sales Labor Cost"
+                "name": "Sales Labor Frozen Cost"
               },
               {
-                "name": "Sales Material Cost"
+                "name": "Sales Material Frozen Cost"
               },
               {
-                "name": "Sales Overhead Cost"
+                "name": "Sales Overhead Frozen Cost"
               },
               {
-                "name": "Sales Setup Cost"
+                "name": "Sales Setup Frozen Cost"
+              },
+              {
+                "name": "Sales Labor Current Cost"
+              },
+              {
+                "name": "Sales Material Current Cost"
+              },
+              {
+                "name": "Sales Overhead Current Cost"
+              },
+              {
+                "name": "Sales Setup Current Cost"
               }
             ]
           },
@@ -19293,6 +19441,18 @@
               },
               {
                 "name": "Sales Order Type"
+              },
+              {
+                "name": "Current Material Cost"
+              },
+              {
+                "name": "Current Labor Cost"
+              },
+              {
+                "name": "Current Overhead Cost"
+              },
+              {
+                "name": "Current Setup Cost"
               }
             ]
           },
@@ -20096,6 +20256,18 @@
               },
               {
                 "name": "Sales Order Type"
+              },
+              {
+                "name": "Current Material Cost"
+              },
+              {
+                "name": "Current Labor Cost"
+              },
+              {
+                "name": "Current Overhead Cost"
+              },
+              {
+                "name": "Current Setup Cost"
               }
             ]
           },

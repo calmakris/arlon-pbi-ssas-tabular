@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -13668,7 +13670,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -13681,7 +13683,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
@@ -13689,7 +13691,7 @@
           },
           {
             "name": "Amount (In Current Price)",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "AmountInCurrentPrice",
             "formatString": "#,0.00",
@@ -13702,11 +13704,23 @@
           },
           {
             "name": "Gross Weight",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.KUNNR; Not related to 'Customer Master'",
+            "sourceColumn": "CustomerNo"
+          },
+          {
+            "name": "Customer Name",
+            "dataType": "string",
+            "description": "SAP Source: KNA1.NAME1; Not related to 'Customer Master'",
+            "sourceColumn": "CustomerName"
           }
         ],
         "partitions": [
@@ -25308,6 +25322,12 @@
               },
               {
                 "name": "Gross Weight"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Customer Name"
               }
             ]
           },
@@ -27474,6 +27494,12 @@
               },
               {
                 "name": "Gross Weight"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Customer Name"
               }
             ]
           },

@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -117,13 +116,6 @@
             "displayFolder": "Master"
           },
           {
-            "name": "Sales Person",
-            "dataType": "string",
-            "description": "Assigned manually; Contact IT for more details",
-            "sourceColumn": "SalesPerson",
-            "displayFolder": "Sales Related"
-          },
-          {
             "name": "SalesRegionSortKey",
             "dataType": "decimal",
             "isHidden": true,
@@ -150,6 +142,20 @@
             "description": "SAP Source: T189T.PTEXT",
             "sourceColumn": "PriceListName",
             "displayFolder": "Master"
+          },
+          {
+            "name": "Delivery Priority",
+            "dataType": "string",
+            "description": "SAP Source: KNVV.LPRIO",
+            "sourceColumn": "DeliveryPriority",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Sales Person",
+            "dataType": "string",
+            "description": "Custom assigned values based on the [Sales Territory]",
+            "sourceColumn": "SalesPerson",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -162,9 +168,9 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data],",
-                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
+                "    #\"Added SalesRegionSortKey\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
                 "in",
-                "    #\"Added Custom\""
+                "    #\"Added SalesRegionSortKey\""
               ]
             }
           }
@@ -13670,7 +13676,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -13683,7 +13689,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
@@ -13691,7 +13697,7 @@
           },
           {
             "name": "Amount (In Current Price)",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AmountInCurrentPrice",
             "formatString": "#,0.00",
@@ -13704,7 +13710,7 @@
           },
           {
             "name": "Gross Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
@@ -17695,6 +17701,39 @@
               },
               {
                 "name": "Sales Territory"
+              },
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -18972,6 +19011,33 @@
               },
               {
                 "name": "Sales Territory"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -19249,9 +19315,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -19274,6 +19337,12 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
               }
             ]
           },
@@ -20064,9 +20133,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -20080,6 +20146,15 @@
               },
               {
                 "name": "Price List Name"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -20851,9 +20926,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -20867,6 +20939,15 @@
               },
               {
                 "name": "Price List Name"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Territory Name"
               }
             ]
           },
@@ -22498,9 +22579,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -22511,6 +22589,18 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "Sales Person"
               }
             ]
           },
@@ -26965,9 +27055,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -26978,6 +27065,12 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
               }
             ]
           },

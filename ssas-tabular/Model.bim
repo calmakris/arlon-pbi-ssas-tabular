@@ -17505,6 +17505,13 @@
         "toTable": "Sales Order Documents",
         "toColumn": "OrderNoLineKey",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "5d4997ce-0596-4d4d-897d-57346c6d67fc",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "Plant for Material",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [

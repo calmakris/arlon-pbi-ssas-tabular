@@ -12177,6 +12177,116 @@
             "isHidden": true,
             "sourceColumn": "LeadOrderBomKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Facestock Material Number 1",
+            "dataType": "string",
+            "description": "First facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Facestock Batch Number 1",
+            "dataType": "string",
+            "description": "First facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Facestock Material Number 2",
+            "dataType": "string",
+            "description": "Second facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Facestock Batch Number 2",
+            "dataType": "string",
+            "description": "Second facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Material Number 1",
+            "dataType": "string",
+            "description": "First liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Batch Number 1",
+            "dataType": "string",
+            "description": "First liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Material Number 2",
+            "dataType": "string",
+            "description": "Second liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Batch Number 2",
+            "dataType": "string",
+            "description": "Second liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Material Number 1",
+            "dataType": "string",
+            "description": "First adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Batch Number 1",
+            "dataType": "string",
+            "description": "First adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Material Number 2",
+            "dataType": "string",
+            "description": "Second adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Batch Number 2",
+            "dataType": "string",
+            "description": "Second adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Material Number 1",
+            "dataType": "string",
+            "description": "First organosol based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "OrganosolMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Batch Number 1",
+            "dataType": "string",
+            "description": "First organosol based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "OrganosolBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Material Number 2",
+            "dataType": "string",
+            "sourceColumn": "OrganosolMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Batch Number 2",
+            "dataType": "string",
+            "sourceColumn": "OrganosolBatchNo2",
+            "displayFolder": ".Components Used"
           }
         ],
         "partitions": [
@@ -18249,6 +18359,146 @@
                 "name": "Currency"
               }
             ]
+          },
+          {
+            "name": "Shop Orders",
+            "columns": [
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Adhesive Batch Number 1"
+              },
+              {
+                "name": "Adhesive Batch Number 2"
+              },
+              {
+                "name": "Adhesive Material Number 1"
+              },
+              {
+                "name": "Adhesive Material Number 2"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Bill of Material"
+              },
+              {
+                "name": "Close Indicator"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Deliver Indicator"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Document Group"
+              },
+              {
+                "name": "End Date Key"
+              },
+              {
+                "name": "Facestock Batch Number 1"
+              },
+              {
+                "name": "Facestock Batch Number 2"
+              },
+              {
+                "name": "Facestock Material Number 1"
+              },
+              {
+                "name": "Facestock Material Number 2"
+              },
+              {
+                "name": "Final Deliver Indicator"
+              },
+              {
+                "name": "Item Number"
+              },
+              {
+                "name": "LeadOrderBomKey"
+              },
+              {
+                "name": "Liner Batch Number 1"
+              },
+              {
+                "name": "Liner Batch Number 2"
+              },
+              {
+                "name": "Liner Material Number 1"
+              },
+              {
+                "name": "Liner Material Number 2"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Organosol Batch Number 1"
+              },
+              {
+                "name": "Organosol Batch Number 2"
+              },
+              {
+                "name": "Organosol Material Number 1"
+              },
+              {
+                "name": "Organosol Material Number 2"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Same Day Indicator"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Work Center"
+              }
+            ]
           }
         ]
       },
@@ -24004,6 +24254,57 @@
               },
               {
                 "name": "LeadOrderBomKey"
+              },
+              {
+                "name": "Facestock Material Number 1"
+              },
+              {
+                "name": "Facestock Batch Number 1"
+              },
+              {
+                "name": "Facestock Material Number 2"
+              },
+              {
+                "name": "Facestock Batch Number 2"
+              },
+              {
+                "name": "Liner Material Number 1"
+              },
+              {
+                "name": "Liner Batch Number 1"
+              },
+              {
+                "name": "Liner Material Number 2"
+              },
+              {
+                "name": "Liner Batch Number 2"
+              },
+              {
+                "name": "Adhesive Material Number 1"
+              },
+              {
+                "name": "Adhesive Batch Number 1"
+              },
+              {
+                "name": "Adhesive Material Number 2"
+              },
+              {
+                "name": "Adhesive Batch Number 2"
+              },
+              {
+                "name": "Organosol Material Number 1"
+              },
+              {
+                "name": "Organosol Batch Number 1"
+              },
+              {
+                "name": "Organosol Material Number 2"
+              },
+              {
+                "name": "Organosol Batch Number 2"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -26545,6 +26846,54 @@
               },
               {
                 "name": "LeadOrderBomKey"
+              },
+              {
+                "name": "Facestock Material Number 1"
+              },
+              {
+                "name": "Facestock Batch Number 1"
+              },
+              {
+                "name": "Facestock Material Number 2"
+              },
+              {
+                "name": "Facestock Batch Number 2"
+              },
+              {
+                "name": "Liner Material Number 1"
+              },
+              {
+                "name": "Liner Batch Number 1"
+              },
+              {
+                "name": "Liner Material Number 2"
+              },
+              {
+                "name": "Liner Batch Number 2"
+              },
+              {
+                "name": "Adhesive Material Number 1"
+              },
+              {
+                "name": "Adhesive Batch Number 1"
+              },
+              {
+                "name": "Adhesive Material Number 2"
+              },
+              {
+                "name": "Adhesive Batch Number 2"
+              },
+              {
+                "name": "Organosol Material Number 1"
+              },
+              {
+                "name": "Organosol Batch Number 1"
+              },
+              {
+                "name": "Organosol Material Number 2"
+              },
+              {
+                "name": "Organosol Batch Number 2"
               }
             ]
           },

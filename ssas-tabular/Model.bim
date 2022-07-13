@@ -1332,20 +1332,38 @@
           {
             "name": "Sales Order Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Order Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Order Documents'[Order Amount] ),",
+              "        \"Local\", SUM( 'Sales Order Documents'[Order Amount Local] ),",
+              "        SUM( 'Sales Order Documents'[Order Amount] )",
+              "    ),",
+              "    SUM( 'Sales Order Documents'[Order Amount] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
           },
           {
             "name": "Sales Order Cost Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Cost Amount] )",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Order Documents'[Cost Amount] ),",
+              "        \"Local\", SUM( 'Sales Order Documents'[Cost Amount Local] ),",
+              "        SUM( 'Sales Order Documents'[Cost Amount] )",
+              "    ),",
+              "    SUM( 'Sales Order Documents'[Cost Amount] )",
+              ")"
+            ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales Orders",
             "annotations": [

@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -21961,6 +21960,14 @@
             "measures": [
               {
                 "name": "Delivery Note Quantity"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
+              {
+                "name": "Currency"
               }
             ]
           }

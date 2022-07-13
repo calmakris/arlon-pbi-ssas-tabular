@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -9502,6 +9503,37 @@
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Incoterms Part 1",
+            "dataType": "string",
+            "description": "SAP Source: VBKD.INCO1",
+            "sourceColumn": "IncoTerms1"
+          },
+          {
+            "name": "Incoterms Part 2",
+            "dataType": "string",
+            "description": "SAP Source: VBKD.INCO2",
+            "sourceColumn": "IncoTerms2"
+          },
+          {
+            "name": "Pricing Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: VBKD.PRSDT",
+            "sourceColumn": "PricingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Ship To Account Number",
+            "dataType": "string",
+            "description": "SAP Source: VBPA.KUNNR",
+            "sourceColumn": "ShipToAcctNo"
           }
         ],
         "partitions": [
@@ -16331,6 +16363,12 @@
             "sourceColumn": "DeliveredQuantity",
             "formatString": "0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: LIPS.CHARG",
+            "sourceColumn": "BatchNo"
           }
         ],
         "partitions": [
@@ -16356,10 +16394,7 @@
               "",
               "IF(",
               "    ISFILTERED( 'Sales Order Shipments' ),",
-              "    SUMX(",
-              "        VALUES( 'Sales Order Shipments'[OrderNoLineKey] ),",
-              "        SUM( 'Sales Order Shipments'[Delivered Quantity] )",
-              "    ),",
+              "    SUM( 'Sales Order Shipments'[Delivered Quantity] ),",
               "    BLANK()",
               ")"
             ],
@@ -19405,6 +19440,9 @@
               },
               {
                 "name": "Delivered Quantity"
+              },
+              {
+                "name": "Batch Number"
               }
             ],
             "measures": [
@@ -21049,6 +21087,18 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
               }
             ]
           },
@@ -21579,6 +21629,18 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
               }
             ]
           },
@@ -21955,6 +22017,9 @@
               },
               {
                 "name": "Delivered Quantity"
+              },
+              {
+                "name": "Batch Number"
               }
             ],
             "measures": [
@@ -23160,6 +23225,18 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
               }
             ]
           },
@@ -23468,6 +23545,9 @@
               },
               {
                 "name": "Delivered Quantity"
+              },
+              {
+                "name": "Batch Number"
               }
             ],
             "measures": [
@@ -25453,6 +25533,18 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
               }
             ]
           },
@@ -27743,6 +27835,18 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
               }
             ]
           },

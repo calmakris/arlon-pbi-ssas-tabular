@@ -19,8 +19,6 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -9199,6 +9197,7 @@
             "dataType": "decimal",
             "description": "SAP Source: VBAP.NETPR",
             "sourceColumn": "UnitPrice",
+            "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
@@ -9206,7 +9205,7 @@
             "dataType": "decimal",
             "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
             "sourceColumn": "ExchangeRate",
-            "formatString": "0.0000",
+            "formatString": "0.00",
             "summarizeBy": "none"
           },
           {
@@ -29788,18 +29787,6 @@
         "modelPermission": "read",
         "members": [
           {
-            "memberName": "DOMAIN\\aarzate",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4946"
-          },
-          {
-            "memberName": "DOMAIN\\agonzalez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8541"
-          },
-          {
-            "memberName": "DOMAIN\\AGutierrez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1795"
-          },
-          {
             "memberName": "DOMAIN\\amendes",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8652"
           },
@@ -30094,6 +30081,22 @@
           {
             "memberName": "DOMAIN\\lproano",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21046"
+          },
+          {
+            "memberName": "DOMAIN\\aarzate",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4946"
+          },
+          {
+            "memberName": "DOMAIN\\agonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8541"
+          },
+          {
+            "memberName": "DOMAIN\\AGutierrez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1795"
+          },
+          {
+            "memberName": "DOMAIN\\lmolina",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8741"
           }
         ],
         "tablePermissions": [

@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -6889,6 +6888,52 @@
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Compounding"
+          },
+          {
+            "name": "Gross Sales (Was New Product)",
+            "description": "Total revenue of sales invoices where the material was 36 months old at the time of posting",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Gross Sales],",
+              "    KEEPFILTERS( 'Sales Invoice Documents'[Was New Product] )",
+              ")"
+            ],
+            "formatString": "0",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD Gross Sales (Was New Product)",
+            "description": "Total revenue of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "CALCULATE( [Gross Sales (Was New Product)], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales (Was New Product)",
+            "description": "Total revenue of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "CALCULATE( [MTD Gross Sales (Was New Product)], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Gross Sales %Grand (Was New Product)",
+            "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "DIVIDE( [Gross Sales (Was New Product)], [Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD Gross Sales %Grand (Was New Product)",
+            "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "DIVIDE( [MTD Gross Sales (Was New Product)], [MTD Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%"
+          },
+          {
+            "name": "MTD PY Gross Sales %Grand (Was New Product)",
+            "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "DIVIDE( [MTD PY Gross Sales (Was New Product)], [MTD PY Gross Sales] )",
+            "formatString": "0.00%;-0.00%;0.00%"
           }
         ]
       },
@@ -12353,7 +12398,7 @@
           },
           {
             "name": "Order Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: AFKO.GAMNG",
             "isHidden": true,
             "sourceColumn": "OrderQty",
@@ -12363,7 +12408,7 @@
           },
           {
             "name": "Delivered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: AFPO.WEMNG",
             "isHidden": true,
             "sourceColumn": "DeliverQty",
@@ -16591,7 +16636,7 @@
           },
           {
             "name": "Delivered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG",
             "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
@@ -16656,7 +16701,8 @@
             "name": "Department",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "Department"
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
           },
           {
             "name": "ID",
@@ -16682,7 +16728,8 @@
             "name": "Production Shift",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "ProductionShift"
+            "sourceColumn": "ProductionShift",
+            "isAvailableInMdx": false
           },
           {
             "name": "Operator",
@@ -20366,6 +20413,24 @@
               },
               {
                 "name": "Sales MLOS Current Cost"
+              },
+              {
+                "name": "Gross Sales (Was New Product)"
+              },
+              {
+                "name": "MTD Gross Sales (Was New Product)"
+              },
+              {
+                "name": "MTD PY Gross Sales (Was New Product)"
+              },
+              {
+                "name": "Gross Sales %Grand (Was New Product)"
+              },
+              {
+                "name": "MTD Gross Sales %Grand (Was New Product)"
+              },
+              {
+                "name": "MTD PY Gross Sales %Grand (Was New Product)"
               }
             ]
           },

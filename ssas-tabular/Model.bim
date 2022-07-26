@@ -6899,7 +6899,7 @@
               "    KEEPFILTERS( 'Sales Invoice Documents'[Was New Product] )",
               ")"
             ],
-            "formatString": "0",
+            "formatString": "#,0",
             "displayFolder": "Sales"
           },
           {
@@ -6920,20 +6920,22 @@
             "name": "Gross Sales %Grand (Was New Product)",
             "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
             "expression": "DIVIDE( [Gross Sales (Was New Product)], [Gross Sales] )",
-            "formatString": "0.00%;-0.00%;0.00%",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Sales"
           },
           {
             "name": "MTD Gross Sales %Grand (Was New Product)",
             "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
             "expression": "DIVIDE( [MTD Gross Sales (Was New Product)], [MTD Gross Sales] )",
-            "formatString": "0.00%;-0.00%;0.00%"
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
           },
           {
             "name": "MTD PY Gross Sales %Grand (Was New Product)",
             "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
             "expression": "DIVIDE( [MTD PY Gross Sales (Was New Product)], [MTD PY Gross Sales] )",
-            "formatString": "0.00%;-0.00%;0.00%"
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -30254,10 +30256,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21056"
           },
           {
-            "memberName": "DOMAIN\\jgonzales",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
-          },
-          {
             "memberName": "DOMAIN\\jignacio",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7164"
           },
@@ -30312,6 +30310,10 @@
           {
             "memberName": "DOMAIN\\vbahn",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21058"
+          },
+          {
+            "memberName": "DOMAIN\\johngonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
           }
         ],
         "tablePermissions": [

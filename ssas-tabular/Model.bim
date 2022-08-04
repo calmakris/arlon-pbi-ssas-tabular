@@ -30833,6 +30833,10 @@
           {
             "memberName": "DOMAIN\\vguardado",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21515"
+          },
+          {
+            "memberName": "DOMAIN\\sramirez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21045"
           }
         ],
         "tablePermissions": [

@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -13281,7 +13282,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MSEG.ERFMG",
             "isHidden": true,
             "sourceColumn": "Quantity",
@@ -13292,7 +13293,7 @@
           },
           {
             "name": "Linear Feet",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "LinearFeet",
             "formatString": "#,0",
@@ -13301,7 +13302,7 @@
           },
           {
             "name": "Square Feet",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SquareFeet",
             "formatString": "#,0",
@@ -13310,7 +13311,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: MSEG.DMBTR",
             "isHidden": true,
             "sourceColumn": "Amount",
@@ -15388,7 +15389,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -15396,7 +15397,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS.DMBE2 (negated if BSIS.SHKZH = 'H')",
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
@@ -15560,7 +15561,6 @@
             "name": "Amount",
             "dataType": "decimal",
             "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
-            "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "0.00",
             "isAvailableInMdx": false
@@ -30837,6 +30837,10 @@
           {
             "memberName": "DOMAIN\\sramirez",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21045"
+          },
+          {
+            "memberName": "DOMAIN\\esimon",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21522"
           }
         ],
         "tablePermissions": [

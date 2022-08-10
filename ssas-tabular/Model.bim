@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1018,21 +1017,21 @@
           {
             "name": "Product Quality Index",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " DIVIDE( [PQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [PQ Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Product Quality Index (Credited)",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " DIVIDE( [PQ Credit Issued], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [PQ Credit Issued], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
           {
             "name": "Product Quality Index (Open)",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " DIVIDE( [PQ Open Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints\\KPI"
           },
@@ -1278,14 +1277,14 @@
           {
             "name": "Service Quality Index",
             "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
-            "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [SQ Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index",
             "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
-            "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [CA Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
@@ -30239,6 +30238,10 @@
           {
             "memberName": "DOMAIN\\sdong",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
+          },
+          {
+            "memberName": "DOMAIN\\LTorres",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
           }
         ]
       },
@@ -30713,10 +30716,6 @@
           {
             "memberName": "DOMAIN\\lmota",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21494"
-          },
-          {
-            "memberName": "DOMAIN\\LTorres",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
           },
           {
             "memberName": "DOMAIN\\lurias",

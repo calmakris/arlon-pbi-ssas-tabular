@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -6994,6 +6993,19 @@
             ],
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "5S"
+          },
+          {
+            "name": "SO Unrestricted Stock Quantity",
+            "expression": [
+              "",
+              "IF(",
+              "    ISFILTERED(Plant[Plant]) || ISFILTERED('Material Master'[Material Number]) || ISFILTERED('Sales Order Documents'[Material Number]),",
+              "    SUMX( VALUES('Sales Order Documents'[MaterialPlantKey]), AVERAGE('Sales Order Documents'[Unrestricted Stock Quantity]) ),",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
           }
         ]
       },
@@ -9867,6 +9879,13 @@
             "dataType": "string",
             "description": "SAP Source: VBPA.KUNNR",
             "sourceColumn": "ShipToAcctNo"
+          },
+          {
+            "name": "Unrestricted Stock Quantity",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "UnrestrictStockQty",
+            "formatString": "#,0.00"
           }
         ],
         "partitions": [
@@ -17006,6 +17025,7 @@
             "isHidden": true,
             "sourceColumn": "DateKey",
             "formatString": "Short Date",
+            "isAvailableInMdx": false,
             "annotations": [
               {
                 "name": "Format",
@@ -21924,6 +21944,9 @@
               },
               {
                 "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
               }
             ]
           },
@@ -22190,10 +22213,7 @@
                 "name": "SO Customer Open Quantity (By Enter Date)"
               },
               {
-                "name": "Current Inventory Amount"
-              },
-              {
-                "name": "Current Inventory Quantity"
+                "name": "SO Unrestricted Stock Quantity"
               }
             ]
           },
@@ -22501,6 +22521,9 @@
               },
               {
                 "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
               }
             ]
           },
@@ -24100,6 +24123,9 @@
               },
               {
                 "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
               }
             ]
           },
@@ -26594,6 +26620,9 @@
               },
               {
                 "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
               }
             ]
           },
@@ -28937,6 +28966,9 @@
               },
               {
                 "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
               }
             ]
           },

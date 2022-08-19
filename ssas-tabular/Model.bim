@@ -9885,7 +9885,14 @@
             "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
-            "formatString": "#,0.00"
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Requirements Type",
+            "dataType": "string",
+            "description": "SAP Source: VBAP.BEDAE",
+            "sourceColumn": "RequirementsType"
           }
         ],
         "partitions": [
@@ -21947,6 +21954,9 @@
               },
               {
                 "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -22524,6 +22534,9 @@
               },
               {
                 "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -24126,6 +24139,9 @@
               },
               {
                 "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -26623,6 +26639,9 @@
               },
               {
                 "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -28969,6 +28988,9 @@
               },
               {
                 "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },

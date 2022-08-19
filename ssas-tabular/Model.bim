@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -6972,6 +6974,26 @@
             "expression": "DIVIDE( [MTD PY Gross Sales (Was New Product)], [MTD PY Gross Sales] )",
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Audit 5S Score",
+            "description": "Sum of sort, straighten, shine, standardize, sustain, and safety scores",
+            "expression": "SUM( 'Audit 5S Scores'[Score Value] )",
+            "formatString": "#,0",
+            "displayFolder": "5S"
+          },
+          {
+            "name": "Audit 5S Score as % of Target",
+            "description": "Quotient of [Audit 5S Score] and target. Total target value per department is 18 points while the total target value per category is 3 points.",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Audit 5S Score],",
+              "    SUM( 'Audit 5S Scores'[Target Value] )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "5S"
           }
         ]
       },
@@ -16967,6 +16989,94 @@
             }
           }
         ]
+      },
+      {
+        "name": "Audit 5S Scores",
+        "columns": [
+          {
+            "name": "Audit ID",
+            "dataType": "int64",
+            "description": "Source: [5S Data].[ID]",
+            "sourceColumn": "AuditID",
+            "formatString": "0"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Audit Date",
+            "dataType": "dateTime",
+            "description": "Source: [5S Data].[Report Date]",
+            "sourceColumn": "ReportDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Area",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Area]",
+            "sourceColumn": "Area"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Category]",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Score Value",
+            "dataType": "int64",
+            "description": "Source: [5S Data].[Sort], [Straighten], [Shine], [Standardize], [Sustain], and [Safety]",
+            "sourceColumn": "ScoreValue",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Target Value",
+            "dataType": "int64",
+            "description": "Hardcoded to 3",
+            "sourceColumn": "TargetValue",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Company]",
+            "sourceColumn": "CompanyCode"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_5S = Source{[Schema=\"dbo\",Item=\"VW_5S_SCORES\"]}[Data]",
+                "in",
+                "    dbo_VW_5S"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -18257,6 +18367,20 @@
         "fromColumn": "Work Center",
         "toTable": "_Work Centers",
         "toColumn": "Work Center"
+      },
+      {
+        "name": "9c6265fd-8311-47af-ae6b-97b3bd4aa534",
+        "fromTable": "Audit 5S Scores",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7040d8a6-f19f-4052-9a4d-1b05527d3374",
+        "fromTable": "Audit 5S Scores",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -18599,6 +18723,12 @@
               },
               {
                 "name": "Testing 24hr Dwell Adhesion Avg Result"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -19135,6 +19265,35 @@
               },
               {
                 "name": "Material Group"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -19749,6 +19908,12 @@
               },
               {
                 "name": "Sales Order Line Count"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -20055,6 +20220,35 @@
             "measures": [
               {
                 "name": "Delivery Note Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -21307,6 +21501,12 @@
               },
               {
                 "name": "Net Sales"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -21812,6 +22012,35 @@
                 "name": "Currency"
               }
             ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
           }
         ]
       },
@@ -21959,6 +22188,12 @@
               },
               {
                 "name": "SO Customer Open Quantity (By Enter Date)"
+              },
+              {
+                "name": "Current Inventory Amount"
+              },
+              {
+                "name": "Current Inventory Quantity"
               }
             ]
           },
@@ -24646,6 +24881,12 @@
               },
               {
                 "name": "COMP First Pass Reliability Impact"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -25422,6 +25663,35 @@
               },
               {
                 "name": "Work Center"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -27422,6 +27692,12 @@
               },
               {
                 "name": "Current Inventory MLOS Cost"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -28066,6 +28342,35 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -28970,6 +29275,12 @@
               },
               {
                 "name": "WH Days of Perfect On Time Shipment"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -29153,6 +29464,35 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -29625,6 +29965,12 @@
               },
               {
                 "name": "Operations Goods Receipt Amount"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -29883,6 +30229,35 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }
@@ -30374,12 +30749,16 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21047"
           },
           {
-            "memberName": "DOMAIN\\vbahn",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21058"
-          },
-          {
             "memberName": "DOMAIN\\johngonzalez",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
+          },
+          {
+            "memberName": "DOMAIN\\jwolfert",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20499"
+          },
+          {
+            "memberName": "DOMAIN\\jsalazar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20505"
           }
         ],
         "tablePermissions": [

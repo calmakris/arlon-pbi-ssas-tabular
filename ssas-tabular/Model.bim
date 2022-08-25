@@ -7006,6 +7006,50 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "MTD Audit Score as % of Target",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Audit 5S Score as % of Target],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PM Var Audit Score as % of Target",
+            "expression": [
+              "",
+              "VAR PM =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            [Audit 5S Score as % of Target],",
+              "            PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    ISBLANK( [MTD Audit Score as % of Target] ) || ISBLANK( PM ),",
+              "    BLANK(),",
+              "    [MTD Audit Score as % of Target] - PM",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -8731,12 +8775,12 @@
                 "    )",
                 ")"
               ],
-              "ordinal": 10
+              "ordinal": 12
             },
             {
               "name": "PY",
               "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
-              "ordinal": 16
+              "ordinal": 18
             },
             {
               "name": "PY YTD",
@@ -8747,7 +8791,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
                 ")"
               ],
-              "ordinal": 11
+              "ordinal": 13
             },
             {
               "name": "PY MTD",
@@ -8774,7 +8818,7 @@
                 "    )",
                 ")"
               ],
-              "ordinal": 13
+              "ordinal": 15
             },
             {
               "name": "PY FYTD",
@@ -8785,7 +8829,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
                 ")"
               ],
-              "ordinal": 14
+              "ordinal": 16
             },
             {
               "name": "YOY",
@@ -8803,7 +8847,7 @@
                 "    BLANK()",
                 ")"
               ],
-              "ordinal": 17
+              "ordinal": 19
             },
             {
               "name": "CD",
@@ -8862,7 +8906,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
                 ")"
               ],
-              "ordinal": 12
+              "ordinal": 14
             },
             {
               "name": "FTYD PY Var",
@@ -8876,7 +8920,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
                 ")"
               ],
-              "ordinal": 15
+              "ordinal": 16
             },
             {
               "name": "CD Weekday",
@@ -8927,6 +8971,43 @@
                 ")"
               ],
               "ordinal": 9
+            },
+            {
+              "name": "PM MTD",
+              "expression": [
+                "CALCULATE( ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+                "    ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Report Date]",
+                "    )",
+                ")"
+              ],
+              "ordinal": 11
+            },
+            {
+              "name": "MTD PM Var",
+              "expression": [
+                "IF(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PM MTD\"",
+                "    ),",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                "    ) - ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PM MTD\"",
+                "    ),",
+                "    BLANK()",
+                ")"
+              ],
+              "ordinal": 12
             }
           ]
         },
@@ -17104,6 +17185,39 @@
             }
           }
         ]
+      },
+      {
+        "name": "Audit 5S Comments",
+        "columns": [
+          {
+            "name": "Audit ID",
+            "dataType": "int64",
+            "description": "Source: [5S Data].[ID]",
+            "sourceColumn": "MaxID"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Comments]",
+            "sourceColumn": "Comments"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_5S_COMMENTS = Source{[Schema=\"dbo\",Item=\"VW_5S_COMMENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_5S_COMMENTS"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -18408,6 +18522,13 @@
         "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "7a7306bd-3a7d-4e21-84ed-fd5d562479bd",
+        "fromTable": "Audit 5S Scores",
+        "fromColumn": "Audit ID",
+        "toTable": "Audit 5S Comments",
+        "toColumn": "Audit ID"
       }
     ],
     "perspectives": [
@@ -18756,6 +18877,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -19321,6 +19448,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -19941,6 +20079,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -20276,6 +20420,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -22072,6 +22227,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -24929,6 +25095,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -25734,6 +25906,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -27746,6 +27929,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -28419,6 +28608,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -29335,6 +29535,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -29547,6 +29753,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -30025,6 +30242,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -30312,6 +30535,17 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }

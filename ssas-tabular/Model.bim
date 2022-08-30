@@ -115,13 +115,6 @@
             "displayFolder": "Master"
           },
           {
-            "name": "Sales Person",
-            "dataType": "string",
-            "description": "Assigned manually; Contact IT for more details",
-            "sourceColumn": "SalesPerson",
-            "displayFolder": "Sales Related"
-          },
-          {
             "name": "SalesRegionSortKey",
             "dataType": "decimal",
             "isHidden": true,
@@ -148,6 +141,20 @@
             "description": "SAP Source: T189T.PTEXT",
             "sourceColumn": "PriceListName",
             "displayFolder": "Master"
+          },
+          {
+            "name": "Delivery Priority",
+            "dataType": "string",
+            "description": "SAP Source: KNVV.LPRIO",
+            "sourceColumn": "DeliveryPriority",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Sales Person",
+            "dataType": "string",
+            "description": "Custom assigned values based on the [Sales Territory]",
+            "sourceColumn": "SalesPerson",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -160,9 +167,9 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_CUSTOMER_MASTER = Source{[Schema=\"dbo\",Item=\"VW_CUSTOMER_MASTER\"]}[Data],",
-                "    #\"Added Custom\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
+                "    #\"Added SalesRegionSortKey\" = Table.AddColumn(dbo_VW_CUSTOMER_MASTER, \"SalesRegionSortKey\", each if [SalesDistrict] = \"DOM\" then 1 else if [SalesDistrict] = \"FLEET\" then 2 else if [SalesDistrict] = \"EUROPE\" then 3 else if [SalesDistrict] = \"LA\" then 4 else if [SalesDistrict] = \"AUS\" then 5 else if [SalesDistrict] = \"ASIA\" then 6 else 9999, type number)",
                 "in",
-                "    #\"Added Custom\""
+                "    #\"Added SalesRegionSortKey\""
               ]
             }
           }
@@ -850,14 +857,14 @@
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
               "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", SUM( 'Sales Invoice Documents'[Overall Cost Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overall Cost Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
-              "        SUM('Sales Invoice Documents'[Overall Cost Amount] )",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Total Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Total Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM('Sales Invoice Documents'[Total Cost] )",
               "    ),",
-              "    SUM('Sales Invoice Documents'[Overall Cost Amount] )    ",
+              "    SUM('Sales Invoice Documents'[Total Cost] )    ",
               ")"
             ],
-            "formatString": "#,0",
+            "formatString": "#,0.00",
             "displayFolder": "Sales"
           },
           {
@@ -1010,23 +1017,23 @@
           {
             "name": "Product Quality Index",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " DIVIDE( [PQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [PQ Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Product Quality Index (Credited)",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " DIVIDE( [PQ Credit Issued], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [PQ Credit Issued], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Product Quality Index (Open)",
             "description": "Date grouping: 'Complaint Documents'[Enter Date]",
-            "expression": " DIVIDE( [PQ Open Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [PQ Open Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Hold Amount",
@@ -1121,12 +1128,13 @@
               "CALCULATE(",
               "    AVERAGE( Target_KPI[TargetValue] ),",
               "    Target_KPI[KpiKey] = \"PQI\",",
-              "    FILTER(",
-              "        ALL( Target_KPI[CalendarTimeKey] ),",
-              "        CONTAINS(",
-              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
-              "        )",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Organization] ),",
+              "        Target_KPI[LocationKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Target_KPI[CalendarTimeKey]",
               "    )",
               ")"
             ],
@@ -1270,14 +1278,14 @@
           {
             "name": "Service Quality Index",
             "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
-            "expression": " DIVIDE( [SQ Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [SQ Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index",
             "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
-            "expression": " DIVIDE( [CA Complaint Value], CALCULATE( [Gross Sales], ALL( 'Customer Master' ) ) )",
+            "expression": " DIVIDE( [CA Complaint Value], [Gross Sales] )",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Complaints"
           },
@@ -1289,17 +1297,18 @@
               "CALCULATE(",
               "    AVERAGE( Target_KPI[TargetValue] ),",
               "    Target_KPI[KpiKey] = \"SQI\",",
-              "    FILTER(",
-              "        ALL( Target_KPI[CalendarTimeKey] ),",
-              "        CONTAINS(",
-              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
-              "        )",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Organization] ),",
+              "        Target_KPI[LocationKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Target_KPI[CalendarTimeKey]",
               "    )",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Customer Accommodation Index (Target)",
@@ -1309,35 +1318,54 @@
               "CALCULATE(",
               "    AVERAGE( Target_KPI[TargetValue] ),",
               "    Target_KPI[KpiKey] = \"CAI\",",
-              "    FILTER(",
-              "        ALL( Target_KPI[CalendarTimeKey] ),",
-              "        CONTAINS(",
-              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
-              "        )",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Organization] ),",
+              "        Target_KPI[LocationKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Target_KPI[CalendarTimeKey]",
               "    )",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Complaints\\KPI"
+            "displayFolder": "Complaints"
           },
           {
             "name": "Sales Order Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Order Amount])",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Order Documents'[Order Amount] ),",
+              "        \"Local\", SUM( 'Sales Order Documents'[Order Amount Local] ),",
+              "        SUM( 'Sales Order Documents'[Order Amount] )",
+              "    ),",
+              "    SUM( 'Sales Order Documents'[Order Amount] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Orders"
           },
           {
             "name": "Sales Order Cost Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " SUM( 'Sales Order Documents'[Cost Amount] )",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Order Documents'[Cost Amount] ),",
+              "        \"Local\", SUM( 'Sales Order Documents'[Cost Amount Local] ),",
+              "        SUM( 'Sales Order Documents'[Cost Amount] )",
+              "    ),",
+              "    SUM( 'Sales Order Documents'[Cost Amount] )",
+              ")"
+            ],
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "Sales Orders",
             "annotations": [
@@ -2670,6 +2698,10 @@
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"Sqftmh\",",
               "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
               "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
               "            Target_KPI[CalendarTimeKey]",
               "        )",
@@ -3058,6 +3090,10 @@
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"OEE_CAST\",",
               "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
               "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
               "            Target_KPI[CalendarTimeKey]",
               "        )",
@@ -3081,6 +3117,10 @@
               "    CALCULATE(",
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"OEE_COAT\",",
+              "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
               "        TREATAS(",
               "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
               "            Target_KPI[CalendarTimeKey]",
@@ -3120,6 +3160,10 @@
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"FPass_CAST\",",
               "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
               "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
               "            Target_KPI[CalendarTimeKey]",
               "        )",
@@ -3143,6 +3187,10 @@
               "    CALCULATE(",
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"FPass_COAT\",",
+              "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
               "        TREATAS(",
               "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
               "            Target_KPI[CalendarTimeKey]",
@@ -4393,7 +4441,13 @@
           },
           {
             "name": "MTD Inventory Balance",
-            "expression": "CALCULATE( [Inventory Balance], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Inventory Balance],",
+              "    DATESMTD( 'Calendar'[Date] )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Inventory Balance"
           },
@@ -5527,12 +5581,13 @@
               "    CALCULATE(",
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = KeyVal,",
-              "        FILTER(",
-              "            ALL( Target_KPI[CalendarTimeKey] ),",
-              "            CONTAINS(",
-              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "                'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
-              "            )",
+              "        TREATAS(",
+              "            VALUES( Plant[Plant] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
               "        )",
               "    )",
               "",
@@ -5578,10 +5633,9 @@
               "    [Sales Order Line Count (By First Ship Date)],",
               "    FILTER(",
               "        'Calendar',",
-              "        'Calendar'[Date] <= [Last Working Day]",
+              "        'Calendar'[Date] <= [Report Date]",
               "    )",
-              ")",
-              ""
+              ")"
             ],
             "formatString": "#,0",
             "displayFolder": "Warehouse"
@@ -5593,10 +5647,10 @@
               "VAR OnTime =",
               "    CALCULATE(",
               "        [Sales Order Line Count (By First Ship Date)],",
-              "        'Sales Order Documents'[Late Indicator] = 0,",
+              "        KEEPFILTERS('Sales Order Documents'[Late Indicator] = 0),",
               "        FILTER(",
               "            'Calendar',",
-              "            'Calendar'[Date] <= [Last Working Day]",
+              "            'Calendar'[Date] <= [Report Date]",
               "        )",
               "    )",
               "",
@@ -5618,11 +5672,11 @@
               "VAR Exempt =",
               "    CALCULATE(",
               "        [Sales Order Line Count (By First Ship Date)],",
-              "        'Sales Order Documents'[Late Indicator] = 1,",
-              "        'Sales Order Documents'[Reason Type for Late Shipment] = \"3rd Party\",",
+              "        KEEPFILTERS('Sales Order Documents'[Late Indicator] = 1),",
+              "        KEEPFILTERS('Sales Order Documents'[Reason Type for Late Shipment] = \"3rd Party\"),",
               "        FILTER(",
               "            'Calendar',",
-              "            'Calendar'[Date] <= [Last Working Day]",
+              "            'Calendar'[Date] <= [Report Date]",
               "        )",
               "    )",
               "",
@@ -5645,12 +5699,13 @@
               "    CALCULATE(",
               "        AVERAGE( Target_KPI[TargetValue] ),",
               "        Target_KPI[KpiKey] = \"COT\",",
-              "        FILTER(",
-              "            ALL( Target_KPI[CalendarTimeKey] ),",
-              "            CONTAINS(",
-              "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "                'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
-              "            )",
+              "        TREATAS(",
+              "            VALUES( Plant[Plant] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
               "        )",
               "    )",
               "",
@@ -5737,7 +5792,11 @@
               "",
               "CALCULATE(",
               "    SUM( 'Sales Order Documents'[Late Quantity] ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] )",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order Documents'[First Delivery Date] ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
               ")"
             ],
             "formatString": "#,0.00",
@@ -5892,12 +5951,13 @@
               "CALCULATE(",
               "    AVERAGE( Target_KPI[TargetValue] ),",
               "    Target_KPI[KpiKey] = \"ScrapGR\",",
-              "    FILTER(",
-              "        ALL( Target_KPI[CalendarTimeKey] ),",
-              "        CONTAINS(",
-              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "            'Calendar'[Year_Month_Sort_Key], Target_KPI[CalendarTimeKey]",
-              "        )",
+              "    TREATAS(",
+              "        VALUES( 'Company Code'[Company Code] ),",
+              "        Target_KPI[LocationKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        Target_KPI[CalendarTimeKey]",
               "    )",
               ")"
             ],
@@ -6303,6 +6363,692 @@
               ")"
             ],
             "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "Current Inventory Quantity",
+            "expression": [
+              "",
+              "-- valuated inventory",
+              "SUM( 'Current Inventory'[Total Stock Quantity] ) +",
+              "-- open stock transfer purchase orders",
+              "CALCULATE(",
+              "    [PO In Transit Quantity],",
+              "    KEEPFILTERS( 'Purchase Orders'[Receiving Plant] <> \"1001\" )",
+              ") +",
+              "-- open WIP process orders",
+              "SUM( 'Open WIP'[Quantity] )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Current Inventory MLOS Cost",
+            "description": "Total of material, labor, overhead, and setup cost of current inventory based on current standard prices. May not be the same as the [Current Inventory Amount] because of different decimal precisions.",
+            "expression": [
+              "",
+              "[Current Inventory Material Cost]",
+              "    + [Current Inventory Labor Cost]",
+              "    + [Current Inventory Overhead Cost]",
+              "    + [Current Inventory Setup Cost]"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Inventory",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sales Labor Frozen Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Labor Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Labor Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Labor Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Labor Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Overhead Frozen Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Overhead Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Overhead Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Overhead Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Overhead Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Setup Frozen Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Setup Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Setup Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Setup Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Setup Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Material Frozen Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Material Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Material Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Material Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Material Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Material Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Material Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Material Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Material Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Material Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Labor Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Labor Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Labor Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Labor Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Labor Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Overhead Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Overhead Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Overhead Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Overhead Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Overhead Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Sales Setup Current Cost",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice Documents'[Current Setup Cost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Current Setup Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice Documents'[Current Setup Cost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice Documents'[Current Setup Cost] ) ",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "Last Inventory Material Cost",
+            "description": "Material cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Material Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Labor Cost",
+            "description": "Labor cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Labor Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Overhead Cost",
+            "description": "Overhead cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Overhead Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Setup Cost",
+            "description": "Setup cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Setup Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory MLOS Cost",
+            "description": "Material, labor, overhead, and setup cost at [Snapshot Date]",
+            "expression": [
+              "",
+              "[Last Inventory Material Cost]",
+              "    + [Last Inventory Labor Cost]",
+              "    + [Last Inventory Overhead Cost]",
+              "    + [Last Inventory Setup Cost]"
+            ],
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "Time Intelligence",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Last Inventory Quantity",
+            "description": "Last total inventory quantity at [Report Date]",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Current Inventory Snapshots'[Quantity] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Sales MLOS Current Cost",
+            "description": "Total of [Sales Material/Labor/Overhead/Setup Current Cost]",
+            "expression": [
+              "",
+              "[Sales Material Current Cost]",
+              "    + [Sales Labor Current Cost]",
+              "    + [Sales Overhead Current Cost]",
+              "    + [Sales Setup Current Cost]"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales\\.MLOS"
+          },
+          {
+            "name": "COMP Actual Hours",
+            "description": "Sum of 'Compounding Log'[Actual Hours Spent]",
+            "expression": "SUM( 'Compounding Log'[Actual Hours Spent] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Projected Direct Hours",
+            "description": "Sum of 'Compounding Log'[Projected Hours Spent] where [Is Labor] is 1 and [Task] is not 'MIXING'",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Compounding Log'[Projected Hours Spent] ),",
+              "    KEEPFILTERS( 'Compounding Log'[Is Labor] = 1 ),",
+              "    KEEPFILTERS( 'Compounding Log'[Task] <> \"MIXING\" )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Indirect Actual Hours",
+            "description": "Sum of 'Compounding Log'[Actual Hours Spent] where [Is Indirect] equals to 1",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [COMP Actual Hours],",
+              "    KEEPFILTERS( 'Compounding Log'[Is Indirect] = 1 )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Compounding Efficiency",
+            "description": "[COMP Projected Direct Hours] divided by the difference of [COMP Actual Hours] and [COMP Indirect Actual Hours]",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [COMP Projected Direct Hours],",
+              "    [COMP Actual Hours] - [COMP Indirect Actual Hours]",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Labor Efficiency",
+            "description": "[COMP Projected Direct Hours] divided by the difference between [COMP Actual Hours], [COMP Indirect Actual Hours], and [COMP Actual Hours] where [Task] is 'TRAINING'",
+            "expression": [
+              "",
+              "VAR training = ",
+              "    CALCULATE(",
+              "        [COMP Actual Hours],",
+              "        KEEPFILTERS( 'Compounding Log'[Task] = \"TRAINING\" )",
+              "    )",
+              "",
+              "RETURN",
+              "DIVIDE(",
+              "    [COMP Projected Direct Hours],",
+              "    [COMP Actual Hours] - [COMP Indirect Actual Hours] + training",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Non-Production as % of Direct Labor",
+            "description": "[COMP Actual Hours] where [Task] is 'NON-PRODUCTION (5S/OTHER)' divided by [COMP Actual Hours]",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    CALCULATE(",
+              "        [COMP Actual Hours],",
+              "        KEEPFILTERS( 'Compounding Log'[Task] = \"NON-PRODUCTION (5S/OTHER)\" )",
+              "    ),",
+              "    [COMP Actual Hours] - [COMP Indirect Actual Hours]",
+              ")",
+              ""
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Compounding Efficiency (Target)",
+            "description": "Uploaded KPI target to the Power BI data warehouse. User sends the target data to IT personnel and uploads it in ARLPBIPRD.ARLPBI_STAGE SQL database in 'zTARGETS_KPI' table; KpiKey = \"Eff_COMP\"",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"Eff_COMP\",",
+              "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.90,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP First Pass Reliability (Target)",
+            "description": "Uploaded KPI target to the Power BI data warehouse. User sends the target data to IT personnel and uploads it in ARLPBIPRD.ARLPBI_STAGE SQL database in 'zTARGETS_KPI' table; KpiKey = \"FPass_COMP\"",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"FPass_COMP\",",
+              "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.95,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Shop Order Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DISTINCTCOUNT( 'Shop Orders'[Process Order Number] ),",
+              "    KEEPFILTERS( 'Shop Orders'[Department] = \"COMP\" ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Shop Orders'[End Date Key] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Shop Order Fail Count",
+            "expression": "DISTINCTCOUNT( 'Compounding Failures'[Process Order Number] )",
+            "formatString": "0",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Shop Order Success Count",
+            "expression": "[COMP Shop Order Count] - [COMP Shop Order Fail Count]",
+            "formatString": "0",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP First Pass Reliability",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DIVIDE(",
+              "        [COMP Shop Order Success Count],",
+              "        [COMP Shop Order Count]",
+              "    ),",
+              "    KEEPFILTERS( 'Shop Orders'[Count in COMP First Pass Indicator] = \"X\" )",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Compounding Efficiency (Target Var)",
+            "expression": "[COMP Compounding Efficiency] - [COMP Compounding Efficiency (Target)]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP Labor Efficiency (Target Var)",
+            "expression": "[COMP Labor Efficiency] - [COMP Compounding Efficiency (Target)]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP First Pass Reliability (Target Var)",
+            "expression": "[COMP First Pass Reliability] - [COMP First Pass Reliability (Target)]",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "COMP First Pass Reliability Impact",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [COMP Shop Order Fail Count],",
+              "    [COMP Shop Order Count]",
+              ")"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Compounding"
+          },
+          {
+            "name": "Gross Sales (Was New Product)",
+            "description": "Total revenue of sales invoices where the material was 36 months old at the time of posting",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Gross Sales],",
+              "    KEEPFILTERS( 'Sales Invoice Documents'[Was New Product] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD Gross Sales (Was New Product)",
+            "description": "Total revenue of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "CALCULATE( [Gross Sales (Was New Product)], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales (Was New Product)",
+            "description": "Total revenue of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "CALCULATE( [MTD Gross Sales (Was New Product)], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Gross Sales %Grand (Was New Product)",
+            "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "DIVIDE( [Gross Sales (Was New Product)], [Gross Sales] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD Gross Sales %Grand (Was New Product)",
+            "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "DIVIDE( [MTD Gross Sales (Was New Product)], [MTD Gross Sales] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PY Gross Sales %Grand (Was New Product)",
+            "description": "Total revenue as % of grand total of sales invoices where the material was 36 months old at the time of posting",
+            "expression": "DIVIDE( [MTD PY Gross Sales (Was New Product)], [MTD PY Gross Sales] )",
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Audit 5S Score",
+            "description": "Sum of sort, straighten, shine, standardize, sustain, and safety scores",
+            "expression": "SUM( 'Audit 5S Scores'[Score Value] )",
+            "formatString": "#,0",
+            "displayFolder": "5S"
+          },
+          {
+            "name": "Audit 5S Score as % of Target",
+            "description": "Quotient of [Audit 5S Score] and target. Total target value per department is 18 points while the total target value per category is 3 points.",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Audit 5S Score],",
+              "    SUM( 'Audit 5S Scores'[Target Value] )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "5S"
+          },
+          {
+            "name": "SO Unrestricted Stock Quantity",
+            "expression": [
+              "",
+              "IF(",
+              "    ISFILTERED(Plant[Plant]) || ISFILTERED('Material Master'[Material Number]) || ISFILTERED('Sales Order Documents'[Material Number]),",
+              "    SUMX( VALUES('Sales Order Documents'[MaterialPlantKey]), AVERAGE('Sales Order Documents'[Unrestricted Stock Quantity]) ),",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Orders"
+          },
+          {
+            "name": "MTD Audit Score as % of Target",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Audit 5S Score as % of Target],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PM Var Audit Score as % of Target",
+            "expression": [
+              "",
+              "VAR PM =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            [Audit 5S Score as % of Target],",
+              "            PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    ISBLANK( [MTD Audit Score as % of Target] ) || ISBLANK( PM ),",
+              "    BLANK(),",
+              "    [MTD Audit Score as % of Target] - PM",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -6402,7 +7148,7 @@
             ]
           },
           {
-            "name": "Overall Cost Amount",
+            "name": "Total Cost",
             "dataType": "decimal",
             "description": "SAP Source: VBRP.WAVWR",
             "isHidden": true,
@@ -6419,9 +7165,9 @@
             ]
           },
           {
-            "name": "Material Cost Amount",
+            "name": "Material Cost",
             "dataType": "decimal",
-            "description": "SAP Source: CE110US.VVMEP",
+            "description": "SAP Source: KEPH.KST001",
             "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -6572,6 +7318,127 @@
             "isHidden": true,
             "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Labor Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST003",
+            "isHidden": true,
+            "sourceColumn": "LaborCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Overhead Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST005",
+            "isHidden": true,
+            "sourceColumn": "OverheadCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Setup Cost",
+            "dataType": "decimal",
+            "description": "SAP Source: KEPH.KST007",
+            "isHidden": true,
+            "sourceColumn": "SetupCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Type",
+            "dataType": "string",
+            "description": "SAP Source: VBAK.AUART",
+            "sourceColumn": "SalesOrderType"
+          },
+          {
+            "name": "Current Material Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "MaterialCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Labor Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "LaborCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Overhead Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "OverheadCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Current Setup Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "SetupCurrCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -7891,7 +8758,7 @@
                 "    )",
                 ")"
               ],
-              "ordinal": 4
+              "ordinal": 5
             },
             {
               "name": "YTD",
@@ -7907,12 +8774,12 @@
                 "    )",
                 ")"
               ],
-              "ordinal": 7
+              "ordinal": 12
             },
             {
               "name": "PY",
               "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
-              "ordinal": 13
+              "ordinal": 18
             },
             {
               "name": "PY YTD",
@@ -7923,7 +8790,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
                 ")"
               ],
-              "ordinal": 8
+              "ordinal": 13
             },
             {
               "name": "PY MTD",
@@ -7934,7 +8801,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
                 ")"
               ],
-              "ordinal": 5
+              "ordinal": 7
             },
             {
               "name": "FYTD",
@@ -7950,7 +8817,7 @@
                 "    )",
                 ")"
               ],
-              "ordinal": 10
+              "ordinal": 15
             },
             {
               "name": "PY FYTD",
@@ -7961,7 +8828,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
                 ")"
               ],
-              "ordinal": 11
+              "ordinal": 16
             },
             {
               "name": "YOY",
@@ -7979,7 +8846,7 @@
                 "    BLANK()",
                 ")"
               ],
-              "ordinal": 14
+              "ordinal": 19
             },
             {
               "name": "CD",
@@ -8003,21 +8870,28 @@
                 "    PREVIOUSDAY( 'Calendar'[Date] )",
                 ")"
               ],
-              "ordinal": 3
+              "ordinal": 4
             },
             {
               "name": "MTD PY Var",
               "expression": [
-                "CALCULATE(",
-                "    SELECTEDMEASURE(),",
-                "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
-                ") - ",
-                "CALCULATE(",
-                "    SELECTEDMEASURE(),",
-                "    '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                "IF(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                "    ),",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                "    ) - ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                "    ),",
+                "    BLANK()",
                 ")"
               ],
-              "ordinal": 6
+              "ordinal": 8
             },
             {
               "name": "YTD PY Var",
@@ -8031,7 +8905,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
                 ")"
               ],
-              "ordinal": 9
+              "ordinal": 14
             },
             {
               "name": "FTYD PY Var",
@@ -8045,7 +8919,7 @@
                 "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
                 ")"
               ],
-              "ordinal": 12
+              "ordinal": 16
             },
             {
               "name": "CD Weekday",
@@ -8058,7 +8932,8 @@
                 "            && 'Calendar'[Date] = LASTDATE( ALLSELECTED('Calendar'[Date]) )",
                 "    )",
                 ")"
-              ]
+              ],
+              "ordinal": 3
             },
             {
               "name": "MTD Weekday",
@@ -8074,7 +8949,64 @@
                 "    )",
                 ")"
               ],
-              "ordinal": 4
+              "ordinal": 6
+            },
+            {
+              "name": "MTD PY Var%",
+              "expression": [
+                "DIVIDE(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                "    ) -",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                "    ),",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                "    )",
+                ")"
+              ],
+              "ordinal": 9
+            },
+            {
+              "name": "PM MTD",
+              "expression": [
+                "CALCULATE( ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+                "    ),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] <= [Report Date]",
+                "    )",
+                ")"
+              ],
+              "ordinal": 11
+            },
+            {
+              "name": "MTD PM Var",
+              "expression": [
+                "IF(",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PM MTD\"",
+                "    ),",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
+                "    ) - ",
+                "    CALCULATE(",
+                "        SELECTEDMEASURE(),",
+                "        '_Time Intelligence'[Time Calculation] = \"PM MTD\"",
+                "    ),",
+                "    BLANK()",
+                ")"
+              ],
+              "ordinal": 12
             }
           ]
         },
@@ -8388,6 +9320,12 @@
             "isHidden": true,
             "sourceColumn": "TargetValue",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "LocationKey",
+            "dataType": "string",
+            "sourceColumn": "LocationKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -8398,10 +9336,10 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_zTARGETS_KPI = Source{[Schema=\"dbo\",Item=\"zTARGETS_KPI\"]}[Data]",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_TARGETS_KPI = Source{[Schema=\"dbo\",Item=\"VW_TARGETS_KPI\"]}[Data]",
                 "in",
-                "    dbo_zTARGETS_KPI"
+                "    dbo_VW_TARGETS_KPI"
               ]
             }
           }
@@ -8667,6 +9605,7 @@
             "dataType": "decimal",
             "description": "SAP Source: VBAP.NETPR",
             "sourceColumn": "UnitPrice",
+            "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
@@ -8674,7 +9613,7 @@
             "dataType": "decimal",
             "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
             "sourceColumn": "ExchangeRate",
-            "formatString": "0.0000",
+            "formatString": "0.00",
             "summarizeBy": "none"
           },
           {
@@ -8989,6 +9928,51 @@
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Incoterms Part 1",
+            "dataType": "string",
+            "description": "SAP Source: VBKD.INCO1",
+            "sourceColumn": "IncoTerms1"
+          },
+          {
+            "name": "Incoterms Part 2",
+            "dataType": "string",
+            "description": "SAP Source: VBKD.INCO2",
+            "sourceColumn": "IncoTerms2"
+          },
+          {
+            "name": "Pricing Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: VBKD.PRSDT",
+            "sourceColumn": "PricingDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Ship To Account Number",
+            "dataType": "string",
+            "description": "SAP Source: VBPA.KUNNR",
+            "sourceColumn": "ShipToAcctNo"
+          },
+          {
+            "name": "Unrestricted Stock Quantity",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "UnrestrictStockQty",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Requirements Type",
+            "dataType": "string",
+            "description": "SAP Source: VBAP.BEDAE",
+            "sourceColumn": "RequirementsType"
           }
         ],
         "partitions": [
@@ -9327,6 +10311,7 @@
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'U'",
             "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
@@ -9335,6 +10320,7 @@
             "dataType": "decimal",
             "description": "SAP Source: EKBE.MENGE; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptQuantity",
+            "formatString": "#,0.00",
             "displayFolder": "_Quantities",
             "summarizeBy": "none"
           },
@@ -9344,6 +10330,7 @@
             "description": "Net of delivered and goods receipt",
             "isHidden": true,
             "sourceColumn": "InTransitQuantity",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Quantities"
           },
@@ -9352,6 +10339,7 @@
             "dataType": "decimal",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'U'",
             "sourceColumn": "DeliveredAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -9360,6 +10348,7 @@
             "dataType": "decimal",
             "description": "SAP Source: EKBE.WRBTR; Criteria: EKBE.BEWTP = 'E'",
             "sourceColumn": "GoodsReceiptAmount",
+            "formatString": "#,0.00",
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -9369,6 +10358,7 @@
             "description": "Net of delivered and goods receipt",
             "isHidden": true,
             "sourceColumn": "InTransitAmount",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Values"
           },
@@ -9407,9 +10397,10 @@
               "expression": [
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data]",
+                "    dbo_VW_INVENTORY_INTRANSIT = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_INTRANSIT\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_INTRANSIT,{\"PurchaseOrderLineKey\", \"PurchaseOrderNoKey\", \"PurchaseOrderLineNo\", \"ReferencedDocumentNo\", \"ShipmentDocumentNo\", \"ShipmentLineNo\", \"MaterialNoKey\", \"ValuationClass\", \"ValuationClassKey\", \"BatchNo\", \"DeliveredQuantity\", \"GoodsReceiptQuantity\", \"InTransitQuantity\", \"DeliveredAmount\", \"GoodsReceiptAmount\", \"InTransitAmount\"})",
                 "in",
-                "    dbo_VW_INVENTORY_INTRANSIT"
+                "    #\"Removed Other Columns\""
               ]
             }
           }
@@ -11310,6 +12301,66 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Material Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "MatCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Labor Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "LaborCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Overhead Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "OverheadCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Setup Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "SetupCostUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -11321,8 +12372,8 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_zDAILY_INVENTORY = Source{[Schema=\"dbo\",Item=\"zDAILY_INVENTORY\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_zDAILY_INVENTORY,{{\"SnapshotDateKey\", type date}})",
+                "    dbo_VW_DAILY_INVENTORY = Source{[Schema=\"dbo\",Item=\"VW_DAILY_INVENTORY\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_DAILY_INVENTORY,{{\"SnapshotDateKey\", type date}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -11596,6 +12647,128 @@
             "isHidden": true,
             "sourceColumn": "LeadOrderBomKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Facestock Material Number 1",
+            "dataType": "string",
+            "description": "First facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Facestock Batch Number 1",
+            "dataType": "string",
+            "description": "First facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Facestock Material Number 2",
+            "dataType": "string",
+            "description": "Second facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Facestock Batch Number 2",
+            "dataType": "string",
+            "description": "Second facestock based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "FacestockBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Material Number 1",
+            "dataType": "string",
+            "description": "First liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Batch Number 1",
+            "dataType": "string",
+            "description": "First liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Material Number 2",
+            "dataType": "string",
+            "description": "Second liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Liner Batch Number 2",
+            "dataType": "string",
+            "description": "Second liner based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "LinerBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Material Number 1",
+            "dataType": "string",
+            "description": "First adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Batch Number 1",
+            "dataType": "string",
+            "description": "First adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Material Number 2",
+            "dataType": "string",
+            "description": "Second adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Adhesive Batch Number 2",
+            "dataType": "string",
+            "description": "Second adhesive based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "AdhesiveBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Material Number 1",
+            "dataType": "string",
+            "description": "First organosol based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "OrganosolMatNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Batch Number 1",
+            "dataType": "string",
+            "description": "First organosol based on the process order's goods movement in order of posting date and batch number",
+            "sourceColumn": "OrganosolBatchNo1",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Material Number 2",
+            "dataType": "string",
+            "sourceColumn": "OrganosolMatNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Organosol Batch Number 2",
+            "dataType": "string",
+            "sourceColumn": "OrganosolBatchNo2",
+            "displayFolder": ".Components Used"
+          },
+          {
+            "name": "Count in COMP First Pass Indicator",
+            "dataType": "string",
+            "description": "This value is set if either the [Final Deliver Indicator] or [Close Indicator] is set",
+            "sourceColumn": "IsCountForCompFPass"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "description": "SAP Source: MARA.MATKL",
+            "sourceColumn": "MaterialGroup"
           }
         ],
         "partitions": [
@@ -12336,6 +13509,12 @@
             "isHidden": true,
             "sourceColumn": "ScrapCategoryKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Item Text",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.SGTXT",
+            "sourceColumn": "ItemText"
           }
         ],
         "partitions": [
@@ -13134,6 +14313,18 @@
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Customer Number",
+            "dataType": "string",
+            "description": "SAP Source: MSEG.KUNNR; Not related to 'Customer Master'",
+            "sourceColumn": "CustomerNo"
+          },
+          {
+            "name": "Customer Name",
+            "dataType": "string",
+            "description": "SAP Source: KNA1.NAME1; Not related to 'Customer Master'",
+            "sourceColumn": "CustomerName"
           }
         ],
         "partitions": [
@@ -14401,6 +15592,12 @@
             "isHidden": true,
             "sourceColumn": "ScrapCategoryKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Item Text",
+            "dataType": "string",
+            "description": "SAP Source: ACCTIT.SGTXT",
+            "sourceColumn": "ItemText"
           }
         ],
         "partitions": [
@@ -14534,7 +15731,6 @@
             "name": "Amount",
             "dataType": "decimal",
             "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
-            "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "0.00",
             "isAvailableInMdx": false
@@ -15455,18 +16651,16 @@
         "description": "SAP Source: KEKO, KEPH, CKHS. Costing postings without errors, not lower level, no link for currency type, and are main component cost split.",
         "columns": [
           {
-            "name": "MateriaNo",
+            "name": "Material Number",
             "dataType": "string",
             "description": "SAP Source: KEKO.MATNR",
-            "isHidden": true,
             "sourceColumn": "MaterialNo",
             "isAvailableInMdx": false
           },
           {
-            "name": "PlantNo",
+            "name": "Plant",
             "dataType": "string",
             "description": "SAP Source: KEKO.WERKS",
-            "isHidden": true,
             "sourceColumn": "PlantNo",
             "isAvailableInMdx": false
           },
@@ -15506,7 +16700,8 @@
             "name": "Costing Lot Size",
             "dataType": "decimal",
             "description": "SAP Source: KEKO.LOSGR",
-            "sourceColumn": "CostLotSize"
+            "sourceColumn": "CostLotSize",
+            "formatString": "#,0.00"
           },
           {
             "name": "Costing By",
@@ -15561,12 +16756,12 @@
             "summarizeBy": "none"
           },
           {
-            "name": "LatestRank",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "LatestRank",
-            "formatString": "#,0",
-            "isAvailableInMdx": false
+            "name": "Standard Price",
+            "dataType": "decimal",
+            "description": "Calculated column: [Total Cost] divided by [Costing Lot Size]",
+            "sourceColumn": "StandardPrice",
+            "formatString": "#,0.00",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -15578,9 +16773,446 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_VW_MATERIAL_COSTING_HISTORY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_COSTING_HISTORY\"]}[Data]",
+                "    dbo_VW_MATERIAL_COSTING_HISTORY = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_COSTING_HISTORY\"]}[Data],",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_MATERIAL_COSTING_HISTORY,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"UnitOfMeasure\", \"CostLotSize\", \"CostingBy\", \"Currency\", \"TotalCost\", \"StandardPrice\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\"})",
                 "in",
-                "    dbo_VW_MATERIAL_COSTING_HISTORY"
+                "    #\"Removed Other Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sales Order Shipments",
+        "columns": [
+          {
+            "name": "OrderNoLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "OrderNoLineKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Delivery Note",
+            "dataType": "string",
+            "description": "SAP Source: LIPS.VBELN",
+            "sourceColumn": "DeliveryNoteNo"
+          },
+          {
+            "name": "Shipment Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTK.TKNUM",
+            "sourceColumn": "ShipmentNo"
+          },
+          {
+            "name": "Actual Shipment Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: VTTK.DALBG",
+            "sourceColumn": "ActualShipmentDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Delivered Quantity",
+            "dataType": "decimal",
+            "description": "SAP Source: LIPS.LFIMG",
+            "isHidden": true,
+            "sourceColumn": "DeliveredQuantity",
+            "formatString": "0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "description": "SAP Source: LIPS.CHARG",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Actual Goods Movement Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: LIKP.WADAT_IST",
+            "sourceColumn": "ActualGoodsMvmtDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_SALES_SHIPMENTS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_SALES_SHIPMENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_SALES_SHIPMENTS"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Delivery Note Quantity",
+            "expression": [
+              "",
+              "IF(",
+              "    ISFILTERED( 'Sales Order Shipments' ),",
+              "    SUM( 'Sales Order Shipments'[Delivered Quantity] ),",
+              "    BLANK()",
+              ")"
+            ],
+            "formatString": "#,0.00"
+          }
+        ]
+      },
+      {
+        "name": "Compounding Log",
+        "columns": [
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "description": "Source: Log.ID",
+            "sourceColumn": "CompID",
+            "formatString": "0"
+          },
+          {
+            "name": "Compounding Date",
+            "dataType": "dateTime",
+            "description": "Source: Log.CompDate",
+            "sourceColumn": "CompDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Production Shift",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ProductionShift",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Operator",
+            "dataType": "string",
+            "description": "Source: Log.Operator",
+            "sourceColumn": "Operator"
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "Source: FurtherDetail.[Shop Order]; Not related to 'Shop Orders'[Process Order Number]",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Task",
+            "dataType": "string",
+            "description": "Source: FurtherDetail.Task",
+            "sourceColumn": "Task"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: Log.Comments",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "Is Indirect",
+            "dataType": "decimal",
+            "description": "Source: Tasks.[Is Indirect]",
+            "sourceColumn": "IsIndirect",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Is Labor",
+            "dataType": "decimal",
+            "description": "Source: Tasks.[Is Labor]",
+            "sourceColumn": "IsLabor",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Vessels",
+            "dataType": "decimal",
+            "description": "Source: FurtherDetail.Vessels",
+            "sourceColumn": "Vessels",
+            "formatString": "0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Actual Hours Spent",
+            "dataType": "decimal",
+            "description": "Source: FurtherDetail.[Time Spent]",
+            "sourceColumn": "ActualHours",
+            "formatString": "0.00",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Projected Hours Spent",
+            "dataType": "decimal",
+            "description": "Calculated column; Product of [Vessels] and the corresponding Tasks.[Hours Earned] per [Task]",
+            "sourceColumn": "ProjectHours",
+            "formatString": "0.00",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_COMP_LOG = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_COMP_LOG\"]}[Data]",
+                "in",
+                "    dbo_VW_UPSTREAM_COMP_LOG"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Compounding Failures",
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.[Shop Order]",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Fail Date",
+            "dataType": "dateTime",
+            "description": "Source: tbl1stPassFailures.FailDate",
+            "sourceColumn": "FailDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.[Part Number]",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.[Part Description]",
+            "sourceColumn": "MaterialDescription"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.Status",
+            "sourceColumn": "Status"
+          },
+          {
+            "name": "Base Category",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.Base",
+            "sourceColumn": "BaseCategory"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.Category",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Rework",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.Rework",
+            "sourceColumn": "Rework"
+          },
+          {
+            "name": "Notes",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.Notes",
+            "sourceColumn": "Notes"
+          },
+          {
+            "name": "Theory",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.Theory",
+            "sourceColumn": "Theory"
+          },
+          {
+            "name": "Action Item",
+            "dataType": "string",
+            "description": "Source: tbl1stPassFailures.[Action Item]",
+            "sourceColumn": "ActionItem"
+          },
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "description": "Work center according to the [Base Category] assigned",
+            "sourceColumn": "WorkCenter"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_UPSTREAM_COMP_FPASSFAILS = Source{[Schema=\"dbo\",Item=\"VW_UPSTREAM_COMP_FPASSFAILS\"]}[Data]",
+                "in",
+                "    dbo_VW_UPSTREAM_COMP_FPASSFAILS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Audit 5S Scores",
+        "columns": [
+          {
+            "name": "Audit ID",
+            "dataType": "int64",
+            "description": "Source: [5S Data].[ID]",
+            "sourceColumn": "AuditID",
+            "formatString": "0"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Audit Date",
+            "dataType": "dateTime",
+            "description": "Source: [5S Data].[Report Date]",
+            "sourceColumn": "ReportDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Area",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Area]",
+            "sourceColumn": "Area"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Category]",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Score Value",
+            "dataType": "int64",
+            "description": "Source: [5S Data].[Sort], [Straighten], [Shine], [Standardize], [Sustain], and [Safety]",
+            "sourceColumn": "ScoreValue",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Target Value",
+            "dataType": "int64",
+            "description": "Hardcoded to 3",
+            "sourceColumn": "TargetValue",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Company]",
+            "sourceColumn": "CompanyCode"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_5S = Source{[Schema=\"dbo\",Item=\"VW_5S_SCORES\"]}[Data]",
+                "in",
+                "    dbo_VW_5S"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Audit 5S Comments",
+        "columns": [
+          {
+            "name": "Audit ID",
+            "dataType": "int64",
+            "description": "Source: [5S Data].[ID]",
+            "sourceColumn": "MaxID"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "description": "Source: [5S Data].[Comments]",
+            "sourceColumn": "Comments"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_5S_COMMENTS = Source{[Schema=\"dbo\",Item=\"VW_5S_COMMENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_5S_COMMENTS"
               ]
             }
           }
@@ -16814,16 +18446,89 @@
       {
         "name": "037ca128-5949-419a-b85b-e25fd7b6e74c",
         "fromTable": "Material Costing History",
-        "fromColumn": "MateriaNo",
+        "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
       },
       {
         "name": "f18e033f-cd8d-481b-a011-d88f56bbfe53",
         "fromTable": "Material Costing History",
-        "fromColumn": "PlantNo",
+        "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "defa914c-319b-4223-87eb-6fde4acb151e",
+        "toCardinality": "many",
+        "fromTable": "Sales Order Shipments",
+        "fromColumn": "OrderNoLineKey",
+        "toTable": "Sales Order Documents",
+        "toColumn": "OrderNoLineKey",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "5d4997ce-0596-4d4d-897d-57346c6d67fc",
+        "fromTable": "Hold Tag Documents",
+        "fromColumn": "Plant for Material",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "a133a526-6b51-440b-8cc7-6130663b34e2",
+        "fromTable": "Compounding Log",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
+      },
+      {
+        "name": "089ec1e3-44f8-4eca-9395-b7f8d1677b90",
+        "fromTable": "Compounding Log",
+        "fromColumn": "Production Shift",
+        "toTable": "_Production Shifts",
+        "toColumn": "Production Shift"
+      },
+      {
+        "name": "04eeae6b-a7f6-4389-8685-f764e3dec9a2",
+        "fromTable": "Compounding Log",
+        "fromColumn": "Compounding Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "4e1166b3-1fde-4f73-9359-2267c5bc9c5a",
+        "fromTable": "Compounding Failures",
+        "fromColumn": "Fail Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "8a5ed59e-69bc-4881-8f4c-e09315e0176c",
+        "fromTable": "Compounding Failures",
+        "fromColumn": "Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "9c6265fd-8311-47af-ae6b-97b3bd4aa534",
+        "fromTable": "Audit 5S Scores",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7040d8a6-f19f-4052-9a4d-1b05527d3374",
+        "fromTable": "Audit 5S Scores",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "dfadd8ff-77f6-488e-948e-6bc0db4f3979",
+        "fromTable": "Audit 5S Scores",
+        "fromColumn": "Audit ID",
+        "toTable": "Audit 5S Comments",
+        "toColumn": "Audit ID",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -17020,6 +18725,39 @@
               },
               {
                 "name": "Sales Territory"
+              },
+              {
+                "name": "Account Creation Date"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Is New Customer"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -17133,6 +18871,18 @@
               },
               {
                 "name": "Testing 24hr Dwell Adhesion Avg Result"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -17526,6 +19276,189 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Shop Orders",
+            "columns": [
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Adhesive Batch Number 1"
+              },
+              {
+                "name": "Adhesive Batch Number 2"
+              },
+              {
+                "name": "Adhesive Material Number 1"
+              },
+              {
+                "name": "Adhesive Material Number 2"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Bill of Material"
+              },
+              {
+                "name": "Close Indicator"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Deliver Indicator"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Document Group"
+              },
+              {
+                "name": "End Date Key"
+              },
+              {
+                "name": "Facestock Batch Number 1"
+              },
+              {
+                "name": "Facestock Batch Number 2"
+              },
+              {
+                "name": "Facestock Material Number 1"
+              },
+              {
+                "name": "Facestock Material Number 2"
+              },
+              {
+                "name": "Final Deliver Indicator"
+              },
+              {
+                "name": "Item Number"
+              },
+              {
+                "name": "LeadOrderBomKey"
+              },
+              {
+                "name": "Liner Batch Number 1"
+              },
+              {
+                "name": "Liner Batch Number 2"
+              },
+              {
+                "name": "Liner Material Number 1"
+              },
+              {
+                "name": "Liner Material Number 2"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Order Quantity"
+              },
+              {
+                "name": "Organosol Batch Number 1"
+              },
+              {
+                "name": "Organosol Batch Number 2"
+              },
+              {
+                "name": "Organosol Material Number 1"
+              },
+              {
+                "name": "Organosol Material Number 2"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Same Day Indicator"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Work Center"
+              },
+              {
+                "name": "Material Group"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -18140,6 +20073,18 @@
               },
               {
                 "name": "Sales Order Line Count"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -18297,6 +20242,33 @@
               },
               {
                 "name": "Sales Territory"
+              },
+              {
+                "name": "Country"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Default Ship Plant"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Territory Name"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -18388,6 +20360,77 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Actual Goods Movement Date"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -18549,9 +20592,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -18574,6 +20614,12 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
               }
             ]
           },
@@ -18771,6 +20817,51 @@
               },
               {
                 "name": "MTD Sales Order Amount"
+              },
+              {
+                "name": "Sales Labor Frozen Cost"
+              },
+              {
+                "name": "Sales Material Frozen Cost"
+              },
+              {
+                "name": "Sales Overhead Frozen Cost"
+              },
+              {
+                "name": "Sales Setup Frozen Cost"
+              },
+              {
+                "name": "Sales Labor Current Cost"
+              },
+              {
+                "name": "Sales Material Current Cost"
+              },
+              {
+                "name": "Sales Overhead Current Cost"
+              },
+              {
+                "name": "Sales Setup Current Cost"
+              },
+              {
+                "name": "Sales MLOS Current Cost"
+              },
+              {
+                "name": "Gross Sales (Was New Product)"
+              },
+              {
+                "name": "MTD Gross Sales (Was New Product)"
+              },
+              {
+                "name": "MTD PY Gross Sales (Was New Product)"
+              },
+              {
+                "name": "Gross Sales %Grand (Was New Product)"
+              },
+              {
+                "name": "MTD Gross Sales %Grand (Was New Product)"
+              },
+              {
+                "name": "MTD PY Gross Sales %Grand (Was New Product)"
               }
             ]
           },
@@ -18888,7 +20979,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Cost Amount"
+                "name": "Material Cost"
               },
               {
                 "name": "Material Number"
@@ -18897,7 +20988,7 @@
                 "name": "Net Sales Amount"
               },
               {
-                "name": "Overall Cost Amount"
+                "name": "Total Cost"
               },
               {
                 "name": "Posting Date"
@@ -18949,6 +21040,30 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Sales Order Type"
+              },
+              {
+                "name": "Current Material Cost"
+              },
+              {
+                "name": "Current Labor Cost"
+              },
+              {
+                "name": "Current Overhead Cost"
+              },
+              {
+                "name": "Current Setup Cost"
               }
             ]
           },
@@ -19099,6 +21214,53 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Material Costing History",
+            "columns": [
+              {
+                "name": "Costing By"
+              },
+              {
+                "name": "Costing End Date"
+              },
+              {
+                "name": "Costing Lot Size"
+              },
+              {
+                "name": "Costing Start Date"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Total Cost"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Standard Price"
               }
             ]
           }
@@ -19266,9 +21428,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -19282,6 +21441,15 @@
               },
               {
                 "name": "Price List Name"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "SalesRegionSortKey"
               }
             ]
           },
@@ -19515,6 +21683,12 @@
               },
               {
                 "name": "Net Sales"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
               }
             ]
           },
@@ -19650,7 +21824,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Cost Amount"
+                "name": "Material Cost"
               },
               {
                 "name": "Material Number"
@@ -19659,7 +21833,7 @@
                 "name": "Net Sales Amount"
               },
               {
-                "name": "Overall Cost Amount"
+                "name": "Total Cost"
               },
               {
                 "name": "Posting Date"
@@ -19693,6 +21867,30 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Sales Order Type"
+              },
+              {
+                "name": "Current Material Cost"
+              },
+              {
+                "name": "Current Labor Cost"
+              },
+              {
+                "name": "Current Overhead Cost"
+              },
+              {
+                "name": "Current Setup Cost"
               }
             ]
           },
@@ -19896,6 +22094,24 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -19984,6 +22200,46 @@
                 "name": "Currency"
               }
             ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
+              }
+            ]
           }
         ]
       },
@@ -20029,9 +22285,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -20045,6 +22298,15 @@
               },
               {
                 "name": "Price List Name"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
+              },
+              {
+                "name": "Sales Territory Name"
               }
             ]
           },
@@ -20125,6 +22387,9 @@
               },
               {
                 "name": "SO Customer Open Quantity (By Enter Date)"
+              },
+              {
+                "name": "SO Unrestricted Stock Quantity"
               }
             ]
           },
@@ -20420,6 +22685,24 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -20774,6 +23057,45 @@
               {
                 "name": "Company Code"
               },
+              {
+                "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Actual Goods Movement Date"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
+              }
+            ]
+          },
+          {
+            "name": "_Currency to Use",
+            "columns": [
               {
                 "name": "Currency"
               }
@@ -21651,9 +23973,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -21664,6 +23983,18 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Price List Code"
+              },
+              {
+                "name": "Price List Name"
+              },
+              {
+                "name": "Sales Person"
               }
             ]
           },
@@ -21959,6 +24290,24 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -22247,6 +24596,37 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Actual Goods Movement Date"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
               }
             ]
           }
@@ -22655,6 +25035,72 @@
               },
               {
                 "name": "Upstream Avg Cross Web Value"
+              },
+              {
+                "name": "COMP Actual Hours"
+              },
+              {
+                "name": "COMP Compounding Efficiency"
+              },
+              {
+                "name": "COMP Indirect Actual Hours"
+              },
+              {
+                "name": "COMP Labor Efficiency"
+              },
+              {
+                "name": "COMP Non-Production as % of Direct Labor"
+              },
+              {
+                "name": "COMP Projected Direct Hours"
+              },
+              {
+                "name": "COMP Compounding Efficiency (Target)"
+              },
+              {
+                "name": "COMP First Pass Reliability (Target)"
+              },
+              {
+                "name": "COMP First Pass Reliability"
+              },
+              {
+                "name": "COMP Shop Order Count"
+              },
+              {
+                "name": "COMP Shop Order Fail Count"
+              },
+              {
+                "name": "COMP Shop Order Success Count"
+              },
+              {
+                "name": "S/O Delivered Quantity"
+              },
+              {
+                "name": "S/O Ordered Quantity"
+              },
+              {
+                "name": "COMP Compounding Efficiency (Target Var)"
+              },
+              {
+                "name": "COMP First Pass Reliability (Target Var)"
+              },
+              {
+                "name": "COMP Labor Efficiency (Target Var)"
+              },
+              {
+                "name": "COMP First Pass Reliability Impact"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -22929,6 +25375,9 @@
               },
               {
                 "name": "ScrapCategoryKey"
+              },
+              {
+                "name": "Item Text"
               }
             ]
           },
@@ -23035,6 +25484,63 @@
               },
               {
                 "name": "LeadOrderBomKey"
+              },
+              {
+                "name": "Facestock Material Number 1"
+              },
+              {
+                "name": "Facestock Batch Number 1"
+              },
+              {
+                "name": "Facestock Material Number 2"
+              },
+              {
+                "name": "Facestock Batch Number 2"
+              },
+              {
+                "name": "Liner Material Number 1"
+              },
+              {
+                "name": "Liner Batch Number 1"
+              },
+              {
+                "name": "Liner Material Number 2"
+              },
+              {
+                "name": "Liner Batch Number 2"
+              },
+              {
+                "name": "Adhesive Material Number 1"
+              },
+              {
+                "name": "Adhesive Batch Number 1"
+              },
+              {
+                "name": "Adhesive Material Number 2"
+              },
+              {
+                "name": "Adhesive Batch Number 2"
+              },
+              {
+                "name": "Organosol Material Number 1"
+              },
+              {
+                "name": "Organosol Batch Number 1"
+              },
+              {
+                "name": "Organosol Material Number 2"
+              },
+              {
+                "name": "Organosol Batch Number 2"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Count in COMP First Pass Indicator"
               }
             ]
           },
@@ -23286,6 +25792,131 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Compounding Log",
+            "columns": [
+              {
+                "name": "Actual Hours Spent"
+              },
+              {
+                "name": "Comments"
+              },
+              {
+                "name": "Compounding Date"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "ID"
+              },
+              {
+                "name": "Is Indirect"
+              },
+              {
+                "name": "Is Labor"
+              },
+              {
+                "name": "Operator"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Production Shift"
+              },
+              {
+                "name": "Projected Hours Spent"
+              },
+              {
+                "name": "Task"
+              },
+              {
+                "name": "Vessels"
+              }
+            ]
+          },
+          {
+            "name": "Compounding Failures",
+            "columns": [
+              {
+                "name": "Action Item"
+              },
+              {
+                "name": "Base Category"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Fail Date"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Notes"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Rework"
+              },
+              {
+                "name": "Status"
+              },
+              {
+                "name": "Theory"
+              },
+              {
+                "name": "Work Center"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -23566,6 +26197,33 @@
               },
               {
                 "name": "Current Unrestricted Stock Amount"
+              },
+              {
+                "name": "Current Inventory Quantity"
+              },
+              {
+                "name": "Last Inventory Amount"
+              },
+              {
+                "name": "Current Inventory MLOS Cost"
+              },
+              {
+                "name": "Last Inventory Labor Cost"
+              },
+              {
+                "name": "Last Inventory Material Cost"
+              },
+              {
+                "name": "Last Inventory Overhead Cost"
+              },
+              {
+                "name": "Last Inventory Setup Cost"
+              },
+              {
+                "name": "Last Inventory MLOS Cost"
+              },
+              {
+                "name": "Last Inventory Quantity"
               }
             ]
           },
@@ -24149,6 +26807,24 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -24172,6 +26848,18 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },
@@ -24411,6 +27099,12 @@
               },
               {
                 "name": "Gross Weight"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Customer Name"
               }
             ]
           },
@@ -24479,19 +27173,16 @@
                 "name": "Labor Cost"
               },
               {
-                "name": "LatestRank"
-              },
-              {
                 "name": "Material Cost"
               },
               {
-                "name": "MateriaNo"
+                "name": "Material Number"
               },
               {
                 "name": "Overhead Cost"
               },
               {
-                "name": "PlantNo"
+                "name": "Plant"
               },
               {
                 "name": "Setup Cost"
@@ -24501,6 +27192,9 @@
               },
               {
                 "name": "Unit of Measure"
+              },
+              {
+                "name": "Standard Price"
               }
             ]
           }
@@ -25223,6 +27917,24 @@
               },
               {
                 "name": "Sunday of Prior Week"
+              },
+              {
+                "name": "Current Inventory Quantity"
+              },
+              {
+                "name": "Current Inventory MLOS Cost"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -25424,6 +28136,18 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
               }
             ]
           },
@@ -25513,6 +28237,60 @@
               },
               {
                 "name": "LeadOrderBomKey"
+              },
+              {
+                "name": "Facestock Material Number 1"
+              },
+              {
+                "name": "Facestock Batch Number 1"
+              },
+              {
+                "name": "Facestock Material Number 2"
+              },
+              {
+                "name": "Facestock Batch Number 2"
+              },
+              {
+                "name": "Liner Material Number 1"
+              },
+              {
+                "name": "Liner Batch Number 1"
+              },
+              {
+                "name": "Liner Material Number 2"
+              },
+              {
+                "name": "Liner Batch Number 2"
+              },
+              {
+                "name": "Adhesive Material Number 1"
+              },
+              {
+                "name": "Adhesive Batch Number 1"
+              },
+              {
+                "name": "Adhesive Material Number 2"
+              },
+              {
+                "name": "Adhesive Batch Number 2"
+              },
+              {
+                "name": "Organosol Material Number 1"
+              },
+              {
+                "name": "Organosol Batch Number 1"
+              },
+              {
+                "name": "Organosol Material Number 2"
+              },
+              {
+                "name": "Organosol Batch Number 2"
+              },
+              {
+                "name": "Count in COMP First Pass Indicator"
+              },
+              {
+                "name": "Material Group"
               }
             ]
           },
@@ -25803,6 +28581,46 @@
                 "name": "Currency"
               }
             ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
+              }
+            ]
           }
         ]
       },
@@ -26030,9 +28848,6 @@
                 "name": "Sales Organization"
               },
               {
-                "name": "Sales Person"
-              },
-              {
                 "name": "Sales Region"
               },
               {
@@ -26043,6 +28858,12 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "Delivery Priority"
+              },
+              {
+                "name": "Sales Person"
               }
             ]
           },
@@ -26352,6 +29173,24 @@
               },
               {
                 "name": "Late Quantity"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Requirements Type"
               }
             ]
           },
@@ -26559,6 +29398,12 @@
               },
               {
                 "name": "Gross Weight"
+              },
+              {
+                "name": "Customer Number"
+              },
+              {
+                "name": "Customer Name"
               }
             ]
           },
@@ -26684,6 +29529,18 @@
               },
               {
                 "name": "WH Days of Perfect On Time Shipment"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -26867,6 +29724,46 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -27116,6 +30013,9 @@
               },
               {
                 "name": "ScrapCategoryKey"
+              },
+              {
+                "name": "Item Text"
               }
             ]
           },
@@ -27336,6 +30236,18 @@
               },
               {
                 "name": "Operations Goods Receipt Amount"
+              },
+              {
+                "name": "Audit 5S Score"
+              },
+              {
+                "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "MTD Audit Score as % of Target"
+              },
+              {
+                "name": "MTD PM Var Audit Score as % of Target"
               }
             ]
           },
@@ -27412,6 +30324,9 @@
               },
               {
                 "name": "ScrapCategoryKey"
+              },
+              {
+                "name": "Item Text"
               }
             ]
           },
@@ -27591,6 +30506,46 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Scores",
+            "columns": [
+              {
+                "name": "Area"
+              },
+              {
+                "name": "Audit Date"
+              },
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Score Value"
+              },
+              {
+                "name": "Target Value"
+              },
+              {
+                "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Audit 5S Comments",
+            "columns": [
+              {
+                "name": "Audit ID"
+              },
+              {
+                "name": "Comments"
               }
             ]
           }
@@ -27989,6 +30944,10 @@
           {
             "memberName": "DOMAIN\\sdong",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
+          },
+          {
+            "memberName": "DOMAIN\\LTorres",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
           }
         ]
       },
@@ -28024,10 +30983,6 @@
           {
             "memberName": "DOMAIN\\grose",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21056"
-          },
-          {
-            "memberName": "DOMAIN\\jgonzales",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
           },
           {
             "memberName": "DOMAIN\\jignacio",
@@ -28082,8 +31037,16 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21047"
           },
           {
-            "memberName": "DOMAIN\\vbahn",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21058"
+            "memberName": "DOMAIN\\johngonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
+          },
+          {
+            "memberName": "DOMAIN\\jwolfert",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20499"
+          },
+          {
+            "memberName": "DOMAIN\\jsalazar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20505"
           }
         ],
         "tablePermissions": [
@@ -28117,10 +31080,6 @@
           {
             "memberName": "DOMAIN\\dpiechocki",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8767"
-          },
-          {
-            "memberName": "DOMAIN\\jsmith",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8622"
           },
           {
             "memberName": "DOMAIN\\lcalma",
@@ -28268,18 +31227,6 @@
         "description": "Restricts data based on assigned company code and cost center (from HR)",
         "modelPermission": "read",
         "members": [
-          {
-            "memberName": "DOMAIN\\aarzate",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4946"
-          },
-          {
-            "memberName": "DOMAIN\\agonzalez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8541"
-          },
-          {
-            "memberName": "DOMAIN\\AGutierrez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1795"
-          },
           {
             "memberName": "DOMAIN\\amendes",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8652"
@@ -28477,10 +31424,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21494"
           },
           {
-            "memberName": "DOMAIN\\LTorres",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
-          },
-          {
             "memberName": "DOMAIN\\lurias",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7278"
           },
@@ -28571,6 +31514,46 @@
           {
             "memberName": "DOMAIN\\YOrdiano",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1432"
+          },
+          {
+            "memberName": "DOMAIN\\lproano",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21046"
+          },
+          {
+            "memberName": "DOMAIN\\aarzate",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4946"
+          },
+          {
+            "memberName": "DOMAIN\\agonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8541"
+          },
+          {
+            "memberName": "DOMAIN\\AGutierrez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1795"
+          },
+          {
+            "memberName": "DOMAIN\\lmolina",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8741"
+          },
+          {
+            "memberName": "DOMAIN\\vguardado",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21515"
+          },
+          {
+            "memberName": "DOMAIN\\sramirez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21045"
+          },
+          {
+            "memberName": "DOMAIN\\esimon",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21522"
+          },
+          {
+            "memberName": "DOMAIN\\Anmendes",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20432"
+          },
+          {
+            "memberName": "DOMAIN\\Compounding",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3112"
           }
         ],
         "tablePermissions": [

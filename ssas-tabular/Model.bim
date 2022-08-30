@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -18524,11 +18523,12 @@
         "toColumn": "Company Code"
       },
       {
-        "name": "7a7306bd-3a7d-4e21-84ed-fd5d562479bd",
+        "name": "dfadd8ff-77f6-488e-948e-6bc0db4f3979",
         "fromTable": "Audit 5S Scores",
         "fromColumn": "Audit ID",
         "toTable": "Audit 5S Comments",
-        "toColumn": "Audit ID"
+        "toColumn": "Audit ID",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [

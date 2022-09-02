@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7638,7 +7639,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "ExpiredQuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -7646,7 +7647,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "ExpiredAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -7660,7 +7661,7 @@
           },
           {
             "name": "Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "StockQuantityValue",
             "formatString": "#,0.00",
@@ -7669,7 +7670,7 @@
           },
           {
             "name": "Stock Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "StockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -7681,6 +7682,18 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "description": "SAP Source: MCH1.LGORT",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "Storage Bin",
+            "dataType": "string",
+            "description": "SAP Source: LQUA.LGPLA",
+            "sourceColumn": "StorageBin"
           }
         ],
         "partitions": [
@@ -7693,7 +7706,7 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_INVENTORY_EXPIRED = Source{[Schema=\"dbo\",Item=\"VW_INVENTORY_EXPIRED\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_EXPIRED,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"ExpiredQuantityValue\", \"StockAmountUSD\", \"ExpiredAmountUSD\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_INVENTORY_EXPIRED,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"StorageLoc\", \"StorageBin\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"ExpiredQuantityValue\", \"StockAmountUSD\", \"ExpiredAmountUSD\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -13951,7 +13964,7 @@
           },
           {
             "name": "SBlock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "SBlockQuantityValue",
             "formatString": "0.00",
@@ -13961,7 +13974,7 @@
           },
           {
             "name": "SBlock Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "SBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -13977,7 +13990,7 @@
           },
           {
             "name": "QBlock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "QBlockQuantityValue",
             "formatString": "#,0.00",
@@ -13987,7 +14000,7 @@
           },
           {
             "name": "QBlock Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "QBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -14027,6 +14040,25 @@
             "name": "Notification Author",
             "dataType": "string",
             "sourceColumn": "NotificationAuthor"
+          },
+          {
+            "name": "Storage Bin",
+            "dataType": "string",
+            "description": "SAP Source: LQUA.LGPLA",
+            "sourceColumn": "StorageBin"
+          },
+          {
+            "name": "Expiration Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: LQUA.VFDAT or MCH1.VFDAT",
+            "sourceColumn": "ExpirationDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -18552,6 +18584,9 @@
               },
               {
                 "name": "Snapshot Date"
+              },
+              {
+                "name": "Plant"
               }
             ]
           },
@@ -18909,6 +18944,21 @@
               },
               {
                 "name": "Quantity"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Stock Amount"
+              },
+              {
+                "name": "Stock Quantity"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Bin"
               }
             ]
           },
@@ -19124,6 +19174,27 @@
               },
               {
                 "name": "Storage Location"
+              },
+              {
+                "name": "Expiration Date"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Enter Date"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Storage Bin"
               }
             ]
           },
@@ -27140,6 +27211,12 @@
               },
               {
                 "name": "Stock Quantity"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Bin"
               }
             ]
           },
@@ -27970,6 +28047,12 @@
               },
               {
                 "name": "Stock Quantity"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Storage Bin"
               }
             ]
           },
@@ -31554,6 +31637,10 @@
           {
             "memberName": "DOMAIN\\Compounding",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3112"
+          },
+          {
+            "memberName": "DOMAIN\\fzanfi",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21014"
           }
         ],
         "tablePermissions": [

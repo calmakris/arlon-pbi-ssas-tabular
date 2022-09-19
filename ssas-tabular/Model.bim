@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -11717,7 +11715,7 @@
       },
       {
         "name": "_Machines",
-        "description": "Contains machine names used to filter related tables with 'Machine Name' fields",
+        "description": "Contains machine names used to filter related tables with 'Machine Name' fields. This table is generally related to PLC data in Engineering.",
         "columns": [
           {
             "name": "Machine Name",

@@ -7639,7 +7639,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ExpiredQuantityValue",
             "formatString": "0.00",
             "displayFolder": "_Values",
@@ -7647,7 +7647,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ExpiredAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "displayFolder": "_Values",
@@ -7661,7 +7661,7 @@
           },
           {
             "name": "Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "StockQuantityValue",
             "formatString": "#,0.00",
@@ -7670,7 +7670,7 @@
           },
           {
             "name": "Stock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "StockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -13528,6 +13528,13 @@
             "dataType": "string",
             "description": "SAP Source: MSEG.SGTXT",
             "sourceColumn": "ItemText"
+          },
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "description": "SAP Source: CRHD.ARBPL",
+            "isHidden": true,
+            "sourceColumn": "WorkCenter"
           }
         ],
         "partitions": [
@@ -13964,7 +13971,7 @@
           },
           {
             "name": "SBlock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SBlockQuantityValue",
             "formatString": "0.00",
@@ -13974,7 +13981,7 @@
           },
           {
             "name": "SBlock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -13990,7 +13997,7 @@
           },
           {
             "name": "QBlock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "QBlockQuantityValue",
             "formatString": "#,0.00",
@@ -14000,7 +14007,7 @@
           },
           {
             "name": "QBlock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "QBlockAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -15753,7 +15760,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: AFRU.XMNGA",
             "sourceColumn": "Quantity",
             "formatString": "0.00",
@@ -15761,18 +15768,17 @@
           },
           {
             "name": "Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
             "sourceColumn": "Amount",
             "formatString": "0.00",
             "isAvailableInMdx": false
           },
           {
-            "name": "Machine Name",
+            "name": "Work Center",
             "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MachineName",
-            "isAvailableInMdx": false
+            "description": "SAP Source: CRHD.ARBPL",
+            "sourceColumn": "WorkCenter"
           }
         ],
         "partitions": [
@@ -17600,13 +17606,6 @@
         "toColumn": "Machine Name"
       },
       {
-        "name": "10344338-100d-447d-9f74-b27f469d26d0",
-        "fromTable": "Goods Issues and Receipts",
-        "fromColumn": "Machine Name",
-        "toTable": "_Machines",
-        "toColumn": "Machine Name"
-      },
-      {
         "name": "3dfea972-a6c3-4217-a6f9-2e2df7e2eecb",
         "fromTable": "Upstream Logs - Raw",
         "fromColumn": "Production Shift",
@@ -18033,13 +18032,6 @@
         "toColumn": "Department"
       },
       {
-        "name": "43d9454b-1030-4290-8210-eb1e5a4cce0e",
-        "fromTable": "Cost Center Names",
-        "fromColumn": "Department",
-        "toTable": "_Departments",
-        "toColumn": "Department"
-      },
-      {
         "name": "f62e6263-5dd5-4966-9c15-4458042b2ff0",
         "fromTable": "Upstream Off Days",
         "fromColumn": "Department",
@@ -18201,13 +18193,6 @@
         "toTable": "FG Filters for Absorption",
         "toColumn": "HighestBomKey",
         "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "77952195-6c6e-438e-9736-e3c62c34a164",
-        "fromTable": "Scrap Confirmations",
-        "fromColumn": "Machine Name",
-        "toTable": "_Machines",
-        "toColumn": "Machine Name"
       },
       {
         "name": "c21eb85a-f753-4ab1-b6ae-96af0881ab31",
@@ -18560,6 +18545,35 @@
         "fromColumn": "Audit ID",
         "toTable": "Audit 5S Comments",
         "toColumn": "Audit ID",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "d028cf43-c61d-4ff2-8a81-f073a7acd3f5",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center Names",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "b543b5ff-b280-498b-9c5b-5a6a8d893206",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "2115dc07-f007-4247-b1a0-00c395f1914d",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "7dfbb45e-0705-4e10-9ef5-a16689d907c9",
+        "fromTable": "Cost Center Names",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department",
         "crossFilteringBehavior": "bothDirections"
       }
     ],
@@ -25449,6 +25463,9 @@
               },
               {
                 "name": "Item Text"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           },
@@ -30099,6 +30116,9 @@
               },
               {
                 "name": "Item Text"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           },
@@ -30447,7 +30467,7 @@
                 "name": "ScrapCategoryKey"
               },
               {
-                "name": "Machine Name"
+                "name": "Work Center"
               }
             ]
           },
@@ -30629,6 +30649,20 @@
               },
               {
                 "name": "Comments"
+              }
+            ]
+          },
+          {
+            "name": "_Work Centers",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           }

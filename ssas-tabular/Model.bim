@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -11726,6 +11727,7 @@
           {
             "name": "Department",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Department"
           }
         ],
@@ -16005,6 +16007,7 @@
           {
             "name": "Department",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "Department"
           },
           {
@@ -18025,13 +18028,6 @@
         "isActive": false
       },
       {
-        "name": "a56ef07b-71d5-4c0d-9d9d-480f99a5d2bc",
-        "fromTable": "_Machines",
-        "fromColumn": "Department",
-        "toTable": "_Departments",
-        "toColumn": "Department"
-      },
-      {
         "name": "f62e6263-5dd5-4966-9c15-4458042b2ff0",
         "fromTable": "Upstream Off Days",
         "fromColumn": "Department",
@@ -18251,13 +18247,6 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
-      },
-      {
-        "name": "a1a26610-ae9e-4c77-b196-f5f099c13f08",
-        "fromTable": "_Work Centers",
-        "fromColumn": "Machine Name",
-        "toTable": "_Machines",
-        "toColumn": "Machine Name"
       },
       {
         "name": "0ada833e-dbf6-4c68-a750-2ee5c4b29441",
@@ -18575,6 +18564,20 @@
         "toTable": "_Departments",
         "toColumn": "Department",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "a012ea05-346d-4273-85da-d3fa028dcb0d",
+        "fromTable": "_Machines",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
+      },
+      {
+        "name": "ccff7469-2f46-41bf-8467-6ce4b29538c0",
+        "fromTable": "_Work Centers",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
       }
     ],
     "perspectives": [

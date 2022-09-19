@@ -31065,6 +31065,22 @@
           {
             "memberName": "DOMAIN\\LTorres",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
+          },
+          {
+            "memberName": "DOMAIN\\clopez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
+          },
+          {
+            "memberName": "DOMAIN\\sramirez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21045"
+          },
+          {
+            "memberName": "DOMAIN\\mmartinez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21044"
+          },
+          {
+            "memberName": "DOMAIN\\ppena",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21043"
           }
         ]
       },
@@ -31381,10 +31397,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2747"
           },
           {
-            "memberName": "DOMAIN\\clopez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7254"
-          },
-          {
             "memberName": "DOMAIN\\cpham",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8719"
           },
@@ -31655,10 +31667,6 @@
           {
             "memberName": "DOMAIN\\vguardado",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21515"
-          },
-          {
-            "memberName": "DOMAIN\\sramirez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21045"
           },
           {
             "memberName": "DOMAIN\\esimon",

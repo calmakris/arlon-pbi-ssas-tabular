@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -11725,7 +11727,6 @@
           {
             "name": "Department",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "Department"
           }
         ],
@@ -15529,7 +15530,6 @@
           {
             "name": "Cost Center",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "CostCenter",
             "isAvailableInMdx": false
           },
@@ -15598,7 +15598,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -15606,7 +15606,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: BSIS.DMBE2 (negated if BSIS.SHKZH = 'H')",
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
@@ -15637,6 +15637,12 @@
             "dataType": "string",
             "description": "SAP Source: ACCTIT.SGTXT",
             "sourceColumn": "ItemText"
+          },
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "description": "CRHD.ARBPL; Determined based on the assigned process order in the material document. If that's not available, the process order of the first GR transaction of the batch is used.",
+            "sourceColumn": "WorkCenter"
           }
         ],
         "partitions": [
@@ -15996,6 +16002,7 @@
       },
       {
         "name": "_Work Centers",
+        "description": "Contains work centers in SAP with custom assigned departments and machine names. This table is usually related to other SAP tables.",
         "columns": [
           {
             "name": "Work Center",
@@ -18535,13 +18542,6 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "d028cf43-c61d-4ff2-8a81-f073a7acd3f5",
-        "fromTable": "Scrap Usage Transactions",
-        "fromColumn": "Cost Center",
-        "toTable": "Cost Center Names",
-        "toColumn": "Cost Center"
-      },
-      {
         "name": "b543b5ff-b280-498b-9c5b-5a6a8d893206",
         "fromTable": "Goods Issues and Receipts",
         "fromColumn": "Work Center",
@@ -18556,14 +18556,6 @@
         "toColumn": "Work Center"
       },
       {
-        "name": "7dfbb45e-0705-4e10-9ef5-a16689d907c9",
-        "fromTable": "Cost Center Names",
-        "fromColumn": "Department",
-        "toTable": "_Departments",
-        "toColumn": "Department",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "a012ea05-346d-4273-85da-d3fa028dcb0d",
         "fromTable": "_Machines",
         "fromColumn": "Department",
@@ -18573,6 +18565,20 @@
       {
         "name": "ccff7469-2f46-41bf-8467-6ce4b29538c0",
         "fromTable": "_Work Centers",
+        "fromColumn": "Department",
+        "toTable": "_Departments",
+        "toColumn": "Department"
+      },
+      {
+        "name": "4e350d1c-b948-4307-bfb0-583555e54d5c",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "3abd8e64-f49a-4249-9da4-bd39b2c1de9f",
+        "fromTable": "Cost Center Names",
         "fromColumn": "Department",
         "toTable": "_Departments",
         "toColumn": "Department"
@@ -30431,6 +30437,9 @@
               },
               {
                 "name": "Item Text"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           },

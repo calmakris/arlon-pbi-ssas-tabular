@@ -7780,7 +7780,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -10905,6 +10904,12 @@
             "isHidden": true,
             "sourceColumn": "CompCode",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "description": "SAP Source: CRHD.ARBPL",
+            "sourceColumn": "WorkCenter"
           }
         ],
         "partitions": [
@@ -12783,6 +12788,12 @@
             "dataType": "string",
             "description": "SAP Source: MARA.MATKL",
             "sourceColumn": "MaterialGroup"
+          },
+          {
+            "name": "Planning Plant",
+            "dataType": "string",
+            "description": "SAP Source: AFPO.PWERK",
+            "sourceColumn": "PlanningPlant"
           }
         ],
         "partitions": [
@@ -12974,7 +12985,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -12991,7 +13001,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13008,7 +13017,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13025,7 +13033,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13064,7 +13071,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -13076,7 +13082,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -13252,7 +13257,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -13264,7 +13268,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -13535,7 +13538,8 @@
             "dataType": "string",
             "description": "SAP Source: CRHD.ARBPL",
             "isHidden": true,
-            "sourceColumn": "WorkCenter"
+            "sourceColumn": "WorkCenter",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -15460,8 +15464,6 @@
           {
             "name": "Posting Date",
             "dataType": "dateTime",
-            "isUnique": true,
-            "isKey": true,
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
             "isAvailableInMdx": false,
@@ -15478,6 +15480,13 @@
             "isHidden": true,
             "sourceColumn": "Amount",
             "formatString": "0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "SAP Source: BSIS.BUKRS",
+            "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
           }
         ],
@@ -15598,7 +15607,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: ACCTIT.ERFMG (negated if BSIS.SHKZG = 'H')",
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -15606,7 +15615,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: BSIS.DMBE2 (negated if BSIS.SHKZH = 'H')",
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
@@ -15766,7 +15775,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: AFRU.XMNGA",
             "sourceColumn": "Quantity",
             "formatString": "0.00",
@@ -15774,7 +15783,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
             "sourceColumn": "Amount",
             "formatString": "0.00",
@@ -16013,7 +16022,8 @@
             "name": "Department",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "Department"
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
           },
           {
             "name": "Machine Name",
@@ -18107,15 +18117,6 @@
         "toColumn": "Cost Element"
       },
       {
-        "name": "5f267808-1a47-4e96-b428-5e220dd9d001",
-        "fromCardinality": "one",
-        "fromTable": "Daily Cost of Goods Sold",
-        "fromColumn": "Posting Date",
-        "toTable": "Calendar",
-        "toColumn": "Date",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "473152dc-30ff-403f-927e-eede69b227a4",
         "fromTable": "Scrap Usage Transactions",
         "fromColumn": "Cost Element",
@@ -18582,6 +18583,20 @@
         "fromColumn": "Department",
         "toTable": "_Departments",
         "toColumn": "Department"
+      },
+      {
+        "name": "6de39af7-e053-476a-8a5a-b0854a6426b5",
+        "fromTable": "Daily Cost of Goods Sold",
+        "fromColumn": "Posting Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "c5473117-51d2-40e8-b90a-dc7e8b177ba1",
+        "fromTable": "Daily Cost of Goods Sold",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -19511,6 +19526,9 @@
               },
               {
                 "name": "Material Group"
+              },
+              {
+                "name": "Planning Plant"
               }
             ]
           },
@@ -22279,6 +22297,9 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           },
@@ -25636,6 +25657,9 @@
               },
               {
                 "name": "Count in COMP First Pass Indicator"
+              },
+              {
+                "name": "Planning Plant"
               }
             ]
           },
@@ -26012,6 +26036,41 @@
               },
               {
                 "name": "Comments"
+              }
+            ]
+          },
+          {
+            "name": "Absorption",
+            "columns": [
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Business Transaction Type"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "HighestBomKey"
+              },
+              {
+                "name": "Posting Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           }
@@ -28398,6 +28457,12 @@
               },
               {
                 "name": "Material Group"
+              },
+              {
+                "name": "Planning Plant"
+              },
+              {
+                "name": "Specification Number"
               }
             ]
           },
@@ -28629,6 +28694,9 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           },
@@ -30524,6 +30592,9 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           },
@@ -31717,6 +31788,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

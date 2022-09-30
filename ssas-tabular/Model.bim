@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -3715,7 +3714,7 @@
               "    )",
               ")"
             ],
-            "isHidden": true
+            "displayFolder": ".Dates"
           },
           {
             "name": "Current Inventory Amount",
@@ -7051,6 +7050,278 @@
             ],
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Safety Incident Count",
+            "description": "Count of rows in the 'Safety Incidents' table. Apply a filter to get the number of incidents for certain categories, etc.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    COUNTROWS( 'Safety Incidents' ) + 0,",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "Safety Last Incident Date",
+            "description": "Last [Incident Date] on or before [Report Date] in the 'Safety Incidents' table. Apply a filter to get the number of incidents for certain categories, etc.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    MAX( 'Safety Incidents'[Incident Date] ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ") + TIME(0, 0, 0)"
+            ],
+            "formatString": "Short Date",
+            "displayFolder": "Safety",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Safety Number of Days Since Last Incident Date",
+            "description": "Number of days between [Safety Last Incident Date] and [Report Date]",
+            "expression": "DATEDIFF([Safety Last Incident Date], [Report Date], DAY)",
+            "formatString": "#,### \"days\"",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "MTD Safety Incident Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Safety Incident Count],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "MTD PM Safety Incident Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Safety Incident Count],",
+              "        PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "FYTD Safety Total Incident Rate",
+            "description": "Product of number of incidents and 200000 divided by total work hours. This measure can be transformed as TRIR by filtering the 'Safety Incidents' table.",
+            "expression": [
+              "",
+              "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
+              "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
+              "",
+              "VAR Incidents =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            [Safety Incident Count],",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "VAR Hours =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            SUM( 'Safety Work Hours'[WorkHours] ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= LastDateWithHours",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    MinVisibleDate <= LastDateWithHours,",
+              "    DIVIDE(",
+              "        Incidents * 200000,",
+              "        Hours",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "FYTD PY Safety Total Incident Rate",
+            "description": "Last fiscal year. Product of number of incidents and 200000 divided by total work hours. This measure can be transformed as TRIR by filtering the 'Safety Incidents' table.",
+            "expression": [
+              "",
+              "VAR incidents =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            [Safety Incident Count],",
+              "            SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "VAR hours =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            SUM( 'Safety Work Hours'[WorkHours] ),",
+              "            SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "DIVIDE(",
+              "    incidents * 200000,",
+              "    hours",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "Safety Total Recordable Incident Rate (Target)",
+            "description": "Monthly TRIR target. Values are generated by safety personnel and provided to Arlon IT personnel to upload to Power BI data warehouse.",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( Target_KPI[TargetValue] ),",
+              "        Target_KPI[KpiKey] = \"TRIR\",",
+              "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            Target_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            Target_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.00,",
+              "        CALCULATE(",
+              "            CALCULATE( TargetVal, DATESYTD( 'Calendar'[Date], \"09/30\" ) ),",
+              "            FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date] )",
+              "        )",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "Safety Total Recordable Incident Rate (Projected)",
+            "expression": [
+              "",
+              "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
+              "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
+              "VAR EndOfYearDate = DATE( YEAR([Report Date]) + IF(MONTH([Report Date])>=10, 1, 0) , 9, 30 )",
+              "",
+              "VAR Incidents =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            [Safety Incident Count],",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "VAR CYHours =",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            SUM( 'Safety Work Hours'[WorkHours] ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        )",
+              "    )",
+              "",
+              "VAR PYHours =",
+              "IF(",
+              "        MinVisibleDate > LastDateWithHours,",
+              "        CALCULATE(",
+              "            SUM( 'Safety Work Hours'[WorkHours] ),",
+              "            SAMEPERIODLASTYEAR( 'Calendar'[Date] )",
+              "        ),",
+              "        0",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    MinVisibleDate >= LastDateWithHours && MinVisibleDate <= EndOfYearDate,",
+              "    DIVIDE(",
+              "        Incidents * 200000,",
+              "        CYHours + CALCULATE( PYHours, DATESYTD('Calendar'[Date], \"09/30\"))",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "Safety Perfect Day Count",
+            "description": "Number of days where there is no incident marked as 'NO' under 'Safety Incidents'[Is Perfect Day]",
+            "expression": [
+              "",
+              "VAR AllDays =",
+              "COUNTROWS(",
+              "    FILTER('Calendar', 'Calendar'[Date] <= [Report Date])",
+              ")",
+              "",
+              "VAR NonPerfectDays =",
+              "    COUNTROWS(",
+              "        FILTER(",
+              "            SUMMARIZE(",
+              "                FILTER('Calendar', 'Calendar'[Date] <= [Report Date]),",
+              "                'Calendar'[Date],",
+              "                \"SCORE\", COUNTROWS( FILTER( 'Safety Incidents', NOT('Safety Incidents'[Is Perfect Day]) ) ) + 0",
+              "            ),",
+              "            [SCORE] <> 0",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "AllDays - NonPerfectDays"
+            ],
+            "formatString": "#,### \"days\"",
+            "displayFolder": "Safety"
           }
         ]
       },
@@ -7780,6 +8051,7 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
+            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -12985,6 +13257,7 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13001,6 +13274,7 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13017,6 +13291,7 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13033,6 +13308,7 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13071,6 +13347,7 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -13082,6 +13359,7 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -13257,6 +13535,7 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -13268,6 +13547,7 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -17273,6 +17553,128 @@
             }
           }
         ]
+      },
+      {
+        "name": "Safety Work Hours",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "WorkHours",
+            "dataType": "decimal",
+            "sourceColumn": "WorkHours",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "sourceColumn": "DateKey",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_SAFETY_TRIRHOURS = Source{[Schema=\"dbo\",Item=\"VW_SAFETY_TRIRHOURS\"]}[Data]",
+                "in",
+                "    dbo_VW_SAFETY_TRIRHOURS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Safety Incidents",
+        "columns": [
+          {
+            "name": "Incident Number",
+            "dataType": "string",
+            "sourceColumn": "IncidentNo"
+          },
+          {
+            "name": "Incident Date",
+            "dataType": "dateTime",
+            "sourceColumn": "IncidentDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Report Type",
+            "dataType": "string",
+            "sourceColumn": "ReportType"
+          },
+          {
+            "name": "Is Proactive",
+            "dataType": "boolean",
+            "sourceColumn": "IsProactive"
+          },
+          {
+            "name": "Is Perfect Day",
+            "dataType": "boolean",
+            "sourceColumn": "IsPerfectDay"
+          },
+          {
+            "name": "Is Recordable",
+            "dataType": "boolean",
+            "sourceColumn": "IsRecordable"
+          },
+          {
+            "name": "Incident Description",
+            "dataType": "string",
+            "sourceColumn": "IncidentDescription"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_SAFETY_INCIDENTS = Source{[Schema=\"dbo\",Item=\"VW_SAFETY_INCIDENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_SAFETY_INCIDENTS"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -18597,6 +18999,37 @@
         "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "2b681789-db41-4500-a168-d3c9bc75346c",
+        "fromCardinality": "one",
+        "fromTable": "Safety Work Hours",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "748e7c10-ef29-4139-ad3c-a794138bc7f8",
+        "fromTable": "Safety Work Hours",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code",
+        "isActive": false
+      },
+      {
+        "name": "bb3e7bbc-679c-453e-94a6-655d201be081",
+        "fromTable": "Safety Incidents",
+        "fromColumn": "Incident Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "2772709d-5586-446a-8275-1ffa86c3841f",
+        "fromTable": "Safety Incidents",
+        "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -18954,6 +19387,39 @@
               },
               {
                 "name": "MTD PM Var Audit Score as % of Target"
+              },
+              {
+                "name": "Safety Incident Count"
+              },
+              {
+                "name": "Safety Last Incident Date"
+              },
+              {
+                "name": "Safety Number of Days Since Last Incident Date"
+              },
+              {
+                "name": "MTD Safety Incident Count"
+              },
+              {
+                "name": "MTD PM Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Total Incident Rate"
+              },
+              {
+                "name": "FYTD PY Safety Total Incident Rate"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Target)"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Projected)"
+              },
+              {
+                "name": "Safety Perfect Day Count"
+              },
+              {
+                "name": "Days Count"
               }
             ]
           },
@@ -19569,6 +20035,52 @@
               },
               {
                 "name": "Comments"
+              }
+            ]
+          },
+          {
+            "name": "Safety Incidents",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Incident Date"
+              },
+              {
+                "name": "Incident Description"
+              },
+              {
+                "name": "Incident Number"
+              },
+              {
+                "name": "Is Perfect Day"
+              },
+              {
+                "name": "Is Proactive"
+              },
+              {
+                "name": "Is Recordable"
+              },
+              {
+                "name": "Report Type"
+              }
+            ]
+          },
+          {
+            "name": "Safety Work Hours",
+            "columns": [
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "WorkHours"
               }
             ]
           }
@@ -20195,6 +20707,39 @@
               },
               {
                 "name": "MTD PM Var Audit Score as % of Target"
+              },
+              {
+                "name": "Safety Incident Count"
+              },
+              {
+                "name": "Safety Last Incident Date"
+              },
+              {
+                "name": "Safety Number of Days Since Last Incident Date"
+              },
+              {
+                "name": "MTD Safety Incident Count"
+              },
+              {
+                "name": "MTD PM Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Total Incident Rate"
+              },
+              {
+                "name": "FYTD PY Safety Total Incident Rate"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Target)"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Projected)"
+              },
+              {
+                "name": "Safety Perfect Day Count"
+              },
+              {
+                "name": "Days Count"
               }
             ]
           },
@@ -25214,6 +25759,39 @@
               },
               {
                 "name": "MTD PM Var Audit Score as % of Target"
+              },
+              {
+                "name": "Safety Incident Count"
+              },
+              {
+                "name": "Safety Last Incident Date"
+              },
+              {
+                "name": "Safety Number of Days Since Last Incident Date"
+              },
+              {
+                "name": "MTD Safety Incident Count"
+              },
+              {
+                "name": "MTD PM Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Total Incident Rate"
+              },
+              {
+                "name": "FYTD PY Safety Total Incident Rate"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Target)"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Projected)"
+              },
+              {
+                "name": "Safety Perfect Day Count"
+              },
+              {
+                "name": "Days Count"
               }
             ]
           },
@@ -26071,6 +26649,52 @@
               },
               {
                 "name": "Work Center"
+              }
+            ]
+          },
+          {
+            "name": "Safety Incidents",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Incident Date"
+              },
+              {
+                "name": "Incident Description"
+              },
+              {
+                "name": "Incident Number"
+              },
+              {
+                "name": "Is Perfect Day"
+              },
+              {
+                "name": "Is Proactive"
+              },
+              {
+                "name": "Is Recordable"
+              },
+              {
+                "name": "Report Type"
+              }
+            ]
+          },
+          {
+            "name": "Safety Work Hours",
+            "columns": [
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "WorkHours"
               }
             ]
           }
@@ -28095,6 +28719,39 @@
               },
               {
                 "name": "MTD PM Var Audit Score as % of Target"
+              },
+              {
+                "name": "Safety Incident Count"
+              },
+              {
+                "name": "Safety Last Incident Date"
+              },
+              {
+                "name": "Safety Number of Days Since Last Incident Date"
+              },
+              {
+                "name": "MTD Safety Incident Count"
+              },
+              {
+                "name": "MTD PM Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Total Incident Rate"
+              },
+              {
+                "name": "FYTD PY Safety Total Incident Rate"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Target)"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Projected)"
+              },
+              {
+                "name": "Safety Perfect Day Count"
+              },
+              {
+                "name": "Days Count"
               }
             ]
           },
@@ -28794,6 +29451,52 @@
               },
               {
                 "name": "Comments"
+              }
+            ]
+          },
+          {
+            "name": "Safety Incidents",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Incident Date"
+              },
+              {
+                "name": "Incident Description"
+              },
+              {
+                "name": "Incident Number"
+              },
+              {
+                "name": "Is Perfect Day"
+              },
+              {
+                "name": "Is Proactive"
+              },
+              {
+                "name": "Is Recordable"
+              },
+              {
+                "name": "Report Type"
+              }
+            ]
+          },
+          {
+            "name": "Safety Work Hours",
+            "columns": [
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "WorkHours"
               }
             ]
           }
@@ -29716,6 +30419,39 @@
               },
               {
                 "name": "MTD PM Var Audit Score as % of Target"
+              },
+              {
+                "name": "Safety Incident Count"
+              },
+              {
+                "name": "Safety Last Incident Date"
+              },
+              {
+                "name": "Safety Number of Days Since Last Incident Date"
+              },
+              {
+                "name": "MTD Safety Incident Count"
+              },
+              {
+                "name": "MTD PM Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Total Incident Rate"
+              },
+              {
+                "name": "FYTD PY Safety Total Incident Rate"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Target)"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Projected)"
+              },
+              {
+                "name": "Safety Perfect Day Count"
+              },
+              {
+                "name": "Days Count"
               }
             ]
           },
@@ -29939,6 +30675,52 @@
               },
               {
                 "name": "Comments"
+              }
+            ]
+          },
+          {
+            "name": "Safety Incidents",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Incident Date"
+              },
+              {
+                "name": "Incident Description"
+              },
+              {
+                "name": "Incident Number"
+              },
+              {
+                "name": "Is Perfect Day"
+              },
+              {
+                "name": "Is Proactive"
+              },
+              {
+                "name": "Is Recordable"
+              },
+              {
+                "name": "Report Type"
+              }
+            ]
+          },
+          {
+            "name": "Safety Work Hours",
+            "columns": [
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "WorkHours"
               }
             ]
           }
@@ -30426,6 +31208,39 @@
               },
               {
                 "name": "MTD PM Var Audit Score as % of Target"
+              },
+              {
+                "name": "Safety Incident Count"
+              },
+              {
+                "name": "Safety Last Incident Date"
+              },
+              {
+                "name": "Safety Number of Days Since Last Incident Date"
+              },
+              {
+                "name": "MTD Safety Incident Count"
+              },
+              {
+                "name": "MTD PM Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Total Incident Rate"
+              },
+              {
+                "name": "FYTD PY Safety Total Incident Rate"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Target)"
+              },
+              {
+                "name": "Safety Total Recordable Incident Rate (Projected)"
+              },
+              {
+                "name": "Safety Perfect Day Count"
+              },
+              {
+                "name": "Days Count"
               }
             ]
           },
@@ -30744,6 +31559,52 @@
               },
               {
                 "name": "Work Center"
+              }
+            ]
+          },
+          {
+            "name": "Safety Incidents",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Incident Date"
+              },
+              {
+                "name": "Incident Description"
+              },
+              {
+                "name": "Incident Number"
+              },
+              {
+                "name": "Is Perfect Day"
+              },
+              {
+                "name": "Is Proactive"
+              },
+              {
+                "name": "Is Recordable"
+              },
+              {
+                "name": "Report Type"
+              }
+            ]
+          },
+          {
+            "name": "Safety Work Hours",
+            "columns": [
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "WorkHours"
               }
             ]
           }
@@ -31146,6 +32007,10 @@
           {
             "memberName": "DOMAIN\\LTorres",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
+          },
+          {
+            "memberName": "DOMAIN\\nsoto",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21525"
           }
         ]
       },
@@ -31764,6 +32629,10 @@
           {
             "memberName": "DOMAIN\\ppena",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21043"
+          },
+          {
+            "memberName": "DOMAIN\\safety_consultant",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21096"
           }
         ],
         "tablePermissions": [
@@ -31788,5 +32657,6 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

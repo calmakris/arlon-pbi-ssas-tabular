@@ -7148,7 +7148,7 @@
               "        ),",
               "        FILTER(",
               "            'Calendar',",
-              "            'Calendar'[Date] <= [Report Date]",
+              "            'Calendar'[Date] <= [End of Fiscal Year]",
               "        )",
               "    )",
               "",
@@ -7160,7 +7160,7 @@
               "        ),",
               "        FILTER(",
               "            'Calendar',",
-              "            'Calendar'[Date] <= LastDateWithHours",
+              "            'Calendar'[Date] <= [End of Fiscal Year]",
               "        )",
               "    )",
               "",
@@ -7185,24 +7185,24 @@
               "    CALCULATE(",
               "        CALCULATE(",
               "            [Safety Incident Count],",
-              "            SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+              "            FILTER(",
+              "                'Calendar',",
+              "                'Calendar'[Date] <= [End of Fiscal Year]",
+              "            )",
               "        ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] <= [Report Date]",
-              "        )",
+              "        SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
               "    )",
               "",
               "VAR hours =",
               "    CALCULATE(",
               "        CALCULATE(",
               "            SUM( 'Safety Work Hours'[WorkHours] ),",
-              "            SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+              "            FILTER(",
+              "                'Calendar',",
+              "                'Calendar'[Date] <= [End of Fiscal Year]",
+              "            )",
               "        ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] <= [Report Date]",
-              "        )",
+              "        SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
               "    )",
               "",
               "RETURN",
@@ -7251,7 +7251,6 @@
               "",
               "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
               "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
-              "VAR EndOfYearDate = DATE( YEAR([Report Date]) + IF(MONTH([Report Date])>=10, 1, 0) , 9, 30 )",
               "",
               "VAR Incidents =",
               "    CALCULATE(",
@@ -7285,7 +7284,7 @@
               "",
               "RETURN",
               "IF(",
-              "    MinVisibleDate >= LastDateWithHours && MinVisibleDate <= EndOfYearDate,",
+              "    MinVisibleDate >= LastDateWithHours && MinVisibleDate <= [End of Fiscal Year],",
               "    DIVIDE(",
               "        Incidents * 200000,",
               "        CYHours + CALCULATE( PYHours, DATESYTD('Calendar'[Date], \"09/30\"))",
@@ -7322,6 +7321,30 @@
             ],
             "formatString": "#,### \"days\"",
             "displayFolder": "Safety"
+          },
+          {
+            "name": "End of Fiscal Year",
+            "expression": "DATE( YEAR([Report Date]) + IF(MONTH([Report Date])>=10, 1, 0) , 9, 30 )",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Beginning of Fiscal Year",
+            "expression": "DATE( YEAR([Report Date]) - IF(MONTH([Report Date])>=10, 0, 1) , 10, 1 )",
+            "formatString": "Short Date",
+            "displayFolder": ".Dates",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ]
       },
@@ -11182,6 +11205,11 @@
             "dataType": "string",
             "description": "SAP Source: CRHD.ARBPL",
             "sourceColumn": "WorkCenter"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
           }
         ],
         "partitions": [
@@ -17626,7 +17654,8 @@
             "name": "Company Code",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           },
           {
             "name": "Category",
@@ -22845,6 +22874,9 @@
               },
               {
                 "name": "Work Center"
+              },
+              {
+                "name": "Department"
               }
             ]
           },
@@ -25792,6 +25824,30 @@
               },
               {
                 "name": "Days Count"
+              },
+              {
+                "name": "Absorption"
+              },
+              {
+                "name": "Absorption Hours"
+              },
+              {
+                "name": "Operations Scrap Amount"
+              },
+              {
+                "name": "Operations Scrap as % of COGS"
+              },
+              {
+                "name": "Operations Scrap as % of GR"
+              },
+              {
+                "name": "Operations Scrap as % of GR (Target)"
+              },
+              {
+                "name": "MTD Absorption"
+              },
+              {
+                "name": "MTD Absorption Hours"
               }
             ]
           },
@@ -26649,6 +26705,9 @@
               },
               {
                 "name": "Work Center"
+              },
+              {
+                "name": "Department"
               }
             ]
           },
@@ -26695,6 +26754,78 @@
               },
               {
                 "name": "WorkHours"
+              }
+            ]
+          },
+          {
+            "name": "_Departments",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "SortKey"
+              }
+            ]
+          },
+          {
+            "name": "_Scrap Category",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "ScrapID"
+              },
+              {
+                "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "Cost Element Names",
+            "columns": [
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Category Renamed"
+              },
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Element"
+              },
+              {
+                "name": "Cost Element & Name"
+              },
+              {
+                "name": "Cost Element Name"
+              },
+              {
+                "name": "CustomOrder"
+              },
+              {
+                "name": "Is Controllable Expense"
+              },
+              {
+                "name": "Is Labor"
+              },
+              {
+                "name": "Is Operations Scrap"
+              },
+              {
+                "name": "Is Scrap Usage Account"
+              },
+              {
+                "name": "Is Supplies"
+              },
+              {
+                "name": "Sub Category"
               }
             ]
           }
@@ -29354,6 +29485,9 @@
               },
               {
                 "name": "Work Center"
+              },
+              {
+                "name": "Department"
               }
             ]
           },
@@ -31410,6 +31544,9 @@
               },
               {
                 "name": "Work Center"
+              },
+              {
+                "name": "Department"
               }
             ]
           },

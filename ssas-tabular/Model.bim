@@ -19,6 +19,8 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7140,36 +7142,12 @@
               "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
               "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
               "",
-              "VAR Incidents =",
-              "    CALCULATE(",
-              "        CALCULATE(",
-              "            [Safety Incident Count],",
-              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
-              "        ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] <= [End of Fiscal Year]",
-              "        )",
-              "    )",
-              "",
-              "VAR Hours =",
-              "    CALCULATE(",
-              "        CALCULATE(",
-              "            SUM( 'Safety Work Hours'[WorkHours] ),",
-              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
-              "        ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] <= [End of Fiscal Year]",
-              "        )",
-              "    )",
-              "",
               "RETURN",
               "IF(",
               "    MinVisibleDate <= LastDateWithHours,",
               "    DIVIDE(",
-              "        Incidents * 200000,",
-              "        Hours",
+              "        [FYTD Safety Incident Count] * 200000,",
+              "        [FYTD Safety Work Hours]",
               "    )",
               ")"
             ],
@@ -7252,42 +7230,12 @@
               "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
               "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
               "",
-              "VAR Incidents =",
-              "    CALCULATE(",
-              "        CALCULATE(",
-              "            [Safety Incident Count],",
-              "            FILTER(",
-              "                'Calendar',",
-              "                'Calendar'[Date] <= [Report Date]",
-              "            )",
-              "        ),",
-              "        DATESYTD( 'Calendar'[Date], \"09/30\" )",
-              "    )",
-              "",
-              "VAR CYHours =",
-              "    CALCULATE(",
-              "        CALCULATE(",
-              "            SUM( 'Safety Work Hours'[WorkHours] ),",
-              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
-              "        )",
-              "    )",
-              "",
-              "VAR PYHours =",
-              "    IF(",
-              "        MinVisibleDate > LastDateWithHours,",
-              "        CALCULATE(",
-              "            SUM( 'Safety Work Hours'[WorkHours] ),",
-              "            SAMEPERIODLASTYEAR( 'Calendar'[Date] )",
-              "        ),",
-              "        0",
-              "    )",
-              "",
               "RETURN",
               "IF(",
               "    MinVisibleDate >= LastDateWithHours && MinVisibleDate <= [End of Fiscal Year],",
               "    DIVIDE(",
-              "        Incidents * 200000,",
-              "        CYHours + CALCULATE( PYHours, DATESYTD('Calendar'[Date], \"09/30\"))",
+              "        [FYTD Safety Incident Count] * 200000,",
+              "        [FYTD Safety Work Hours] + [FYTD PY Safety Work Hours]",
               "    )",
               ")"
             ],
@@ -7345,6 +7293,63 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "name": "PY Safety Work Hours",
+            "expression": [
+              "",
+              "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
+              "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
+              "RETURN",
+              "    IF(",
+              "        MinVisibleDate > LastDateWithHours,",
+              "        CALCULATE(",
+              "            SUM( 'Safety Work Hours'[WorkHours] ),",
+              "            SAMEPERIODLASTYEAR( 'Calendar'[Date] )",
+              "        ),",
+              "        0",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "isHidden": true,
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "FYTD PY Safety Work Hours",
+            "expression": "CALCULATE( [PY Safety Work Hours], DATESYTD('Calendar'[Date], \"09/30\"))",
+            "formatString": "#,0",
+            "isHidden": true,
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "FYTD Safety Work Hours",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Safety Work Hours'[WorkHours] ),",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Safety"
+          },
+          {
+            "name": "FYTD Safety Incident Count",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Safety Incident Count],",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [End of Fiscal Year]",
+              "        )",
+              "    ),",
+              "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Safety"
           }
         ]
       },
@@ -19449,6 +19454,15 @@
               },
               {
                 "name": "Days Count"
+              },
+              {
+                "name": "FYTD PY Safety Work Hours"
+              },
+              {
+                "name": "FYTD Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Work Hours"
               }
             ]
           },
@@ -20769,6 +20783,15 @@
               },
               {
                 "name": "Days Count"
+              },
+              {
+                "name": "FYTD PY Safety Work Hours"
+              },
+              {
+                "name": "FYTD Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Work Hours"
               }
             ]
           },
@@ -25848,6 +25871,15 @@
               },
               {
                 "name": "MTD Absorption Hours"
+              },
+              {
+                "name": "FYTD PY Safety Work Hours"
+              },
+              {
+                "name": "FYTD Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Work Hours"
               }
             ]
           },
@@ -28883,6 +28915,15 @@
               },
               {
                 "name": "Days Count"
+              },
+              {
+                "name": "FYTD PY Safety Work Hours"
+              },
+              {
+                "name": "FYTD Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Work Hours"
               }
             ]
           },
@@ -30586,6 +30627,12 @@
               },
               {
                 "name": "Days Count"
+              },
+              {
+                "name": "FYTD Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Work Hours"
               }
             ]
           },
@@ -31375,6 +31422,15 @@
               },
               {
                 "name": "Days Count"
+              },
+              {
+                "name": "FYTD PY Safety Work Hours"
+              },
+              {
+                "name": "FYTD Safety Incident Count"
+              },
+              {
+                "name": "FYTD Safety Work Hours"
               }
             ]
           },

@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -5975,6 +5973,7 @@
               "    ABS(SUM( 'Goods Issues and Receipts'[Amount] )),",
               "    ALL( '_Scrap Category' ),",
               "    ALL( 'Reason for Movement' ),",
+              "    ALL( 'Material Master' ),",
               "    KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"}),",
               "    KEEPFILTERS('Goods Issues and Receipts'[Reason Code for Movement] = \"0000\")",
               ")"

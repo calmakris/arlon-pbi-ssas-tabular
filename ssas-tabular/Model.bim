@@ -5236,8 +5236,8 @@
               "",
               "CALCULATE(",
               "    [GR Linear Footage],",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
@@ -5893,8 +5893,8 @@
             "expression": [
               "CALCULATE(",
               "    [GI Scrap Rate],",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
@@ -5907,8 +5907,8 @@
               "",
               "CALCULATE(",
               "    [GI Linear Footage],",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],
@@ -5994,8 +5994,8 @@
               "",
               "CALCULATE(",
               "    [GR Square Footage],",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"762\", \"MANUAL\"}),",
-              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\", \"555\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Machine Name] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+              "    KEEPFILTERS('Goods Issues and Receipts'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Issues and Receipts'[Production Date] )",
               ")"
             ],

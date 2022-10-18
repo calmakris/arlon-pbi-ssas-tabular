@@ -52,7 +52,8 @@
             "dataType": "string",
             "description": "SAP Source: KNA1.LAND1",
             "sourceColumn": "Country",
-            "displayFolder": "Master"
+            "displayFolder": "Master",
+            "dataCategory": "Country"
           },
           {
             "name": "Customer Name",

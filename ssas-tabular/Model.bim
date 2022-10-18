@@ -31625,17 +31625,6 @@
             ]
           },
           {
-            "name": "_Machines",
-            "columns": [
-              {
-                "name": "Department"
-              },
-              {
-                "name": "Machine Name"
-              }
-            ]
-          },
-          {
             "name": "Reason for Movement",
             "columns": [
               {

@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -52,7 +53,7 @@
             "dataType": "string",
             "description": "SAP Source: KNA1.LAND1",
             "sourceColumn": "Country",
-            "displayFolder": "Master",
+            "displayFolder": "Address",
             "dataCategory": "Country"
           },
           {
@@ -156,6 +157,45 @@
             "description": "Custom assigned values based on the [Sales Territory]",
             "sourceColumn": "SalesPerson",
             "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Street",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.HOUSE_NUM1, ADRC.STREET",
+            "sourceColumn": "Street",
+            "displayFolder": "Address"
+          },
+          {
+            "name": "City",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.CITY1",
+            "sourceColumn": "City",
+            "displayFolder": "Address",
+            "dataCategory": "City"
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.REGION",
+            "sourceColumn": "Region",
+            "displayFolder": "Address",
+            "dataCategory": "StateOrProvince"
+          },
+          {
+            "name": "Postal Code",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.POST_CODE1",
+            "sourceColumn": "PostalCode",
+            "displayFolder": "Address",
+            "dataCategory": "PostalCode"
+          },
+          {
+            "name": "Full Address",
+            "dataType": "string",
+            "description": "Concatenation of street, city, region, postal code, and country fields",
+            "sourceColumn": "FullAddress",
+            "displayFolder": "Address",
+            "dataCategory": "Address"
           }
         ],
         "partitions": [
@@ -21332,6 +21372,21 @@
               },
               {
                 "name": "Sales Person"
+              },
+              {
+                "name": "City"
+              },
+              {
+                "name": "Full Address"
+              },
+              {
+                "name": "Postal Code"
+              },
+              {
+                "name": "Region"
+              },
+              {
+                "name": "Street"
               }
             ]
           },
@@ -22162,6 +22217,21 @@
               },
               {
                 "name": "SalesRegionSortKey"
+              },
+              {
+                "name": "City"
+              },
+              {
+                "name": "Full Address"
+              },
+              {
+                "name": "Postal Code"
+              },
+              {
+                "name": "Region"
+              },
+              {
+                "name": "Street"
               }
             ]
           },
@@ -23025,6 +23095,21 @@
               },
               {
                 "name": "Sales Territory Name"
+              },
+              {
+                "name": "City"
+              },
+              {
+                "name": "Full Address"
+              },
+              {
+                "name": "Postal Code"
+              },
+              {
+                "name": "Region"
+              },
+              {
+                "name": "Street"
               }
             ]
           },
@@ -24713,6 +24798,21 @@
               },
               {
                 "name": "Sales Person"
+              },
+              {
+                "name": "City"
+              },
+              {
+                "name": "Full Address"
+              },
+              {
+                "name": "Postal Code"
+              },
+              {
+                "name": "Region"
+              },
+              {
+                "name": "Street"
               }
             ]
           },
@@ -29922,6 +30022,21 @@
               },
               {
                 "name": "Sales Person"
+              },
+              {
+                "name": "City"
+              },
+              {
+                "name": "Full Address"
+              },
+              {
+                "name": "Postal Code"
+              },
+              {
+                "name": "Region"
+              },
+              {
+                "name": "Street"
               }
             ]
           },

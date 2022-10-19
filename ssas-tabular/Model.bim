@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -856,15 +857,18 @@
             "description": "(SAP Source: Sum of CE110US.ERLOS)",
             "expression": [
               "",
-              "IF(",
-              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "    SWITCH(",
-              "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
-              "        SUM('Sales Invoice Documents'[Gross Sales Amount] )",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
+              "            \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "            SUM('Sales Invoice Documents'[Gross Sales Amount] )",
+              "        ),",
+              "        SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
               "    ),",
-              "    SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
+              "    KEEPFILTERS( NOT( 'Sales Invoice Documents'[Document Type] ) IN {\"IV\", \"IVA\", \"IVS\"} )",
               ")"
             ],
             "formatString": "#,0",
@@ -875,15 +879,18 @@
             "description": "Net of gross sales and discounts; Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
-              "IF(",
-              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "    SWITCH(",
-              "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", SUM( 'Sales Invoice Documents'[Net Sales Amount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents',  'Sales Invoice Documents'[Net Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
-              "        SUM('Sales Invoice Documents'[Net Sales Amount] )",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Invoice Documents'[Net Sales Amount] ),",
+              "            \"Local\", SUMX( 'Sales Invoice Documents',  'Sales Invoice Documents'[Net Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "            SUM('Sales Invoice Documents'[Net Sales Amount] )",
+              "        ),",
+              "        SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
               "    ),",
-              "    SUM('Sales Invoice Documents'[Net Sales Amount] )    ",
+              "    KEEPFILTERS( NOT( 'Sales Invoice Documents'[Document Type] ) IN {\"IV\", \"IVA\", \"IVS\"} )",
               ")"
             ],
             "formatString": "#,0",
@@ -894,15 +901,18 @@
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
-              "IF(",
-              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "    SWITCH(",
-              "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", SUM( 'Sales Invoice Documents'[Total Cost] ),",
-              "        \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Total Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
-              "        SUM('Sales Invoice Documents'[Total Cost] )",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Invoice Documents'[Total Cost] ),",
+              "            \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Total Cost] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "            SUM('Sales Invoice Documents'[Total Cost] )",
+              "        ),",
+              "        SUM('Sales Invoice Documents'[Total Cost] )    ",
               "    ),",
-              "    SUM('Sales Invoice Documents'[Total Cost] )    ",
+              "    KEEPFILTERS( NOT( 'Sales Invoice Documents'[Document Type] ) IN {\"IV\", \"IVA\", \"IVS\"} )",
               ")"
             ],
             "formatString": "#,0.00",
@@ -911,7 +921,13 @@
           {
             "name": "Gross Margin",
             "description": "Net of gross sales and overall cost; Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " SUM( 'Sales Invoice Documents'[Gross Margin Amount] )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Sales Invoice Documents'[Gross Margin Amount] ),",
+              "    KEEPFILTERS( NOT( 'Sales Invoice Documents'[Document Type] ) IN {\"IV\", \"IVA\", \"IVS\"} )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Sales"
           },
@@ -7395,6 +7411,33 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Safety"
+          },
+          {
+            "name": "Intercompany Sales",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Invoice Documents'[Gross Sales Amount] ),",
+              "            \"Local\", SUMX( 'Sales Invoice Documents', 'Sales Invoice Documents'[Gross Sales Amount] * 'Sales Invoice Documents'[Exchange Rate] ),",
+              "            SUM('Sales Invoice Documents'[Gross Sales Amount] )",
+              "        ),",
+              "        SUM('Sales Invoice Documents'[Gross Sales Amount] )    ",
+              "    ),",
+              "    KEEPFILTERS( 'Sales Invoice Documents'[Document Type] IN {\"IV\", \"IVA\", \"IVS\"} )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales"
+          },
+          {
+            "name": "MTD Intercompany Sales",
+            "expression": " CALCULATE( [Intercompany Sales], DATESMTD( 'Calendar'[Date] ) )",
+            "formatString": "#,0",
+            "displayFolder": "Time Intelligence"
           }
         ]
       },
@@ -21629,6 +21672,12 @@
               },
               {
                 "name": "MTD PY Gross Sales %Grand (Was New Product)"
+              },
+              {
+                "name": "Intercompany Sales"
+              },
+              {
+                "name": "MTD Intercompany Sales"
               }
             ]
           },
@@ -22471,6 +22520,12 @@
               },
               {
                 "name": "Audit 5S Score as % of Target"
+              },
+              {
+                "name": "Intercompany Sales"
+              },
+              {
+                "name": "MTD Intercompany Sales"
               }
             ]
           },

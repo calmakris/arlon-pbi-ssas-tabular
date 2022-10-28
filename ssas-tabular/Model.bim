@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIPRD",
+            "server": "ARLPBIDEV",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -5987,7 +5987,9 @@
               "        [Operations Goods Receipt Amount],",
               "        ALL( '_Scrap Category' ),",
               "        ALL( 'Reason for Movement' ),",
-              "        ALL( 'Material Master' )",
+              "        ALL( 'Material Master' ),",
+              "        ALL( '_Work Centers'[Department] ),",
+              "        ALL( '_Work Centers (Mfg)'[Department] )",
               "    )",
               ")"
             ],
@@ -8218,6 +8220,7 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
+            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -13452,6 +13455,7 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13468,6 +13472,7 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13484,6 +13489,7 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13500,6 +13506,7 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13538,6 +13545,7 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -13549,6 +13557,7 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -13724,6 +13733,7 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -13735,6 +13745,7 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
+            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -33403,5 +33414,6 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

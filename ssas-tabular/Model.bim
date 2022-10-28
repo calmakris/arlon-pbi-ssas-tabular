@@ -5979,6 +5979,7 @@
           },
           {
             "name": "Operations Scrap as % of GR",
+            "description": "[Operations Scrap Amount] as percent of entire [Operations Goods Receipt]. In the machine level, this measure is in the machine level.",
             "expression": [
               "",
               "DIVIDE(",

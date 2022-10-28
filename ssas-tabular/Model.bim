@@ -5910,6 +5910,7 @@
           },
           {
             "name": "Operations Scrap Amount",
+            "description": "Sum of non process order scrap from 'Scrap Usage Transactions' table, 'Scrap Confirmations'[Amount], and process order scrap and inventory reserve amout in 'Goods Issues and Receipts' table.",
             "expression": [
               "",
               "VAR PO_Scrap =",
@@ -5980,7 +5981,15 @@
             "name": "Operations Scrap as % of GR",
             "expression": [
               "",
-              "DIVIDE( [Operations Scrap Amount], [Operations Goods Receipt Amount] )"
+              "DIVIDE(",
+              "    [Operations Scrap Amount],",
+              "    CALCULATE(",
+              "        [Operations Goods Receipt Amount],",
+              "        ALL( '_Scrap Category' ),",
+              "        ALL( 'Reason for Movement' ),",
+              "        ALL( 'Material Master' )",
+              "    )",
+              ")"
             ],
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
             "displayFolder": "Operations Scrap"
@@ -6001,6 +6010,7 @@
           },
           {
             "name": "Operations Scrap as % of GR (Target)",
+            "description": "Monthly KPI target manually assigned in the beginning of the fiscal year. Operations provides this data to IT for upload.",
             "expression": [
               "",
               "CALCULATE(",
@@ -6021,14 +6031,11 @@
           },
           {
             "name": "Operations Goods Receipt Amount",
-            "description": "Sum of 'Goods Issues and Receipts'[Amount] with 261 and 262 movement types with non-0000 reason codes",
+            "description": "Sum of 'Goods Issues and Receipts'[Amount] with 261 and 262 movement types with non-0000 reason codes.",
             "expression": [
               "",
               "CALCULATE(",
               "    ABS(SUM( 'Goods Issues and Receipts'[Amount] )),",
-              "    ALL( '_Scrap Category' ),",
-              "    ALL( 'Reason for Movement' ),",
-              "    ALL( 'Material Master' ),",
               "    KEEPFILTERS('Goods Issues and Receipts'[Movement Type] IN {\"261\", \"262\"}),",
               "    KEEPFILTERS('Goods Issues and Receipts'[Reason Code for Movement] = \"0000\")",
               ")"
@@ -7436,6 +7443,52 @@
             "expression": " CALCULATE( [Intercompany Sales], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
+          },
+          {
+            "name": "Frozen Planned Indp Requirements Quantity",
+            "description": "Total planned quantity of planned independent requirements with the change date (by material, plant, and delivery date) closest and before the material's [Commercialization Date] in the material master. If not available, the first one available after the [Commercialization Date] is used.",
+            "expression": [
+              "",
+              "VAR _BeforeLaunch =",
+              "    SUMX(",
+              "        VALUES( 'Planned Independent Requirements'[MaterialPlantDateKey] ),",
+              "        CALCULATE(",
+              "            SUM( 'Planned Independent Requirements'[Planned Quantity] ),",
+              "            KEEPFILTERS( 'Planned Independent Requirements'[RankFrozen] = -1 )",
+              "        )",
+              "    )",
+              "",
+              "VAR _AfterLaunch =",
+              "    SUMX(",
+              "        VALUES( 'Planned Independent Requirements'[MaterialPlantDateKey] ),",
+              "        CALCULATE(",
+              "            SUM( 'Planned Independent Requirements'[Planned Quantity] ),",
+              "            KEEPFILTERS( 'Planned Independent Requirements'[RankFrozen] = 1 )",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    ISBLANK( _BeforeLaunch ),",
+              "    _AfterLaunch,",
+              "    _BeforeLaunch",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Forecast"
+          },
+          {
+            "name": "Flash Planned Indp Requirements Quantity",
+            "description": "Total planned quantity of planned independent requirements with the latest change date by material, plant, and delivery date",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Planned Independent Requirements'[Planned Quantity] ),",
+              "    KEEPFILTERS( 'Planned Independent Requirements'[RankNewest] = 1 )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Forecast"
           }
         ]
       },
@@ -8165,7 +8218,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -13400,7 +13452,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13417,7 +13468,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13434,7 +13484,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13451,7 +13500,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13490,7 +13538,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -13502,7 +13549,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -13678,7 +13724,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -13690,7 +13735,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -13957,12 +14001,17 @@
             "sourceColumn": "ItemText"
           },
           {
-            "name": "Work Center",
+            "name": "Transacting Work Center",
             "dataType": "string",
             "description": "SAP Source: CRHD.ARBPL",
-            "isHidden": true,
             "sourceColumn": "WorkCenter",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Manufacturing Work Center",
+            "dataType": "string",
+            "description": "Work center of the production order of the batch number. Used for analyzing Operations Scrap.",
+            "sourceColumn": "WorkCenterMfg"
           }
         ],
         "partitions": [
@@ -16071,10 +16120,16 @@
             "sourceColumn": "ItemText"
           },
           {
-            "name": "Work Center",
+            "name": "Transacting Work Center",
             "dataType": "string",
-            "description": "CRHD.ARBPL; Determined based on the assigned process order in the material document. If that's not available, the process order of the first GR transaction of the batch is used.",
+            "description": "CRHD.ARBPL; Work center of the process order of the transaction",
             "sourceColumn": "WorkCenter"
+          },
+          {
+            "name": "Manufacturing Work Center",
+            "dataType": "string",
+            "description": "Work center of the production order of the batch number",
+            "sourceColumn": "WorkCenterMfg"
           }
         ],
         "partitions": [
@@ -16434,7 +16489,7 @@
       },
       {
         "name": "_Work Centers",
-        "description": "Contains work centers in SAP with custom assigned departments and machine names. This table is usually related to other SAP tables.",
+        "description": "Contains work centers in SAP with custom assigned departments and machine names. This table is usually related to other SAP tables. Only use this when summarizing measures. This table is generally related to the transacting work center of the transactions like in 'Goods Issues and Receipts' and 'Scrap Usage Transactions' tables.",
         "columns": [
           {
             "name": "Work Center",
@@ -16444,7 +16499,6 @@
           {
             "name": "Department",
             "dataType": "string",
-            "isHidden": true,
             "sourceColumn": "Department",
             "isAvailableInMdx": false
           },
@@ -17819,6 +17873,159 @@
             }
           }
         ]
+      },
+      {
+        "name": "Planned Independent Requirements",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Requirement Type",
+            "dataType": "string",
+            "sourceColumn": "ReqType"
+          },
+          {
+            "name": "Version",
+            "dataType": "string",
+            "sourceColumn": "VersionNo"
+          },
+          {
+            "name": "Delivery Date",
+            "dataType": "dateTime",
+            "sourceColumn": "DeliveryDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Change Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ChangeDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Change Time",
+            "dataType": "dateTime",
+            "sourceColumn": "ChangeTime",
+            "formatString": "HH:mm:ss",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Changed By",
+            "dataType": "string",
+            "sourceColumn": "ChangedBy"
+          },
+          {
+            "name": "Planned Quantity",
+            "dataType": "decimal",
+            "sourceColumn": "PlannedQty",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "RankFrozen",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RankFrozen",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "RankNewest",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RankNewest",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "RankOldest",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RankOldest",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "MaterialPlantDateKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialPlantDateKey",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_SALES_REQUIREMENTS = Source{[Schema=\"dbo\",Item=\"VW_SALES_REQUIREMENTS\"]}[Data]",
+                "in",
+                "    dbo_VW_SALES_REQUIREMENTS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Work Centers (Mfg)",
+        "description": "Contains work centers in SAP with custom assigned departments and machine names. This table is usually related to other SAP tables. Only use this when summarizing measures. This table is generally related to manufacturing work centers of the transactions like 'Goods Issues and Receipts' and 'Scrap Usage Transactions' tables.",
+        "columns": [
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "sourceColumn": "WorkCenter"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Machine Name",
+            "dataType": "string",
+            "sourceColumn": "Machine"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_WORK_CENTER_NAMES = Source{[Schema=\"dbo\",Item=\"VW_WORK_CENTER_NAMES\"]}[Data]",
+                "in",
+                "    dbo_VW_WORK_CENTER_NAMES"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -19089,13 +19296,6 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "b543b5ff-b280-498b-9c5b-5a6a8d893206",
-        "fromTable": "Goods Issues and Receipts",
-        "fromColumn": "Work Center",
-        "toTable": "_Work Centers",
-        "toColumn": "Work Center"
-      },
-      {
         "name": "2115dc07-f007-4247-b1a0-00c395f1914d",
         "fromTable": "Scrap Confirmations",
         "fromColumn": "Work Center",
@@ -19115,13 +19315,6 @@
         "fromColumn": "Department",
         "toTable": "_Departments",
         "toColumn": "Department"
-      },
-      {
-        "name": "4e350d1c-b948-4307-bfb0-583555e54d5c",
-        "fromTable": "Scrap Usage Transactions",
-        "fromColumn": "Work Center",
-        "toTable": "_Work Centers",
-        "toColumn": "Work Center"
       },
       {
         "name": "3abd8e64-f49a-4249-9da4-bd39b2c1de9f",
@@ -19174,6 +19367,62 @@
         "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "8f77610e-bfef-4f19-aac3-7b9fa5a6e455",
+        "fromTable": "Planned Independent Requirements",
+        "fromColumn": "Delivery Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "4c480518-9695-4940-9c0d-b38a257f36e0",
+        "fromTable": "Planned Independent Requirements",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "f5e60c51-68f2-4f08-a652-dbf5f9018d71",
+        "fromTable": "Planned Independent Requirements",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "587eaffc-022a-4c52-b2dc-aef9a251921f",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Transacting Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "1ece8578-a50e-49bb-8dd8-8e8155b725a5",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Transacting Work Center",
+        "toTable": "_Work Centers",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "a7d5deb6-dcee-4111-8ee5-2fedf732f834",
+        "fromTable": "Scrap Confirmations",
+        "fromColumn": "Work Center",
+        "toTable": "_Work Centers (Mfg)",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "17384830-158f-444a-9768-90a35fc0a263",
+        "fromTable": "Goods Issues and Receipts",
+        "fromColumn": "Manufacturing Work Center",
+        "toTable": "_Work Centers (Mfg)",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "84ecddde-8a99-4577-9317-47b5da7c76f3",
+        "fromTable": "Scrap Usage Transactions",
+        "fromColumn": "Manufacturing Work Center",
+        "toTable": "_Work Centers (Mfg)",
+        "toColumn": "Work Center"
       }
     ],
     "perspectives": [
@@ -21700,6 +21949,12 @@
               },
               {
                 "name": "MTD Intercompany Sales"
+              },
+              {
+                "name": "Flash Planned Indp Requirements Quantity"
+              },
+              {
+                "name": "Frozen Planned Indp Requirements Quantity"
               }
             ]
           },
@@ -22099,6 +22354,50 @@
               },
               {
                 "name": "Standard Price"
+              }
+            ]
+          },
+          {
+            "name": "Planned Independent Requirements",
+            "columns": [
+              {
+                "name": "Change Date"
+              },
+              {
+                "name": "Change Time"
+              },
+              {
+                "name": "Changed By"
+              },
+              {
+                "name": "Delivery Date"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Planned Quantity"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "RankFrozen"
+              },
+              {
+                "name": "RankNewest"
+              },
+              {
+                "name": "RankOldest"
+              },
+              {
+                "name": "Requirement Type"
+              },
+              {
+                "name": "Version"
+              },
+              {
+                "name": "MaterialPlantDateKey"
               }
             ]
           }
@@ -26362,7 +26661,10 @@
                 "name": "Item Text"
               },
               {
-                "name": "Work Center"
+                "name": "Transacting Work Center"
+              },
+              {
+                "name": "Manufacturing Work Center"
               }
             ]
           },
@@ -31398,7 +31700,10 @@
                 "name": "Item Text"
               },
               {
-                "name": "Work Center"
+                "name": "Transacting Work Center"
+              },
+              {
+                "name": "Manufacturing Work Center"
               }
             ]
           },
@@ -31754,7 +32059,10 @@
                 "name": "Item Text"
               },
               {
-                "name": "Work Center"
+                "name": "Transacting Work Center"
+              },
+              {
+                "name": "Manufacturing Work Center"
               }
             ]
           },
@@ -32029,6 +32337,20 @@
               },
               {
                 "name": "WorkHours"
+              }
+            ]
+          },
+          {
+            "name": "_Work Centers (Mfg)",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Machine Name"
+              },
+              {
+                "name": "Work Center"
               }
             ]
           }
@@ -33081,6 +33403,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

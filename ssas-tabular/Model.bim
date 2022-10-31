@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "Username": "DOMAIN\\PBI-ETL",
@@ -5979,7 +5978,7 @@
           },
           {
             "name": "Operations Scrap as % of GR",
-            "description": "[Operations Scrap Amount] as percent of entire [Operations Goods Receipt]. In the machine level, this measure is in the machine level.",
+            "description": "[Operations Scrap Amount] as percent of entire [Operations Goods Receipt]",
             "expression": [
               "",
               "DIVIDE(",
@@ -5989,8 +5988,8 @@
               "        ALL( '_Scrap Category' ),",
               "        ALL( 'Reason for Movement' ),",
               "        ALL( 'Material Master' ),",
-              "        ALL( '_Work Centers'[Department] ),",
-              "        ALL( '_Work Centers (Mfg)'[Department] )",
+              "        ALL( '_Work Centers' ),",
+              "        ALL( '_Work Centers (Mfg)' )",
               "    )",
               ")"
             ],

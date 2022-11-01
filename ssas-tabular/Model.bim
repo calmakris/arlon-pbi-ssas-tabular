@@ -17374,7 +17374,7 @@
           },
           {
             "name": "Delivered Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "SAP Source: LIPS.LFIMG",
             "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
@@ -17399,6 +17399,18 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "name": "Shipment Route",
+            "dataType": "string",
+            "description": "SAP Source: VTTK.ROUTE",
+            "sourceColumn": "ShipmentRoute"
+          },
+          {
+            "name": "PRO Number",
+            "dataType": "string",
+            "description": "SAP Source: VTTK.TPBEZ",
+            "sourceColumn": "PRONo"
           }
         ],
         "partitions": [
@@ -21304,6 +21316,102 @@
               },
               {
                 "name": "Tier"
+              },
+              {
+                "name": "Allocated Amount"
+              },
+              {
+                "name": "Allocated Amount Local"
+              },
+              {
+                "name": "Customer Material Number"
+              },
+              {
+                "name": "Customer Open Margin Amount"
+              },
+              {
+                "name": "Customer Open Margin Amount (Local)"
+              },
+              {
+                "name": "Customer Open Weight"
+              },
+              {
+                "name": "Gross Weight"
+              },
+              {
+                "name": "Has Changes (CS)"
+              },
+              {
+                "name": "In Stock"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Late Quantity"
+              },
+              {
+                "name": "Margin Amount"
+              },
+              {
+                "name": "Margin Amount Local"
+              },
+              {
+                "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Payment Terms"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Requirements Type"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Ship To Address"
+              },
+              {
+                "name": "Shipped Amount"
+              },
+              {
+                "name": "Shipped Amount Local"
+              },
+              {
+                "name": "Shipped Weight"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Weight Unit"
               }
             ]
           },
@@ -21474,6 +21582,12 @@
               },
               {
                 "name": "Actual Goods Movement Date"
+              },
+              {
+                "name": "Shipment Route"
+              },
+              {
+                "name": "PRO Number"
               }
             ],
             "measures": [
@@ -22310,6 +22424,102 @@
               },
               {
                 "name": "Ship To Name"
+              },
+              {
+                "name": "Allocated Amount"
+              },
+              {
+                "name": "Allocated Amount Local"
+              },
+              {
+                "name": "Customer Open Margin Amount"
+              },
+              {
+                "name": "Customer Open Margin Amount (Local)"
+              },
+              {
+                "name": "Customer Open Weight"
+              },
+              {
+                "name": "External Purchase Order Number"
+              },
+              {
+                "name": "Gross Weight"
+              },
+              {
+                "name": "Has Changes (CS)"
+              },
+              {
+                "name": "In Stock"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Late Exclude Indicator"
+              },
+              {
+                "name": "Late Indicator"
+              },
+              {
+                "name": "Late Quantity"
+              },
+              {
+                "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Payment Terms"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Requirements Type"
+              },
+              {
+                "name": "Sample Category"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Ship To Address"
+              },
+              {
+                "name": "Shipped Amount"
+              },
+              {
+                "name": "Shipped Amount Local"
+              },
+              {
+                "name": "Shipped Weight"
+              },
+              {
+                "name": "Tier"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Weight Unit"
               }
             ]
           },
@@ -24304,6 +24514,12 @@
               },
               {
                 "name": "Actual Goods Movement Date"
+              },
+              {
+                "name": "Shipment Route"
+              },
+              {
+                "name": "PRO Number"
               }
             ],
             "measures": [
@@ -25868,6 +26084,12 @@
               },
               {
                 "name": "Actual Goods Movement Date"
+              },
+              {
+                "name": "Shipment Route"
+              },
+              {
+                "name": "PRO Number"
               }
             ],
             "measures": [
@@ -31483,6 +31705,43 @@
               },
               {
                 "name": "WorkHours"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order Shipments",
+            "columns": [
+              {
+                "name": "Actual Goods Movement Date"
+              },
+              {
+                "name": "Actual Shipment Date"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Delivered Quantity"
+              },
+              {
+                "name": "Delivery Note"
+              },
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "PRO Number"
+              },
+              {
+                "name": "Shipment Number"
+              },
+              {
+                "name": "Shipment Route"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Delivery Note Quantity"
               }
             ]
           }

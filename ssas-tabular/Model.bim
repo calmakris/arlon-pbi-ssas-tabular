@@ -8223,7 +8223,6 @@
             "type": "calculated",
             "name": "Blocked Inv Value",
             "dataType": "decimal",
-            "isDataTypeInferred": false,
             "expression": " 'Blocked Inventory Snapshots'[SBlock Value] + 'Blocked Inventory Snapshots'[QBlock Value] + 'Blocked Inventory Snapshots'[Expired Value] + 0",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "summarizeBy": "none",
@@ -9967,7 +9966,7 @@
           },
           {
             "name": "Order Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.KWMENG",
             "isHidden": true,
             "sourceColumn": "OrderQuantity",
@@ -9984,7 +9983,7 @@
           },
           {
             "name": "Order Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.NETWR; Converted to USD using the exchange rate",
             "isHidden": true,
             "sourceColumn": "OrderAmountUSD",
@@ -10001,7 +10000,7 @@
           },
           {
             "name": "Cost Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.WAVWR; Converted to USD using the exchange rate",
             "isHidden": true,
             "sourceColumn": "CostAmountUSD",
@@ -10024,7 +10023,7 @@
           },
           {
             "name": "Allocated Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued without an actual PGI date yet",
             "isHidden": true,
             "sourceColumn": "AllocatedQuantity",
@@ -10035,7 +10034,7 @@
           },
           {
             "name": "Shipped Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with actual PGI date set",
             "isHidden": true,
             "sourceColumn": "ShippedQuantity",
@@ -10046,7 +10045,7 @@
           },
           {
             "name": "Shipped On Time Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with PGI date on or before the first schedule delivery date",
             "sourceColumn": "OnTimeShippedQuantity",
             "formatString": "#,0.00",
@@ -10055,7 +10054,7 @@
           },
           {
             "name": "Internal Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Order quantity minus allocated and shipped quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenQuantity",
@@ -10066,7 +10065,7 @@
           },
           {
             "name": "Customer Open Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Order quantity minus shipped quantity",
             "isHidden": true,
             "sourceColumn": "CustomerOpenQuantity",
@@ -10077,7 +10076,7 @@
           },
           {
             "name": "Unit Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.NETPR",
             "sourceColumn": "UnitPrice",
             "formatString": "#,0.00",
@@ -10085,7 +10084,7 @@
           },
           {
             "name": "Exchange Rate",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: VBAP.STCUR or VBKD.KURSK; Exchange rate to USD. Due to errors in some orders, this exchange is a calculated column. If the currency is USD, then the value is 1.0. Else if the currency is not USD but the exchange rate in the order is 1.0, use the VBKD.KURSK. Else, use VBAP.STCUR.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.00",
@@ -10093,7 +10092,7 @@
           },
           {
             "name": "Cost Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: WAVWR",
             "isHidden": true,
             "sourceColumn": "CostAmount",
@@ -10104,7 +10103,7 @@
           },
           {
             "name": "Order Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: NETWR",
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
@@ -10113,7 +10112,7 @@
           },
           {
             "name": "Internal Open Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmount",
@@ -10124,7 +10123,7 @@
           },
           {
             "name": "Internal Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmountUSD",
@@ -10141,7 +10140,7 @@
           },
           {
             "name": "Customer Open Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmount",
             "formatString": "#,0",
@@ -10151,7 +10150,7 @@
           },
           {
             "name": "Customer Open Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -10167,7 +10166,7 @@
           },
           {
             "name": "Margin Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmount",
@@ -10178,7 +10177,7 @@
           },
           {
             "name": "Margin Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmountUSD",
@@ -10235,7 +10234,7 @@
           },
           {
             "name": "Customer Open Margin Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -10249,7 +10248,7 @@
           },
           {
             "name": "Customer Open Margin Amount (Local)",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmount",
             "formatString": "#,0",
@@ -10268,7 +10267,7 @@
           },
           {
             "name": "Allocated Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedAmount",
             "formatString": "#,0",
@@ -10278,7 +10277,7 @@
           },
           {
             "name": "Allocated Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -10294,7 +10293,7 @@
           },
           {
             "name": "Shipped Amount Local",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedAmount",
             "formatString": "#,0",
@@ -10304,7 +10303,7 @@
           },
           {
             "name": "Shipped Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -10338,14 +10337,14 @@
           },
           {
             "name": "Gross Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
             "summarizeBy": "none"
           },
           {
             "name": "Shipped Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ShippedWeight",
             "formatString": "#,0.00",
             "displayFolder": "_Values",
@@ -10353,7 +10352,7 @@
           },
           {
             "name": "Customer Open Weight",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenWeight",
             "formatString": "#,0.00",
@@ -10397,7 +10396,7 @@
           },
           {
             "name": "Late Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between [Order Quantity] and [Shipped On Time Quantity]",
             "isHidden": true,
             "sourceColumn": "LateQuantity",
@@ -10438,7 +10437,7 @@
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
@@ -13466,7 +13465,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13483,7 +13481,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13500,7 +13497,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13517,7 +13513,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13556,7 +13551,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -13568,7 +13562,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -13744,7 +13737,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -13756,7 +13748,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -17374,7 +17365,7 @@
           },
           {
             "name": "Delivered Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "SAP Source: LIPS.LFIMG",
             "isHidden": true,
             "sourceColumn": "DeliveredQuantity",
@@ -33699,6 +33690,5 @@
         "value": "{\"RuleIDs\":[]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

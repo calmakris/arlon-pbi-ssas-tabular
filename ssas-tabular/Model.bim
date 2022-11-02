@@ -10461,6 +10461,12 @@
             "description": "SAP Source: ADRC. Concatenation of HOUSE_NUM1, STREET, CITY1, REGION, POST_CODE1 and COUNTRY fields.",
             "sourceColumn": "ShipToFullAddress",
             "dataCategory": "Address"
+          },
+          {
+            "name": "Credit Block Reason",
+            "dataType": "string",
+            "description": "This field only applies to items with credit block. The value is determined by the open items in customer account (BSID table): if static credit check status is \"not OK\" and net balance is positive, then it is \"Exceeds Credit Limit / Past Due\"; if static credit check status is \"not OK\" and net balance is 0 or negative, then value is \"Exceeds Credit Limit\"; if there is at least one open item, then \"Past Due\"; otherwise, it's \"Exceeds Credit Limit\".",
+            "sourceColumn": "CreditBlockReason"
           }
         ],
         "partitions": [
@@ -21403,6 +21409,9 @@
               },
               {
                 "name": "Weight Unit"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },
@@ -22511,6 +22520,9 @@
               },
               {
                 "name": "Weight Unit"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },
@@ -23499,6 +23511,9 @@
               },
               {
                 "name": "Ship To Address"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },
@@ -24117,6 +24132,9 @@
               },
               {
                 "name": "Ship To Address"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },
@@ -25761,6 +25779,9 @@
               },
               {
                 "name": "Ship To Address"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },
@@ -28527,6 +28548,9 @@
               },
               {
                 "name": "Ship To Address"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },
@@ -31032,6 +31056,9 @@
               },
               {
                 "name": "Ship To Address"
+              },
+              {
+                "name": "Credit Block Reason"
               }
             ]
           },

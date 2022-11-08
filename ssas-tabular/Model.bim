@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -26113,10 +26112,10 @@
             ]
           },
           {
-            "name": "_Value to Use",
+            "name": "_Currency to Use",
             "columns": [
               {
-                "name": "Value"
+                "name": "Currency"
               }
             ]
           }
@@ -27638,6 +27637,14 @@
               },
               {
                 "name": "Sub Category"
+              }
+            ]
+          },
+          {
+            "name": "_Value to Use",
+            "columns": [
+              {
+                "name": "Value"
               }
             ]
           }

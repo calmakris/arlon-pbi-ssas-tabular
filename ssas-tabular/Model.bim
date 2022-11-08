@@ -7715,7 +7715,8 @@
             "name": "Ship To City",
             "dataType": "string",
             "description": "SAP Source: ADRC.CITY1",
-            "sourceColumn": "ShipToCity"
+            "sourceColumn": "ShipToCity",
+            "dataCategory": "City"
           },
           {
             "name": "Sales Order Number",
@@ -7863,6 +7864,13 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Ship To Country",
+            "dataType": "string",
+            "description": "SAP Source: ADRC.COUNTRY",
+            "sourceColumn": "ShipToCountry",
+            "dataCategory": "Country"
           }
         ],
         "partitions": [
@@ -22281,6 +22289,9 @@
               },
               {
                 "name": "Current Setup Cost"
+              },
+              {
+                "name": "Ship To Country"
               }
             ]
           },
@@ -23272,6 +23283,9 @@
               },
               {
                 "name": "Current Setup Cost"
+              },
+              {
+                "name": "Ship To Country"
               }
             ]
           },
@@ -26095,6 +26109,14 @@
             "measures": [
               {
                 "name": "Delivery Note Quantity"
+              }
+            ]
+          },
+          {
+            "name": "_Value to Use",
+            "columns": [
+              {
+                "name": "Value"
               }
             ]
           }

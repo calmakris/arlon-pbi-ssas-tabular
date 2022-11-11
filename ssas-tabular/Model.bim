@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7472,6 +7473,52 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Forecast"
+          },
+          {
+            "name": "Net Inventory Quantity After Order Reservations",
+            "description": "[Current Inventory Quantity] minus the cumulative total of 'Shop Order Reservations'[Requirement Quantity] by [Requirement Date]. If this measure is grouped by 'Calendar'[Date], the current day is the [Current Inventory Quantity] and the future dates are the net quantity.",
+            "expression": [
+              "",
+              "VAR MinVisibleDate = MIN( 'Calendar'[Date] )",
+              "VAR MaxReqDateWithData = ",
+              "    CALCULATE(",
+              "        MAX( 'Shop Order Reservations'[Requirement Date] ),",
+              "        ALL( 'Calendar' )",
+              "    )",
+              "VAR CurrentInventory = ",
+              "    CALCULATE(",
+              "        [Current Inventory Quantity],",
+              "        TREATAS(",
+              "            VALUES( 'Purchasing Source List'[MaterialPlantKey] ),",
+              "            'Current Inventory'[MaterialPlantKey]",
+              "        )",
+              "    )",
+              "VAR CumulativeTotal =",
+              "    CALCULATE(",
+              "        SUM( 'Shop Order Reservations'[Requirement Quantity] ),",
+              "        FILTER(",
+              "            ALLSELECTED( 'Calendar'[Date] ),",
+              "            'Calendar'[Date] > ([Report Date] + 1)",
+              "                && 'Calendar'[Date] <= MAX( 'Calendar'[Date] )",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Purchasing Source List'[MaterialPlantKey] ),",
+              "            'Shop Order Reservations'[MaterialPlantKey]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    MinVisibleDate = ([Report Date] + 1),",
+              "    CurrentInventory,",
+              "    IF(",
+              "        MinVisibleDate > ([Report Date] + 1),",
+              "        CurrentInventory + CumulativeTotal",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "MRP"
           }
         ]
       },
@@ -18052,6 +18099,124 @@
             }
           }
         ]
+      },
+      {
+        "name": "Purchasing Source List",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: EORD.MATNR",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: EORD.WERKS",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Purchasing Group",
+            "dataType": "string",
+            "description": "SAP Source: MARC.EKGRP",
+            "sourceColumn": "PurchasingGroup"
+          },
+          {
+            "name": "Vendor Number",
+            "dataType": "string",
+            "description": "SAP Source: EORD.LIFNR",
+            "sourceColumn": "VendorNo"
+          },
+          {
+            "name": "Vendor Name",
+            "dataType": "string",
+            "description": "SAP Source: LFA1.NAME1",
+            "sourceColumn": "VendorName"
+          },
+          {
+            "name": "MaterialPlantKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialPlantKey",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_MATERIAL_SOURCELIST = Source{[Schema=\"dbo\",Item=\"VW_MATERIAL_SOURCELIST\"]}[Data]",
+                "in",
+                "    dbo_VW_MATERIAL_SOURCELIST"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Shop Order Reservations",
+        "columns": [
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: RESB.MATNR",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: RESB.WERKS",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Requirement Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: RESB.BDTER",
+            "sourceColumn": "RequirementDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Requirement Quantity",
+            "dataType": "decimal",
+            "description": "SAP Source: RESB.BDMNG, RESB.SHKZG",
+            "sourceColumn": "RequirementQty",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "MaterialPlantKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialPlantKey",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_VW_ORDER_PROCESS_RESERVATIONS = Source{[Schema=\"dbo\",Item=\"VW_ORDER_PROCESS_RESERVATIONS\"]}[Data]",
+                "in",
+                "    dbo_VW_ORDER_PROCESS_RESERVATIONS"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -19449,6 +19614,27 @@
         "fromColumn": "Manufacturing Work Center",
         "toTable": "_Work Centers (Mfg)",
         "toColumn": "Work Center"
+      },
+      {
+        "name": "c6c7d9e1-b0fb-4835-b75e-d93b7188ecf8",
+        "fromTable": "Shop Order Reservations",
+        "fromColumn": "Material Number",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "680b8744-3b92-419e-add3-a6ec4e7af8bf",
+        "fromTable": "Shop Order Reservations",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "716d6935-1135-4805-bb46-0b85b46b4df5",
+        "fromTable": "Shop Order Reservations",
+        "fromColumn": "Requirement Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -27952,6 +28138,9 @@
               },
               {
                 "name": "Last Inventory Quantity"
+              },
+              {
+                "name": "Net Inventory Quantity After Order Reservations"
               }
             ]
           },
@@ -28946,6 +29135,49 @@
                 "name": "Standard Price"
               }
             ]
+          },
+          {
+            "name": "Purchasing Source List",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Purchasing Group"
+              },
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              },
+              {
+                "name": "MaterialPlantKey"
+              }
+            ]
+          },
+          {
+            "name": "Shop Order Reservations",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Requirement Date"
+              },
+              {
+                "name": "Requirement Quantity"
+              },
+              {
+                "name": "MaterialPlantKey"
+              }
+            ]
           }
         ]
       },
@@ -29726,6 +29958,9 @@
               },
               {
                 "name": "FYTD Safety Work Hours"
+              },
+              {
+                "name": "Net Inventory Quantity After Order Reservations"
               }
             ]
           },
@@ -30480,6 +30715,49 @@
               },
               {
                 "name": "WorkHours"
+              }
+            ]
+          },
+          {
+            "name": "Purchasing Source List",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Purchasing Group"
+              },
+              {
+                "name": "Vendor Name"
+              },
+              {
+                "name": "Vendor Number"
+              },
+              {
+                "name": "MaterialPlantKey"
+              }
+            ]
+          },
+          {
+            "name": "Shop Order Reservations",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Requirement Date"
+              },
+              {
+                "name": "Requirement Quantity"
+              },
+              {
+                "name": "MaterialPlantKey"
               }
             ]
           }

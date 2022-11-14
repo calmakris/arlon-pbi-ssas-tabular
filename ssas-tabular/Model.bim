@@ -19,8 +19,6 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3294,6 +3292,7 @@
               "            'Upstream Logs - Simplified'[Specification Number],",
               "            'Upstream Logs - Simplified'[Efficiency Hitter]",
               "        ),",
+              "        ALL('_Production Shifts'),",
               "        ALL(_Machines[Machine Name])",
               "    )",
               ")"
@@ -3325,6 +3324,7 @@
               "            'Upstream Logs - Simplified'[Specification Number],",
               "            'Upstream Logs - Simplified'[Efficiency Hitter]",
               "        ),",
+              "        ALL('_Production Shifts'),",
               "        ALL(_Machines[Machine Name])",
               "    )",
               ")"

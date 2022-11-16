@@ -19,6 +19,8 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -5897,7 +5899,7 @@
           },
           {
             "name": "Operations Scrap Amount",
-            "description": "Sum of non process order scrap from 'Scrap Usage Transactions' table, 'Scrap Confirmations'[Amount], and process order scrap and inventory reserve amout in 'Goods Issues and Receipts' table.",
+            "description": "Sum of non process order scrap from 'Scrap Usage Transactions' table, 'Scrap Confirmations'[Amount], and process order scrap and inventory reserve amount in 'Goods Issues and Receipts' table.",
             "expression": [
               "",
               "VAR PO_Scrap =",
@@ -7519,6 +7521,42 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "MRP"
+          },
+          {
+            "name": "Operations Scrap Quantity",
+            "description": "Sum of non process order scrap from 'Scrap Usage Transactions' table, 'Scrap Confirmations'[Quantity], and process order scrap and inventory reserve quantity in 'Goods Issues and Receipts' table.",
+            "expression": [
+              "",
+              "VAR PO_Scrap =",
+              "    CALCULATE(",
+              "        SUM( 'Goods Issues and Receipts'[Quantity] ) * -1,",
+              "        KEEPFILTERS('_Scrap Category'[Category] = \"Process Order Scrap\")",
+              "    )",
+              "",
+              "-- Use G/L account items instead because it has correct debit/credit indicators",
+              "VAR NonPO_Scrap =",
+              "    CALCULATE(",
+              "        SUM( 'Scrap Usage Transactions'[Quantity] ),",
+              "        kEEPFILTERS('Cost Element Names'[Category] = \"Scrap\"),",
+              "        KEEPFILTERS('Cost Element Names'[Sub Category] = \"Non-PO Scrap\"),",
+              "        KEEPFILTERS('Cost Element Names'[Is Operations Scrap])",
+              "    )",
+              "",
+              "-- ZSCRAP tcode only has confirmations on CAST orders",
+              "VAR Scrap_Conf = SUM( 'Scrap Confirmations'[Quantity] )",
+              "",
+              "VAR Inv_Reserve =",
+              "    CALCULATE(",
+              "        SUM( 'Goods Issues and Receipts'[Quantity] ) * -1,",
+              "        KEEPFILTERS('Cost Element Names'[Category] = \"Inventory Reserve\"),",
+              "        KEEPFILTERS('Cost Element Names'[Is Operations Scrap])",
+              "    )",
+              "",
+              "RETURN",
+              "PO_Scrap + NonPO_Scrap + Scrap_Conf + Inv_Reserve"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Operations Scrap"
           }
         ]
       },
@@ -32587,6 +32625,9 @@
               },
               {
                 "name": "FYTD Safety Work Hours"
+              },
+              {
+                "name": "Operations Scrap Quantity"
               }
             ]
           },

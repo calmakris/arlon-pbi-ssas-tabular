@@ -17,8 +17,11 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -616,6 +619,20 @@
             "dataType": "boolean",
             "sourceColumn": "Is_After_13MonthsAgo",
             "displayFolder": "Helper Attributes"
+          },
+          {
+            "name": "Day of Calendar Year",
+            "dataType": "int64",
+            "sourceColumn": "Day_Of_Calendar_Year",
+            "formatString": "0",
+            "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "Day of Fiscal Year",
+            "dataType": "int64",
+            "sourceColumn": "Day_Of_Fiscal_Year",
+            "formatString": "0",
+            "displayFolder": "Individual Attributes"
           }
         ],
         "partitions": [
@@ -628,10 +645,10 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_VW_Calendar = Source{[Schema=\"dbo\",Item=\"VW_Calendar\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_Calendar,{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}}),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Changed Type\",{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_After_13MonthsAgo\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_VW_Calendar,{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Day_Of_Calendar_Year\", \"Day_Of_Fiscal_Year\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_After_13MonthsAgo\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\"}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Removed Other Columns\",{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}})",
                 "in",
-                "    #\"Removed Other Columns\""
+                "    #\"Changed Type\""
               ]
             }
           }
@@ -1445,7 +1462,32 @@
           {
             "name": "FYTD Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "expression": [
+              "",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Gross Sales],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
@@ -1459,7 +1501,32 @@
           {
             "name": "FYTD Gross Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "expression": [
+              "",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Gross Margin],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
@@ -1473,14 +1540,68 @@
           {
             "name": "FYTD PY Gross Sales",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [FYTD Gross Sales], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "VAR _LastDate =",
+              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Gross Sales],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\" ))",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Gross Margin",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [FYTD Gross Margin], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "VAR _LastDate =",
+              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Gross Margin],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\" ))",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,0",
             "displayFolder": "Time Intelligence"
           },
@@ -1494,7 +1615,32 @@
           {
             "name": "FYTD Gross Margin%",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Gross Margin %], DATESYTD( 'Calendar'[Date], \"9/30\" ) )",
+            "expression": [
+              "",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Gross Margin %],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
@@ -1508,7 +1654,34 @@
           {
             "name": "FYTD PY Gross Margin%",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [FYTD Gross Margin%], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "VAR _LastDate =",
+              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Gross Margin %],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\" ))",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "0%;-0%;\"-\"",
             "displayFolder": "Time Intelligence"
           },
@@ -1638,7 +1811,32 @@
           {
             "name": "FYTD Quantity Sold",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Quantity Sold], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "expression": [
+              "",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Quantity Sold],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Time Intelligence"
           },
@@ -1719,14 +1917,66 @@
           {
             "name": "FYTD Sales Order Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " CALCULATE( [Sales Order Amount], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+            "expression": [
+              "",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Sales Order Amount],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
           {
             "name": "FYTD PY Sales Order Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " CALCULATE( [FYTD Sales Order Amount], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "VAR _LastDate =",
+              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Sales Order Amount],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\" ))",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )"
+            ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
@@ -5275,7 +5525,30 @@
             "name": "FYTD Absorption",
             "description": "Date grouping: 'Absorption'[Posting Date]",
             "expression": [
-              "CALCULATE( [Absorption], DATESYTD('Calendar'[Date], \"09/30\") )",
+              "",
+              "VAR _DayofFiscal =",
+              "    DATEDIFF(",
+              "        [Beginning of Fiscal Year],",
+              "        [Report Date],",
+              "        DAY",
+              "    ) + 1",
+              "RETURN",
+              "    CALCULATE(",
+              "        CALCULATE(",
+              "            CALCULATE(",
+              "                [Absorption],",
+              "                FILTER(",
+              "                    'Calendar',",
+              "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+              "                )",
+              "            ),",
+              "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "        ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
               ""
             ],
             "formatString": "#,0",
@@ -9538,17 +9811,13 @@
                 "DIVIDE(",
                 "    CALCULATE(",
                 "        SELECTEDMEASURE(),",
-                "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
-                "    ) -",
-                "    CALCULATE(",
-                "        SELECTEDMEASURE(),",
-                "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+                "        '_Time Intelligence'[Time Calculation] = \"MTD PY Var\"",
                 "    ),",
                 "    CALCULATE(",
                 "        SELECTEDMEASURE(),",
                 "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
                 "    )",
-                ")"
+                ") * 100"
               ],
               "ordinal": 9
             },
@@ -19601,15 +19870,6 @@
         "toColumn": "Company Code"
       },
       {
-        "name": "2b681789-db41-4500-a168-d3c9bc75346c",
-        "fromCardinality": "one",
-        "fromTable": "Safety Work Hours",
-        "fromColumn": "DateKey",
-        "toTable": "Calendar",
-        "toColumn": "Date",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "748e7c10-ef29-4139-ad3c-a794138bc7f8",
         "fromTable": "Safety Work Hours",
         "fromColumn": "CompanyCode",
@@ -19705,6 +19965,13 @@
         "name": "716d6935-1135-4805-bb46-0b85b46b4df5",
         "fromTable": "Shop Order Reservations",
         "fromColumn": "Requirement Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7514f752-4889-4c00-8cdb-caebf413509a",
+        "fromTable": "Safety Work Hours",
+        "fromColumn": "DateKey",
         "toTable": "Calendar",
         "toColumn": "Date"
       }
@@ -19834,6 +20101,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -20873,6 +21146,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -21173,6 +21452,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -22014,6 +22299,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -23017,6 +23308,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -24506,6 +24803,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -24926,6 +25229,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -25281,6 +25590,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -26142,6 +26457,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -26491,6 +26812,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -28420,6 +28747,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -29376,6 +29709,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -30947,6 +31286,12 @@
               },
               {
                 "name": "Is After 13 Months Ago"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -32244,6 +32589,12 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [
@@ -33152,6 +33503,12 @@
               },
               {
                 "name": "Year_Week_Sort_Key"
+              },
+              {
+                "name": "Day of Calendar Year"
+              },
+              {
+                "name": "Day of Fiscal Year"
               }
             ],
             "hierarchies": [

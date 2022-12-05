@@ -7500,20 +7500,15 @@
             "description": "Product of number of incidents and 200000 divided by total work hours. This measure can be transformed as TRIR by filtering the 'Safety Incidents' table.",
             "expression": [
               "",
-              "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
-              "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
-              "VAR TRIR =",
+              "CALCULATE(",
               "    DIVIDE(",
               "        [FYTD Safety Incident Count] * 200000,",
               "        [FYTD Safety Work Hours]",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
               "    )",
-              "",
-              "RETURN",
-              "IF(",
-              "    ISBLANK( TRIR )",
-              "        && MinVisibleDate <= [End of Month],",
-              "    0,",
-              "    TRIR",
               ")"
             ],
             "formatString": "#,0.00",
@@ -7592,15 +7587,11 @@
             "name": "Safety Total Recordable Incident Rate (Projected)",
             "expression": [
               "",
-              "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
-              "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[DateKey] ), REMOVEFILTERS() )",
-              "",
-              "RETURN",
-              "IF(",
-              "    MinVisibleDate >= LastDateWithHours && MinVisibleDate <= [End of Fiscal Year],",
-              "    DIVIDE(",
-              "        [FYTD Safety Incident Count] * 200000,",
-              "        [FYTD Safety Work Hours] + [FYTD PY Safety Work Hours]",
+              "DIVIDE(",
+              "    [FYTD Safety Incident Count] * 200000,",
+              "    CALCULATE(",
+              "        SUM( 'Safety Work Hours'[WorkHoursProj] ),",
+              "        DATESYTD( 'Calendar'[Date], \"09/30\" )",
               "    )",
               ")"
             ],
@@ -8262,6 +8253,26 @@
             "description": "SAP Source: ADRC.COUNTRY",
             "sourceColumn": "ShipToCountry",
             "dataCategory": "Country"
+          },
+          {
+            "name": "Plant",
+            "dataType": "string",
+            "description": "SAP Source: CE110US.WERKS",
+            "sourceColumn": "PlantNo"
+          },
+          {
+            "name": "Previous Overall Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "CostPrevValueUSD",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "displayFolder": "_Values",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -18167,7 +18178,6 @@
       },
       {
         "name": "Safety Work Hours",
-        "isHidden": true,
         "columns": [
           {
             "name": "CompanyCode",
@@ -18177,7 +18187,7 @@
           },
           {
             "name": "WorkHours",
-            "dataType": "decimal",
+            "dataType": "double",
             "sourceColumn": "WorkHours",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
@@ -18194,6 +18204,12 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "name": "WorkHoursProj",
+            "dataType": "double",
+            "sourceColumn": "WorkHoursProj",
+            "formatString": "#,0.00"
           }
         ],
         "partitions": [
@@ -19870,14 +19886,6 @@
         "toColumn": "Company Code"
       },
       {
-        "name": "748e7c10-ef29-4139-ad3c-a794138bc7f8",
-        "fromTable": "Safety Work Hours",
-        "fromColumn": "CompanyCode",
-        "toTable": "Company Code",
-        "toColumn": "Company Code",
-        "isActive": false
-      },
-      {
         "name": "bb3e7bbc-679c-453e-94a6-655d201be081",
         "fromTable": "Safety Incidents",
         "fromColumn": "Incident Date",
@@ -19974,6 +19982,13 @@
         "fromColumn": "DateKey",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "ab06ccd5-09a3-4e4d-bdb6-6a956a73a033",
+        "fromTable": "Safety Work Hours",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -21040,6 +21055,9 @@
               },
               {
                 "name": "WorkHours"
+              },
+              {
+                "name": "WorkHoursProj"
               }
             ]
           }
@@ -22840,6 +22858,12 @@
               },
               {
                 "name": "Ship To Country"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Previous Overall Cost"
               }
             ]
           },
@@ -23840,6 +23864,12 @@
               },
               {
                 "name": "Ship To Country"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Previous Overall Cost"
               }
             ]
           },
@@ -28150,6 +28180,9 @@
               },
               {
                 "name": "WorkHours"
+              },
+              {
+                "name": "WorkHoursProj"
               }
             ]
           },
@@ -31126,6 +31159,9 @@
               },
               {
                 "name": "WorkHours"
+              },
+              {
+                "name": "WorkHoursProj"
               }
             ]
           },
@@ -32435,6 +32471,9 @@
               },
               {
                 "name": "WorkHours"
+              },
+              {
+                "name": "WorkHoursProj"
               }
             ]
           },
@@ -33372,6 +33411,9 @@
               },
               {
                 "name": "WorkHours"
+              },
+              {
+                "name": "WorkHoursProj"
               }
             ]
           },

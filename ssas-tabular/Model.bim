@@ -18972,6 +18972,74 @@
             "formatString": "#,0"
           }
         ]
+      },
+      {
+        "name": "BRIDGE_SalesOrganization",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesOrganization",
+            "dataType": "string",
+            "sourceColumn": "SalesOrganization",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "BRIDGE_SalesOrganization",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_BRIDGE_SalesOrganization = Source{[Schema=\"dbo\",Item=\"BRIDGE_SalesOrganization\"]}[Data]",
+                "in",
+                "    dbo_BRIDGE_SalesOrganization"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_SalesOrganization",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesOrgKey",
+            "dataType": "string",
+            "sourceColumn": "SalesOrgKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "RLS_SalesOrganization",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_RLS_SalesOrganization = Source{[Schema=\"dbo\",Item=\"RLS_SalesOrganization\"]}[Data]",
+                "in",
+                "    dbo_RLS_SalesOrganization"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -19729,14 +19797,6 @@
         "isActive": false
       },
       {
-        "name": "dab96cdb-20bf-4038-bcc5-adf8c50a6f0a",
-        "toCardinality": "many",
-        "fromTable": "Upstream Logs - Raw",
-        "fromColumn": "Process Order Number",
-        "toTable": "Process Order",
-        "toColumn": "Process Order Number"
-      },
-      {
         "name": "21764f5f-1d6d-4ff2-8861-9ee6b673ce23",
         "fromTable": "Converting Uptime",
         "fromColumn": "Machine Name",
@@ -20420,6 +20480,22 @@
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "cfde6b67-c9ab-4eca-a516-db0083898b8c",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Organization",
+        "toTable": "BRIDGE_SalesOrganization",
+        "toColumn": "SalesOrganization"
+      },
+      {
+        "name": "574deea4-7062-4777-b80f-036da7caee3c",
+        "fromTable": "RLS_SalesOrganization",
+        "fromColumn": "SalesOrgKey",
+        "toTable": "BRIDGE_SalesOrganization",
+        "toColumn": "SalesOrganization",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [

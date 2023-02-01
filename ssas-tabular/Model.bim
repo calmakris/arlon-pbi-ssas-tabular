@@ -20,6 +20,8 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -7191,41 +7193,30 @@
             "description": "[Current Inventory Quantity] minus the cumulative total of 'Shop Order Reservations'[Requirement Quantity] by [Requirement Date]. If this measure is grouped by 'Calendar'[Date], the current day is the [Current Inventory Quantity] and the future dates are the net quantity.",
             "expression": [
               "",
+              "VAR _Today = [Report Date] + 1",
               "VAR MinVisibleDate = MIN( 'Calendar'[Date] )",
               "VAR MaxReqDateWithData = ",
               "    CALCULATE(",
               "        MAX( 'Process Order Reservation'[Requirement Date] ),",
               "        ALL( 'Calendar' )",
               "    )",
-              "VAR CurrentInventory = ",
-              "    CALCULATE(",
-              "        [Current Inventory Quantity],",
-              "        TREATAS(",
-              "            VALUES( 'Purchasing Source List'[MaterialPlantKey] ),",
-              "            'Inventory'[MaterialPlantKey]",
-              "        )",
-              "    )",
               "VAR CumulativeTotal =",
               "    CALCULATE(",
               "        SUM( 'Process Order Reservation'[Requirement Quantity] ),",
               "        FILTER(",
               "            ALLSELECTED( 'Calendar'[Date] ),",
-              "            'Calendar'[Date] > ([Report Date] + 1)",
+              "            'Calendar'[Date] > _Today",
               "                && 'Calendar'[Date] <= MAX( 'Calendar'[Date] )",
-              "        ),",
-              "        TREATAS(",
-              "            VALUES( 'Purchasing Source List'[MaterialPlantKey] ),",
-              "            'Process Order Reservation'[MaterialPlantKey]",
               "        )",
               "    )",
               "",
               "RETURN",
               "IF(",
-              "    MinVisibleDate = ([Report Date] + 1),",
-              "    CurrentInventory,",
+              "    MinVisibleDate = _Today,",
+              "    [Current Inventory Quantity],",
               "    IF(",
-              "        MinVisibleDate > ([Report Date] + 1),",
-              "        CurrentInventory + CumulativeTotal",
+              "        MinVisibleDate > _Today,",
+              "        [Current Inventory Quantity] + CumulativeTotal",
               "    )",
               ")"
             ],
@@ -35954,6 +35945,10 @@
           {
             "memberName": "DOMAIN\\bsnowdon",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21111"
+          },
+          {
+            "memberName": "DOMAIN\\tsmith",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21533"
           }
         ],
         "tablePermissions": [

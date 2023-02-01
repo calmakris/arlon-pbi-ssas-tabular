@@ -3056,7 +3056,7 @@
               "    )",
               ")"
             ],
-            "formatString": "0.00%;-0.00%;0.00%",
+            "formatString": "0.00 %",
             "displayFolder": "Converting"
           },
           {
@@ -3164,7 +3164,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Ideal Production Footage",
@@ -3182,7 +3182,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Uptime Minutes",
@@ -3199,7 +3199,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Runtime Minutes",
@@ -3237,21 +3237,21 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Actual Footage",
             "description": "Sum of 'Upstreal Logs - Simplified'[Footage]",
             "expression": " SUM('Upstream Log Simplified'[Footage])",
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Ideal Footage",
             "description": "Sum of 'Upstreal Logs - Simplified'[Ideal Footage]. Ideal footage is derived from the specification linespeed and duration between 'Start Time' and 'Stop Time' in minutes",
             "expression": "SUM('Upstream Log Simplified'[IdealFootage])",
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Downtime Hours",
@@ -3268,7 +3268,7 @@
               ")"
             ],
             "formatString": "#,###0.00 \"hr\";-#,###0.00 #,###0.00 \"hr\";0 \"hr\"",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "CAST Clean Up Count",
@@ -3299,7 +3299,7 @@
               ""
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Unplanned CU Count",
@@ -3318,7 +3318,7 @@
               ""
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Performance",
@@ -3339,7 +3339,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Availability",
@@ -3361,21 +3361,21 @@
               ""
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Overall Equipment Efficiency",
             "description": "Product of upstream availability, performance, and quality",
             "expression": "[Upstream Availability] * [Upstream Performance] * [Upstream Quality]",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream First Pass Reliability",
             "description": "Number of planned clean ups divided by the total planned and unplanned clean ups",
             "expression": " DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Changeover Time",
@@ -3391,7 +3391,7 @@
               ")"
             ],
             "formatString": "#,### \"min\"",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "CAST Overall Equipment Efficiency (Target)",
@@ -3419,7 +3419,7 @@
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "isHidden": true,
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "COAT Overall Equipment Efficiency (Target)",
@@ -3447,7 +3447,7 @@
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "isHidden": true,
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Overall Equipment Efficiency (Target)",
@@ -3461,7 +3461,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "CAST First Pass Reliability (Target)",
@@ -3489,7 +3489,7 @@
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "isHidden": true,
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "COAT First Pass Reliability (Target)",
@@ -3517,7 +3517,7 @@
             ],
             "formatString": "0.00%;-0.00%;0.00%",
             "isHidden": true,
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream First Pass Reliability (Target)",
@@ -3531,7 +3531,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Changeover Time (Target)",
@@ -3544,7 +3544,7 @@
               ")"
             ],
             "formatString": "#,### \"min\"",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Performance Impact",
@@ -3571,7 +3571,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Availability Impact",
@@ -3598,7 +3598,7 @@
               ")"
             ],
             "formatString": "#,0.00%;-#,0.00%;#,0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Quality",
@@ -3616,7 +3616,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Overall Equipment Efficiency Impact",
@@ -3663,7 +3663,7 @@
               "(( _avail + [Upstream Availability Impact] ) * ( _perf + [Upstream Performance Impact] ) * [Upstream Quality] ) - _oee"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Days Since Last Unplanned Clean Up",
@@ -3698,7 +3698,7 @@
               "DATEDIFF(Last_Date, [Yesterday], DAY)"
             ],
             "formatString": "#,###0 \"days\"",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Changeover Scrap",
@@ -3714,7 +3714,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "MTD Sales Order Amount %Grand",
@@ -3779,7 +3779,7 @@
             "name": "Upstream Overall Equipment Efficiency (Target Var)",
             "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency (Target)]",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Upstream Logs"
+            "displayFolder": "Upstream Log"
           },
           {
             "name": "YTD Gross Sales",
@@ -6336,7 +6336,7 @@
             "description": "Average of 'Upstream Logs - Process Data'[Tag Value]",
             "expression": "AVERAGE( 'Upstream Process Log'[Tag Value] )",
             "formatString": "#,0",
-            "displayFolder": "Upstream Process Data"
+            "displayFolder": "Upstream Process Log"
           },
           {
             "name": "CONV Square Footage",
@@ -6356,7 +6356,7 @@
             "name": "Upstream Avg Cross Web Value",
             "expression": "AVERAGE( 'Upstream NDC Profile'[Average Cross Web Value] )",
             "formatString": "#,0.00000",
-            "displayFolder": "Upstream Process Data"
+            "displayFolder": "Upstream Process Log"
           },
           {
             "name": "Website Bounce Rate",
@@ -8354,6 +8354,168 @@
             "expression": "[COMP First Pass Reliability] - [COMP First Pass Reliability Target]",
             "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Compounding"
+          },
+          {
+            "name": "CONV Performance",
+            "description": [
+              "Total footage divided by the ideal footage of production runs.",
+              "",
+              "Footage is based on the footage recorded in the runtime log. The ideal footage based on the spec linespeed of the material assigned in the linespeed table in the Converting's Access database.",
+              ""
+            ],
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    SUM( 'Converting OEE'[ActualFootage] ),",
+              "    SUM( 'Converting OEE'[IdealFootage] )",
+              ")"
+            ],
+            "formatString": "#,##0.00 %",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Quality",
+            "description": [
+              "Net of goods receipt and scrap footage form goods movement transactions divided by the goods receipt footage.",
+              "",
+              "Footage is the quantity converted to linear footage using the length and width data from the material master."
+            ],
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    SUM( 'Converting OEE'[GoodsFootage] ) - SUM( 'Converting OEE'[ScrapFootage] ),",
+              "    SUM( 'Converting OEE'[GoodsFootage] )",
+              ")"
+            ],
+            "formatString": "#,##0.00 %",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "CONV Efficiency",
+            "description": "Product of availability, performance, and quality",
+            "expression": "[CONV Availability] * [CONV Performance] * [CONV Quality]",
+            "formatString": "#,##0.00 %",
+            "displayFolder": "Converting"
+          },
+          {
+            "name": "Frozen Labor Cost per Unit",
+            "description": "Frozen labor cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Frozen Labor Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Frozen Material Cost per Unit",
+            "description": "Frozen material cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Frozen Material Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Frozen Overhead Cost per Unit",
+            "description": "Frozen overhead cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Frozen Overhead Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Frozen Setup Cost per Unit",
+            "description": "Frozen setup cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Frozen Setup Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Frozen Standard Cost per Unit",
+            "description": "Frozen standard cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Frozen Standard Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Current Labor Cost per Unit",
+            "description": "Current labor cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Current Labor Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Current Material Cost per Unit",
+            "description": "Current material cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Current Material Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Current Overhead Cost per Unit",
+            "description": "Current overhead cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Current Overhead Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Current Setup Cost per Unit",
+            "description": "Current setup cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Current Setup Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Current Standard Cost per Unit",
+            "description": "Current standard cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Current Standard Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
           }
         ]
       },
@@ -11034,6 +11196,12 @@
             "dataType": "string",
             "description": "Value is 'Yes' if this line is indicated to be excluded in On Time Shipping metrics.",
             "sourceColumn": "LateExcludeFlag"
+          },
+          {
+            "name": "Special Processing Indicator",
+            "dataType": "string",
+            "description": "Indicator that results in a special processing form for a shipment or a special calculation form for shipment costs. Examples for special processing are express shipments or special tariffs.",
+            "sourceColumn": "SpecialProcessIndicator"
           }
         ],
         "partitions": [
@@ -19177,6 +19345,149 @@
             }
           }
         ]
+      },
+      {
+        "name": "Converting OEE",
+        "description": "Summarized table to calculate the efficiency in Converting",
+        "columns": [
+          {
+            "name": "ProductionDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Machine",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Machine",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "ShiftNo",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ShiftNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "MaterialNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "DurationSecs",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DurationSecs",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "UptimeSecs",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "UptimeSecs",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "DowntimeSecs",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DowntimeSecs",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "NonProdSecs",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "NonProdSecs",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "ActualFootage",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ActualFootage",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "IdealFootage",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "IdealFootage",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "GoodsFootage",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "GoodsFootage",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "ScrapFootage",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ScrapFootage",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Operator Badge",
+            "dataType": "string",
+            "sourceColumn": "OperatorNo"
+          },
+          {
+            "name": "Operator Name",
+            "dataType": "string",
+            "sourceColumn": "OperatorName"
+          },
+          {
+            "name": "Batch Number",
+            "dataType": "string",
+            "sourceColumn": "BatchNo"
+          },
+          {
+            "name": "Specification Linespeed",
+            "dataType": "int64",
+            "sourceColumn": "SpecLS",
+            "formatString": "#,0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Converting OEE",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_ConvertingOEE = Source{[Schema=\"dbo\",Item=\"FACT_ConvertingOEE\"]}[Data]",
+                "in",
+                "    dbo_FACT_ConvertingOEE"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -20686,6 +20997,36 @@
         "fromColumn": "MaterialPlantKey",
         "toTable": "Purchasing Source List",
         "toColumn": "MaterialPlantKey"
+      },
+      {
+        "name": "64ec85ba-75c9-4c8d-8f75-dcc4022aba99",
+        "fromTable": "Converting OEE",
+        "fromColumn": "ProductionDate",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "e81adb12-f6af-49dd-ae5b-fffdf2933716",
+        "fromTable": "Converting OEE",
+        "fromColumn": "Machine",
+        "toTable": "Machine",
+        "toColumn": "Machine"
+      },
+      {
+        "name": "391e3baa-53ca-4b33-af40-2a53723c04f6",
+        "toCardinality": "many",
+        "fromTable": "Converting OEE",
+        "fromColumn": "ShiftNo",
+        "toTable": "Production Shift",
+        "toColumn": "Production Shift",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "3866c55f-651e-4c57-89dc-e259e4457133",
+        "fromTable": "Converting OEE",
+        "fromColumn": "MaterialNo",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
       }
     ],
     "perspectives": [
@@ -22615,6 +22956,9 @@
               },
               {
                 "name": "Late Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -23318,6 +23662,36 @@
               },
               {
                 "name": "Was New Product Gross Sales %Grand"
+              },
+              {
+                "name": "Frozen Labor Cost per Unit"
+              },
+              {
+                "name": "Frozen Material Cost per Unit"
+              },
+              {
+                "name": "Frozen Overhead Cost per Unit"
+              },
+              {
+                "name": "Frozen Setup Cost per Unit"
+              },
+              {
+                "name": "Frozen Standard Cost per Unit"
+              },
+              {
+                "name": "Current Labor Cost per Unit"
+              },
+              {
+                "name": "Current Material Cost per Unit"
+              },
+              {
+                "name": "Current Overhead Cost per Unit"
+              },
+              {
+                "name": "Current Setup Cost per Unit"
+              },
+              {
+                "name": "Current Standard Cost per Unit"
               }
             ]
           },
@@ -23726,6 +24100,9 @@
               },
               {
                 "name": "Late Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -24705,6 +25082,9 @@
               },
               {
                 "name": "Late Exclude Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -25296,6 +25676,9 @@
               },
               {
                 "name": "Late Exclude Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -26971,6 +27354,9 @@
               },
               {
                 "name": "Late Exclude Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -27850,6 +28236,15 @@
               },
               {
                 "name": "COMP Labor Efficiency Target Var"
+              },
+              {
+                "name": "CONV Performance"
+              },
+              {
+                "name": "CONV Quality"
+              },
+              {
+                "name": "CONV Efficiency"
               }
             ]
           },
@@ -28820,6 +29215,62 @@
                 "name": "Supplies Flag"
               }
             ]
+          },
+          {
+            "name": "Converting OEE",
+            "columns": [
+              {
+                "name": "ActualFootage"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "DowntimeSecs"
+              },
+              {
+                "name": "DurationSecs"
+              },
+              {
+                "name": "GoodsFootage"
+              },
+              {
+                "name": "IdealFootage"
+              },
+              {
+                "name": "Machine"
+              },
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "NonProdSecs"
+              },
+              {
+                "name": "Operator Badge"
+              },
+              {
+                "name": "Operator Name"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "ProductionDate"
+              },
+              {
+                "name": "ScrapFootage"
+              },
+              {
+                "name": "ShiftNo"
+              },
+              {
+                "name": "Specification Linespeed"
+              },
+              {
+                "name": "UptimeSecs"
+              }
+            ]
           }
         ]
       },
@@ -29706,6 +30157,9 @@
               },
               {
                 "name": "Late Exclude Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -32185,6 +32639,9 @@
               },
               {
                 "name": "Late Exclude Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           },
@@ -34708,6 +35165,39 @@
               },
               {
                 "name": "Was New Product Gross Sales %Grand"
+              },
+              {
+                "name": "Frozen Labor Cost per Unit"
+              },
+              {
+                "name": "Frozen Material Cost per Unit"
+              },
+              {
+                "name": "Frozen Overhead Cost per Unit"
+              },
+              {
+                "name": "Frozen Setup Cost per Unit"
+              },
+              {
+                "name": "Frozen Standard Cost per Unit"
+              },
+              {
+                "name": "Previous Standard Cost"
+              },
+              {
+                "name": "Current Labor Cost per Unit"
+              },
+              {
+                "name": "Current Material Cost per Unit"
+              },
+              {
+                "name": "Current Overhead Cost per Unit"
+              },
+              {
+                "name": "Current Setup Cost per Unit"
+              },
+              {
+                "name": "Current Standard Cost per Unit"
               }
             ]
           },

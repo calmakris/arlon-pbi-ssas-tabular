@@ -206,7 +206,7 @@
           {
             "name": "Sales Person Code",
             "dataType": "string",
-            "description": "Determines the assignment of sales person per customer",
+            "description": "Determines the assignment of sales person per customer. Sales organization 1000 and 2000 uses sales territory/office while organization 1500 uses sales group.",
             "sourceColumn": "SalesPersonKey",
             "displayFolder": "Sales Related"
           }
@@ -1693,8 +1693,8 @@
               "CALCULATE(",
               "    SUM( TARGET_Sales[GrossSales] ),",
               "    TREATAS(",
-              "        VALUES( 'Customer Master'[Sales Territory] ),",
-              "        TARGET_Sales[SalesTerritoryKey]",
+              "        VALUES( 'Customer Master'[Sales Person Code] ),",
+              "        TARGET_Sales[SalesPersonKey]",
               "    ),",
               "    TREATAS(",
               "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
@@ -2119,8 +2119,8 @@
               "            AVERAGE( TARGET_Sales[GrossMarginMTD] ),",
               "            FILTER( TARGET_Sales, TARGET_Sales[GrossMarginMTD] <> 0 ),",
               "            TREATAS(",
-              "                VALUES( 'Customer Master'[Sales Territory] ),",
-              "                TARGET_Sales[SalesTerritoryKey]",
+              "                VALUES( 'Customer Master'[Sales Person Code] ),",
+              "                TARGET_Sales[SalesPersonKey]",
               "            ),",
               "            TREATAS(",
               "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
@@ -2147,8 +2147,8 @@
               "            AVERAGE( TARGET_Sales[GrossMarginYTD] ),",
               "            FILTER( TARGET_Sales, TARGET_Sales[GrossMarginYTD] <> 0 ),",
               "            TREATAS(",
-              "                VALUES( 'Customer Master'[Sales Territory] ),",
-              "                TARGET_Sales[SalesTerritoryKey]",
+              "                VALUES( 'Customer Master'[Sales Person Code] ),",
+              "                TARGET_Sales[SalesPersonKey]",
               "            ),",
               "            TREATAS(",
               "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
@@ -3064,7 +3064,7 @@
               "    )",
               ")"
             ],
-            "formatString": "0.00 %",
+            "formatString": "0.00%;-0.00%;0.00%",
             "displayFolder": "Converting"
           },
           {
@@ -11301,13 +11301,6 @@
         "isHidden": true,
         "columns": [
           {
-            "name": "SalesTerritoryKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "SalesTerritoryKey",
-            "isAvailableInMdx": false
-          },
-          {
             "name": "CalendarTimeKey",
             "dataType": "string",
             "isHidden": true,
@@ -11316,7 +11309,7 @@
           },
           {
             "name": "GrossSales",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossSales",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -11330,7 +11323,7 @@
           },
           {
             "name": "GrossMarginMTD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossMarginMTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11338,11 +11331,17 @@
           },
           {
             "name": "GrossMarginYTD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossMarginYTD",
             "formatString": "0.00%;-0.00%;0.00%",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "SalesPersonKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SalesPersonKey"
           }
         ],
         "partitions": [

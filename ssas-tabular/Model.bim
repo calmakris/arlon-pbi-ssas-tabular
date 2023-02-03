@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -204,6 +202,13 @@
             "description": "Sales group assigned to the customer in the customer master account in SAP. Finance and Accounting department maintains this assignment in SAP. All changes are requested by the Commercial Leadership Team (CLT) at least once every fiscal year.",
             "sourceColumn": "SalesGroup",
             "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Sales Person Code",
+            "dataType": "string",
+            "description": "Determines the assignment of sales person per customer",
+            "sourceColumn": "SalesPersonKey",
+            "displayFolder": "Sales Related"
           }
         ],
         "partitions": [
@@ -308,6 +313,7 @@
             "name": "ComplaintLineKey",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "ComplaintLineKey",
             "isAvailableInMdx": false
           },
@@ -9791,6 +9797,7 @@
       },
       {
         "name": "Purchase Order",
+        "description": "Contains purchase orders entered in SAP in the last few fiscal years. Items with deletion flag are excluded.",
         "columns": [
           {
             "name": "PurchaseOrderLineKey",
@@ -10570,6 +10577,7 @@
             "name": "OrderNoLineKey",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "OrderNoLineKey",
             "isAvailableInMdx": false
           },
@@ -11219,6 +11227,7 @@
           {
             "name": "Sales Region",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "SalesDistrictKey",
             "isAvailableInMdx": false
           }
@@ -11235,81 +11244,6 @@
                 "    dbo_BRIDGE_SalesRegion = Source{[Schema=\"dbo\",Item=\"BRIDGE_SalesRegion\"]}[Data]",
                 "in",
                 "    dbo_BRIDGE_SalesRegion"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "BRIDGE_SalesTerritory",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "Sales Territory",
-            "dataType": "string",
-            "sourceColumn": "SalesTerritoryKey",
-            "isAvailableInMdx": false
-          }
-        ],
-        "partitions": [
-          {
-            "name": "BRIDGE_SalesTerritory",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_BRIDGE_SalesTerritory = Source{[Schema=\"dbo\",Item=\"BRIDGE_SalesTerritory\"]}[Data]",
-                "in",
-                "    dbo_BRIDGE_SalesTerritory"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "RLS_Territory",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "SalesTerritoryKey",
-            "dataType": "string",
-            "sourceColumn": "SalesTerritoryKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "DomainName",
-            "dataType": "string",
-            "sourceColumn": "DomainName",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "InactiveDate",
-            "dataType": "dateTime",
-            "sourceColumn": "InactiveDate",
-            "formatString": "Short Date",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          }
-        ],
-        "partitions": [
-          {
-            "name": "RLS_Territory",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_RLS_SalesTerritory = Source{[Schema=\"dbo\",Item=\"RLS_SalesTerritory\"]}[Data]",
-                "in",
-                "    dbo_RLS_SalesTerritory"
               ]
             }
           }
@@ -11500,6 +11434,7 @@
       },
       {
         "name": "Inventory in Transit",
+        "description": "Contains STO purchase orders with pending deliveries. Completely delivered STOs and items with deletion flag are excluded.",
         "columns": [
           {
             "name": "Purchase Order Number",
@@ -11951,6 +11886,7 @@
       },
       {
         "name": "Purchase Order Invoice",
+        "description": "Contains invoice receipts of purchase orders with posting date in the last few fiscal years.",
         "columns": [
           {
             "name": "Material Document Number",
@@ -12221,6 +12157,7 @@
             "description": "SAP Source: USR21.BNAME",
             "isHidden": true,
             "isUnique": true,
+            "isKey": true,
             "sourceColumn": "UsernameKey",
             "isAvailableInMdx": false
           },
@@ -13057,6 +12994,7 @@
           {
             "name": "Machine",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "MachineName"
           },
           {
@@ -13092,6 +13030,7 @@
             "isNameInferred": false,
             "isDataTypeInferred": true,
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "[Value1]",
             "isAvailableInMdx": false
           },
@@ -13483,6 +13422,7 @@
             "name": "Valuation Class",
             "dataType": "string",
             "description": "SAP Source: T025T.BKLAS",
+            "isKey": true,
             "sourceColumn": "ValuationClass"
           },
           {
@@ -13524,6 +13464,7 @@
       },
       {
         "name": "Inventory Open WIP",
+        "description": "Contains process orders with non-zero target/planned cost variance. In addition, process orders with TECO, DLV, CLSD, or DLFL status are excluded.",
         "columns": [
           {
             "name": "Process Order Number",
@@ -13728,6 +13669,7 @@
       },
       {
         "name": "Upstream Schedule",
+        "description": "Contains the schedule data from daily frozen schedule Excel files generated by Planning. Each revision is incrementally added to this table. If a process order in a new revision already exists in the database, the record is updated with the new information from the new revision.",
         "columns": [
           {
             "name": "Process Order Number",
@@ -14608,6 +14550,7 @@
             "name": "Company Code",
             "dataType": "string",
             "description": "Determines if the audit belongs to Arlon Graphics (1000), Arlon Innovations (1500), or Arlon Graphics EMEA (2000)",
+            "isKey": true,
             "sourceColumn": "CompanyCode"
           },
           {
@@ -14791,6 +14734,7 @@
       },
       {
         "name": "Odoo Sample Request",
+        "description": "Open sample requests in Odoo. A request is open if the status is not complete.",
         "columns": [
           {
             "name": "Ticket Number",
@@ -14903,10 +14847,12 @@
       },
       {
         "name": "Sample Category",
+        "description": "A table used to filter sample requests entered in SAP and Odoo by category such as full rolls, sample rolls, literature, and tradeshow requests.",
         "columns": [
           {
             "name": "Category",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "Category"
           }
         ],
@@ -14929,6 +14875,11 @@
       },
       {
         "name": "Inventory Consumption",
+        "description": [
+          "Contains goods movement transactions with movement types considered as consumption.",
+          "",
+          "In this query, there is no indicator if a movement type is considered as consumption. Therefore, the filter is hardcoded to 261/262, 601, 641, 643, Z43, and 101 with consumption posting indicator."
+        ],
         "columns": [
           {
             "name": "Material Document Number",
@@ -15384,6 +15335,7 @@
       },
       {
         "name": "Storage Bin",
+        "description": "Contains storage bins available in SAP",
         "columns": [
           {
             "name": "Storage Type",
@@ -16347,6 +16299,7 @@
             "name": "ScrapID",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "ScrapID",
             "isAvailableInMdx": false
           },
@@ -16484,11 +16437,13 @@
       },
       {
         "name": "Reason for Movement",
+        "description": "Contains the reason code per movement type and their descriptions. This table is used to provide more information about the movement type field.",
         "columns": [
           {
             "name": "MvmtReasonKey",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "MvmtReasonKey",
             "isAvailableInMdx": false
           },
@@ -16626,11 +16581,13 @@
       },
       {
         "name": "Machine Tag",
+        "description": "Contains PLC tags. This table contains tags as specified by the Engineering department. Not all PLC tags are in this table.",
         "columns": [
           {
             "name": "MachineTagNameKey",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "MachineTagNameKey",
             "isAvailableInMdx": false
           },
@@ -16893,6 +16850,7 @@
       },
       {
         "name": "Marketing Email",
+        "description": "Contains all the email campaigns delivered. Campaigns without any delivered emails are excluded.",
         "columns": [
           {
             "name": "Campaign Name",
@@ -16997,18 +16955,21 @@
       },
       {
         "name": "Marketing Geo Network",
+        "description": "Contains geographical information of the users in the website",
         "columns": [
           {
             "name": "GeoKey",
             "dataType": "string",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "GeoKey",
             "isAvailableInMdx": false
           },
           {
             "name": "Continent",
             "dataType": "string",
-            "sourceColumn": "Continent"
+            "sourceColumn": "Continent",
+            "dataCategory": "Continent"
           },
           {
             "name": "Sub Continent",
@@ -17018,7 +16979,8 @@
           {
             "name": "Country",
             "dataType": "string",
-            "sourceColumn": "Country"
+            "sourceColumn": "Country",
+            "dataCategory": "Country"
           }
         ],
         "partitions": [
@@ -17218,6 +17180,11 @@
       },
       {
         "name": "Sales Order Shipment",
+        "description": [
+          "Contains delivery note and shipment information per sales order line item.",
+          "",
+          "This table is related to the 'Sales Order' table."
+        ],
         "columns": [
           {
             "name": "OrderNoLineKey",
@@ -17548,6 +17515,7 @@
       },
       {
         "name": "Audit 5S Comments",
+        "description": "Contains notes and comments entered per 5S+S audit",
         "columns": [
           {
             "name": "Comments",
@@ -17560,6 +17528,7 @@
             "dataType": "int64",
             "description": "Source: [5S Data].[ID]",
             "isHidden": true,
+            "isKey": true,
             "sourceColumn": "MaxID",
             "isAvailableInMdx": false,
             "summarizeBy": "none"
@@ -17584,6 +17553,7 @@
       },
       {
         "name": "Safety Work Hours",
+        "description": "Monthly total work hours per company according to Paylocity. This data is provided by HR upon request.",
         "columns": [
           {
             "name": "CompanyCode",
@@ -17639,6 +17609,11 @@
       },
       {
         "name": "Safety Incident Log",
+        "description": [
+          "Contains recorded incidents in the last few fiscal years.",
+          "",
+          "Employees generate this data using the 'Safety Incidents' form in Microsoft Forms. Each submission is recorded in the safety incidents file in the 'Safety' SharePoint group. RNICHOLSON or a safety consultant maintains the additional information per incident."
+        ],
         "columns": [
           {
             "name": "Incident Number",
@@ -17714,6 +17689,7 @@
       },
       {
         "name": "Purchasing Source List",
+        "description": "Contains the purchasing group and vendor assigned per material and plant",
         "columns": [
           {
             "name": "Purchasing Group",
@@ -17865,6 +17841,7 @@
           {
             "name": "Work Center",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "WorkCenter"
           },
           {
@@ -17905,6 +17882,7 @@
           {
             "name": "Work Center",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "WorkCenter"
           },
           {
@@ -17938,6 +17916,7 @@
       },
       {
         "name": "Related Process Order",
+        "description": "This table is related to the 'Sales Order' table. It contains the related process order per MTO sales orders.",
         "columns": [
           {
             "name": "Process Order Number",
@@ -17971,6 +17950,7 @@
       },
       {
         "name": "Process Order Reservation",
+        "description": "Contains all the active order reservations per released process orders in SAP",
         "columns": [
           {
             "name": "Material Number",
@@ -18616,6 +18596,7 @@
           {
             "name": "SalesOrganization",
             "dataType": "string",
+            "isKey": true,
             "sourceColumn": "SalesOrganization",
             "isAvailableInMdx": false
           }
@@ -19130,6 +19111,7 @@
       },
       {
         "name": "Audit 5S",
+        "description": "Contains the scores recorded per area and 5S category during audit",
         "columns": [
           {
             "name": "DateKey",
@@ -19222,6 +19204,7 @@
       },
       {
         "name": "Planned Independent Requirement",
+        "description": "Contains different versions of planned independent requirement (or forecast) entered in SAP",
         "columns": [
           {
             "name": "Material Number",
@@ -19460,7 +19443,8 @@
             "name": "Specification Linespeed",
             "dataType": "int64",
             "sourceColumn": "SpecLS",
-            "formatString": "#,0"
+            "formatString": "#,0",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -19475,6 +19459,70 @@
                 "    dbo_FACT_ConvertingOEE = Source{[Schema=\"dbo\",Item=\"FACT_ConvertingOEE\"]}[Data]",
                 "in",
                 "    dbo_FACT_ConvertingOEE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RLS_SalesPerson",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesPersonKey",
+            "dataType": "string",
+            "sourceColumn": "SalesPersonKey"
+          },
+          {
+            "name": "DomainName",
+            "dataType": "string",
+            "sourceColumn": "DomainName"
+          },
+          {
+            "name": "InactiveDate",
+            "dataType": "dateTime",
+            "sourceColumn": "InactiveDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_RLS_SalesPerson = Source{[Schema=\"dbo\",Item=\"RLS_SalesPerson\"]}[Data]",
+                "in",
+                "    dbo_RLS_SalesPerson"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "BRIDGE_SalesPerson",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesPersonKey",
+            "dataType": "string",
+            "sourceColumn": "SalesPersonKey"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_BRIDGE_SalesPerson = Source{[Schema=\"dbo\",Item=\"BRIDGE_SalesPerson\"]}[Data]",
+                "in",
+                "    dbo_BRIDGE_SalesPerson"
               ]
             }
           }
@@ -19621,27 +19669,11 @@
         "securityFilteringBehavior": "bothDirections"
       },
       {
-        "name": "6c7f5d85-c9b6-4d16-b9d9-96554aad9745",
-        "fromTable": "RLS_Territory",
-        "fromColumn": "SalesTerritoryKey",
-        "toTable": "BRIDGE_SalesTerritory",
-        "toColumn": "Sales Territory",
-        "crossFilteringBehavior": "bothDirections",
-        "securityFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
         "fromTable": "Customer Master",
         "fromColumn": "Sales Region",
         "toTable": "BRIDGE_SalesRegion",
         "toColumn": "Sales Region"
-      },
-      {
-        "name": "0133610b-f474-47c4-a3e2-612f4360d565",
-        "fromTable": "Customer Master",
-        "fromColumn": "Sales Territory",
-        "toTable": "BRIDGE_SalesTerritory",
-        "toColumn": "Sales Territory"
       },
       {
         "name": "dc5f18dd-e738-46d9-a5c9-5306f5255523",
@@ -20055,13 +20087,6 @@
         "fromColumn": "Sales Region",
         "toTable": "BRIDGE_SalesRegion",
         "toColumn": "Sales Region"
-      },
-      {
-        "name": "2438a1ab-8937-4e85-a1f5-d980e2d96609",
-        "fromTable": "Odoo Sample Request",
-        "fromColumn": "Sales Territory",
-        "toTable": "BRIDGE_SalesTerritory",
-        "toColumn": "Sales Territory"
       },
       {
         "name": "5f253841-6767-45ca-aea6-e69e887e1f75",
@@ -21018,6 +21043,22 @@
         "fromColumn": "MaterialNo",
         "toTable": "Material Master",
         "toColumn": "Material Number"
+      },
+      {
+        "name": "bba994e1-832b-4c0d-a644-bb8bc4b8d34f",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Person Code",
+        "toTable": "BRIDGE_SalesPerson",
+        "toColumn": "SalesPersonKey"
+      },
+      {
+        "name": "3efe12c0-c7c6-459b-9f18-234f4a1fac2a",
+        "fromTable": "RLS_SalesPerson",
+        "fromColumn": "SalesPersonKey",
+        "toTable": "BRIDGE_SalesPerson",
+        "toColumn": "SalesPersonKey",
+        "crossFilteringBehavior": "bothDirections",
+        "securityFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
@@ -21286,6 +21327,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -23021,6 +23065,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -23087,14 +23134,6 @@
             "columns": [
               {
                 "name": "Sales Region"
-              }
-            ]
-          },
-          {
-            "name": "BRIDGE_SalesTerritory",
-            "columns": [
-              {
-                "name": "Sales Territory"
               }
             ]
           },
@@ -23405,6 +23444,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -24414,6 +24456,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -25292,6 +25337,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -27047,6 +27095,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -32318,6 +32369,9 @@
               },
               {
                 "name": "Sales Group"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -34747,6 +34801,9 @@
               },
               {
                 "name": "Street"
+              },
+              {
+                "name": "Sales Person Code"
               }
             ]
           },
@@ -35293,10 +35350,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
           },
           {
-            "memberName": "DOMAIN\\pbitest1",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
-          },
-          {
             "memberName": "DOMAIN\\rfaust",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
           },
@@ -35324,7 +35377,7 @@
       },
       {
         "name": "Company",
-        "description": "Restricts data based on assigned company code",
+        "description": "Restricts data based on assigned company code and sales organization",
         "modelPermission": "read",
         "members": [
           {
@@ -35424,12 +35477,16 @@
           {
             "name": "RLS_CompanyCode",
             "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_SalesOrganization",
+            "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
           }
         ]
       },
       {
         "name": "Company and Region",
-        "description": "Restricts data based on assigned company code and sales region",
+        "description": "Restricts data based on assigned company code, sales organization, and sales region",
         "modelPermission": "read",
         "members": [
           {
@@ -35501,12 +35558,16 @@
           {
             "name": "RLS_CompanyCode",
             "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_SalesOrganization",
+            "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
           }
         ]
       },
       {
-        "name": "Company and Territory",
-        "description": "Restricts data based on assigned company code and sales territory",
+        "name": "Company and Sales Person",
+        "description": "Restricts data based on assigned company code, sales organization, and sales person assignment",
         "modelPermission": "read",
         "members": [
           {
@@ -35580,22 +35641,30 @@
           {
             "memberName": "DOMAIN\\tswartout",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           }
         ],
         "tablePermissions": [
           {
-            "name": "RLS_Territory",
-            "filterExpression": "RLS_Territory[DomainName]=USERNAME() && RLS_Territory[InactiveDate] < TODAY()"
-          },
-          {
             "name": "RLS_CompanyCode",
             "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_SalesOrganization",
+            "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_SalesPerson",
+            "filterExpression": "RLS_SalesPerson[DomainName]=USERNAME() && RLS_SalesPerson[InactiveDate] < TODAY()"
           }
         ]
       },
       {
         "name": "Company and Cost Center",
-        "description": "Restricts data based on assigned company code and cost center (from HR)",
+        "description": "Restricts data based on assigned company code, sales organization, and cost center (from HR)",
         "modelPermission": "read",
         "members": [
           {
@@ -35959,6 +36028,10 @@
           {
             "name": "RLS_CompanyCode",
             "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_SalesOrganization",
+            "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
           }
         ]
       }
@@ -35970,7 +36043,7 @@
       },
       {
         "name": "BestPracticeAnalyzer_IgnoreRules",
-        "value": "{\"RuleIDs\":[]}"
+        "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
   },

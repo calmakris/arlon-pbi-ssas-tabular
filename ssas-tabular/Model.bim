@@ -7894,64 +7894,6 @@
             "displayFolder": "Material Costing and Pricing"
           },
           {
-            "name": "Invoice Selling Price",
-            "description": "Gross sales divided by quantity sold of billing documents posted in SAP. This measure is essentially the average selling price of billing documents.",
-            "expression": [
-              "",
-              "ABS(",
-              "    DIVIDE(",
-              "        [Gross Sales],",
-              "        [Quantity Sold]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Sales Invoice"
-          },
-          {
-            "name": "Invoice Selling Price MTD",
-            "description": "MTD gross sales divided by quantity sold as of yesterday or whatever is the last date filtered in 'Calendar'[Date]",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    CALCULATE(",
-              "        [Invoice Selling Price],",
-              "        DATESMTD( 'Calendar'[Date] )",
-              "    ),",
-              "    FILTER(",
-              "        'Calendar',",
-              "        'Calendar'[Date] <= [Report Date]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Sales Invoice"
-          },
-          {
-            "name": "Selling Price",
-            "description": [
-              "Latest selling price by material and customer based on sales quote or price list. This value is in local currency by default but is toggleable to USD by filtering the '_Currency to Use' table.",
-              "",
-              "The sales quote and price list are maintained by regional Customer Service and Sales departments."
-            ],
-            "expression": [
-              "",
-              "IF(",
-              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "    SWITCH(",
-              "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", AVERAGE( 'Price List'[UnitPriceUSD] ),",
-              "        \"Local\", AVERAGE( 'Price List'[UnitPrice] ),",
-              "        AVERAGE( 'Price List'[UnitPrice] )",
-              "    ),",
-              "    AVERAGE( 'Price List'[UnitPrice] )    ",
-              ")",
-              ""
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Material Costing and Pricing"
-          },
-          {
             "name": "Frozen Sales Forecast Quantity",
             "description": [
               "Total planned quantity of planned independent requirements with the change date (by material, plant, and delivery date) closest and before the material's [Commercialization Date] in the material master.",
@@ -8513,6 +8455,64 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Invoice Selling Price",
+            "description": "Gross sales divided by quantity sold of billing documents posted in SAP. This measure is essentially the average selling price of billing documents.",
+            "expression": [
+              "",
+              "ABS(",
+              "    DIVIDE(",
+              "        [Gross Sales],",
+              "        [Quantity Sold]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Invoice"
+          },
+          {
+            "name": "Invoice Selling Price MTD",
+            "description": "MTD gross sales divided by quantity sold as of yesterday or whatever is the last date filtered in 'Calendar'[Date]",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Invoice Selling Price],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Invoice"
+          },
+          {
+            "name": "Selling Price",
+            "description": [
+              "Latest selling price by material and customer based on sales quote or price list. It is the selling price per one unit of measure.",
+              "",
+              "This value is in local currency by default but is toggleable to USD by filtering the '_Currency to Use' table. The sales quote and price list are maintained by regional Customer Service and Sales departments."
+            ],
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", AVERAGE( 'Price List'[UnitPriceUSD] ),",
+              "        \"Local\", AVERAGE( 'Price List'[UnitPrice] ),",
+              "        AVERAGE( 'Price List'[UnitPrice] )",
+              "    ),",
+              "    AVERAGE( 'Price List'[UnitPrice] )    ",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Material Costing and Pricing"
           }
         ]
       },
@@ -8546,7 +8546,7 @@
             ]
           },
           {
-            "name": "Material Number",
+            "name": "MaterialNoKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "MaterialNoKey",
@@ -8579,7 +8579,7 @@
           {
             "name": "Exchange Rate",
             "dataType": "decimal",
-            "description": "Exchange rate to convert the document amounts to USD",
+            "description": "Exchange rate to convert the document amounts to USD. This is the rate at the pricing date of the document.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000",
             "summarizeBy": "none"
@@ -8604,7 +8604,7 @@
             "dataCategory": "City"
           },
           {
-            "name": "External Purchase Order Number",
+            "name": "Customer PO",
             "dataType": "string",
             "description": "Customer PO in the reference sales order of the invoice/billing document",
             "sourceColumn": "ExtPurchaseOrderNo"
@@ -11309,7 +11309,7 @@
           },
           {
             "name": "GrossSales",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossSales",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -11323,7 +11323,7 @@
           },
           {
             "name": "GrossMarginMTD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossMarginMTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11331,7 +11331,7 @@
           },
           {
             "name": "GrossMarginYTD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossMarginYTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11341,7 +11341,8 @@
             "name": "SalesPersonKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "SalesPersonKey"
+            "sourceColumn": "SalesPersonKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13821,7 +13822,6 @@
             "name": "Plan Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13838,7 +13838,6 @@
             "name": "Actual Start",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Start]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13855,7 +13854,6 @@
             "name": "Plan Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13872,7 +13870,6 @@
             "name": "Actual Stop",
             "dataType": "dateTime",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Stop]",
             "formatString": "MM/dd/yyyy HH:mm",
@@ -13911,7 +13908,6 @@
             "name": "Plan Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Dur]",
             "formatString": "#,0.00",
@@ -13923,7 +13919,6 @@
             "name": "Actual Dur",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Actual Dur]",
             "formatString": "#,0.00",
@@ -14107,7 +14102,6 @@
             "name": "Plan Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "isHidden": true,
             "sourceColumn": "[Plan Duration Hour]",
             "formatString": "#,0.00",
@@ -14119,7 +14113,6 @@
             "name": "Actual Duration Hour",
             "dataType": "decimal",
             "isNameInferred": true,
-            "isDataTypeInferred": false,
             "sourceColumn": "[Actual Duration Hour]",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -17781,23 +17774,25 @@
       },
       {
         "name": "Price List",
-        "isHidden": true,
         "columns": [
           {
             "name": "CustomerOrg",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "CustomerOrg",
             "isAvailableInMdx": false
           },
           {
             "name": "MaterialNo",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "MaterialNo",
             "isAvailableInMdx": false
           },
           {
             "name": "UnitPrice",
             "dataType": "decimal",
+            "isHidden": true,
             "sourceColumn": "UnitPrice",
             "isAvailableInMdx": false,
             "summarizeBy": "none"
@@ -17805,6 +17800,7 @@
           {
             "name": "UnitPriceUSD",
             "dataType": "decimal",
+            "isHidden": true,
             "sourceColumn": "UnitPriceUSD",
             "isAvailableInMdx": false,
             "summarizeBy": "none"
@@ -17812,7 +17808,16 @@
           {
             "name": "PlantNo",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Pricing Unit",
+            "dataType": "decimal",
+            "description": "The quantity on which the amount or percentage is based. For example, a material is sold by $500 per 1,000 FT where 1,000 FT is the pricing unit.",
+            "sourceColumn": "PriceUnit",
+            "formatString": "#,0.00",
             "isAvailableInMdx": false
           }
         ],
@@ -19470,22 +19475,25 @@
           {
             "name": "SalesPersonKey",
             "dataType": "string",
-            "sourceColumn": "SalesPersonKey"
+            "sourceColumn": "SalesPersonKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "DomainName",
             "dataType": "string",
-            "sourceColumn": "DomainName"
+            "sourceColumn": "DomainName",
+            "isAvailableInMdx": false
           },
           {
             "name": "InactiveDate",
             "dataType": "dateTime",
-            "sourceColumn": "InactiveDate"
+            "sourceColumn": "InactiveDate",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
           {
-            "name": "Partition",
+            "name": "RLS_SalesPerson",
             "dataView": "full",
             "source": {
               "type": "m",
@@ -19507,12 +19515,13 @@
           {
             "name": "SalesPersonKey",
             "dataType": "string",
-            "sourceColumn": "SalesPersonKey"
+            "sourceColumn": "SalesPersonKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
           {
-            "name": "Partition",
+            "name": "BRIDGE_SalesPerson",
             "dataView": "full",
             "source": {
               "type": "m",
@@ -19567,7 +19576,7 @@
       {
         "name": "c2395825-7531-4dd0-9c3e-d4e7a214fb64",
         "fromTable": "Sales Invoice",
-        "fromColumn": "Material Number",
+        "fromColumn": "MaterialNoKey",
         "toTable": "Material Master",
         "toColumn": "Material Number"
       },
@@ -22778,6 +22787,9 @@
               },
               {
                 "name": "Safety Work Hours FYTD"
+              },
+              {
+                "name": "Selling Price"
               }
             ]
           },
@@ -23243,6 +23255,29 @@
                 "name": "AuditID"
               }
             ]
+          },
+          {
+            "name": "Price List",
+            "columns": [
+              {
+                "name": "CustomerOrg"
+              },
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "PlantNo"
+              },
+              {
+                "name": "Pricing Unit"
+              },
+              {
+                "name": "UnitPrice"
+              },
+              {
+                "name": "UnitPriceUSD"
+              }
+            ]
           }
         ]
       },
@@ -23678,12 +23713,6 @@
                 "name": "MTD Gross Sales"
               },
               {
-                "name": "Invoice Selling Price"
-              },
-              {
-                "name": "Selling Price"
-              },
-              {
                 "name": "Flash Sales Forecast Quantity"
               },
               {
@@ -23724,6 +23753,12 @@
               },
               {
                 "name": "Current Standard Cost per Unit"
+              },
+              {
+                "name": "Invoice Selling Price"
+              },
+              {
+                "name": "Selling Price"
               }
             ]
           },
@@ -23826,7 +23861,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Number"
+                "name": "MaterialNoKey"
               },
               {
                 "name": "Posting Date"
@@ -23850,7 +23885,7 @@
                 "name": "Ship To City"
               },
               {
-                "name": "External Purchase Order Number"
+                "name": "Customer PO"
               },
               {
                 "name": "CompanyCode"
@@ -24253,6 +24288,29 @@
               },
               {
                 "name": "MaterialPlantDateKey"
+              }
+            ]
+          },
+          {
+            "name": "Price List",
+            "columns": [
+              {
+                "name": "CustomerOrg"
+              },
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "PlantNo"
+              },
+              {
+                "name": "Pricing Unit"
+              },
+              {
+                "name": "UnitPrice"
+              },
+              {
+                "name": "UnitPriceUSD"
               }
             ]
           }
@@ -24817,7 +24875,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Number"
+                "name": "MaterialNoKey"
               },
               {
                 "name": "Posting Date"
@@ -24835,7 +24893,7 @@
                 "name": "Ship To Name"
               },
               {
-                "name": "External Purchase Order Number"
+                "name": "Customer PO"
               },
               {
                 "name": "CompanyCode"
@@ -27647,6 +27705,9 @@
               },
               {
                 "name": "SO Shipped Amount"
+              },
+              {
+                "name": "Selling Price"
               }
             ]
           },
@@ -27754,6 +27815,43 @@
               },
               {
                 "name": "MRP Type"
+              }
+            ]
+          },
+          {
+            "name": "Price List",
+            "columns": [
+              {
+                "name": "CustomerOrg"
+              },
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "PlantNo"
+              },
+              {
+                "name": "Pricing Unit"
+              },
+              {
+                "name": "UnitPrice"
+              },
+              {
+                "name": "UnitPriceUSD"
+              }
+            ]
+          },
+          {
+            "name": "Plant",
+            "columns": [
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Description"
+              },
+              {
+                "name": "CompCode"
               }
             ]
           }
@@ -34914,7 +35012,7 @@
                 "name": "Exchange Rate"
               },
               {
-                "name": "External Purchase Order Number"
+                "name": "Customer PO"
               },
               {
                 "name": "Invoice Line Number"
@@ -34923,7 +35021,7 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "Material Number"
+                "name": "MaterialNoKey"
               },
               {
                 "name": "Plant"
@@ -35184,12 +35282,6 @@
                 "name": "Frozen Standard Cost"
               },
               {
-                "name": "Invoice Selling Price"
-              },
-              {
-                "name": "Invoice Selling Price MTD"
-              },
-              {
                 "name": "Current Labor Cost"
               },
               {
@@ -35203,9 +35295,6 @@
               },
               {
                 "name": "Current Standard Cost"
-              },
-              {
-                "name": "Selling Price"
               },
               {
                 "name": "Was New Product Gross Sales"
@@ -35245,6 +35334,15 @@
               },
               {
                 "name": "Current Standard Cost per Unit"
+              },
+              {
+                "name": "Invoice Selling Price"
+              },
+              {
+                "name": "Invoice Selling Price MTD"
+              },
+              {
+                "name": "Selling Price"
               }
             ]
           },
@@ -35278,6 +35376,29 @@
             "columns": [
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Price List",
+            "columns": [
+              {
+                "name": "CustomerOrg"
+              },
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "UnitPrice"
+              },
+              {
+                "name": "UnitPriceUSD"
+              },
+              {
+                "name": "PlantNo"
+              },
+              {
+                "name": "Pricing Unit"
               }
             ]
           }
@@ -36045,6 +36166,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

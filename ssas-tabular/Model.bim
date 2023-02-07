@@ -34,7 +34,7 @@
           {
             "name": "Customer Number",
             "dataType": "string",
-            "description": "Accout number of customer in the customer account information in SAP",
+            "description": "Account number of customer in in SAP",
             "sourceColumn": "CustomerNoKey",
             "displayFolder": "Master"
           },
@@ -412,14 +412,6 @@
             ]
           },
           {
-            "name": "Fiscal Period",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "Fiscal_Month_Of_Year",
-            "displayFolder": "Individual Attributes",
-            "summarizeBy": "none"
-          },
-          {
             "name": "Is Current Month",
             "dataType": "boolean",
             "description": "This value is true if the date is the same month as yesterday. For example, if yesterday is June 10, the dates from June 1 to 10 are set to true.",
@@ -512,6 +504,7 @@
           {
             "name": "Week Group",
             "dataType": "string",
+            "description": "Week of calendar year",
             "sourceColumn": "Group_Week",
             "sortByColumn": "Year_Week_Sort_Key",
             "displayFolder": "Individual Attributes"
@@ -560,6 +553,7 @@
           {
             "name": "Day of Calendar Year",
             "dataType": "int64",
+            "description": "Day of calendar year. For example, January 31 is 31st day and February 28 is the 59th day.",
             "sourceColumn": "Day_Of_Calendar_Year",
             "formatString": "0",
             "displayFolder": "Individual Attributes",
@@ -568,6 +562,7 @@
           {
             "name": "Day of Fiscal Year",
             "dataType": "int64",
+            "description": "Day of fiscal year. For example, October 15 is the 15th day and December 31 is 92nd day.",
             "sourceColumn": "Day_Of_Fiscal_Year",
             "formatString": "0",
             "displayFolder": "Individual Attributes",
@@ -576,6 +571,7 @@
           {
             "name": "Calendar Year",
             "dataType": "string",
+            "description": "Year part of the date",
             "sourceColumn": "Year_Name",
             "displayFolder": "Individual Attributes"
           },
@@ -596,26 +592,29 @@
           {
             "name": "Fiscal Year",
             "dataType": "string",
+            "description": "Fiscal year part of the date. Fiscal year starts on October 1st.",
             "sourceColumn": "Fiscal_Year_Name",
             "displayFolder": "Individual Attributes"
           },
           {
             "name": "Fiscal Quarter",
             "dataType": "string",
+            "description": "Fiscal quarter part of the date. Fiscal quarter starts on October 1st.",
             "sourceColumn": "Fiscal_Quarter_Of_Year_Name",
             "displayFolder": "Individual Attributes"
           },
           {
             "name": "Fiscal Month",
             "dataType": "string",
-            "description": "Sorted by fiscal period",
+            "description": "Month name but sorted by fiscal period",
             "sourceColumn": "Month_Name_Abbrev",
-            "sortByColumn": "Fiscal Period",
+            "sortByColumn": "FiscalPeriod",
             "displayFolder": "Individual Attributes"
           },
           {
             "name": "Day of Month",
             "dataType": "int64",
+            "description": "Day part of the date",
             "sourceColumn": "Day_Of_Month",
             "displayFolder": "Individual Attributes",
             "summarizeBy": "none"
@@ -623,6 +622,7 @@
           {
             "name": "Fiscal Year Month",
             "dataType": "string",
+            "description": "Combination of fiscal year and month name",
             "sourceColumn": "Fiscal_Year_Month_Name",
             "sortByColumn": "Year_Month_Sort_Key",
             "displayFolder": "Individual Attributes"
@@ -630,6 +630,7 @@
           {
             "name": "Calendar Month",
             "dataType": "string",
+            "description": "Month name but sorted by calendar month",
             "sourceColumn": "Month_Name_Abbrev_Calendar",
             "sortByColumn": "MonthOfYear",
             "displayFolder": "Individual Attributes"
@@ -645,9 +646,18 @@
           {
             "name": "Weekday",
             "dataType": "string",
+            "description": "Weekday name like Sunday, Monday, etc.",
             "sourceColumn": "Weekday_Name",
             "sortByColumn": "DayOfWeek",
             "displayFolder": "Individual Attributes"
+          },
+          {
+            "name": "FiscalPeriod",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Fiscal_Month_Of_Year",
+            "displayFolder": "Individual Attributes",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -1090,7 +1100,7 @@
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " SUM('Hold Tag'[Amount])",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Hold Tags",
+            "displayFolder": "Hold Tag",
             "annotations": [
               {
                 "name": "Format",
@@ -1103,14 +1113,14 @@
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " SUM('Hold Tag'[Quantity])",
             "formatString": "#,##0.00;-#,##0.00;\"-\"",
-            "displayFolder": "Hold Tags"
+            "displayFolder": "Hold Tag"
           },
           {
             "name": "Hold Tag Count",
             "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
             "expression": " DISTINCTCOUNT( 'Hold Tag'[Notification Number] )",
             "formatString": "#,0",
-            "displayFolder": "Hold Tags"
+            "displayFolder": "Hold Tag"
           },
           {
             "name": "Current S-Block Value",
@@ -1383,7 +1393,7 @@
           },
           {
             "name": "Sales Order Amount",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total ordered amount in the sales order. This value is toggleable to local currency using the '_Currency To Use' table.",
             "expression": [
               "",
               "IF(",
@@ -1398,11 +1408,11 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Cost Amount",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total cost of material in the sales order. This value is toggleable to local currency using the '_Currency To Use' table.",
             "expression": [
               "",
               "IF(",
@@ -1416,14 +1426,8 @@
               "    SUM( 'Sales Order'[CostAmountUSD] )",
               ")"
             ],
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "displayFolder": "Sales Orders",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
+            "formatString": "#,0",
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Date 12 Months Ago",
@@ -1443,7 +1447,7 @@
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DISTINCTCOUNT(  'Sales Order'[Order Number] )",
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "FYTD Gross Sales",
@@ -1721,11 +1725,11 @@
               ""
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Margin",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Difference between the ordered amount and cost in the sales order. This value is toggleable to local currency using the '_Currency To Use' table.",
             "expression": [
               "",
               "IF(",
@@ -1739,8 +1743,8 @@
               "    SUM( 'Sales Order'[MarginAmountUSD] )  ",
               ") + 0"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "formatString": "#,0",
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Backorder Margin",
@@ -1757,7 +1761,7 @@
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Quantity Sold",
@@ -2004,11 +2008,11 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Customer Open Quantity",
-            "description": "If billing status is not complete, this value is ordered minus shipped quantities; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "description": "Total quantity in the sales order that is not yet shipped to the customer including allocated items",
             "expression": [
               "  ",
               "CALCULATE(",
@@ -2018,7 +2022,7 @@
               ""
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Internal Open Amount",
@@ -2040,11 +2044,11 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Customer Open Amount",
-            "description": "If billing status is not complete, this value is ordered minus shipped amount; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "description": "Total amount in the sales order that is not yet shipped to the customer including allocated items. This value is toggleable to local currency using the '_Currency To Use' table.",
             "expression": [
               " ",
               "CALCULATE(",
@@ -2061,15 +2065,15 @@
               "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
               ")"
             ],
-            "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "formatString": "#,0",
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Ordered Quantity",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total ordered quantity in the sales order",
             "expression": "SUM( 'Sales Order'[OrderQuantity] )",
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Allocated Quantity",
@@ -2085,7 +2089,7 @@
               "    IF( alloc, alloc, BLANK() )"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Shipped Quantity",
@@ -2098,14 +2102,14 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "In Stock Measure",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date); Note that this calculation is report-side which means the material is not actually allocated to the order in SAP",
             "expression": " PRODUCT( 'Sales Order'[In Stock] )",
             "formatString": "0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "MTD Gross Margin% Budget",
@@ -2251,7 +2255,7 @@
             "name": "PO Ordered Quantity",
             "expression": " SUM( 'Purchase Order'[Ordered Quantity] )",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "PO Open Quantity",
@@ -2263,13 +2267,13 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "PO Ordered Amount",
             "expression": " SUM( 'Purchase Order'[Ordered Amount] )",
             "formatString": "#,0",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "PO Open Amount",
@@ -2281,19 +2285,19 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "PO Delivered Quantity",
             "expression": " SUM( 'Inventory in Transit'[Delivered Quantity] )",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "PO In Transit Quantity",
             "expression": " SUM( 'Inventory in Transit'[In Transit Quantity] )",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "GRIR Amount (Document)",
@@ -2369,14 +2373,14 @@
             "description": "Sum of invoice receipt amount in purchase order history. See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " SUM( 'Purchase Order Invoice'[Amount] )",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "PO Invoice Receipt Quantity",
             "description": "Sum of invoice receipt quantity in purchase order history (in purchase order unit). See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
             "expression": " SUM( 'Purchase Order Invoice'[Quantity] )",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "FYTD PO Invoice Receipt Amount",
@@ -2552,7 +2556,7 @@
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Backorder Amount (Current Month)",
@@ -2571,7 +2575,7 @@
               ""
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "End of Next Month",
@@ -2606,7 +2610,7 @@
               ""
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Backorder Amount (Beyond Next Month)",
@@ -2627,7 +2631,7 @@
               ""
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Earned Labor",
@@ -2667,14 +2671,14 @@
             "description": "Number of sales order line items entered by BATCHUSER (sales order automation); Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " COUNTROWS( FILTER( 'Sales Order', 'Sales Order'[Entered By] = \"BATCHUSER\" ) )",
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Line Count",
             "description": "Number of sales order line items; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " COUNTROWS( 'Sales Order' )",
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Lines Automated Entry%",
@@ -2687,7 +2691,7 @@
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Lines Manual",
@@ -2700,7 +2704,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "FYTD Sales Order Line Count",
@@ -2747,14 +2751,14 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Automation Efficiency%",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DIVIDE( [Sales Order Lines Automated (No Changes)], [Sales Order Lines Automated] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "FYTD Sales Order Automation Efficiency%",
@@ -2775,14 +2779,14 @@
             "description": "Number of sales order line items entered by Customer Service divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " DIVIDE( [Sales Order Lines Manual], [Sales Order Line Count (Automated + Manual)] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Line Count (Automated + Manual)",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
             "expression": " [Sales Order Lines Manual] + [Sales Order Lines Automated]",
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "MTD Absorption",
@@ -2847,7 +2851,7 @@
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "PD SO Customer Open Amount",
@@ -2883,7 +2887,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GR Square Footage",
@@ -2896,7 +2900,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GI Linear Footage",
@@ -2911,38 +2915,38 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GI Scrap Rate",
             "description": "GI Footage over GR Footage",
             "expression": " DIVIDE( [GI Linear Footage], [GR Linear Footage] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GIR Linear Footage",
             "expression": " SUM ('Goods Movement'[Linear Feet])",
             "formatString": "#,0",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GIR Square Footage",
             "expression": " SUM ('Goods Movement'[Square Feet])",
             "formatString": "#,0",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GIR Quantity",
             "expression": " SUM( 'Goods Movement'[Quantity])",
             "formatString": "#,0.00",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "GIR Amount",
             "expression": " SUM( 'Goods Movement'[Amount] )",
             "formatString": "#,0",
-            "displayFolder": "Goods Receipts and Issues"
+            "displayFolder": "Goods Movement"
           },
           {
             "name": "SO Allocated Amount",
@@ -2964,7 +2968,7 @@
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "SO Shipped Amount",
@@ -2985,7 +2989,7 @@
               ")"
             ],
             "formatString": "#,##0;(#,##0);\"-\"",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "CONV Production Hours",
@@ -3903,7 +3907,7 @@
             "name": "PO Goods Receipt Quantity",
             "expression": " SUM('Purchase Order'[Goods Receipt Quantity])",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "Cumulative Expired Value",
@@ -4105,7 +4109,7 @@
               ""
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "Current Open WIP Value",
@@ -4202,7 +4206,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "S/O Ordered Quantity",
@@ -4218,7 +4222,7 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "S/O Delivered Quantity",
@@ -4234,7 +4238,7 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "S/O Scheduled Count",
@@ -4250,7 +4254,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "S/O Completed Count",
@@ -4262,7 +4266,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "S/O With Hold Tag Count",
@@ -4274,13 +4278,13 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "S/O With Hold Tag %",
             "expression": "DIVIDE( [S/O With Hold Tag Count], [S/O Count] )",
             "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "Min Date",
@@ -4338,12 +4342,12 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( 'Upstream Schedule'[Target Quantity] ),",
-              "    'Upstream Schedule'[Ranking Desc] = 1",
+              "    SUM( 'Planning Schedule'[Target Quantity] ),",
+              "    'Planning Schedule'[Ranking Desc] = 1",
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Shop Orders"
+            "displayFolder": "Process Order"
           },
           {
             "name": "MTD S/O Remake Reason Hour",
@@ -4351,9 +4355,9 @@
               "",
               "CALCULATE(",
               "    CALCULATE(",
-              "        SUM( 'Upstream Schedule'[Processing Hour] ),",
+              "        SUM( 'Planning Schedule'[Processing Hour] ),",
               "        DATESMTD( 'Calendar'[Date] ),",
-              "        'Upstream Schedule'[Ranking Desc] = 1",
+              "        'Planning Schedule'[Ranking Desc] = 1",
               "    ),",
               "    FILTER(",
               "        'Calendar',",
@@ -4370,9 +4374,9 @@
               "",
               "CALCULATE(",
               "    CALCULATE(",
-              "        SUM( 'Upstream Schedule'[Processing Hour] ),",
+              "        SUM( 'Planning Schedule'[Processing Hour] ),",
               "        DATESMTD( 'Calendar'[Date] ),",
-              "        'Upstream Schedule'[Ranking Desc] = 1",
+              "        'Planning Schedule'[Ranking Desc] = 1",
               "    ),",
               "    FILTER(",
               "        ALL( 'Calendar' ),",
@@ -4395,153 +4399,6 @@
                 "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
               }
             ]
-          },
-          {
-            "name": "MStat Last Process Order Number",
-            "description": "Last process order ran in the machine. This measure is designed to be analyzed by machine.",
-            "expression": [
-              "",
-              "VAR LastActDate = ",
-              "    CALCULATE(",
-              "        MAX('Machine Status'[Actual Start Time]),",
-              "        FILTER(",
-              "            'Machine Status',",
-              "            'Machine Status'[Plan Start Time] <> BLANK()",
-              "                && 'Machine Status'[Actual Start Time] <> BLANK()",
-              "                && 'Machine Status'[Actual Start Time] >= [Report Production Date]",
-              "        )",
-              "    )",
-              "RETURN",
-              "    LOOKUPVALUE('Machine Status'[Process Order Number],'Machine Status'[Actual Start Time], LastActDate, BLANK() )"
-            ],
-            "formatString": "\"0\"",
-            "displayFolder": "Machine Status"
-          },
-          {
-            "name": "MStat Last Actual Start Time",
-            "description": "Start time of the last process order ran in the machine. This measure is designed when analyzing by machine.",
-            "expression": "LOOKUPVALUE('Machine Status'[Actual Start Time],'Machine Status'[Process Order Number], [MStat Last Process Order Number], BLANK() )",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "displayFolder": "Machine Status",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "MStat Last Plan Start Time",
-            "description": "Scheduled start time of last process order ran in the machine. This measure is designed when analyzing by machine.",
-            "expression": "LOOKUPVALUE('Machine Status'[Plan Start Time],'Machine Status'[Process Order Number], [MStat Last Process Order Number], BLANK() )",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "displayFolder": "Machine Status",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "MStat Net Hours Loss/Gain",
-            "description": "Difference between [Last Actual Start Time] and [Last Plan Start Time] measures in hours.",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    DIVIDE( DATEDIFF( [MStat Last Actual Start Time], [MStat Last Plan Start Time], MINUTE), 60 ),",
-              "    FILTER(",
-              "        'Machine Status',",
-              "        'Machine Status'[Plan Start Time] <> BLANK()",
-              "            && 'Machine Status'[Actual Stop Time] >= [Report Production Date]",
-              "            && 'Machine Status'[Actual Start Time] <= [Now Date]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,##0.0 \"hr\"",
-            "displayFolder": "Machine Status"
-          },
-          {
-            "name": "MStat Skipped S/O Duration Hour",
-            "description": "Total duration of process orders scheduled between current production date and now. Skipped process orders have data in schedule files but none in machine data.",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM('Machine Status'[Plan Duration Hour] ),",
-              "    FILTER(",
-              "        'Machine Status',",
-              "        'Machine Status'[Actual Start Time] = BLANK()",
-              "            && 'Machine Status'[Plan Stop Time] >= [Report Production Date]",
-              "            && 'Machine Status'[Plan Stop Time] <= [Now Date]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,##0.0 \"hr\"",
-            "displayFolder": "Machine Status"
-          },
-          {
-            "name": "MStat Effective Net Hours Loss/Gain",
-            "description": "Difference between [Net Hours Loss/Gain] and [Skipped S/O Duration Hours] measures.",
-            "expression": "[MStat Net Hours Loss/Gain] - [MStat Skipped S/O Duration Hour]",
-            "formatString": "#,##0.0 \"hr\"",
-            "displayFolder": "Machine Status"
-          },
-          {
-            "name": "MStat Net Footage Variance",
-            "description": "Variance between the actual and scheduled footage between start of current production date and now.",
-            "expression": [
-              "",
-              "VAR Actual = ",
-              "    CALCULATE(",
-              "        SUM( 'Machine Status'[Actual Footage] ),",
-              "        FILTER(",
-              "            'Machine Status',",
-              "            'Machine Status'[Actual Stop Time] >= [Report Production Date]",
-              "                && 'Machine Status'[Actual Stop Time] <= [Now Date]",
-              "                && 'Machine Status'[Plan Start Time] <> BLANK()",
-              "        )",
-              "    )",
-              "VAR Plan = ",
-              "    CALCULATE(",
-              "        SUM( 'Machine Status'[Plan Footage] ),",
-              "        FILTER(",
-              "            'Machine Status',",
-              "            'Machine Status'[Actual Stop Time] >= [Report Production Date]",
-              "                && 'Machine Status'[Actual Stop Time] <= [Now Date]",
-              "                && 'Machine Status'[Plan Start Time] <> BLANK()",
-              "        )",
-              "    )",
-              "RETURN",
-              "    Actual - Plan",
-              ""
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Machine Status"
-          },
-          {
-            "name": "MStat Data Integrity",
-            "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
-            "expression": [
-              "",
-              "VAR Required = DIVIDE( DATEDIFF([Prior Production Date], [Now Date], SECOND), 60 )",
-              "VAR Actual = ",
-              "    CALCULATE(",
-              "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] >= [Report Date] - 1",
-              "        ),",
-              "        FILTER(",
-              "            'Upstream Log Simplified',",
-              "            'Upstream Log Simplified'[Start Time] <= [Now Date]",
-              "        )",
-              "    )",
-              "",
-              "RETURN",
-              "    DIVIDE( Actual, Required )"
-            ],
-            "formatString": "0.00%;-0.00%;0.00%",
-            "displayFolder": "Machine Status"
           },
           {
             "name": "Prior Production Date",
@@ -4858,13 +4715,6 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
-          },
-          {
-            "name": "MStat Indicator",
-            "description": "Log error / typo (-1); Skipped S/O (0); Other (1)",
-            "expression": "MAX( 'Machine Status'[Status] )",
-            "formatString": "0",
-            "displayFolder": "Machine Status"
           },
           {
             "name": "Sample Request Count",
@@ -5290,7 +5140,7 @@
             "name": "PO Goods Receipt Amount",
             "expression": " SUM('Purchase Order'[Goods Receipt Amount])",
             "formatString": "#,0.00",
-            "displayFolder": "Purchase Orders"
+            "displayFolder": "Purchase Order"
           },
           {
             "name": "CW SO Internal Open Amount",
@@ -5617,12 +5467,12 @@
               "",
               "CALCULATE(",
               "    [S/O Scheduled Quantity (Upstream)],",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Upstream Schedule'[PlanFinishDateAltKey] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Planning Schedule'[PlanFinishDateAltKey] ),",
               "    ALL( 'Calendar'[Date] ),",
               "    FILTER(",
-              "        ALL( 'Upstream Schedule'[PlanFinishDateAltKey] ),",
-              "        'Upstream Schedule'[PlanFinishDateAltKey] > [Report Date]",
-              "            && 'Upstream Schedule'[PlanFinishDateAltKey] <= [End of Month]",
+              "        ALL( 'Planning Schedule'[PlanFinishDateAltKey] ),",
+              "        'Planning Schedule'[PlanFinishDateAltKey] > [Report Date]",
+              "            && 'Planning Schedule'[PlanFinishDateAltKey] <= [End of Month]",
               "    )",
               ")"
             ],
@@ -5726,12 +5576,12 @@
               "",
               "VAR SchedEnd = ",
               "    CALCULATE(",
-              "        MAX( 'Upstream Schedule'[Plan Finish Date] ),",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Upstream Schedule'[PlanFinishDateAltKey] ),",
+              "        MAX( 'Planning Schedule'[Plan Finish Date] ),",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Planning Schedule'[PlanFinishDateAltKey] ),",
               "        ALL( 'Calendar'[Date] ),",
               "        FILTER(",
-              "            'Upstream Schedule',",
-              "            'Upstream Schedule'[PlanFinishDateAltKey] <= [End of Month]",
+              "            'Planning Schedule',",
+              "            'Planning Schedule'[PlanFinishDateAltKey] <= [End of Month]",
               "        )",
               "    )",
               "",
@@ -5894,7 +5744,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "WH Effective On Time Shipment",
@@ -6167,7 +6017,7 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "WH Days of Perfect On Time Shipment",
@@ -7049,7 +6899,7 @@
               ")"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Sales Orders"
+            "displayFolder": "Sales Order"
           },
           {
             "name": "MTD Audit Score as % of Target",
@@ -7450,7 +7300,7 @@
           },
           {
             "name": "Frozen Standard Cost",
-            "description": "This cost is based on the the cost at the time the billing/invoice document is posted. It is the quantity sold multiplied by the total of latest material, labor, overhead, and setup cost of the material.",
+            "description": "This cost is based on the cost at the time the billing/invoice document is posted. It is the quantity sold multiplied by the total of latest material, labor, overhead, and setup cost of the material.",
             "expression": [
               "",
               "IF(",
@@ -7882,6 +7732,7 @@
           },
           {
             "name": "Gross Margin % Var between Current and Prev Cost Roll",
+            "description": "Variance between the gross margin % that uses current and previous cost roll",
             "expression": [
               "IF(",
               "    ISBLANK([Gross Margin % using Current Cost Roll])",
@@ -8513,6 +8364,99 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Material Costing and Pricing"
+          },
+          {
+            "name": "Skipped Planned Orders Duration",
+            "description": "Total duration of process orders scheduled between current production date and now. Skipped process orders have data in schedule files but none in machine data.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Planning Schedule Comparison'[Plan Duration] ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 0 ), -- 0 is skipped",
+              "    FILTER(",
+              "        'Planning Schedule Comparison',",
+              "        'Planning Schedule Comparison'[ProductionDate] >= ([Report Date] - 1)",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0.0 \"hr\"",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Hours Gained",
+            "description": "Difference of scheduled and actual start timestamps of the latest order at the time of data refresh",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Planning Schedule Comparison'[VarDuration] ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[LatestFlag] = \"Yes\" )",
+              ") -",
+              "[Skipped Planned Orders Duration]"
+            ],
+            "formatString": "#,##0.0 \"hr\"",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Footage Variance",
+            "description": "Variance between the actual and scheduled footage between start of current production date and now.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Planning Schedule Comparison'[VarQuantity] ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 1 ) -- 1 is orders with schedule and machine data",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Comparison Data Integrity %",
+            "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
+            "expression": [
+              "",
+              "VAR Required = DIVIDE( DATEDIFF([Prior Production Date], [Now Date], SECOND), 60 )",
+              "VAR Actual = ",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] >= [Report Date] - 1",
+              "        ),",
+              "        FILTER(",
+              "            'Upstream Log Simplified',",
+              "            'Upstream Log Simplified'[Start Time] <= [Now Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    DIVIDE( Actual, Required )"
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Status",
+            "description": "Log error / typo (-1); Skipped S/O (0); Other (1)",
+            "expression": "MAX( 'Planning Schedule Comparison'[StatusFlag] )",
+            "formatString": "0",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Duration Variance",
+            "description": "Variance between the actual and scheduled footage between start of current production date and now.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Planning Schedule Comparison'[VarDuration] ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[Actual Start Date] <> BLANK() )",
+              ")",
+              ""
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Planning Schedule"
           }
         ]
       },
@@ -8546,13 +8490,6 @@
             ]
           },
           {
-            "name": "MaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey",
-            "isAvailableInMdx": false
-          },
-          {
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
@@ -8562,7 +8499,6 @@
           {
             "name": "Quantity",
             "dataType": "decimal",
-            "description": "SAP Source: CE110US.ABSMG",
             "isHidden": true,
             "sourceColumn": "QuantityValue",
             "formatString": "0.00",
@@ -8602,12 +8538,6 @@
             "description": "Ship to city destination of the ship to account in the invoice/billing document",
             "sourceColumn": "ShipToCity",
             "dataCategory": "City"
-          },
-          {
-            "name": "Customer PO",
-            "dataType": "string",
-            "description": "Customer PO in the reference sales order of the invoice/billing document",
-            "sourceColumn": "ExtPurchaseOrderNo"
           },
           {
             "name": "CompanyCode",
@@ -8662,7 +8592,6 @@
           {
             "name": "GrossSalesAmount",
             "dataType": "decimal",
-            "description": "SAP Source: CE110US.ERLOS",
             "isHidden": true,
             "sourceColumn": "GrossSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8679,7 +8608,6 @@
           {
             "name": "NetSales",
             "dataType": "decimal",
-            "description": "SAP Source: CE110US.ERLOS, CE110US.KWKDRB; Difference between gross sales and discount",
             "isHidden": true,
             "sourceColumn": "NetSalesValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8696,7 +8624,6 @@
           {
             "name": "StdCost",
             "dataType": "decimal",
-            "description": "SAP Source: VBRP.WAVWR",
             "isHidden": true,
             "sourceColumn": "CostValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8713,7 +8640,6 @@
           {
             "name": "MaterialCost",
             "dataType": "decimal",
-            "description": "SAP Source: KEPH.KST001",
             "isHidden": true,
             "sourceColumn": "MaterialExtPriceUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8730,7 +8656,6 @@
           {
             "name": "GrossMargin",
             "dataType": "decimal",
-            "description": "Difference between gross sales and cost value",
             "isHidden": true,
             "sourceColumn": "GrossMarginValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -8747,7 +8672,6 @@
           {
             "name": "LaborCost",
             "dataType": "decimal",
-            "description": "SAP Source: KEPH.KST003",
             "isHidden": true,
             "sourceColumn": "LaborCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8764,7 +8688,6 @@
           {
             "name": "OverheadCost",
             "dataType": "decimal",
-            "description": "SAP Source: KEPH.KST005",
             "isHidden": true,
             "sourceColumn": "OverheadCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8781,7 +8704,6 @@
           {
             "name": "SetupCost",
             "dataType": "decimal",
-            "description": "SAP Source: KEPH.KST007",
             "isHidden": true,
             "sourceColumn": "SetupCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8877,7 +8799,6 @@
           {
             "name": "SalesDiscount",
             "dataType": "decimal",
-            "description": "SAP Source: CE110US.KWKDRB",
             "isHidden": true,
             "sourceColumn": "DiscountValueUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -8896,6 +8817,19 @@
             "dataType": "string",
             "description": "Determines if the material was a new product at the time the invoice is posted. A material is a new product if the invoice is posted within the next 36 months after its Commercialization Date according to the material master.",
             "sourceColumn": "WasNewProductFlag"
+          },
+          {
+            "name": "MaterialNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Customer PO",
+            "dataType": "string",
+            "description": "Customer PO in the reference sales order of the invoice/billing document",
+            "sourceColumn": "ExtPurchaseOrderNo"
           }
         ],
         "partitions": [
@@ -9354,18 +9288,21 @@
           {
             "name": "Product Hierarchy L1",
             "dataType": "string",
+            "description": "First level of product hierarchy assigned in the material master in SAP",
             "sourceColumn": "ProductHierarchyDescriptionL1",
             "displayFolder": "Product Hierarchy"
           },
           {
             "name": "Product Hierarchy L2",
             "dataType": "string",
+            "description": "Second level of product hierarchy assigned in the material master in SAP",
             "sourceColumn": "ProductHierarchyDescriptionL2",
             "displayFolder": "Product Hierarchy"
           },
           {
             "name": "Product Hierarchy L3",
             "dataType": "string",
+            "description": "Third level of product hierarchy assigned in the material master in SAP",
             "sourceColumn": "ProductHierarchyDescriptionL3",
             "displayFolder": "Product Hierarchy"
           },
@@ -9484,7 +9421,7 @@
           {
             "name": "Plant",
             "dataType": "string",
-            "description": "SAP Source: T001W.WERKS",
+            "description": "Plant number",
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "PlantNoKey"
@@ -9492,7 +9429,7 @@
           {
             "name": "Description",
             "dataType": "string",
-            "description": "SAP Source: T001W.NAME1",
+            "description": "Description of the plant",
             "sourceColumn": "PlantDescription"
           },
           {
@@ -11419,6 +11356,7 @@
             "dataType": "string",
             "isNameInferred": false,
             "isDataTypeInferred": true,
+            "description": "Toggles certain measures between USD and local currency",
             "sourceColumn": "[Value]"
           }
         ],
@@ -13668,524 +13606,6 @@
         ]
       },
       {
-        "name": "Upstream Schedule",
-        "description": "Contains the schedule data from daily frozen schedule Excel files generated by Planning. Each revision is incrementally added to this table. If a process order in a new revision already exists in the database, the record is updated with the new information from the new revision.",
-        "columns": [
-          {
-            "name": "Process Order Number",
-            "dataType": "string",
-            "sourceColumn": "ProcessOrderNo"
-          },
-          {
-            "name": "Remake Code",
-            "dataType": "string",
-            "sourceColumn": "RemakeCode"
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "sourceColumn": "MaterialNo"
-          },
-          {
-            "name": "Department",
-            "dataType": "string",
-            "sourceColumn": "Department"
-          },
-          {
-            "name": "Publish Date",
-            "dataType": "dateTime",
-            "sourceColumn": "PublishDate",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Processing Hour",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "ProcessingHour",
-            "formatString": "#,0.000",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Plan Finish Date",
-            "dataType": "dateTime",
-            "sourceColumn": "PlanFinishDate",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Plan Production Date",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "PlanProductionDate",
-            "formatString": "Short Date",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Target Quantity",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "TargetQuantity",
-            "formatString": "#,0",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Adhesive Quantity",
-            "dataType": "int64",
-            "sourceColumn": "AdhesiveQuantity",
-            "formatString": "#,0",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Remake Code Text",
-            "dataType": "string",
-            "sourceColumn": "RemakeCodeText"
-          },
-          {
-            "name": "Plan Start Date",
-            "dataType": "dateTime",
-            "sourceColumn": "PlanStartDate",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Ranking Desc",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "RankingDesc",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "PlanFinishDateAltKey",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "PlanFinishDateAltKey",
-            "formatString": "Short Date",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Machine",
-            "dataType": "string",
-            "sourceColumn": "Machine"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Upstream Schedule",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_UpstreamSchedule = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamSchedule\"]}[Data]",
-                "in",
-                "    dbo_FACT_UpstreamSchedule"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "PREP_MachineStatus",
-        "isHidden": true,
-        "columns": [
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Start",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Plan Start]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Start",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Actual Start]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Stop",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Plan Stop]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Stop",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Actual Stop]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Ft",
-            "dataType": "int64",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Plan Ft]",
-            "formatString": "#,0",
-            "isAvailableInMdx": false
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Ft",
-            "dataType": "int64",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Actual Ft]",
-            "formatString": "#,0",
-            "isAvailableInMdx": false
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Dur",
-            "dataType": "decimal",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Plan Dur]",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Dur",
-            "dataType": "decimal",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Actual Dur]",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Process Order Number",
-            "dataType": "string",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "sourceColumn": "Upstream Log[Process Order Number]",
-            "isAvailableInMdx": false
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Machine",
-            "dataType": "string",
-            "isNameInferred": false,
-            "isDataTypeInferred": true,
-            "sourceColumn": "Upstream Log[Machine]",
-            "isAvailableInMdx": false
-          }
-        ],
-        "partitions": [
-          {
-            "name": "CalculatedTable 1",
-            "source": {
-              "type": "calculated",
-              "expression": [
-                "",
-                "VAR Actuals =",
-                "    SUMMARIZE(",
-                "        FILTER(",
-                "            'Upstream Log',",
-                "            'Upstream Log'[Stop Time] >= [Report Production Date] - 14",
-                "                && 'Upstream Log'[Start Time] <= [Now Date]",
-                "                && 'Upstream Log'[Category] = \"Production\"",
-                "                && 'Upstream Log'[Process Order Number] <> \"000000000000\"",
-                "        ),",
-                "        'Upstream Log'[Machine],",
-                "        'Upstream Log'[Process Order Number],",
-                "        \"Plan Start\", BLANK(),",
-                "        \"Plan Stop\", BLANK(),",
-                "        \"Actual Start\", MIN( 'Upstream Log'[Start Time] ),",
-                "        \"Actual Stop\", MAX( 'Upstream Log'[Stop Time] ),",
-                "        \"Plan Ft\", BLANK(),",
-                "        \"Actual Ft\", SUM( 'Upstream Log'[Footage] ),",
-                "        \"Plan Dur\", BLANK(),",
-                "        \"Actual Dur\", SUM( 'Upstream Log'[Duration Minutes] ) / 60.0",
-                "    )",
-                "",
-                "VAR Schedule =",
-                "    SUMMARIZE(",
-                "        FILTER(",
-                "            'Upstream Schedule',",
-                "            'Upstream Schedule'[Plan Finish Date] >= [Report Production Date] - 14",
-                "                && 'Upstream Schedule'[Plan Start Date] < [Report Production Date] + 14",
-                "                && 'Upstream Schedule'[Publish Date] <= [Now Date]",
-                "                && 'Upstream Schedule'[Ranking Desc] = 1",
-                "                && 'Upstream Schedule'[Target Quantity] > 0",
-                "        ),",
-                "        'Upstream Schedule'[Machine],",
-                "        'Upstream Schedule'[Process Order Number],",
-                "        \"Plan Start\", MIN( 'Upstream Schedule'[Plan Start Date] ),",
-                "        \"Plan Stop\", MAX( 'Upstream Schedule'[Plan Finish Date] ),",
-                "        \"Actual Start\", BLANK(),",
-                "        \"Actual Stop\", BLANK(),",
-                "        \"Plan Ft\", SUM( 'Upstream Schedule'[Target Quantity] ),",
-                "        \"Actual Ft\", BLANK(),",
-                "        \"Plan Dur\", SUM( 'Upstream Schedule'[Processing Hour] ),",
-                "        \"Actual Dur\", BLANK()",
-                "    )",
-                "",
-                "RETURN ",
-                "    UNION(Actuals, Schedule)"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Machine Status",
-        "description": "Calculated table that compiles schedule and machine data and compares the planned and actual start times and quantities per process order.",
-        "columns": [
-          {
-            "type": "calculatedTableColumn",
-            "name": "Process Order Number",
-            "dataType": "string",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "sourceColumn": "PREP_MachineStatus[Process Order Number]"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Start Time",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "sourceColumn": "[Plan Start Time]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Stop Time",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "sourceColumn": "[Plan Stop Time]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Start Time",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "sourceColumn": "[Actual Start Time]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Stop Time",
-            "dataType": "dateTime",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "sourceColumn": "[Actual Stop Time]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Footage",
-            "dataType": "int64",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Plan Footage]",
-            "formatString": "#,0",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Footage",
-            "dataType": "int64",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Actual Footage]",
-            "formatString": "#,0",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Plan Duration Hour",
-            "dataType": "decimal",
-            "isNameInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Plan Duration Hour]",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Actual Duration Hour",
-            "dataType": "decimal",
-            "isNameInferred": true,
-            "sourceColumn": "[Actual Duration Hour]",
-            "formatString": "#,0.00",
-            "summarizeBy": "none"
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Status",
-            "dataType": "int64",
-            "isNameInferred": true,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Status]",
-            "isAvailableInMdx": false
-          },
-          {
-            "type": "calculatedTableColumn",
-            "name": "Machine",
-            "dataType": "string",
-            "isNameInferred": false,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "PREP_MachineStatus[Machine]",
-            "isAvailableInMdx": false
-          }
-        ],
-        "partitions": [
-          {
-            "name": "CalculatedTable 1",
-            "source": {
-              "type": "calculated",
-              "expression": [
-                "",
-                "SUMMARIZE(",
-                "    'PREP_MachineStatus',",
-                "    'PREP_MachineStatus'[Machine],",
-                "    'PREP_MachineStatus'[Process Order Number],",
-                "    \"Plan Start Time\", MIN( 'PREP_MachineStatus'[Plan Start] ),",
-                "    \"Plan Stop Time\", MAX( 'PREP_MachineStatus'[Plan Stop] ),",
-                "    \"Actual Start Time\", MIN( 'PREP_MachineStatus'[Actual Start] ),",
-                "    \"Actual Stop Time\", MAX( 'PREP_MachineStatus'[Actual Stop] ),",
-                "    \"Plan Footage\", SUM( 'PREP_MachineStatus'[Plan Ft] ),",
-                "    \"Actual Footage\", SUM( 'PREP_MachineStatus'[Actual Ft] ),",
-                "    \"Plan Duration Hour\", SUM( 'PREP_MachineStatus'[Plan Dur] ),",
-                "    \"Actual Duration Hour\", SUM( 'PREP_MachineStatus'[Actual Dur] ),",
-                "    \"Status\",",
-                "        SWITCH( TRUE(),",
-                "            NOT(ISBLANK( MIN( 'PREP_MachineStatus'[Actual Start] ) ) )",
-                "                && ISBLANK( MIN( 'PREP_MachineStatus'[Plan Start] ) )",
-                "                && MAX( 'PREP_MachineStatus'[Actual Stop] ) >= [Report Production Date]",
-                "                && MIN( 'PREP_MachineStatus'[Actual Start] ) <= [Now Date], -1,",
-                "            ISBLANK( MIN( 'PREP_MachineStatus'[Actual Start] ) )",
-                "                && NOT(ISBLANK( MIN( 'PREP_MachineStatus'[Plan Start] ) ) )",
-                "                && MAX( 'PREP_MachineStatus'[Plan Stop] ) >= [Report Production Date]",
-                "                && MAX( 'PREP_MachineStatus'[Plan Stop] ) <= [Now Date], 0,",
-                "            NOT(ISBLANK( MIN( 'PREP_MachineStatus'[Actual Start] ) ) )",
-                "                && NOT(ISBLANK( MIN( 'PREP_MachineStatus'[Plan Start] ) ) )",
-                "                && MAX( 'PREP_MachineStatus'[Actual Stop] ) >= [Report Production Date]",
-                "                && MIN( 'PREP_MachineStatus'[Actual Start] ) <= [Now Date], 1,",
-                "            NOT( ISBLANK( MIN( 'PREP_MachineStatus'[Actual Start] ) ) )",
-                "                && MIN( 'PREP_MachineStatus'[Actual Start] ) < [Report Production Date]",
-                "                && MIN( 'PREP_MachineStatus'[Actual Start] ) >= [Report Production Date] - 2, -2,",
-                "            NOT( ISBLANK( MIN( 'PREP_MachineStatus'[Plan Start] ) ) )",
-                "                && MIN( 'PREP_MachineStatus'[Plan Start] ) < [Report Production Date]",
-                "                && MIN( 'PREP_MachineStatus'[Plan Start] ) >= [Report Production Date] - 2, -2,",
-                "            BLANK()",
-                "        )",
-                ")"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Inventory Balance Item",
         "description": "Accounting document items posted to inventory balance G/L accounts in the last 3 fiscal years. SAP Source: BSIS, BSAS, BKPF, ACCTIT, and EKKO",
         "columns": [
@@ -14541,7 +13961,7 @@
           {
             "name": "Company Code",
             "dataType": "string",
-            "description": "Determines if the audit belongs to Arlon Graphics (1000), Arlon Innovations (1500), or Arlon Graphics EMEA (2000)",
+            "description": "Determines the company as Arlon Graphics (1000), Arlon Innovations (1500), or Arlon Graphics EMEA (2000)",
             "isKey": true,
             "sourceColumn": "CompanyCode"
           },
@@ -17774,6 +17194,7 @@
       },
       {
         "name": "Price List",
+        "description": "Contains the latest selling price per customer and material. If there is a sales quote for the customer, that overwrites the existing price list.",
         "columns": [
           {
             "name": "CustomerOrg",
@@ -19535,6 +18956,343 @@
             }
           }
         ]
+      },
+      {
+        "name": "Planning Schedule",
+        "description": "Contains the schedule data from daily frozen schedule Excel files generated by Planning. Each revision is incrementally added to this table. If a process order in a new revision already exists in the database, the record is updated with the new information from the new revision.",
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Remake Code",
+            "dataType": "string",
+            "sourceColumn": "RemakeCode"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "sourceColumn": "MaterialNo"
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "sourceColumn": "Department"
+          },
+          {
+            "name": "Publish Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PublishDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Processing Hour",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "ProcessingHour",
+            "formatString": "#,0.000",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Plan Finish Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanFinishDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Plan Production Date",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "PlanProductionDate",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Target Quantity",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "TargetQuantity",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Adhesive Quantity",
+            "dataType": "int64",
+            "sourceColumn": "AdhesiveQuantity",
+            "formatString": "#,0",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Remake Code Text",
+            "dataType": "string",
+            "sourceColumn": "RemakeCodeText"
+          },
+          {
+            "name": "Plan Start Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanStartDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Ranking Desc",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RankingDesc",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "PlanFinishDateAltKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "PlanFinishDateAltKey",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Machine",
+            "dataType": "string",
+            "sourceColumn": "Machine"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Upstream Schedule",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_UpstreamSchedule = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamSchedule\"]}[Data]",
+                "in",
+                "    dbo_FACT_UpstreamSchedule"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Planning Schedule Comparison",
+        "description": "Planning schedule compared with machine log data",
+        "columns": [
+          {
+            "name": "Machine",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Machine",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "sourceColumn": "ProcessOrderNo"
+          },
+          {
+            "name": "Plan Start Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanStartDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Plan Start Time",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanStartTime",
+            "formatString": "HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Plan Stop Date",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanStopDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Plan Stop Time",
+            "dataType": "dateTime",
+            "sourceColumn": "PlanStopTime",
+            "formatString": "HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Actual Start Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ActualStartDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Actual Start Time",
+            "dataType": "dateTime",
+            "sourceColumn": "ActualStartTime",
+            "formatString": "HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Actual Stop Date",
+            "dataType": "dateTime",
+            "sourceColumn": "ActualStopDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Actual Stop Time",
+            "dataType": "dateTime",
+            "sourceColumn": "ActualStopTime",
+            "formatString": "HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Plan Quantity",
+            "dataType": "int64",
+            "sourceColumn": "PlanQuantity",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Actual Quantity",
+            "dataType": "int64",
+            "sourceColumn": "ActualQuantity",
+            "formatString": "#,0"
+          },
+          {
+            "name": "VarQuantity",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "VarQuantity",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Plan Duration",
+            "dataType": "double",
+            "sourceColumn": "PlanDuration",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Actual Duration",
+            "dataType": "double",
+            "sourceColumn": "ActualDuration",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "VarDuration",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "VarDuration",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "LatestFlag",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "LatestFlag",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "StatusFlag",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "StatusFlag",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "ProductionDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ProductionDate"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Upstream Schedule Comparison",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_UpstreamScheduleAndActual = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamScheduleAndActual\"]}[Data]",
+                "in",
+                "    dbo_FACT_UpstreamScheduleAndActual"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -19956,21 +19714,14 @@
       },
       {
         "name": "9e3d8325-575b-4183-9f36-c00277724088",
-        "fromTable": "Upstream Schedule",
+        "fromTable": "Planning Schedule",
         "fromColumn": "Plan Production Date",
         "toTable": "Calendar",
         "toColumn": "Date"
       },
       {
         "name": "fc38a22e-bdd7-41aa-8806-a4bac5a049cb",
-        "fromTable": "Upstream Schedule",
-        "fromColumn": "Machine",
-        "toTable": "Machine",
-        "toColumn": "Machine"
-      },
-      {
-        "name": "658d9e4a-953d-40c9-bd24-176d803ed9bd",
-        "fromTable": "Machine Status",
+        "fromTable": "Planning Schedule",
         "fromColumn": "Machine",
         "toTable": "Machine",
         "toColumn": "Machine"
@@ -20226,7 +19977,7 @@
       },
       {
         "name": "c0270be3-3c6b-448a-a3c3-9d5a1fdf85c1",
-        "fromTable": "Upstream Schedule",
+        "fromTable": "Planning Schedule",
         "fromColumn": "PlanFinishDateAltKey",
         "toTable": "Calendar",
         "toColumn": "Date",
@@ -21067,6 +20818,13 @@
         "toColumn": "SalesPersonKey",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "beebd4a1-d806-42ad-b8bc-729906add4b8",
+        "fromTable": "Planning Schedule Comparison",
+        "fromColumn": "Machine",
+        "toTable": "Machine",
+        "toColumn": "Machine"
       }
     ],
     "perspectives": [
@@ -21101,9 +20859,6 @@
               },
               {
                 "name": "Date"
-              },
-              {
-                "name": "Fiscal Period"
               },
               {
                 "name": "Is Calendar YTD"
@@ -21197,6 +20952,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -22129,9 +21887,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -22223,6 +21978,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -22422,9 +22180,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -22516,6 +22271,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -23305,9 +23063,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -23399,6 +23154,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -23861,9 +23619,6 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "MaterialNoKey"
-              },
-              {
                 "name": "Posting Date"
               },
               {
@@ -23883,9 +23638,6 @@
               },
               {
                 "name": "Ship To City"
-              },
-              {
-                "name": "Customer PO"
               },
               {
                 "name": "CompanyCode"
@@ -23955,6 +23707,12 @@
               },
               {
                 "name": "Was New Product Flag"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Customer PO"
               }
             ]
           },
@@ -24340,9 +24098,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -24434,6 +24189,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -24875,9 +24633,6 @@
                 "name": "Invoice Number"
               },
               {
-                "name": "MaterialNoKey"
-              },
-              {
                 "name": "Posting Date"
               },
               {
@@ -24891,9 +24646,6 @@
               },
               {
                 "name": "Ship To Name"
-              },
-              {
-                "name": "Customer PO"
               },
               {
                 "name": "CompanyCode"
@@ -24963,6 +24715,12 @@
               },
               {
                 "name": "Was New Product Flag"
+              },
+              {
+                "name": "MaterialNoKey"
+              },
+              {
+                "name": "Customer PO"
               }
             ]
           },
@@ -25788,9 +25546,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -25882,6 +25637,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -26223,9 +25981,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -26317,6 +26072,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -26581,9 +26339,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -26675,6 +26430,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -27469,9 +27227,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -27563,6 +27318,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -27870,9 +27628,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -27964,6 +27719,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -29814,9 +29572,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -29908,6 +29663,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -30749,9 +30507,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is Calendar YTD"
               },
               {
@@ -30843,6 +30598,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -31238,30 +30996,6 @@
                 "name": "Report Production Date"
               },
               {
-                "name": "MStat Effective Net Hours Loss/Gain"
-              },
-              {
-                "name": "MStat Last Actual Start Time"
-              },
-              {
-                "name": "MStat Last Plan Start Time"
-              },
-              {
-                "name": "MStat Last Process Order Number"
-              },
-              {
-                "name": "MStat Net Hours Loss/Gain"
-              },
-              {
-                "name": "MStat Skipped S/O Duration Hour"
-              },
-              {
-                "name": "MStat Net Footage Variance"
-              },
-              {
-                "name": "MStat Data Integrity"
-              },
-              {
                 "name": "Now Date"
               },
               {
@@ -31272,9 +31006,6 @@
               },
               {
                 "name": "Last Shortage Amount% Snapshot"
-              },
-              {
-                "name": "MStat Indicator"
               },
               {
                 "name": "Absorption"
@@ -31485,6 +31216,24 @@
               },
               {
                 "name": "Safety Work Hours FYTD"
+              },
+              {
+                "name": "Planning Schedule Hours Gained"
+              },
+              {
+                "name": "Skipped Planned Orders Duration"
+              },
+              {
+                "name": "Planning Schedule Footage Variance"
+              },
+              {
+                "name": "Planning Schedule Comparison Data Integrity %"
+              },
+              {
+                "name": "Planning Schedule Status"
+              },
+              {
+                "name": "Planning Schedule Duration Variance"
               }
             ]
           },
@@ -31708,56 +31457,6 @@
             ]
           },
           {
-            "name": "Upstream Schedule",
-            "columns": [
-              {
-                "name": "Adhesive Quantity"
-              },
-              {
-                "name": "Department"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Plan Finish Date"
-              },
-              {
-                "name": "Plan Production Date"
-              },
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Processing Hour"
-              },
-              {
-                "name": "Publish Date"
-              },
-              {
-                "name": "Remake Code"
-              },
-              {
-                "name": "Target Quantity"
-              },
-              {
-                "name": "Remake Code Text"
-              },
-              {
-                "name": "Plan Start Date"
-              },
-              {
-                "name": "Ranking Desc"
-              },
-              {
-                "name": "PlanFinishDateAltKey"
-              },
-              {
-                "name": "Machine"
-              }
-            ]
-          },
-          {
             "name": "Backorder Snapshots",
             "columns": [
               {
@@ -31970,44 +31669,6 @@
               },
               {
                 "name": "MaterialPlantKey"
-              }
-            ]
-          },
-          {
-            "name": "Machine Status",
-            "columns": [
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Plan Start Time"
-              },
-              {
-                "name": "Plan Stop Time"
-              },
-              {
-                "name": "Actual Start Time"
-              },
-              {
-                "name": "Actual Stop Time"
-              },
-              {
-                "name": "Plan Footage"
-              },
-              {
-                "name": "Actual Footage"
-              },
-              {
-                "name": "Plan Duration Hour"
-              },
-              {
-                "name": "Actual Duration Hour"
-              },
-              {
-                "name": "Status"
-              },
-              {
-                "name": "Machine"
               }
             ]
           },
@@ -32277,6 +31938,118 @@
                 "name": "AuditID"
               }
             ]
+          },
+          {
+            "name": "Planning Schedule",
+            "columns": [
+              {
+                "name": "Adhesive Quantity"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plan Finish Date"
+              },
+              {
+                "name": "Plan Production Date"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Processing Hour"
+              },
+              {
+                "name": "Publish Date"
+              },
+              {
+                "name": "Remake Code"
+              },
+              {
+                "name": "Target Quantity"
+              },
+              {
+                "name": "Remake Code Text"
+              },
+              {
+                "name": "Plan Start Date"
+              },
+              {
+                "name": "Ranking Desc"
+              },
+              {
+                "name": "PlanFinishDateAltKey"
+              },
+              {
+                "name": "Machine"
+              }
+            ]
+          },
+          {
+            "name": "Planning Schedule Comparison",
+            "columns": [
+              {
+                "name": "Actual Duration"
+              },
+              {
+                "name": "Actual Quantity"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Actual Stop Date"
+              },
+              {
+                "name": "Actual Stop Time"
+              },
+              {
+                "name": "LatestFlag"
+              },
+              {
+                "name": "Machine"
+              },
+              {
+                "name": "Plan Duration"
+              },
+              {
+                "name": "Plan Quantity"
+              },
+              {
+                "name": "Plan Start Date"
+              },
+              {
+                "name": "Plan Start Time"
+              },
+              {
+                "name": "Plan Stop Date"
+              },
+              {
+                "name": "Plan Stop Time"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "StatusFlag"
+              },
+              {
+                "name": "VarDuration"
+              },
+              {
+                "name": "VarQuantity"
+              },
+              {
+                "name": "ProductionDate"
+              }
+            ]
           }
         ]
       },
@@ -32291,9 +32064,6 @@
               },
               {
                 "name": "Date"
-              },
-              {
-                "name": "Fiscal Period"
               },
               {
                 "name": "Is Calendar YTD"
@@ -32387,6 +32157,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -33604,9 +33377,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is After 13 Months Ago"
               },
               {
@@ -33698,6 +33468,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -34532,9 +34305,6 @@
                 "name": "Date"
               },
               {
-                "name": "Fiscal Period"
-              },
-              {
                 "name": "Is After 13 Months Ago"
               },
               {
@@ -34626,6 +34396,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -35012,16 +34785,10 @@
                 "name": "Exchange Rate"
               },
               {
-                "name": "Customer PO"
-              },
-              {
                 "name": "Invoice Line Number"
               },
               {
                 "name": "Invoice Number"
-              },
-              {
-                "name": "MaterialNoKey"
               },
               {
                 "name": "Plant"
@@ -35097,6 +34864,12 @@
               },
               {
                 "name": "Was New Product Flag"
+              },
+              {
+                "name": "Customer PO"
+              },
+              {
+                "name": "MaterialNoKey"
               }
             ]
           },
@@ -35105,9 +34878,6 @@
             "columns": [
               {
                 "name": "Date"
-              },
-              {
-                "name": "Fiscal Period"
               },
               {
                 "name": "Is Current Month"
@@ -35204,6 +34974,9 @@
               },
               {
                 "name": "Weekday"
+              },
+              {
+                "name": "FiscalPeriod"
               }
             ],
             "hierarchies": [
@@ -35343,6 +35116,30 @@
               },
               {
                 "name": "Selling Price"
+              },
+              {
+                "name": "Flash Sales Forecast Quantity"
+              },
+              {
+                "name": "Frozen Sales Forecast Quantity"
+              },
+              {
+                "name": "SO Customer Open Amount"
+              },
+              {
+                "name": "SO Customer Open Quantity"
+              },
+              {
+                "name": "Sales Order Amount"
+              },
+              {
+                "name": "Sales Order Cost Amount"
+              },
+              {
+                "name": "Sales Order Margin"
+              },
+              {
+                "name": "SO Ordered Quantity"
               }
             ]
           },
@@ -35399,6 +35196,221 @@
               },
               {
                 "name": "Pricing Unit"
+              }
+            ]
+          },
+          {
+            "name": "Sales Order",
+            "columns": [
+              {
+                "name": "OrderNoLineKey"
+              },
+              {
+                "name": "Order Number"
+              },
+              {
+                "name": "Order Line Number"
+              },
+              {
+                "name": "Order Type"
+              },
+              {
+                "name": "Enter Date"
+              },
+              {
+                "name": "Last PGI Date"
+              },
+              {
+                "name": "Entered By"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "CustomerOrgKey"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Credit Block"
+              },
+              {
+                "name": "Route Type"
+              },
+              {
+                "name": "Unit of Measure"
+              },
+              {
+                "name": "Order Currency"
+              },
+              {
+                "name": "Billing Status"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Exchange Rate"
+              },
+              {
+                "name": "Customer Material Number"
+              },
+              {
+                "name": "Ship To Name"
+              },
+              {
+                "name": "Ship To City"
+              },
+              {
+                "name": "In Stock"
+              },
+              {
+                "name": "Has Changes (CS)"
+              },
+              {
+                "name": "Processing Status"
+              },
+              {
+                "name": "Sample Category"
+              },
+              {
+                "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Weight Unit"
+              },
+              {
+                "name": "Gross Weight"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Order Line Number"
+              },
+              {
+                "name": "Reason for Late Shipment"
+              },
+              {
+                "name": "Reason Type for Late Shipment"
+              },
+              {
+                "name": "Incoterms Part 1"
+              },
+              {
+                "name": "Incoterms Part 2"
+              },
+              {
+                "name": "Pricing Date"
+              },
+              {
+                "name": "Ship To Account Number"
+              },
+              {
+                "name": "Requirements Type"
+              },
+              {
+                "name": "Payment Terms"
+              },
+              {
+                "name": "Ship To Address"
+              },
+              {
+                "name": "Credit Block Reason"
+              },
+              {
+                "name": "OrderQuantity"
+              },
+              {
+                "name": "OrderAmountUSD"
+              },
+              {
+                "name": "CostAmountUSD"
+              },
+              {
+                "name": "AllocatedQuantity"
+              },
+              {
+                "name": "ShippedQuantity"
+              },
+              {
+                "name": "InternalOpenQuantity"
+              },
+              {
+                "name": "CustomerOpenQuantity"
+              },
+              {
+                "name": "CostAmount"
+              },
+              {
+                "name": "OrderAmount"
+              },
+              {
+                "name": "InternalOpenAmount"
+              },
+              {
+                "name": "InternalOpenAmountUSD"
+              },
+              {
+                "name": "CustomerOpenAmount"
+              },
+              {
+                "name": "CustomerOpenAmountUSD"
+              },
+              {
+                "name": "MarginAmount"
+              },
+              {
+                "name": "MarginAmountUSD"
+              },
+              {
+                "name": "CustomerOpenMarginAmountUSD"
+              },
+              {
+                "name": "CustomerOpenMarginAmount"
+              },
+              {
+                "name": "AllocatedAmount"
+              },
+              {
+                "name": "AllocatedAmountUSD"
+              },
+              {
+                "name": "ShippedAmount"
+              },
+              {
+                "name": "ShippedAmountUSD"
+              },
+              {
+                "name": "CustomerOpenWeight"
+              },
+              {
+                "name": "LateQuantity"
+              },
+              {
+                "name": "UnrestrictStockQty"
+              },
+              {
+                "name": "First Scheduled Ship Date"
+              },
+              {
+                "name": "Customer PO"
+              },
+              {
+                "name": "Late Flag"
+              },
+              {
+                "name": "Late Exclude Flag"
+              },
+              {
+                "name": "Special Processing Indicator"
               }
             ]
           }
@@ -36166,5 +36178,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

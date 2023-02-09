@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -2107,7 +2108,7 @@
           {
             "name": "In Stock Measure",
             "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date); Note that this calculation is report-side which means the material is not actually allocated to the order in SAP",
-            "expression": " PRODUCT( 'Sales Order'[In Stock] )",
+            "expression": " PRODUCT( 'Sales Order'[InStockIndicator] )",
             "formatString": "0",
             "displayFolder": "Sales Order"
           },
@@ -2747,7 +2748,7 @@
             "expression": [
               "CALCULATE (",
               "    [Sales Order Lines Automated],",
-              "    'Sales Order'[Has Changes (CS)] = 0",
+              "    'Sales Order'[HasChanges_CS] = 0",
               ")"
             ],
             "formatString": "#,0",
@@ -3934,53 +3935,12 @@
             ]
           },
           {
-            "name": "Earned Labor (Budget)",
-            "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM( TARGET_Absorption[Labor] ),",
-              "    TARGET_Absorption[ForecastType] = \"B\",",
-              "    TREATAS(",
-              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "        TARGET_Absorption[CalendarTimeKey]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Absorption"
-          },
-          {
-            "name": "Earned Overhead (Budget)",
-            "description": "SAP Source: ZFORECAST.OH (Type = 'B')",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    SUM( TARGET_Absorption[Overhead] ),",
-              "    TARGET_Absorption[ForecastType] = \"B\",",
-              "    TREATAS(",
-              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "        TARGET_Absorption[CalendarTimeKey]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Absorption"
-          },
-          {
-            "name": "Absorption (Budget)",
-            "description": "Sum of 'Earned Labor (Budget)' and 'Earned Overhead (Budget)'",
-            "expression": " [Earned Labor (Budget)] + [Earned Overhead (Budget)]",
-            "formatString": "#,0",
-            "displayFolder": "Absorption"
-          },
-          {
             "name": "MTD Earned Labor (Budget)",
             "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
             "expression": [
               "",
               "CALCULATE(",
-              "    [Earned Labor (Budget)],",
+              "    [Earned Labor Budget],",
               "    DATESMTD( 'Calendar'[Date] )",
               ")"
             ],
@@ -3993,7 +3953,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [Earned Overhead (Budget)],",
+              "    [Earned Overhead Budget],",
               "    DATESMTD( 'Calendar'[Date] )",
               ")"
             ],
@@ -4012,7 +3972,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [Earned Labor (Budget)],",
+              "    [Earned Labor Budget],",
               "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
               ")"
             ],
@@ -4025,7 +3985,7 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    [Earned Overhead (Budget)],",
+              "    [Earned Overhead Budget],",
               "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
               ")"
             ],
@@ -5461,87 +5421,6 @@
             "displayFolder": "Converting"
           },
           {
-            "name": "S/O Future Scheduled Output by Month End (Upstream)",
-            "description": "Total target quantity of scheduled shop orders after today until end of month (relative to [Report Date]). Scheduled data is the from the latest schedule published by Planning.",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    [S/O Scheduled Quantity (Upstream)],",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Planning Schedule'[PlanFinishDateAltKey] ),",
-              "    ALL( 'Calendar'[Date] ),",
-              "    FILTER(",
-              "        ALL( 'Planning Schedule'[PlanFinishDateAltKey] ),",
-              "        'Planning Schedule'[PlanFinishDateAltKey] > [Report Date]",
-              "            && 'Planning Schedule'[PlanFinishDateAltKey] <= [End of Month]",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0",
-            "displayFolder": "Absorption (Projected)"
-          },
-          {
-            "name": "Absorption per Output (Last 3 Months)",
-            "description": "Total absorption posted in the last 3 calendar months divided by the total output of departments. Casting and coating output is from machine data, Converting output is GR transaction, and others are delivered quantity of shop orders that ended in the last 3 months.",
-            "expression": [
-              "",
-              "VAR BegDate = EDATE([Beginning of Month], -3)",
-              "VAR Upstream_Out = ",
-              "    CALCULATE(",
-              "        [Upstream Actual Production Footage],",
-              "        ALL( 'Calendar' ),",
-              "        FILTER(",
-              "            ALL( 'Upstream Log Simplified'[Start Time] ),",
-              "            'Upstream Log Simplified'[Start Time] >= BegDate",
-              "                && 'Upstream Log Simplified'[Start Time] < [Beginning of Month]",
-              "        )",
-              "    )",
-              "",
-              "VAR Conv_Out = ",
-              "    CALCULATE(",
-              "        [CONV Linear Footage],",
-              "        ALL( 'Calendar' ),",
-              "        FILTER(",
-              "            ALL( 'Goods Movement'[Posting Date] ),",
-              "            'Goods Movement'[Posting Date] >= BegDate",
-              "                && 'Goods Movement'[Posting Date] < [Beginning of Month]",
-              "        )",
-              "    )",
-              "",
-              "VAR Other_Out = ",
-              "    CALCULATE(",
-              "        SUM('Process Order'[DeliveredQuantity] ),",
-              "        ALL( 'Calendar' ),",
-              "        FILTER(",
-              "            ALL( 'Process Order'[EndDateKey] ),",
-              "            'Process Order'[EndDateKey] >= BegDate",
-              "                && 'Process Order'[EndDateKey] < [Beginning of Month]",
-              "        ),",
-              "        'Process Order'[Close Flag] = \"Yes\"",
-              "    )",
-              "",
-              "RETURN",
-              "DIVIDE(",
-              "    CALCULATE(",
-              "        [Absorption],",
-              "        FILTER(",
-              "            ALL( 'Calendar'[Date] ),",
-              "            'Calendar'[Date] >= BegDate",
-              "                && 'Calendar'[Date] < [Beginning of Month]",
-              "        )",
-              "    ),",
-              "    SWITCH(",
-              "        SELECTEDVALUE( 'Department'[Department] ),",
-              "        \"CONV\", Conv_Out,",
-              "        \"CAST\", Upstream_Out,",
-              "        \"COAT\", Upstream_Out,",
-              "        Other_Out",
-              "    )",
-              ")"
-            ],
-            "formatString": "#,0.00",
-            "displayFolder": "Absorption (Projected)"
-          },
-          {
             "name": "Actual Production Start Datetime",
             "description": "Actual datetime the production per department started since the beginning of the month. This value is from machine data. If not available, the beginning of month datetime is used.",
             "expression": [
@@ -5561,7 +5440,7 @@
               "IF( ISBLANK(StartTime) && [MTD Absorption] <> BLANK(), [Beginning of Month] + TIME(0, 0, 0), StartTime )"
             ],
             "formatString": "MM/dd/yyyy HH:mm:ss",
-            "displayFolder": "Absorption (Projected)",
+            "displayFolder": "Absorption Projected",
             "annotations": [
               {
                 "name": "Format",
@@ -5589,7 +5468,7 @@
               "IF( ISBLANK(SchedEnd) && [MTD Absorption] <> BLANK(), [Report Date] + TIME(23, 59, 59), SchedEnd )"
             ],
             "formatString": "MM/dd/yyyy HH:mm:ss",
-            "displayFolder": "Absorption (Projected)",
+            "displayFolder": "Absorption Projected",
             "annotations": [
               {
                 "name": "Format",
@@ -5602,11 +5481,11 @@
             "description": "[MTD Absorption] plus the product of [S/O Future Scheduled Output by Month End (Upstream)] and the average absorption per output in the last 3 calendar months ([Absorption per Output (Last 3 Months)])",
             "expression": [
               "",
-              "SUMX( VALUES('Department'[Department]), [MTD Absorption] + ([S/O Future Scheduled Output by Month End (Upstream)] * [Absorption per Output (Last 3 Months)]) )",
+              "SUMX( VALUES('Department'[Department]), [MTD Absorption] + ([S/O Future Scheduled Output by Month End] * [Absorption per Output Last 3 Months]) )",
               ""
             ],
             "formatString": "#,0",
-            "displayFolder": "Absorption (Projected)"
+            "displayFolder": "Absorption Projected"
           },
           {
             "name": "Average Daily Absorption based on Estimate",
@@ -5619,7 +5498,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Absorption (Projected)"
+            "displayFolder": "Absorption Projected"
           },
           {
             "name": "Projected Absorption",
@@ -5655,7 +5534,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Absorption (Projected)"
+            "displayFolder": "Absorption Projected"
           },
           {
             "name": "Future Off Hours After Schedule End",
@@ -5680,7 +5559,7 @@
               ")"
             ],
             "formatString": "0.00",
-            "displayFolder": "Absorption (Projected)"
+            "displayFolder": "Absorption Projected"
           },
           {
             "name": "Absorption Hours",
@@ -8457,6 +8336,128 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Earned Labor Budget",
+            "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( TARGET_Absorption[Labor] ),",
+              "    TARGET_Absorption[ForecastType] = \"B\",",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        TARGET_Absorption[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Earned Overhead Budget",
+            "description": "SAP Source: ZFORECAST.OH (Type = 'B')",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( TARGET_Absorption[Overhead] ),",
+              "    TARGET_Absorption[ForecastType] = \"B\",",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        TARGET_Absorption[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "Absorption Budget",
+            "description": "Sum of 'Earned Labor (Budget)' and 'Earned Overhead (Budget)'",
+            "expression": " [Earned Labor Budget] + [Earned Overhead Budget]",
+            "formatString": "#,0",
+            "displayFolder": "Absorption"
+          },
+          {
+            "name": "S/O Future Scheduled Output by Month End",
+            "description": "Total target quantity of scheduled shop orders after today until end of month (relative to [Report Date]). Scheduled data is the from the latest schedule published by Planning.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [S/O Scheduled Quantity (Upstream)],",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Planning Schedule'[PlanFinishDateAltKey] ),",
+              "    ALL( 'Calendar'[Date] ),",
+              "    FILTER(",
+              "        ALL( 'Planning Schedule'[PlanFinishDateAltKey] ),",
+              "        'Planning Schedule'[PlanFinishDateAltKey] > [Report Date]",
+              "            && 'Planning Schedule'[PlanFinishDateAltKey] <= [End of Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Absorption Projected"
+          },
+          {
+            "name": "Absorption per Output Last 3 Months",
+            "description": "Total absorption posted in the last 3 calendar months divided by the total output of departments. Casting and coating output is from machine data, Converting output is GR transaction, and others are delivered quantity of shop orders that ended in the last 3 months.",
+            "expression": [
+              "",
+              "VAR BegDate = EDATE([Beginning of Month], -3)",
+              "VAR Upstream_Out = ",
+              "    CALCULATE(",
+              "        [Upstream Actual Production Footage],",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Upstream Log Simplified'[Start Time] ),",
+              "            'Upstream Log Simplified'[Start Time] >= BegDate",
+              "                && 'Upstream Log Simplified'[Start Time] < [Beginning of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR Conv_Out = ",
+              "    CALCULATE(",
+              "        [CONV Linear Footage],",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Goods Movement'[Posting Date] ),",
+              "            'Goods Movement'[Posting Date] >= BegDate",
+              "                && 'Goods Movement'[Posting Date] < [Beginning of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR Other_Out = ",
+              "    CALCULATE(",
+              "        SUM('Process Order'[DeliveredQuantity] ),",
+              "        ALL( 'Calendar' ),",
+              "        FILTER(",
+              "            ALL( 'Process Order'[EndDateKey] ),",
+              "            'Process Order'[EndDateKey] >= BegDate",
+              "                && 'Process Order'[EndDateKey] < [Beginning of Month]",
+              "        ),",
+              "        'Process Order'[Close Flag] = \"Yes\"",
+              "    )",
+              "",
+              "RETURN",
+              "DIVIDE(",
+              "    CALCULATE(",
+              "        [Absorption],",
+              "        FILTER(",
+              "            ALL( 'Calendar'[Date] ),",
+              "            'Calendar'[Date] >= BegDate",
+              "                && 'Calendar'[Date] < [Beginning of Month]",
+              "        )",
+              "    ),",
+              "    SWITCH(",
+              "        SELECTEDVALUE( 'Department'[Department] ),",
+              "        \"CONV\", Conv_Out,",
+              "        \"CAST\", Upstream_Out,",
+              "        \"COAT\", Upstream_Out,",
+              "        Other_Out",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Absorption Projected"
           }
         ]
       },
@@ -8468,13 +8469,15 @@
             "name": "Invoice Number",
             "dataType": "string",
             "description": "Document number of the invoice/billing document",
-            "sourceColumn": "SaleDocNoKey"
+            "sourceColumn": "SaleDocNoKey",
+            "displayFolder": "Header"
           },
           {
             "name": "Invoice Line Number",
             "dataType": "string",
             "description": "Line/item number in the invoice/billing document",
-            "sourceColumn": "SaleLineNo"
+            "sourceColumn": "SaleLineNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Posting Date",
@@ -8482,6 +8485,7 @@
             "description": "Posting date of the invoice/billing document",
             "sourceColumn": "PostingDateKey",
             "formatString": "Short Date",
+            "displayFolder": "Header",
             "annotations": [
               {
                 "name": "Format",
@@ -8494,7 +8498,8 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "CustomerOrgKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           },
           {
             "name": "Quantity",
@@ -8510,7 +8515,8 @@
             "name": "Quantity Unit",
             "dataType": "string",
             "description": "Unit of measure of the quantity sold",
-            "sourceColumn": "QuantityUoM"
+            "sourceColumn": "QuantityUoM",
+            "displayFolder": "Item"
           },
           {
             "name": "Exchange Rate",
@@ -8518,25 +8524,29 @@
             "description": "Exchange rate to convert the document amounts to USD. This is the rate at the pricing date of the document.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.0000",
+            "displayFolder": "Header",
             "summarizeBy": "none"
           },
           {
             "name": "Currency",
             "dataType": "string",
             "description": "Currency in the invoice/billing document",
-            "sourceColumn": "Currency"
+            "sourceColumn": "Currency",
+            "displayFolder": "Header"
           },
           {
             "name": "Ship To Name",
             "dataType": "string",
             "description": "Ship to account name in the invoice/billing document",
-            "sourceColumn": "ShipToName"
+            "sourceColumn": "ShipToName",
+            "displayFolder": "Header"
           },
           {
             "name": "Ship To City",
             "dataType": "string",
             "description": "Ship to city destination of the ship to account in the invoice/billing document",
             "sourceColumn": "ShipToCity",
+            "displayFolder": "Header",
             "dataCategory": "City"
           },
           {
@@ -8544,50 +8554,58 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "CompanyCode",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           },
           {
             "name": "Sales Order Type",
             "dataType": "string",
             "description": "Sales order type referenced in the invoice/billing document",
-            "sourceColumn": "SalesOrderType"
+            "sourceColumn": "SalesOrderType",
+            "displayFolder": "Item"
           },
           {
             "name": "Ship To Country",
             "dataType": "string",
             "description": "Ship to country of the ship to account in the invoice/billing document",
             "sourceColumn": "ShipToCountry",
+            "displayFolder": "Header",
             "dataCategory": "Country"
           },
           {
             "name": "Plant",
             "dataType": "string",
             "description": "Plant assigned in the line item in the invoice/billing document",
-            "sourceColumn": "PlantNo"
+            "sourceColumn": "PlantNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Document Type Text",
             "dataType": "string",
             "description": "Document type of the invoice/billing document",
-            "sourceColumn": "DocTypeText"
+            "sourceColumn": "DocTypeText",
+            "displayFolder": "Header"
           },
           {
             "name": "Sales Order Number",
             "dataType": "string",
             "description": "Sales order referenced in the invoice/billing document",
-            "sourceColumn": "SalesOrderNo"
+            "sourceColumn": "SalesOrderNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Sales Order Line Number",
             "dataType": "string",
             "description": "Sales order line item referenced in the invoice/billing document",
-            "sourceColumn": "SalesOrderLineNo"
+            "sourceColumn": "SalesOrderLineNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Document Type",
             "dataType": "string",
             "description": "Document type code of the invoice/billing document",
-            "sourceColumn": "DocType"
+            "sourceColumn": "DocType",
+            "displayFolder": "Header"
           },
           {
             "name": "GrossSalesAmount",
@@ -8816,20 +8834,23 @@
             "name": "Was New Product Flag",
             "dataType": "string",
             "description": "Determines if the material was a new product at the time the invoice is posted. A material is a new product if the invoice is posted within the next 36 months after its Commercialization Date according to the material master.",
-            "sourceColumn": "WasNewProductFlag"
+            "sourceColumn": "WasNewProductFlag",
+            "displayFolder": "Item"
           },
           {
             "name": "MaterialNoKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "MaterialNoKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Customer PO",
             "dataType": "string",
             "description": "Customer PO in the reference sales order of the invoice/billing document",
-            "sourceColumn": "ExtPurchaseOrderNo"
+            "sourceColumn": "ExtPurchaseOrderNo",
+            "displayFolder": "Header"
           }
         ],
         "partitions": [
@@ -9743,19 +9764,22 @@
             "isUnique": true,
             "isKey": true,
             "sourceColumn": "PurchaseOrderLineKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           },
           {
             "name": "Purchase Order Number",
             "dataType": "string",
             "description": "SAP Source: EKKO.EBELN",
-            "sourceColumn": "PurchaseOrderNoKey"
+            "sourceColumn": "PurchaseOrderNoKey",
+            "displayFolder": "Header"
           },
           {
             "name": "Purchase Line Number",
             "dataType": "string",
             "description": "SAP Source: EKPO.EBELN",
-            "sourceColumn": "PurchaseOrderLineNo"
+            "sourceColumn": "PurchaseOrderLineNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Document Date",
@@ -9763,6 +9787,7 @@
             "description": "SAP Source: EKKO.AEDAT",
             "sourceColumn": "DocumentDateKey",
             "formatString": "Short Date",
+            "displayFolder": "Header",
             "annotations": [
               {
                 "name": "Format",
@@ -9776,50 +9801,58 @@
             "description": "SAP Source: EKKO.LIFNR",
             "isHidden": true,
             "sourceColumn": "VendorNoKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           },
           {
             "name": "Material Group",
             "dataType": "string",
             "description": "SAP Source: EKPO.MATKL",
-            "sourceColumn": "MaterialGroup"
+            "sourceColumn": "MaterialGroup",
+            "displayFolder": "Item"
           },
           {
             "name": "Material Number",
             "dataType": "string",
             "description": "SAP Source: EKPO.MATNR",
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "displayFolder": "Item"
           },
           {
             "name": "Material Description",
             "dataType": "string",
             "description": "SAP Source: EKPO.TXZ01",
-            "sourceColumn": "MaterialText"
+            "sourceColumn": "MaterialText",
+            "displayFolder": "Item"
           },
           {
             "name": "Req Track Number",
             "dataType": "string",
             "description": "SAP Source: EKPO.BEDNR",
-            "sourceColumn": "RequisitionTrackNo"
+            "sourceColumn": "RequisitionTrackNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Unit Price",
             "dataType": "decimal",
             "description": "SAP Source: EKPO.NETPR",
             "sourceColumn": "UnitPrice",
+            "displayFolder": "Item",
             "summarizeBy": "none"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
             "description": "SAP Source: EKPO.MEINS",
-            "sourceColumn": "UnitOfMeasure"
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "Item"
           },
           {
             "name": "Document Type",
             "dataType": "string",
             "description": "SAP Source: EKKO.BSART",
-            "sourceColumn": "PurchaseDocType"
+            "sourceColumn": "PurchaseDocType",
+            "displayFolder": "Header"
           },
           {
             "name": "First Delivery Date",
@@ -9827,6 +9860,7 @@
             "description": "SAP Source: EKET.SLFDT",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "MM/dd/yyyy",
+            "displayFolder": "Item",
             "annotations": [
               {
                 "name": "Format",
@@ -9838,25 +9872,29 @@
             "name": "Issuing Plant",
             "dataType": "string",
             "description": "SAP Source: EKKO.RESWK",
-            "sourceColumn": "IssuingPlantNo"
+            "sourceColumn": "IssuingPlantNo",
+            "displayFolder": "Header"
           },
           {
             "name": "Receiving Plant",
             "dataType": "string",
             "description": "SAP Source: EKPO.WERKS",
-            "sourceColumn": "ReceivingPlantNo"
+            "sourceColumn": "ReceivingPlantNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Material Type",
             "dataType": "string",
             "description": "SAP Source: EKPO.MTART",
-            "sourceColumn": "MaterialType"
+            "sourceColumn": "MaterialType",
+            "displayFolder": "Item"
           },
           {
             "name": "Currency",
             "dataType": "string",
             "description": "SAP Source: EKKO.WAERS",
-            "sourceColumn": "Currency"
+            "sourceColumn": "Currency",
+            "displayFolder": "Header"
           },
           {
             "name": "Ordered Quantity",
@@ -9904,13 +9942,15 @@
             "name": "Purchase Order Unit",
             "dataType": "string",
             "description": "SAP Source: EKPO.BPRME",
-            "sourceColumn": "POUnitOfMeasure"
+            "sourceColumn": "POUnitOfMeasure",
+            "displayFolder": "Item"
           },
           {
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: EKKO.BUKRS",
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "displayFolder": "Header"
           },
           {
             "name": "Goods Receipt Quantity",
@@ -9937,7 +9977,8 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "ValuationClassKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Item Delivery Date",
@@ -9945,6 +9986,7 @@
             "description": "SAP Source: EKPO.EINDT",
             "sourceColumn": "ItemDeliveryDate",
             "formatString": "Short Date",
+            "displayFolder": "Item",
             "annotations": [
               {
                 "name": "Format",
@@ -9956,19 +9998,22 @@
             "name": "Requisitioner Name",
             "dataType": "string",
             "description": "SAP Source: EKPO.AFNAM",
-            "sourceColumn": "RequisitionerName"
+            "sourceColumn": "RequisitionerName",
+            "displayFolder": "Item"
           },
           {
             "name": "Complete Delivery Flag",
             "dataType": "string",
             "description": "SAP Source: EKPO.ELIKZ",
-            "sourceColumn": "CompleteDeliverIndicator"
+            "sourceColumn": "CompleteDeliverIndicator",
+            "displayFolder": "Item"
           },
           {
             "name": "Goods Receipt Required Flag",
             "dataType": "string",
             "description": "SAP Source: EKPO.WEPOS",
-            "sourceColumn": "GoodsReceiptIndicator"
+            "sourceColumn": "GoodsReceiptIndicator",
+            "displayFolder": "Item"
           }
         ],
         "partitions": [
@@ -10516,25 +10561,29 @@
             "isHidden": true,
             "isKey": true,
             "sourceColumn": "OrderNoLineKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           },
           {
             "name": "Order Number",
             "dataType": "string",
             "description": "Identifier of the sales order",
-            "sourceColumn": "OrderNoKey"
+            "sourceColumn": "OrderNoKey",
+            "displayFolder": "Header"
           },
           {
             "name": "Order Line Number",
             "dataType": "string",
             "description": "Line number of the sales order item",
-            "sourceColumn": "OrderLineNo"
+            "sourceColumn": "OrderLineNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Order Type",
             "dataType": "string",
             "description": "Determines if the sales order is a standard order (TA), container (ZCON), buyout (ZDSP), etc.",
-            "sourceColumn": "OrderType"
+            "sourceColumn": "OrderType",
+            "displayFolder": "Header"
           },
           {
             "name": "Enter Date",
@@ -10542,6 +10591,7 @@
             "description": "Date on which the sales order was created.",
             "sourceColumn": "EnterDateKey",
             "formatString": "Short Date",
+            "displayFolder": "Header",
             "annotations": [
               {
                 "name": "Format",
@@ -10555,6 +10605,7 @@
             "description": "Latest actual goods movement date in the delivery note of the sales order item.",
             "sourceColumn": "LastPgiDate",
             "formatString": "Short Date",
+            "displayFolder": "Item",
             "annotations": [
               {
                 "name": "Format",
@@ -10566,7 +10617,8 @@
             "name": "Entered By",
             "dataType": "string",
             "description": "Name of person who created the sales order",
-            "sourceColumn": "EnteredBy"
+            "sourceColumn": "EnteredBy",
+            "displayFolder": "Header"
           },
           {
             "name": "Plant",
@@ -10574,62 +10626,72 @@
             "description": "Plant assigned to the sales order item",
             "isHidden": true,
             "sourceColumn": "PlantNoKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "CustomerOrgKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "CustomerOrgKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           },
           {
             "name": "Material Number",
             "dataType": "string",
             "description": "Material number in the sales order item",
-            "sourceColumn": "MaterialNoKey"
+            "sourceColumn": "MaterialNoKey",
+            "displayFolder": "Item"
           },
           {
             "name": "Material Description",
             "dataType": "string",
             "description": "Short text for sales order item",
-            "sourceColumn": "MaterialText"
+            "sourceColumn": "MaterialText",
+            "displayFolder": "Item"
           },
           {
             "name": "Material Group",
             "dataType": "string",
             "description": "Material group of the material in the sales order item",
-            "sourceColumn": "MaterialGroup"
+            "sourceColumn": "MaterialGroup",
+            "displayFolder": "Item"
           },
           {
             "name": "Credit Block",
             "dataType": "string",
             "description": "Overall status of credit checks",
-            "sourceColumn": "CreditBlock"
+            "sourceColumn": "CreditBlock",
+            "displayFolder": "Header"
           },
           {
             "name": "Route Type",
             "dataType": "string",
             "description": "Route by which the delivery item is to be delivered to the customer",
-            "sourceColumn": "RouteType"
+            "sourceColumn": "RouteType",
+            "displayFolder": "Item"
           },
           {
             "name": "Unit of Measure",
             "dataType": "string",
             "description": "Unit of measure of the sales order item",
-            "sourceColumn": "OrderUoM"
+            "sourceColumn": "OrderUoM",
+            "displayFolder": "Item"
           },
           {
             "name": "Order Currency",
             "dataType": "string",
             "description": "Currency in the sales order",
-            "sourceColumn": "OrderCurrency"
+            "sourceColumn": "OrderCurrency",
+            "displayFolder": "Item"
           },
           {
             "name": "Billing Status",
             "dataType": "string",
             "description": "The order-related billing status shows to what extent an item has been processed for billing.",
-            "sourceColumn": "BillingStatBlock"
+            "sourceColumn": "BillingStatBlock",
+            "displayFolder": "Item"
           },
           {
             "name": "Unit Price",
@@ -10637,6 +10699,7 @@
             "description": "Price per unit of the sales order item",
             "sourceColumn": "UnitPrice",
             "formatString": "#,0.00",
+            "displayFolder": "Item",
             "summarizeBy": "none"
           },
           {
@@ -10645,66 +10708,59 @@
             "description": "Exchange rate to convert the value to USD.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.00",
+            "displayFolder": "Item",
             "summarizeBy": "none"
           },
           {
             "name": "Customer Material Number",
             "dataType": "string",
             "description": "Uniquely identifies the material from the customer's point of view.",
-            "sourceColumn": "CustomerMaterialNo"
+            "sourceColumn": "CustomerMaterialNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Ship To Name",
             "dataType": "string",
             "description": "Account name of the sales order's destination",
-            "sourceColumn": "ShipToName"
+            "sourceColumn": "ShipToName",
+            "displayFolder": "Header"
           },
           {
             "name": "Ship To City",
             "dataType": "string",
             "description": "City destination of the sales order",
             "sourceColumn": "ShipToCity",
+            "displayFolder": "Header",
             "dataCategory": "City"
-          },
-          {
-            "name": "In Stock",
-            "dataType": "int64",
-            "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
-            "isHidden": true,
-            "sourceColumn": "InStockIndicator",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Has Changes (CS)",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "HasChanges_CS",
-            "isAvailableInMdx": false
           },
           {
             "name": "Processing Status",
             "dataType": "string",
             "description": "Overall processing status of the sales order item",
-            "sourceColumn": "ProcessingBlock"
+            "sourceColumn": "ProcessingBlock",
+            "displayFolder": "Item"
           },
           {
             "name": "Sample Category",
             "dataType": "string",
             "description": "Calculated column: If the order type is 'KL', then 'Full Rolls'. Else if the order type is 'ZSMP' and order reason is 'Tradeshow Requests' then 'Tradeshow'. Else if order type is 'ZSMP' and material group is 'MARKETG', then 'Literature'. Else if order type is 'ZSMP' and not a tradeshow nor literature, then 'Samples'. Otherwise, 'Not Applicable'.",
-            "sourceColumn": "FOCCategory"
+            "sourceColumn": "FOCCategory",
+            "displayFolder": "Item"
           },
           {
             "name": "MaterialPlantKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "MaterialPlantKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Weight Unit",
             "dataType": "string",
             "description": "Weight unit of measure of the sales order item",
-            "sourceColumn": "WeightUoM"
+            "sourceColumn": "WeightUoM",
+            "displayFolder": "Item"
           },
           {
             "name": "Gross Weight",
@@ -10712,19 +10768,22 @@
             "description": "The total gross weight of the item. The gross weight represents the net weight plus the weight of packaging.",
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
+            "displayFolder": "Item",
             "summarizeBy": "none"
           },
           {
             "name": "Purchase Order Number",
             "dataType": "string",
             "description": "Line number in the purchase order number if the sales order is a buyout order (ZDSP order type)",
-            "sourceColumn": "PurchaseOrderNo"
+            "sourceColumn": "PurchaseOrderNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Purchase Order Line Number",
             "dataType": "string",
             "description": "Purchase order number if the sales order is a buyout order (ZDSP order type)",
-            "sourceColumn": "PurchaseOrderLineNo"
+            "sourceColumn": "PurchaseOrderLineNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Reason for Late Shipment",
@@ -10733,25 +10792,29 @@
               "Reason code assigned by Planning/Shipping department per sales order item if the item is late. See 'Late Flag' field for the definition of late and SAP tcode ZSDSHIP_LATE to assign reason codes per late item.",
               ""
             ],
-            "sourceColumn": "LateReasonText"
+            "sourceColumn": "LateReasonText",
+            "displayFolder": "Item"
           },
           {
             "name": "Reason Type for Late Shipment",
             "dataType": "string",
             "description": "1st party means the reason why the item is late is controllable by Arlon. On the other hand, 3rd party means the item is late of external reasons.",
-            "sourceColumn": "LateReasonType"
+            "sourceColumn": "LateReasonType",
+            "displayFolder": "Item"
           },
           {
             "name": "Incoterms Part 1",
             "dataType": "string",
             "description": "Commonly-used trading terms that comply with the standards established by the International Chamber of Commerce (ICC).",
-            "sourceColumn": "IncoTerms1"
+            "sourceColumn": "IncoTerms1",
+            "displayFolder": "Header"
           },
           {
             "name": "Incoterms Part 2",
             "dataType": "string",
             "description": "Additional information for the primary incoterm.",
-            "sourceColumn": "IncoTerms2"
+            "sourceColumn": "IncoTerms2",
+            "displayFolder": "Header"
           },
           {
             "name": "Pricing Date",
@@ -10759,6 +10822,7 @@
             "description": "Date for material pricing and exchange rate",
             "sourceColumn": "PricingDate",
             "formatString": "Short Date",
+            "displayFolder": "Header",
             "annotations": [
               {
                 "name": "Format",
@@ -10770,25 +10834,29 @@
             "name": "Ship To Account Number",
             "dataType": "string",
             "description": "Account number of the destination of the sales order",
-            "sourceColumn": "ShipToAcctNo"
+            "sourceColumn": "ShipToAcctNo",
+            "displayFolder": "Header"
           },
           {
             "name": "Requirements Type",
             "dataType": "string",
             "description": "The requirements type determines the planning strategy to be used for manufacturing",
-            "sourceColumn": "RequirementsType"
+            "sourceColumn": "RequirementsType",
+            "displayFolder": "Item"
           },
           {
             "name": "Payment Terms",
             "dataType": "string",
             "description": "Key for defining payment terms composed of cash discount percentages and payment periods",
-            "sourceColumn": "PaymentTerms"
+            "sourceColumn": "PaymentTerms",
+            "displayFolder": "Item"
           },
           {
             "name": "Ship To Address",
             "dataType": "string",
             "description": "Address of the sales order's destination",
             "sourceColumn": "ShipToFullAddress",
+            "displayFolder": "Header",
             "dataCategory": "Address"
           },
           {
@@ -10802,12 +10870,12 @@
               "- If static credit check status is \"not OK\" and net balance is 0 or negative, then value is \"Exceeds Credit Limit\"",
               "- If there is at least one open item, then \"Past Due\"; otherwise, it's \"Exceeds Credit Limit\""
             ],
-            "sourceColumn": "CreditBlockReason"
+            "sourceColumn": "CreditBlockReason",
+            "displayFolder": "Header"
           },
           {
             "name": "OrderQuantity",
             "dataType": "decimal",
-            "description": "SAP Source: VBAP.KWMENG",
             "isHidden": true,
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
@@ -10818,7 +10886,6 @@
           {
             "name": "OrderAmountUSD",
             "dataType": "decimal",
-            "description": "SAP Source: VBAP.NETWR; Converted to USD using the exchange rate",
             "isHidden": true,
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -10835,7 +10902,6 @@
           {
             "name": "CostAmountUSD",
             "dataType": "decimal",
-            "description": "SAP Source: VBAP.WAVWR; Converted to USD using the exchange rate",
             "isHidden": true,
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -10852,7 +10918,6 @@
           {
             "name": "AllocatedQuantity",
             "dataType": "decimal",
-            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued without an actual PGI date yet",
             "isHidden": true,
             "sourceColumn": "AllocatedQuantity",
             "formatString": "#,0.00",
@@ -10863,7 +10928,6 @@
           {
             "name": "ShippedQuantity",
             "dataType": "decimal",
-            "description": "SAP Source: LIPS.LFIMG; Total quantity in delivery notes issued with actual PGI date set",
             "isHidden": true,
             "sourceColumn": "ShippedQuantity",
             "formatString": "#,0.00",
@@ -10885,7 +10949,6 @@
           {
             "name": "CustomerOpenQuantity",
             "dataType": "decimal",
-            "description": "Order quantity minus shipped quantity",
             "isHidden": true,
             "sourceColumn": "CustomerOpenQuantity",
             "formatString": "#,0.00",
@@ -10896,7 +10959,6 @@
           {
             "name": "CostAmount",
             "dataType": "decimal",
-            "description": "SAP Source: WAVWR",
             "isHidden": true,
             "sourceColumn": "CostAmount",
             "formatString": "#,0",
@@ -10907,7 +10969,6 @@
           {
             "name": "OrderAmount",
             "dataType": "decimal",
-            "description": "SAP Source: NETWR",
             "isHidden": true,
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
@@ -11107,6 +11168,7 @@
             "description": "First schedule line date of the sales order item",
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "Short Date",
+            "displayFolder": "Item",
             "annotations": [
               {
                 "name": "Format",
@@ -11118,26 +11180,47 @@
             "name": "Customer PO",
             "dataType": "string",
             "description": "Number that the customer uses to uniquely identify a purchasing document (e.g. an inquiry or a purchase order).",
-            "sourceColumn": "ExtPurchaseOrderNo"
+            "sourceColumn": "ExtPurchaseOrderNo",
+            "displayFolder": "Header"
           },
           {
             "name": "Late Flag",
             "dataType": "string",
             "description": "Value is 'Yes' if the line item was not fully delivered on the first schedule ship date.",
             "sourceColumn": "LateFlag",
+            "displayFolder": "Item",
             "summarizeBy": "none"
           },
           {
             "name": "Late Exclude Flag",
             "dataType": "string",
             "description": "Value is 'Yes' if this line is indicated to be excluded in On Time Shipping metrics.",
-            "sourceColumn": "LateExcludeFlag"
+            "sourceColumn": "LateExcludeFlag",
+            "displayFolder": "Item"
           },
           {
             "name": "Special Processing Indicator",
             "dataType": "string",
             "description": "Indicator that results in a special processing form for a shipment or a special calculation form for shipment costs. Examples for special processing are express shipments or special tariffs.",
-            "sourceColumn": "SpecialProcessIndicator"
+            "sourceColumn": "SpecialProcessIndicator",
+            "displayFolder": "Header"
+          },
+          {
+            "name": "InStockIndicator",
+            "dataType": "int64",
+            "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
+            "isHidden": true,
+            "sourceColumn": "InStockIndicator",
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
+          },
+          {
+            "name": "HasChanges_CS",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "HasChanges_CS",
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
           }
         ],
         "partitions": [
@@ -17147,52 +17230,6 @@
         ]
       },
       {
-        "name": "_Refresh Date",
-        "description": "This table is not related to other table. It is used to determine when was the last time the data model is processed/refreshed.",
-        "columns": [
-          {
-            "type": "calculatedTableColumn",
-            "name": "Refresh Date",
-            "dataType": "dateTime",
-            "isNameInferred": false,
-            "isDataTypeInferred": true,
-            "isHidden": true,
-            "sourceColumn": "[Value]",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          }
-        ],
-        "partitions": [
-          {
-            "name": "CalculatedTable 1",
-            "source": {
-              "type": "calculated",
-              "expression": "{NOW()}"
-            }
-          }
-        ],
-        "measures": [
-          {
-            "name": "Last Data Refresh Date",
-            "description": "The last timestamp when the data model is refreshed",
-            "expression": "MAX( '_Refresh Date'[Refresh Date] )",
-            "formatString": "MM/dd/yyyy HH:mm",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "Price List",
         "description": "Contains the latest selling price per customer and material. If there is a sales quote for the customer, that overwrites the existing price list.",
         "columns": [
@@ -18146,19 +18183,22 @@
             "name": "Material Document Number",
             "dataType": "string",
             "description": "Number of the material document with which a goods movement was posted.",
-            "sourceColumn": "MaterialDocNo"
+            "sourceColumn": "MaterialDocNo",
+            "displayFolder": "Header"
           },
           {
             "name": "Material Document Line Number",
             "dataType": "string",
             "description": "Specifies the number that uniquely identifies an item in of a material document.",
-            "sourceColumn": "MaterialDocItemNo"
+            "sourceColumn": "MaterialDocItemNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Movement Type",
             "dataType": "string",
             "description": "Specifies the type of goods movement.",
-            "sourceColumn": "MovementType"
+            "sourceColumn": "MovementType",
+            "displayFolder": "Header"
           },
           {
             "name": "MaterialNoKey",
@@ -18166,19 +18206,22 @@
             "description": "SAP Source: MSEG.MATNR",
             "isHidden": true,
             "sourceColumn": "MaterialNoKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Process Order Number",
             "dataType": "string",
             "description": "Proess order assigned to the goods movement.",
-            "sourceColumn": "ProcessOrderNoKey"
+            "sourceColumn": "ProcessOrderNoKey",
+            "displayFolder": "Item"
           },
           {
             "name": "Batch Number",
             "dataType": "string",
             "description": "Batch number of the material",
-            "sourceColumn": "BatchNo"
+            "sourceColumn": "BatchNo",
+            "displayFolder": "Item"
           },
           {
             "name": "Plant",
@@ -18186,49 +18229,57 @@
             "description": "SAP Source: MSEG.WERKS",
             "isHidden": true,
             "sourceColumn": "PlantNoKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Storage Location",
             "dataType": "string",
             "description": "Number of the storage location at which the material is stored.",
-            "sourceColumn": "StorageLoc"
+            "sourceColumn": "StorageLoc",
+            "displayFolder": "Item"
           },
           {
             "name": "Storage Bin",
             "dataType": "string",
             "description": "Identifies the exact location in the warehouse where goods can be stored.",
-            "sourceColumn": "StorageBin"
+            "sourceColumn": "StorageBin",
+            "displayFolder": "Item"
           },
           {
             "name": "Storage Type",
             "dataType": "string",
             "description": "Determines the type of storage in the warehouse.",
-            "sourceColumn": "StorageType"
+            "sourceColumn": "StorageType",
+            "displayFolder": "Item"
           },
           {
             "name": "Reason Code for Movement",
             "dataType": "string",
             "description": "Specifies the description of the reason for a goods movement.",
-            "sourceColumn": "ReasonCode"
+            "sourceColumn": "ReasonCode",
+            "displayFolder": "Item"
           },
           {
             "name": "Material Document Header Text",
             "dataType": "string",
             "description": "Contains explanations or notes which apply to the document as a whole, that is, not only for certain line items.",
-            "sourceColumn": "DocHeaderText"
+            "sourceColumn": "DocHeaderText",
+            "displayFolder": "Header"
           },
           {
             "name": "Machine",
             "dataType": "string",
             "description": "Extracted from Document Header Text",
-            "sourceColumn": "MachineName"
+            "sourceColumn": "MachineName",
+            "displayFolder": "Item"
           },
           {
             "name": "Posted By",
             "dataType": "string",
             "description": "Name of person who posted the goods movement",
-            "sourceColumn": "PostingUsername"
+            "sourceColumn": "PostingUsername",
+            "displayFolder": "Header"
           },
           {
             "name": "Posting Date",
@@ -18236,6 +18287,7 @@
             "description": "Date which is used when entering the document in Financial Accounting or Controlling.",
             "sourceColumn": "PostingDate",
             "formatString": "Short Date",
+            "displayFolder": "Header",
             "annotations": [
               {
                 "name": "Format",
@@ -18249,6 +18301,7 @@
             "description": "Time on which the goods movement was posted.",
             "sourceColumn": "PostingTime",
             "formatString": "HH:mm:ss",
+            "displayFolder": "Header",
             "annotations": [
               {
                 "name": "Format",
@@ -18262,6 +18315,7 @@
             "description": "Calculated from posting date and time. Production dates starts at 6AM and ends at 5:59AM the next day.",
             "sourceColumn": "ProductionDate",
             "formatString": "Short Date",
+            "displayFolder": "Item",
             "annotations": [
               {
                 "name": "Format",
@@ -18273,7 +18327,8 @@
             "name": "Unit of Measure",
             "dataType": "string",
             "description": "Specifies the unit of measure in which the goods movement or inventory count is entered.",
-            "sourceColumn": "UnitOfMeasure"
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "Item"
           },
           {
             "name": "Quantity",
@@ -18319,40 +18374,46 @@
             "name": "Cost Element",
             "dataType": "string",
             "description": "G/L account assigned to the transaction",
-            "sourceColumn": "CostElement"
+            "sourceColumn": "CostElement",
+            "displayFolder": "Item"
           },
           {
             "name": "MvmtReasonKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "MvmtReasonKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "ScrapCategoryKey",
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "ScrapCategoryKey",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Item Text",
             "dataType": "string",
             "description": "Contains an explanatory text on the line item.",
-            "sourceColumn": "ItemText"
+            "sourceColumn": "ItemText",
+            "displayFolder": "Item"
           },
           {
             "name": "Transacting Work Center",
             "dataType": "string",
             "description": "Work center assigned to the process order in the goods movement.",
             "sourceColumn": "WorkCenter",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           },
           {
             "name": "Manufacturing Work Center",
             "dataType": "string",
             "description": "Work center of the production order of the batch number. Used for analyzing Operations Scrap.",
-            "sourceColumn": "WorkCenterMfg"
+            "sourceColumn": "WorkCenterMfg",
+            "displayFolder": "Item"
           }
         ],
         "partitions": [
@@ -19088,7 +19149,7 @@
         ],
         "partitions": [
           {
-            "name": "Upstream Schedule",
+            "name": "Planning Schedule",
             "dataView": "full",
             "source": {
               "type": "m",
@@ -19237,19 +19298,19 @@
           },
           {
             "name": "Plan Duration",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "PlanDuration",
             "formatString": "#,0.00"
           },
           {
             "name": "Actual Duration",
-            "dataType": "double",
+            "dataType": "decimal",
             "sourceColumn": "ActualDuration",
             "formatString": "#,0.00"
           },
           {
             "name": "VarDuration",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "VarDuration",
             "formatString": "#,0.00",
@@ -19274,12 +19335,13 @@
             "name": "ProductionDate",
             "dataType": "dateTime",
             "isHidden": true,
-            "sourceColumn": "ProductionDate"
+            "sourceColumn": "ProductionDate",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
           {
-            "name": "Upstream Schedule Comparison",
+            "name": "Planning Schedule Comparison",
             "dataView": "full",
             "source": {
               "type": "m",
@@ -19291,6 +19353,55 @@
                 "    dbo_FACT_UpstreamScheduleAndActual"
               ]
             }
+          }
+        ]
+      },
+      {
+        "name": "_Refresh Date",
+        "description": "This table is not related to other table. It is used to determine when was the last time the data model is processed/refreshed.",
+        "columns": [
+          {
+            "name": "Refresh Date",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "RefreshDate",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "_Refresh Date",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_RefreshDate = Source{[Schema=\"dbo\",Item=\"FACT_RefreshDate\"]}[Data]",
+                "in",
+                "    dbo_FACT_RefreshDate"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Last Data Refresh Date",
+            "expression": "MAX( '_Refresh Date'[Refresh Date] )",
+            "formatString": "MM/dd/yyyy HH:mm",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+              }
+            ]
           }
         ]
       }
@@ -22627,12 +22738,6 @@
                 "name": "Gross Weight"
               },
               {
-                "name": "Has Changes (CS)"
-              },
-              {
-                "name": "In Stock"
-              },
-              {
                 "name": "Incoterms Part 1"
               },
               {
@@ -22763,6 +22868,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "HasChanges_CS"
+              },
+              {
+                "name": "InStockIndicator"
               }
             ]
           },
@@ -23517,6 +23628,9 @@
               },
               {
                 "name": "Selling Price"
+              },
+              {
+                "name": "Standard Cost"
               }
             ]
           },
@@ -23789,12 +23903,6 @@
                 "name": "Gross Weight"
               },
               {
-                "name": "Has Changes (CS)"
-              },
-              {
-                "name": "In Stock"
-              },
-              {
                 "name": "Incoterms Part 1"
               },
               {
@@ -23928,6 +24036,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "HasChanges_CS"
+              },
+              {
+                "name": "InStockIndicator"
               }
             ]
           },
@@ -24467,15 +24581,6 @@
                 "name": "SO Allocated Quantity"
               },
               {
-                "name": "Absorption (Budget)"
-              },
-              {
-                "name": "Earned Labor (Budget)"
-              },
-              {
-                "name": "Earned Overhead (Budget)"
-              },
-              {
                 "name": "FYTD Absorption (Budget)"
               },
               {
@@ -24525,6 +24630,15 @@
               },
               {
                 "name": "Was New Product Gross Sales %Grand"
+              },
+              {
+                "name": "Absorption Budget"
+              },
+              {
+                "name": "Earned Labor Budget"
+              },
+              {
+                "name": "Earned Overhead Budget"
               }
             ]
           },
@@ -24788,12 +24902,6 @@
                 "name": "Customer Material Number"
               },
               {
-                "name": "Has Changes (CS)"
-              },
-              {
-                "name": "In Stock"
-              },
-              {
                 "name": "MaterialPlantKey"
               },
               {
@@ -24936,6 +25044,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "HasChanges_CS"
+              },
+              {
+                "name": "InStockIndicator"
               }
             ]
           },
@@ -25391,12 +25505,6 @@
                 "name": "Ship To Name"
               },
               {
-                "name": "In Stock"
-              },
-              {
-                "name": "Has Changes (CS)"
-              },
-              {
                 "name": "Processing Status"
               },
               {
@@ -25533,6 +25641,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "InStockIndicator"
+              },
+              {
+                "name": "HasChanges_CS"
               }
             ]
           },
@@ -27027,9 +27141,6 @@
                 "name": "Exchange Rate"
               },
               {
-                "name": "In Stock"
-              },
-              {
                 "name": "Last PGI Date"
               },
               {
@@ -27073,9 +27184,6 @@
               },
               {
                 "name": "Unit Price"
-              },
-              {
-                "name": "Has Changes (CS)"
               },
               {
                 "name": "Processing Status"
@@ -27214,6 +27322,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "InStockIndicator"
+              },
+              {
+                "name": "HasChanges_CS"
               }
             ]
           },
@@ -29870,12 +29984,6 @@
                 "name": "Exchange Rate"
               },
               {
-                "name": "Has Changes (CS)"
-              },
-              {
-                "name": "In Stock"
-              },
-              {
                 "name": "Last PGI Date"
               },
               {
@@ -30057,6 +30165,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "HasChanges_CS"
+              },
+              {
+                "name": "InStockIndicator"
               }
             ]
           },
@@ -31011,19 +31125,10 @@
                 "name": "Absorption"
               },
               {
-                "name": "Absorption (Budget)"
-              },
-              {
                 "name": "Earned Labor"
               },
               {
-                "name": "Earned Labor (Budget)"
-              },
-              {
                 "name": "Earned Overhead"
-              },
-              {
-                "name": "Earned Overhead (Budget)"
               },
               {
                 "name": "FYTD Absorption (Budget)"
@@ -31069,12 +31174,6 @@
               },
               {
                 "name": "MTD PY Absorption Hours"
-              },
-              {
-                "name": "Absorption per Output (Last 3 Months)"
-              },
-              {
-                "name": "S/O Future Scheduled Output by Month End (Upstream)"
               },
               {
                 "name": "Actual Production Start Datetime"
@@ -31234,6 +31333,21 @@
               },
               {
                 "name": "Planning Schedule Duration Variance"
+              },
+              {
+                "name": "Absorption Budget"
+              },
+              {
+                "name": "Earned Labor Budget"
+              },
+              {
+                "name": "Earned Overhead Budget"
+              },
+              {
+                "name": "Absorption per Output Last 3 Months"
+              },
+              {
+                "name": "S/O Future Scheduled Output by Month End"
               }
             ]
           },
@@ -32370,12 +32484,6 @@
                 "name": "Exchange Rate"
               },
               {
-                "name": "Has Changes (CS)"
-              },
-              {
-                "name": "In Stock"
-              },
-              {
                 "name": "Last PGI Date"
               },
               {
@@ -32557,6 +32665,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "HasChanges_CS"
+              },
+              {
+                "name": "InStockIndicator"
               }
             ]
           },
@@ -33587,13 +33701,7 @@
                 "name": "Absorption"
               },
               {
-                "name": "Absorption (Budget)"
-              },
-              {
                 "name": "Absorption Hours"
-              },
-              {
-                "name": "Absorption per Output (Last 3 Months)"
               },
               {
                 "name": "Actual Production Start Datetime"
@@ -33608,13 +33716,7 @@
                 "name": "Earned Labor"
               },
               {
-                "name": "Earned Labor (Budget)"
-              },
-              {
                 "name": "Earned Overhead"
-              },
-              {
-                "name": "Earned Overhead (Budget)"
               },
               {
                 "name": "End of Month"
@@ -33750,6 +33852,18 @@
               },
               {
                 "name": "Safety Work Hours FYTD"
+              },
+              {
+                "name": "Absorption Budget"
+              },
+              {
+                "name": "Absorption per Output Last 3 Months"
+              },
+              {
+                "name": "Earned Labor Budget"
+              },
+              {
+                "name": "Earned Overhead Budget"
               }
             ]
           },
@@ -35269,12 +35383,6 @@
                 "name": "Ship To City"
               },
               {
-                "name": "In Stock"
-              },
-              {
-                "name": "Has Changes (CS)"
-              },
-              {
                 "name": "Processing Status"
               },
               {
@@ -35411,6 +35519,12 @@
               },
               {
                 "name": "Special Processing Indicator"
+              },
+              {
+                "name": "InStockIndicator"
+              },
+              {
+                "name": "HasChanges_CS"
               }
             ]
           }

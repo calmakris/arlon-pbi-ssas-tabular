@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3059,14 +3058,9 @@
             "description": "Converting uptime hours divided by available hours",
             "expression": [
               " ",
-              "AVERAGEX(",
-              "    VALUES( 'Converting Uptime'[Machine Name] ),",
-              "    CALCULATE(",
-              "        AVERAGEX(",
-              "            VALUES( 'Calendar'[Date] ),",
-              "            DIVIDE( [CONV Uptime Hours], [CONV Available Hours] )",
-              "        )",
-              "    )",
+              "DIVIDE(",
+              "    SUM( 'Converting OEE'[UptimeSecs] ),",
+              "    SUM( 'Converting OEE'[DurationSecs] ) - SUM( 'Converting OEE'[NonProdSecs] )",
               ")"
             ],
             "formatString": "0.00%;-0.00%;0.00%",
@@ -8076,7 +8070,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Frozen Material Cost per Unit",
@@ -8088,7 +8082,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Frozen Overhead Cost per Unit",
@@ -8100,7 +8094,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Frozen Setup Cost per Unit",
@@ -8112,7 +8106,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Frozen Standard Cost per Unit",
@@ -8124,7 +8118,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Current Labor Cost per Unit",
@@ -8136,7 +8130,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Current Material Cost per Unit",
@@ -8148,7 +8142,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Current Overhead Cost per Unit",
@@ -8160,7 +8154,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Current Setup Cost per Unit",
@@ -8172,7 +8166,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Current Standard Cost per Unit",
@@ -8184,7 +8178,7 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Cost in Sales Invoice"
+            "displayFolder": "Cost in Sales Invoice\\Per Unit"
           },
           {
             "name": "Invoice Selling Price",
@@ -8254,7 +8248,7 @@
               "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 0 ), -- 0 is skipped",
               "    FILTER(",
               "        'Planning Schedule Comparison',",
-              "        'Planning Schedule Comparison'[ProductionDate] >= ([Report Date] - 1)",
+              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
               "    )",
               ")"
             ],
@@ -8267,8 +8261,12 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( 'Planning Schedule Comparison'[VarDuration] ),",
-              "    KEEPFILTERS( 'Planning Schedule Comparison'[LatestFlag] = \"Yes\" )",
+              "    SUM( 'Planning Schedule Comparison'[VarStartInMins] ) / 60,",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[LatestFlag] = \"Yes\" ),",
+              "    FILTER(",
+              "        'Planning Schedule Comparison',",
+              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
+              "    )",
               ") -",
               "[Skipped Planned Orders Duration]"
             ],
@@ -8283,7 +8281,11 @@
               "CALCULATE(",
               "    SUM( 'Planning Schedule Comparison'[VarQuantity] ),",
               "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
-              "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 1 ) -- 1 is orders with schedule and machine data",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 1 ), -- 1 is orders with schedule and machine data",
+              "    FILTER(",
+              "        'Planning Schedule Comparison',",
+              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
+              "    )",
               ")",
               ""
             ],
@@ -8318,7 +8320,16 @@
           {
             "name": "Planning Schedule Status",
             "description": "Log error / typo (-1); Skipped S/O (0); Other (1)",
-            "expression": "MAX( 'Planning Schedule Comparison'[StatusFlag] )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    MAX( 'Planning Schedule Comparison'[StatusFlag] ),",
+              "    FILTER(",
+              "        'Planning Schedule Comparison',",
+              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "0",
             "displayFolder": "Planning Schedule"
           },
@@ -8330,7 +8341,11 @@
               "CALCULATE(",
               "    SUM( 'Planning Schedule Comparison'[VarDuration] ),",
               "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
-              "    KEEPFILTERS( 'Planning Schedule Comparison'[Actual Start Date] <> BLANK() )",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[Actual Start Date] <> BLANK() ),",
+              "    FILTER(",
+              "        'Planning Schedule Comparison',",
+              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
+              "    )",
               ")",
               ""
             ],
@@ -19336,6 +19351,20 @@
             "dataType": "dateTime",
             "isHidden": true,
             "sourceColumn": "ProductionDate",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "VarStartInMins",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "VarStartInMins",
             "isAvailableInMdx": false
           }
         ],
@@ -32162,6 +32191,9 @@
               },
               {
                 "name": "ProductionDate"
+              },
+              {
+                "name": "VarStartInMins"
               }
             ]
           }
@@ -35616,8 +35648,8 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21525"
           },
           {
-            "memberName": "DOMAIN\\janderson",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21534"
+            "memberName": "DOMAIN\\ktran",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8825"
           }
         ]
       },
@@ -35717,6 +35749,14 @@
           {
             "memberName": "DOMAIN\\jsalazar",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20505"
+          },
+          {
+            "memberName": "DOMAIN\\janderson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21534"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           }
         ],
         "tablePermissions": [
@@ -35887,10 +35927,6 @@
           {
             "memberName": "DOMAIN\\tswartout",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
-          },
-          {
-            "memberName": "DOMAIN\\pbitest1",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
           }
         ],
         "tablePermissions": [

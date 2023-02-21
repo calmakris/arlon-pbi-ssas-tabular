@@ -86,7 +86,10 @@
           {
             "name": "Sales Region",
             "dataType": "string",
-            "description": "Sales region/district assigned to the customer in the customer master account in SAP. However, if the sales territory name contains 'Fleet', a custom region called \"FLEET\" is assigned.",
+            "description": [
+              "Sales region/district assigned to the customer in the customer master account in SAP",
+              ""
+            ],
             "sourceColumn": "SalesDistrict",
             "sortByColumn": "SalesRegionSortKey",
             "displayFolder": "Sales Related"
@@ -208,6 +211,21 @@
             "dataType": "string",
             "description": "Determines the assignment of sales person per customer. Sales organization 1000 and 2000 uses sales territory/office while organization 1500 uses sales group.",
             "sourceColumn": "SalesPersonKey",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "name": "Sales Region Alternative",
+            "dataType": "string",
+            "description": "Similar to the sales region field except some sales territories specified as Fleet is assigned to the FLEET region",
+            "sourceColumn": "SalesDistrictWithFleet",
+            "sortByColumn": "SalesRegionAltSortKey",
+            "displayFolder": "Sales Related"
+          },
+          {
+            "name": "SalesRegionAltSortKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "SalesDistrictWithFleetSortKey",
             "displayFolder": "Sales Related"
           }
         ],
@@ -658,6 +676,14 @@
             "sourceColumn": "Fiscal_Month_Of_Year",
             "displayFolder": "Individual Attributes",
             "summarizeBy": "none"
+          },
+          {
+            "name": "Start of Week",
+            "dataType": "dateTime",
+            "description": "Sunday of the date",
+            "sourceColumn": "Start_Of_Week",
+            "formatString": "MMM dd",
+            "displayFolder": "Individual Attributes"
           }
         ],
         "partitions": [
@@ -670,8 +696,8 @@
                 "let",
                 "    Source = #\"ARLPBI_STAGE\",",
                 "    dbo_DIM_Calendar = Source{[Schema=\"dbo\",Item=\"DIM_Calendar\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_DIM_Calendar,{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Day_Of_Calendar_Year\", \"Day_Of_Fiscal_Year\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_After_13MonthsAgo\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\"}),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Removed Other Columns\",{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_DIM_Calendar,{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Day_Of_Calendar_Year\", \"Day_Of_Fiscal_Year\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_After_13MonthsAgo\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\", \"Start_Of_Week\"}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Removed Other Columns\",{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}, {\"Start_Of_Week\", type date}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -1434,7 +1460,7 @@
             "expression": " EOMONTH( EDATE( [Report Date], -12), -1) + 1",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1835,7 +1861,7 @@
             "expression": " TODAY() - 1",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1848,7 +1874,7 @@
             "expression": " EOMONTH( [Report Date], -1 ) + 1",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1861,7 +1887,7 @@
             "expression": " EOMONTH( [Report Date], 0 )",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -1872,7 +1898,19 @@
           {
             "name": "MTD Sales Order Amount",
             "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
-            "expression": " CALCULATE( [Sales Order Amount], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Sales Order Amount],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,##0;(#,##0);\"-\"",
             "displayFolder": "Time Intelligence"
           },
@@ -2582,7 +2620,7 @@
             "expression": " EOMONTH( [Report Date], 1 )",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -3774,7 +3812,7 @@
             "expression": " CALCULATE( Max( 'Calendar'[Date] ), FILTER(  ALLSELECTED('Calendar'), 'Calendar'[Date] <= [Yesterday] ) )",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -3890,13 +3928,13 @@
             "name": "Helper_12MoAgo",
             "expression": "YEAR([Date 12 Months Ago]) * 100 + MONTH([Date 12 Months Ago])",
             "isHidden": true,
-            "displayFolder": ".Helpers"
+            "displayFolder": "_Helpers"
           },
           {
             "name": "Helper_CurrMo",
             "expression": "YEAR([Beginning of Month]) * 100 + MONTH([Beginning of Month])",
             "isHidden": true,
-            "displayFolder": ".Helpers"
+            "displayFolder": "_Helpers"
           },
           {
             "name": "PO Goods Receipt Quantity",
@@ -4016,7 +4054,7 @@
             "name": "Days In Month",
             "expression": " CALCULATE( COUNTROWS( 'Calendar' ), ALL( 'Calendar' ), VALUES( 'Calendar'[Year_Month_Sort_Key] ))",
             "isHidden": true,
-            "displayFolder": ".Dates"
+            "displayFolder": "_Dates"
           },
           {
             "name": "Days Count",
@@ -4031,7 +4069,7 @@
               ")"
             ],
             "isHidden": true,
-            "displayFolder": ".Dates"
+            "displayFolder": "_Dates"
           },
           {
             "name": "Current Inventory Amount",
@@ -4245,7 +4283,7 @@
             "expression": "MIN( 'Calendar'[Date] )",
             "formatString": "MM/dd/yyyy",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -4258,7 +4296,7 @@
             "expression": "MAX( 'Calendar'[Date] )",
             "formatString": "MM/dd/yyyy",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -4346,7 +4384,7 @@
             "expression": "[Report Date] + TIME(6, 0, 0)",
             "formatString": "MM/dd/yyyy HH:mm",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -4359,7 +4397,7 @@
             "expression": " ([Report Date] - 1) + TIME(6, 0, 0)",
             "formatString": "MM/dd/yyyy HH:mm",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -4372,7 +4410,7 @@
             "expression": "NOW() + TIME(0,0,0)",
             "formatString": "MM/dd/yyyy HH:mm",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -4662,7 +4700,7 @@
             "expression": " EOMONTH( [Report Date], 3 )",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -4713,7 +4751,7 @@
             "expression": "EDATE([Beginning of Month], -1)",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -5837,7 +5875,7 @@
             ],
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6115,7 +6153,7 @@
             "expression": "([Report Date] - 1) + TIME(0,0,0)",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6128,7 +6166,7 @@
             "expression": "EOMONTH([Report Date], -1)",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6264,7 +6302,7 @@
             "expression": "DATE(YEAR([Report Date])-1, 12, 31)",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6327,7 +6365,7 @@
             ],
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6382,7 +6420,7 @@
             "expression": "EOMONTH([Report Date], -2)",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6395,7 +6433,7 @@
             "expression": "([Sunday of Current Week] - 7) + TIME(0,0,0)",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6875,7 +6913,7 @@
             "expression": "DATE( YEAR([Report Date]) + IF(MONTH([Report Date])>=10, 1, 0) , 9, 30 )",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -6888,7 +6926,7 @@
             "expression": "DATE( YEAR([Report Date]) - IF(MONTH([Report Date])>=10, 0, 1) , 10, 1 )",
             "formatString": "Short Date",
             "isHidden": true,
-            "displayFolder": ".Dates",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -8473,6 +8511,419 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Absorption Projected"
+          },
+          {
+            "name": "Sales Order Amount Projected Month End",
+            "description": "Average daily ordered amount multiplied by the total number of weekdays in the month",
+            "expression": [
+              "",
+              "VAR _MinVisibleDate = MIN('Calendar'[Date])",
+              "",
+              "RETURN",
+              "IF(",
+              "    _MinVisibleDate >= [Beginning of Month]",
+              "        && _MinVisibleDate <= [End of Month],",
+              "    [Sales Order Amount Daily Entry Rate MTD] * [Weekdays Count],",
+              "    IF(",
+              "        _MinVisibleDate > [End of Month],",
+              "        [Sales Order Amount Daily Entry Rate] * [Weekdays Count]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Weekdays Count MTD",
+            "description": "Number of MTD weekdays in a month",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        COUNTROWS( 'Calendar' ),",
+              "        KEEPFILTERS( 'Calendar'[Is Weekday] ),",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )    ",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "_Dates"
+          },
+          {
+            "name": "Sales Order Amount Daily Entry Rate",
+            "description": [
+              "MTD ordered value of sales orders divided by MTD number of weekdays.",
+              "",
+              "For future months, the daily order entry average amount between the beginning and end of last month is taken and multiplied by the assigned monthly index. The monthly index is manually assigned per sales region."
+            ],
+            "expression": [
+              "",
+              "VAR _YtdAvg =",
+              "    CALCULATE(",
+              "        AVERAGEX(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            [Sales Order Amount Daily Entry Rate Hidden]",
+              "        ),",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+              "                && 'Calendar'[Date] < [Beginning of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR _Index =",
+              "    CALCULATE(",
+              "        AVERAGE( TARGET_SalesOrder[MonthlyIndex] ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Region] ),",
+              "            TARGET_SalesOrder[SalesRegionKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            TARGET_SalesOrder[CalendarTimeKey]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    IF(",
+              "        [Sales Order Amount Daily Entry Rate Hidden] <> BLANK(),",
+              "        [Sales Order Amount Daily Entry Rate Hidden],",
+              "        _YtdAvg * _Index",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Daily Entry Rate MTD",
+            "description": [
+              "MTD ordered value of sales orders divided by MTD number of weekdays.",
+              "",
+              "Use this measure if none of the fields in 'Calendar' table are used in the visual."
+            ],
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [MTD Sales Order Amount],",
+              "    [Weekdays Count MTD]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Weekdays Count Current Month End",
+            "description": "Number of weekdays in the entire month",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    COUNTROWS( 'Calendar' ),",
+              "    FILTER(",
+              "        ALL( 'Calendar' ),",
+              "        'Calendar'[Date] >= [Beginning of Month]",
+              "            && 'Calendar'[Date] <= [End of Month]",
+              "            && 'Calendar'[Is Weekday]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "_Dates"
+          },
+          {
+            "name": "Sales Order Amount Projected Current Month End",
+            "description": [
+              "Average daily ordered amount multiplied by the total number of weekdays in the month.",
+              "",
+              "Use this measure if none of the fields in 'Calendar' table are used in the visual."
+            ],
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Amount Daily Entry Rate MTD],",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Date] ),",
+              "        'Calendar'[Date] >= [Beginning of Month]",
+              "            && 'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ") * [Weekdays Count Current Month End]"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Weekdays Count",
+            "description": "Number of weekdays in the entire month",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    COUNTROWS( 'Calendar' ),",
+              "    FILTER(",
+              "        ALL( 'Calendar'[Is Weekday] ),",
+              "        'Calendar'[Is Weekday]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "_Dates"
+          },
+          {
+            "name": "Weekdays in Month",
+            "description": "Number of weekdays in the whole month",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    COUNTROWS( 'Calendar' ),",
+              "    FILTER(",
+              "        ALL( 'Calendar' ),",
+              "        'Calendar'[Is Weekday]",
+              "    ),",
+              "    VALUES( 'Calendar'[Year_Month_Sort_Key] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "_Dates"
+          },
+          {
+            "name": "Sales Order Amount Daily Entry Rate Hidden",
+            "description": [
+              "MTD ordered value of sales orders divided by MTD number of weekdays.",
+              "",
+              "For future months, the daily order entry average amount between the beginning and end of last month is taken and multiplied by the assigned monthly index. The monthly index is manually assigned per sales region."
+            ],
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Sales Order Amount],",
+              "    [Weekdays Count]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Regional Budget",
+            "description": "Planned order entry amount per month and sales region",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( TARGET_SalesOrder[OrderEntryGoal] ),",
+              "    TREATAS(",
+              "        VALUES( 'Customer Master'[Sales Region] ),",
+              "        TARGET_SalesOrder[SalesRegionKey]",
+              "    ),",
+              "    TREATAS(",
+              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "        TARGET_SalesOrder[CalendarTimeKey]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Regional Budget MTD",
+            "description": [
+              "Planned order entry amount per month and sales region.",
+              "",
+              "Use this measure if none of the fields in 'Calendar' table are used in the visual."
+            ],
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Sales Order Amount Regional Budget],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Projected Regional Budget Var",
+            "description": "Variance between current month end's sales order entry projection and budget",
+            "expression": [
+              "",
+              "IF(",
+              "    ISBLANK( [Sales Order Amount Regional Budget MTD] ),",
+              "    BLANK(),",
+              "    [Sales Order Amount Projected Current Month End] - [Sales Order Amount Regional Budget MTD]",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Daily Entry Rate Regional Budget",
+            "description": "Monthly budgeted order entry amount divided by the total number of weekdays of the corresponding month",
+            "expression": [
+              "",
+              "AVERAGEX(",
+              "    VALUES('Calendar'[Date]),",
+              "    DIVIDE(",
+              "        [Sales Order Amount Regional Budget],",
+              "        [Weekdays in Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Regional Budget Adjusted",
+            "description": "Adjusted budget to meet the fiscal year-end goal if the previous months of the year didn't meet the goal",
+            "expression": [
+              " ",
+              "VAR _MinVisibleDate = MIN( 'Calendar'[Date] )",
+              "",
+              "VAR _sales =",
+              "    CALCULATE(",
+              "        [Gross Sales],",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+              "                && 'Calendar'[Date] <= [End of Prior Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR _goal =",
+              "    CALCULATE(",
+              "        [Sales Order Amount Regional Budget],",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+              "                && 'Calendar'[Date] <= [End of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR _currentMonthProj = [Sales Order Amount Projected Current Month End]",
+              "",
+              "VAR _currentPeriod = MONTH( [Report Date] ) - IF( MONTH( [Report Date] ) >= 10, 9, -3 )",
+              "",
+              "VAR _remainMonthsInFY =",
+              "--- Remaining months of FY excluding next month",
+              "--- Per LBABILO, some orders taken this month gets shipped next month",
+              "    IF(",
+              "        _currentPeriod >= 8,",
+              "        0,",
+              "        12 - _currentPeriod + 1",
+              "    )",
+              "",
+              "VAR _extraNeeded = ( _goal - _sales - _currentMonthProj ) / _remainMonthsInFY",
+              "",
+              "RETURN",
+              "IF(",
+              "    _MinVisibleDate > [End of Month],",
+              "    [Sales Order Amount Regional Budget] + _extraNeeded",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Daily Entry Rate Regional Budget Adjusted",
+            "description": "Monthly budgeted and adjusted order entry amount divided by the total number of weekdays of the corresponding month",
+            "expression": [
+              "",
+              "AVERAGEX(",
+              "    VALUES('Calendar'[Date]),",
+              "    DIVIDE(",
+              "        [Sales Order Amount Regional Budget Adjusted],",
+              "        [Weekdays in Month]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount Projected Regional Budget Var%",
+            "description": "Variance in percentage between current month end's sales order entry projection and budget",
+            "expression": [
+              "",
+              "DIVIDE(",
+              "    [Sales Order Amount Projected Regional Budget Var],",
+              "    [Sales Order Amount Regional Budget MTD]",
+              ")"
+            ],
+            "formatString": "#,0.00%;-#,0.00%;#,0.00%",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount FYTD Regional Budget Var",
+            "description": "FYTD gross sales up to last month plus current month end projection of sales order entry minus FYTD sales order entry budget",
+            "expression": [
+              "--- FYTD gross sales up to last month plus current month end projection of sales order entry minus FYTD sales order entry budget",
+              "(",
+              "    [FYTD Gross Sales]",
+              "    - CALCULATE(",
+              "        [MTD Gross Sales],",
+              "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date] )",
+              "    ) + [Sales Order Amount Projected Current Month End]",
+              ") - CALCULATE(",
+              "    CALCULATE(",
+              "        [Sales Order Amount Regional Budget],",
+              "        DATESYTD( 'Calendar'[Date], \"09/30\" )",
+              "    ),",
+              "    FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
+          },
+          {
+            "name": "Sales Order Amount FY End Regional Budget Var",
+            "description": "FYTD gross sales up to last month plus current and future month end projections of sales order entry minus total FY sales order entry budget",
+            "expression": [
+              "--- FYTD gross sales up to last month plus current and future month end projections of sales order entry minus total FY sales order entry budget",
+              "VAR _RestOfYearProj =",
+              "    CALCULATE(",
+              "        SUMX(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            [Sales Order Amount Projected Month End]",
+              "        ),",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] >= [Beginning of Month]",
+              "                && 'Calendar'[Date] <= [End of Fiscal Year]",
+              "        )",
+              "    )",
+              "",
+              "VAR _FYTDSales =",
+              "--- FYTD gross sales up to last month",
+              "    CALCULATE(",
+              "        [FYTD Gross Sales],",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+              "                && 'Calendar'[Date] < [Beginning of Month]",
+              "        )",
+              "    )",
+              "",
+              "VAR _YearBudget =",
+              "--- Total year sales order entry budget",
+              "    CALCULATE(",
+              "        [Sales Order Amount Regional Budget],",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+              "                && 'Calendar'[Date] <= [End of Fiscal Year]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "_FYTDSales + _RestOfYearProj - _YearBudget"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\Order Entry Analysis"
           }
         ]
       },
@@ -11262,6 +11713,7 @@
           {
             "name": "Sales Region",
             "dataType": "string",
+            "isUnique": true,
             "isKey": true,
             "sourceColumn": "SalesDistrictKey",
             "isAvailableInMdx": false
@@ -18073,6 +18525,7 @@
           {
             "name": "SalesOrganization",
             "dataType": "string",
+            "isUnique": true,
             "isKey": true,
             "sourceColumn": "SalesOrganization",
             "isAvailableInMdx": false
@@ -19012,6 +19465,8 @@
           {
             "name": "SalesPersonKey",
             "dataType": "string",
+            "isUnique": true,
+            "isKey": true,
             "sourceColumn": "SalesPersonKey",
             "isAvailableInMdx": false
           }
@@ -19433,6 +19888,58 @@
             ]
           }
         ]
+      },
+      {
+        "name": "TARGET_SalesOrder",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalesRegionKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SalesRegionKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CalendarTimeKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CalendarTimeKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "OrderEntryGoal",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "OrderEntryGoal",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "MonthlyIndex",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "MonthlyIndex",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "TARGET_SalesOrder",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_TARGET_SalesOrder = Source{[Schema=\"dbo\",Item=\"TARGET_SalesOrder\"]}[Data]",
+                "in",
+                "    dbo_TARGET_SalesOrder"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -19573,13 +20080,6 @@
         "toColumn": "Sales Region",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "bbf17c5a-1360-4ff5-8464-c1322342394c",
-        "fromTable": "Customer Master",
-        "fromColumn": "Sales Region",
-        "toTable": "BRIDGE_SalesRegion",
-        "toColumn": "Sales Region"
       },
       {
         "name": "dc5f18dd-e738-46d9-a5c9-5306f5255523",
@@ -20965,6 +21465,13 @@
         "fromColumn": "Machine",
         "toTable": "Machine",
         "toColumn": "Machine"
+      },
+      {
+        "name": "c15b8bfc-4508-4e76-b14c-d6d8dc3cf51b",
+        "fromTable": "Customer Master",
+        "fromColumn": "Sales Region Alternative",
+        "toTable": "BRIDGE_SalesRegion",
+        "toColumn": "Sales Region"
       }
     ],
     "perspectives": [
@@ -21095,6 +21602,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -21236,6 +21746,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -22121,6 +22637,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -22414,6 +22933,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -22977,6 +23499,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -23297,6 +23825,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -23379,6 +23910,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -24335,6 +24872,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -24417,6 +24957,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -25298,6 +25844,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -25783,6 +26335,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -26218,6 +26773,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -26576,6 +27134,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -27056,6 +27617,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -27464,6 +28031,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -27609,6 +28179,57 @@
               },
               {
                 "name": "Selling Price"
+              },
+              {
+                "name": "Sales Order Amount Projected Month End"
+              },
+              {
+                "name": "Weekdays Count MTD"
+              },
+              {
+                "name": "Sales Order Amount Daily Entry Rate"
+              },
+              {
+                "name": "Sales Order Amount Daily Entry Rate MTD"
+              },
+              {
+                "name": "Sales Order Amount Projected Current Month End"
+              },
+              {
+                "name": "Weekdays Count"
+              },
+              {
+                "name": "Weekdays Count Current Month End"
+              },
+              {
+                "name": "Weekdays in Month"
+              },
+              {
+                "name": "Sales Order Amount Regional Budget"
+              },
+              {
+                "name": "Sales Order Amount Regional Budget MTD"
+              },
+              {
+                "name": "Sales Order Amount Projected Regional Budget Var"
+              },
+              {
+                "name": "Sales Order Amount Daily Entry Rate Regional Budget"
+              },
+              {
+                "name": "Sales Order Amount Regional Budget Adjusted"
+              },
+              {
+                "name": "Sales Order Amount Daily Entry Rate Regional Budget Adjusted"
+              },
+              {
+                "name": "Sales Order Amount Projected Regional Budget Var%"
+              },
+              {
+                "name": "Sales Order Amount FYTD Regional Budget Var"
+              },
+              {
+                "name": "Sales Order Amount FY End Regional Budget Var"
               }
             ]
           },
@@ -27865,6 +28486,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -29809,6 +30433,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -30744,6 +31371,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -32306,6 +32936,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -32388,6 +33021,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -33617,6 +34256,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -34545,6 +35187,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [
@@ -34820,6 +35465,12 @@
               },
               {
                 "name": "Sales Person Code"
+              },
+              {
+                "name": "Sales Region Alternative"
+              },
+              {
+                "name": "SalesRegionAltSortKey"
               }
             ]
           },
@@ -35123,6 +35774,9 @@
               },
               {
                 "name": "FiscalPeriod"
+              },
+              {
+                "name": "Start of Week"
               }
             ],
             "hierarchies": [

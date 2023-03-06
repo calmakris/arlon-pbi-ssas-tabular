@@ -11,7 +11,7 @@
         "connectionDetails": {
           "protocol": "tds",
           "address": {
-            "server": "ARLPBIPRD",
+            "server": "ARLPBIDEV",
             "database": "ARLPBI_STAGE"
           },
           "authentication": null,
@@ -772,8 +772,7 @@
               "        SUM('Sales Invoice'[GrossSalesAmount] )",
               "    ),",
               "    SUM('Sales Invoice'[GrossSalesAmount] )    ",
-              ")",
-              ""
+              ")"
             ],
             "formatString": "#,0",
             "displayFolder": "Sales Invoice"
@@ -820,27 +819,35 @@
           },
           {
             "name": "Complaint Count",
-            "expression": " DISTINCTCOUNT( 'Complaint'[Complaint Number] ) + 0",
+            "description": "Distinct count of complaints entered (by complaint number, not by line)",
+            "expression": [
+              " DISTINCTCOUNT( 'Complaint'[Complaint Number] )",
+              ""
+            ],
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "Product Quality Index",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": [
+              "Total amount of product quality complaints entered divided by the gross sales. For example, in Jan 2023, this value is the total amount of complaints entered in Jan 2023 divided by the gross sales in Jan 2023.",
+              "",
+              "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality)."
+            ],
             "expression": " DIVIDE( [Product Quality Complaint Amount], [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Product Quality"
           },
           {
             "name": "Hold Tag Count",
-            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
+            "description": "Count of hold tags by unique notification number",
             "expression": " DISTINCTCOUNT( 'Hold Tag'[Notification Number] )",
             "formatString": "#,0",
             "displayFolder": "Hold Tag"
           },
           {
             "name": "Expenses Amount",
-            "description": "Date grouping: 'Expenses'[Posting Date]",
+            "description": "Total amount posted in the expenses related cost elements per cost center",
             "expression": [
               "",
               "CALCULATE(",
@@ -848,11 +855,12 @@
               "    ALL( Plant[Plant] )",
               ")"
             ],
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Expenses"
           },
           {
             "name": "Expenses Plan",
+            "description": "Monthly budget values per cost center and cost element. Operations submit their expenses budget to IT for upload annually.",
             "expression": [
               "",
               "CALCULATE(",
@@ -880,19 +888,28 @@
               "    )",
               ")"
             ],
-            "formatString": "$#,##0;($#,##0);\"-\"",
+            "formatString": "#,0",
             "displayFolder": "Expenses"
           },
           {
             "name": "Service Quality Index",
-            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
+            "description": [
+              "Total credit issue amount of service complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
+              "",
+              "Service are complaints entered with reason codes marked as 'S' (service).",
+              ""
+            ],
             "expression": " DIVIDE( [Service Quality Complaint Amount], [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Service Quality"
           },
           {
             "name": "Customer Accommodation Index",
-            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
+            "description": [
+              "Total credit issue amount of customer accommodation complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
+              "",
+              "Customer accommodation are complaints entered with reason codes marked as 'S1' (accommodation)."
+            ],
             "expression": " DIVIDE( [Customer Accommodation Complaint Amount], [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Customer Accommodation"
@@ -912,7 +929,7 @@
           },
           {
             "name": "Sales Order Count",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Count of sales order entered (by unique order number)",
             "expression": " DISTINCTCOUNT(  'Sales Order'[Order Number] )",
             "formatString": "#,0",
             "displayFolder": "Sales Order"
@@ -939,7 +956,11 @@
           },
           {
             "name": "Backorder Amount",
-            "description": "Total customer open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Total sales order open amount scheduled to ship in the past and current month.",
+              "",
+              "Scheduled ship date is the first date in the schedule line."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -957,7 +978,11 @@
           },
           {
             "name": "Sales Order Margin",
-            "description": "Difference between the ordered amount and cost in the sales order. This value is toggleable to local currency using the '_Currency To Use' table.",
+            "description": [
+              "Difference between the ordered amount and standard cost in the sales order.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table."
+            ],
             "expression": [
               "",
               "IF(",
@@ -976,7 +1001,11 @@
           },
           {
             "name": "Backorder Margin",
-            "description": "Total margin of internally open sales order items (TA, ZCON, and ZDSP) originally scheduled to ship on or before the end of current month; Internal open amount is ordered minus allocated minus shipped amount; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Total gross margin of open sales order items scheduled to ship in the past and current month.",
+              "",
+              "Scheduled ship date is the first date in the schedule line."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -1039,14 +1068,18 @@
           },
           {
             "name": "GRIR Quantity",
-            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
+            "description": "Total quantity in the cleared and open accounting documents posted under the 0022877000 G/L account",
             "expression": " SUM( 'Goods and Invoice Receipt'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Open Amount",
-            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
+            "description": [
+              "Total amount of open accounting documents posted under the 0022877000 G/L account.",
+              "",
+              "This value is in USD by default but it is toggleable to local currency using the '_Currency to Use' table."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -1071,7 +1104,10 @@
           },
           {
             "name": "GRIR Open Quantity",
-            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
+            "description": [
+              "Total quantity of open accounting documents posted under the 0022877000 G/L account.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -1100,7 +1136,7 @@
           },
           {
             "name": "Earned Labor",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Total cost posted in the earned labor and setup cost elements",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1113,7 +1149,7 @@
           },
           {
             "name": "Earned Overhead",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Total cost posted in the earned overhead cost elements",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1126,28 +1162,28 @@
           },
           {
             "name": "Absorption",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Total cost posted in the earned labor, setup, and overhead cost elements",
             "expression": " [Earned Labor] + [Earned Overhead]",
             "formatString": "#,0",
             "displayFolder": "Absorption"
           },
           {
             "name": "Sales Order Lines Automated",
-            "description": "Number of sales order line items entered by BATCHUSER (sales order automation); Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Number of sales order line items entered by BATCHUSER",
             "expression": " COUNTROWS( FILTER( 'Sales Order', 'Sales Order'[Entered By] = \"BATCHUSER\" ) )",
             "formatString": "#,0",
             "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Line Count",
-            "description": "Number of sales order line items; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Count of sales order line items entered",
             "expression": " COUNTROWS( 'Sales Order' )",
             "formatString": "#,0",
             "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Lines Automated Entry%",
-            "description": "Number of sales order line items entered by BATCHUSER divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Number of sales order line items entered by BATCHUSER divided by sales order line count entered by Customer Service and BATCHUSER",
             "expression": [
               " ",
               "DIVIDE( ",
@@ -1160,7 +1196,7 @@
           },
           {
             "name": "Sales Order Lines Manual",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Number of sales order line items entered by Customer Service",
             "expression": [
               "",
               "CALCULATE(",
@@ -1173,14 +1209,14 @@
           },
           {
             "name": "Sales Order Automation Efficiency%",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Count of sales order line items entered automatically but without any manual changes divided by the count of sales order line items entered automatically",
             "expression": " DIVIDE( [Sales Order Lines Automated without Changes], [Sales Order Lines Automated] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order"
           },
           {
             "name": "Sales Order Lines Manual Entry%",
-            "description": "Number of sales order line items entered by Customer Service divided by sales order line count entered by Customer Service and BATCHUSER; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Number of sales order line items entered by Customer Service divided by sales order line count entered by Customer Service and BATCHUSER",
             "expression": " DIVIDE( [Sales Order Lines Manual], [Sales Order Line Count Automated and Manual] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order"
@@ -1218,7 +1254,7 @@
           },
           {
             "name": "Upstream Actual Production Footage",
-            "description": "Sum of 'Upstream Logs - Simplified'[Footage] of production records excluding FEs",
+            "description": "Total footage of production records (excl FEs) in the machine logs in Casting and Coating departments",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1236,7 +1272,7 @@
           },
           {
             "name": "Upstream Ideal Production Footage",
-            "description": "Sum of 'Upstream Logs - Simplified'[Footage] of production records excluding FEs",
+            "description": "Sum of ideal footage of production records excluding FEs. Ideal footage is based on the duration of the run (in minutes) multplied by the specification linespeed.",
             "expression": [
               " ",
               "CALCULATE(",
@@ -1309,14 +1345,14 @@
           },
           {
             "name": "Upstream Actual Footage",
-            "description": "Sum of 'Upstreal Logs - Simplified'[Footage]",
+            "description": "Total footage recorded in the machine logs in Casting and Coating departments",
             "expression": " SUM('Upstream Log Simplified'[Footage])",
             "formatString": "#,0",
             "displayFolder": "Upstream Log"
           },
           {
             "name": "Upstream Ideal Footage",
-            "description": "Sum of 'Upstreal Logs - Simplified'[Ideal Footage]. Ideal footage is derived from the specification linespeed and duration between 'Start Time' and 'Stop Time' in minutes",
+            "description": "Sum of ideal footage. Ideal footage is derived from the specification linespeed and duration between 'Start Time' and 'Stop Time' in minutes",
             "expression": "SUM('Upstream Log Simplified'[IdealFootage])",
             "formatString": "#,0",
             "displayFolder": "Upstream Log"
@@ -1520,7 +1556,7 @@
             "displayFolder": "Upstream Log"
           },
           {
-            "name": "Upstream Overall Equipment Efficiency (Target)",
+            "name": "Upstream Overall Equipment Efficiency Target",
             "description": "Monthly target data supplied by Engineering once every fiscal year",
             "expression": [
               "",
@@ -1590,7 +1626,7 @@
             "displayFolder": "Upstream Log"
           },
           {
-            "name": "Upstream First Pass Reliability (Target)",
+            "name": "Upstream First Pass Reliability Target",
             "description": "Monthly target data supplied by Engineering once every fiscal year",
             "expression": [
               "",
@@ -1604,8 +1640,8 @@
             "displayFolder": "Upstream Log"
           },
           {
-            "name": "Upstream Changeover Time (Target)",
-            "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified'",
+            "name": "Upstream Changeover Time Target",
+            "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified' table",
             "expression": [
               "",
               "CALCULATE(",
@@ -1800,8 +1836,9 @@
             ]
           },
           {
-            "name": "Upstream Overall Equipment Efficiency (Target Var)",
-            "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency (Target)]",
+            "name": "Upstream Overall Equipment Efficiency Target Var",
+            "description": "Difference between OEE and the corresponding monthly target",
+            "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency Target]",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Upstream Log"
           },
@@ -1905,6 +1942,11 @@
           },
           {
             "name": "Inventory Balance",
+            "description": [
+              "Total of accounting documents posted in the inventory related G/L accounts in SAP.",
+              "",
+              "By default, this value is in USD but it is toggleable to local currency using the '_Currency to Use' table."
+            ],
             "expression": [
               "",
               "IF(",
@@ -1915,7 +1957,7 @@
               "        \"Local\", SUM( 'Inventory Balance Item'[Amount (Local Currency)] ),",
               "        SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] )",
               "    ),",
-              "    SUM( 'Inventory Balance Item'[Amount (Local Currency)] )  ",
+              "    SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] )  ",
               ")"
             ],
             "formatString": "#,0",
@@ -1936,6 +1978,7 @@
           },
           {
             "name": "Sample Request Count",
+            "description": "Total count of free-of-charge or sample sales orders and open requests in Odoo",
             "expression": [
               "",
               "CALCULATE(",
@@ -2020,7 +2063,7 @@
           },
           {
             "name": "WH Expenses per Units Picked",
-            "description": "Total expenses amount assigned to \"DIST\" department divided by [WH Shipment Amount]",
+            "description": "Total expenses amount posted in the cost centers for the Logistics department divided by amount of materials shipped",
             "expression": [
               "",
               "DIVIDE(",
@@ -2055,20 +2098,21 @@
           },
           {
             "name": "Expenses Plan Var%",
+            "description": "Difference between expenses amount and plan divided by the plan",
             "expression": "DIVIDE([Expenses Amount] - [Expenses Plan], [Expenses Plan])",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Expenses"
           },
           {
             "name": "WH Storage Bin Amount",
-            "description": "Total amount (in USD) of materials in storage bin (sum of 'Current Inventory (Bins)'[Amount in USD])",
+            "description": "Total amount (in USD) of materials in storage bins",
             "expression": "SUM( 'Inventory in Storage Bin'[Amount in USD] )",
             "formatString": "#,0",
             "displayFolder": "Warehouse"
           },
           {
             "name": "WH Storage Bin Capacity",
-            "description": "Capacity per storage bin (sum of '_Storage Bin'[Capacity])",
+            "description": "Capacity per storage bin maintained in the storage bin master data in SAP",
             "expression": [
               "",
               "CALCULATE(",
@@ -2081,7 +2125,7 @@
           },
           {
             "name": "WH Storage Bin Utilization",
-            "description": "[WH Storage Bin Quantity] divided by [WH Storage Bin Capacity]",
+            "description": "The quants in a storage bin divided by its capacity according to the storage bin master data",
             "expression": [
               "",
               "IF(",
@@ -2098,43 +2142,49 @@
           },
           {
             "name": "WH Storage Bin Quantity",
-            "description": "Total quantity in a storage bin (sum of 'Current Inventory (Bins)'[Quantity])",
+            "description": "Total quantity in a storage bin",
             "expression": "SUM( 'Inventory in Storage Bin'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Warehouse"
           },
           {
             "name": "Testing Sample Count",
+            "description": "Count of samples used in testing. Usually, samples is by batch number. If there are multiple specimens for a batch number, they all count as one sample.",
             "expression": "DISTINCTCOUNT( 'Test Result'[Result Key] )",
             "formatString": "#,0",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Average Result",
+            "description": "Average testing result from online tests in Manufacturing and/or aged testing in QA",
             "expression": "AVERAGE( 'Test Result'[Result Value] )",
             "formatString": "#,0.00",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Minimum Result",
+            "description": "Minimum of all testing results from online testing in Manufacturing and/or aged testing in QA",
             "expression": "MIN( 'Test Result'[Result Value] )",
             "formatString": "#,0.00",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Maximum Result",
+            "description": "Maximum of all testing results in online testing in Manufacturing and/or aged testing in QA",
             "expression": "MAX( 'Test Result'[Result Value] )",
             "formatString": "#,0.00",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Standard Deviation Result",
+            "description": "Population standard deviation of testing results from online tests in Manufacturing and/or aged testing in QA",
             "expression": "STDEV.P( 'Test Result'[Result Value] )",
             "formatString": "#,0.00",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Passing Rate",
+            "description": "Count of specimens that passed the test results divided by the count of speciments",
             "expression": [
               "",
               "DIVIDE(",
@@ -2147,36 +2197,40 @@
           },
           {
             "name": "Testing Specification Lower Limit",
+            "description": "Minimum specification lower limit at the time the tests are conducted",
             "expression": "MIN( 'Test Result'[Specification Lower Limit] )",
             "formatString": "#,0.00",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Specification Upper Limit",
+            "description": "Maximum specification lower limit at the time the tests are conducted",
             "expression": "MAX( 'Test Result'[Specification Upper Limit] )",
             "formatString": "#,0.00",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Passed Specimen Count",
+            "description": "Count of specimens with test results within acceptable range of the specification",
             "expression": [
               "",
               "CALCULATE(",
               "    COUNTA( 'Test Result'[Pass Flag] ),",
               "    'Test Result'[Pass Flag] = \"Yes\"",
-              ") + 0"
+              ")"
             ],
             "formatString": "#,0",
             "displayFolder": "Testing"
           },
           {
             "name": "Testing Failed Specimen Count",
+            "description": "Count of specimens with test results not within acceptable range of the specification",
             "expression": [
               "",
               "CALCULATE(",
               "    COUNTA( 'Test Result'[Pass Flag] ),",
               "    'Test Result'[Pass Flag] = \"No\"",
-              ") + 0"
+              ")"
             ],
             "formatString": "#,0",
             "displayFolder": "Testing"
@@ -2198,13 +2252,14 @@
           },
           {
             "name": "Absorption Hours",
+            "description": "Total quantity (in hours) posted in the earned labor, setup, and overhead cost elements",
             "expression": "SUM( Absorption[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Absorption"
           },
           {
             "name": "WH Shipment Quantity",
-            "description": "Total weight of material transactions with 601, 641, 643, and Z43 movement types. Weight is given in the material master data.",
+            "description": "Total quantity of material transactions with 601, 641, 643, and Z43 movement types",
             "expression": [
               "",
               "ABS(",
@@ -2222,6 +2277,7 @@
           },
           {
             "name": "WH Future Shipment Amount",
+            "description": "Total amount (in USD) of material transactions with 601, 641, 643, and Z43 movement types plus the total amount of open sales orders",
             "expression": [
               "",
               "VAR MinVisibleDate = MIN('Calendar'[Date])",
@@ -2244,7 +2300,11 @@
           },
           {
             "name": "WH Effective On Time Shipment",
-            "description": "Daily average ratio of the number of on time lines plus exempted late lines divided by the number of lines. Date grouping: 'Sales Order Documents'[First Delivery Date].",
+            "description": [
+              "Daily average ratio of the number of on time lines plus exempted late lines divided by the number of lines.",
+              "",
+              "A sales order line item is on time if the entire ordered quantity is shipped on or before the first scheduled ship date. Otherwise, the line item is late. If Logistics specified in ZSDSHIP_LATE tcode in SAP that a line is not Arlon's fault, then the line item is exempted from being late."
+            ],
             "expression": [
               "",
               "VAR OnTimeLines =",
@@ -2278,6 +2338,11 @@
           },
           {
             "name": "WH Complete On Time",
+            "description": [
+              "Number of customers with 100% on time shipment in sales orders divided by the number of customers.",
+              "",
+              "The date grouping is by first scheduled ship date in the schedule line of the sales order. For example, if there are 10 customers with shipments scheduled in a certain day and 7 of those customers have all their orders shipped on time, then the complete on time is 70% for that day."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -2296,6 +2361,7 @@
           },
           {
             "name": "WH Shipment Calendar List",
+            "description": "Combination of customer, sales order number, and sales order type sorted by the ordered amount",
             "expression": [
               "",
               "CONCATENATEX( ",
@@ -2332,7 +2398,7 @@
           },
           {
             "name": "WH Days of Perfect On Time Shipment",
-            "description": "Number of days when [WH Effective On Time Shipment] equals to 100%",
+            "description": "Number of days when on time shipment is 100%",
             "expression": [
               "",
               "VAR CountPerfectDays =",
@@ -2364,7 +2430,7 @@
           },
           {
             "name": "Operations Scrap Amount",
-            "description": "Sum of non process order scrap from 'Scrap Usage Transactions' table, 'Scrap Confirmations'[Amount], and process order scrap and inventory reserve amount in 'Goods Issues and Receipts' table.",
+            "description": "Sum of non process order scrap from accounting documents, scrap confirmation from process orders, process order scrap from goods issue material document transactions, and inventory reserve from material document transactions.",
             "expression": [
               "",
               "VAR PO_Scrap =",
@@ -2429,13 +2495,14 @@
           },
           {
             "name": "Operations Scrap as % of COGS",
+            "description": "Total scrap amount divided by cost of goods sold",
             "expression": "DIVIDE( [Operations Scrap Amount], [Cost of Goods Sold] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Operations Scrap"
           },
           {
             "name": "Operations Scrap as % of GR",
-            "description": "[Operations Scrap Amount] as percent of entire [Operations Goods Receipt]",
+            "description": "Total scrap amount divided by the goods receipt amount",
             "expression": [
               "",
               "DIVIDE(",
@@ -2455,7 +2522,7 @@
           },
           {
             "name": "Scrap P&L Amount",
-            "description": "Sum of 'Scrap Usage Transactions'[Amount] and 'Absorption'[Amount]",
+            "description": "Total amount of documents in the 'Scrap Usage' and 'Absorption' table",
             "expression": [
               "",
               "VAR Scrap = SUM( 'Scrap Usage'[Amount] )",
@@ -2469,7 +2536,7 @@
           },
           {
             "name": "Operations Goods Receipt Amount",
-            "description": "Sum of 'Goods Issues and Receipts'[Amount] with 261 and 262 movement types with non-0000 reason codes.",
+            "description": "Total of transactions with 261 and 262 movement types with non-0000 reason codes in 'Goods Movement' table",
             "expression": [
               "",
               "CALCULATE(",
@@ -2483,13 +2550,14 @@
           },
           {
             "name": "Upstream Avg Scanned Tag Value",
-            "description": "Average of 'Upstream Logs - Process Data'[Tag Value]",
+            "description": "Average of values recorded in the PLC tags. Filter or grouped this measure by tag names to get the intended values per PLC tag.",
             "expression": "AVERAGE( 'Upstream Process Log'[Tag Value] )",
             "formatString": "#,0",
             "displayFolder": "Upstream Process Log"
           },
           {
             "name": "CONV Square Footage",
+            "description": "Total linear footage of goods movement transaction with movement types 101/102 and 531/532 from the Converting machines posted in Converting storage bins. The dimensions are based on the width and length in the alternative unit of measure in the material master.",
             "expression": [
               "",
               "CALCULATE(",
@@ -2504,6 +2572,7 @@
           },
           {
             "name": "Upstream Avg Cross Web Value",
+            "description": "Average of values in the NDC profile",
             "expression": "AVERAGE( 'Upstream NDC Profile'[Average Cross Web Value] )",
             "formatString": "#,0.00000",
             "displayFolder": "Upstream Process Log"
@@ -2619,14 +2688,14 @@
           },
           {
             "name": "COMP Actual Hours",
-            "description": "Sum of 'Compounding Log'[Actual Hours Spent]",
+            "description": "Total hours spent by operators to perform a task in Compounding",
             "expression": "SUM( 'Compounding Log'[Actual Hours Spent] )",
             "formatString": "#,0.00",
             "displayFolder": "Compounding"
           },
           {
             "name": "COMP Projected Direct Hours",
-            "description": "Sum of 'Compounding Log'[Projected Hours Spent] where [Is Labor] is 1 and [Task] is not 'MIXING'",
+            "description": "Expected total hours spent by operators to perform a task directly related to production in Compounding",
             "expression": [
               "",
               "CALCULATE(",
@@ -2640,7 +2709,7 @@
           },
           {
             "name": "COMP Indirect Actual Hours",
-            "description": "Sum of 'Compounding Log'[Actual Hours Spent] where [Is Indirect] equals to 1",
+            "description": "Total hours spent by operators to perform a task not directly related to production in Compounding",
             "expression": [
               "",
               "CALCULATE(",
@@ -2653,7 +2722,7 @@
           },
           {
             "name": "COMP Labor Efficiency",
-            "description": "[COMP Projected Direct Hours] divided by the difference between [COMP Actual Hours], [COMP Indirect Actual Hours], and [COMP Actual Hours] where [Task] is 'TRAINING'",
+            "description": "Projected direct hours divided by the difference between actual hours and indirect actual hours. The training hours are excluded in the indirect hours so it negatively impacts the efficiency.",
             "expression": [
               "",
               "VAR training = ",
@@ -2673,7 +2742,7 @@
           },
           {
             "name": "COMP Non-Production as % of Direct Labor",
-            "description": "[COMP Actual Hours] where [Task] is 'NON-PRODUCTION (5S/OTHER)' divided by [COMP Actual Hours]",
+            "description": "Total hours spent by operators to perform non-production task divided by the difference between actual hours and indirect actual hours",
             "expression": [
               "",
               "DIVIDE(",
@@ -2690,6 +2759,7 @@
           },
           {
             "name": "COMP First Pass Reliability",
+            "description": "Count of successful process orders divided by the number of process orders finished/scheduled in Compounding. This measure excludes process orders for FEs and adhesive premix materials.",
             "expression": [
               "",
               "CALCULATE(",
@@ -2705,6 +2775,7 @@
           },
           {
             "name": "COMP First Pass Reliability Impact",
+            "description": "Count of failed process orders divided by the count of process orders finished/scheduled in Compounding",
             "expression": [
               "",
               "DIVIDE(",
@@ -2717,14 +2788,14 @@
           },
           {
             "name": "Audit 5S Score",
-            "description": "Sum of sort, straighten, shine, standardize, sustain, and safety scores",
+            "description": "Sum of sort, straighten, shine, standardize, sustain, and safety scores taken during the audit",
             "expression": "SUM( 'Audit 5S'[Score Value] )",
             "formatString": "#,0",
             "displayFolder": "5S"
           },
           {
             "name": "Audit 5S Score as % of Target",
-            "description": "Quotient of [Audit 5S Score] and target. Total target value per department is 18 points while the total target value per category is 3 points.",
+            "description": "5S score divided by the monthly target. Total target value per department is 18 points while the total target value per category is 3 points.",
             "expression": [
               "",
               "DIVIDE(",
@@ -2794,11 +2865,7 @@
           },
           {
             "name": "Net Inventory Quantity After Order Reservations",
-            "description": [
-              "Difference between unrestricted stock quantity and cumulative total of open order reservations. Requirement date of the order reservation is the date to determine when the reservation consumes the quantity.",
-              "",
-              "If this measure is grouped by 'Calendar'[Date], the current day is the unrestricted stock quantity and the future dates are the net quantity described above."
-            ],
+            "description": "Difference between unrestricted stock quantity and cumulative total of open order reservations. Requirement date of the order reservation is the date to determine when the reservation consumes the quantity.",
             "expression": [
               "",
               "VAR _Today = [Report Date] + 1",
@@ -2847,7 +2914,7 @@
           },
           {
             "name": "Operations Scrap Quantity",
-            "description": "Sum of non process order scrap from 'Scrap Usage Transactions' table, 'Scrap Confirmations'[Quantity], and process order scrap and inventory reserve quantity in 'Goods Issues and Receipts' table.",
+            "description": "Sum of quantities of non process order scrap from accounting documents, scrap confirmation from process orders, process order scrap from goods issue material document transactions, and inventory reserve from material document transactions.",
             "expression": [
               "",
               "VAR PO_Scrap =",
@@ -3009,7 +3076,7 @@
           },
           {
             "name": "Material Cost",
-            "description": "Latest material cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
+            "description": "Latest official material cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
             "expression": [
               "VAR _isMaterialFiltered = HASONEFILTER( 'Material Costing History'[Material Number] ) || ISFILTERED( 'Material Master' )",
               "VAR _isPlantFiltered = HASONEFILTER( 'Material Costing History'[Plant] ) || ISFILTERED( 'Plant' )",
@@ -3066,7 +3133,7 @@
           },
           {
             "name": "Labor Cost",
-            "description": "Latest labor cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
+            "description": "Latest official labor cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
             "expression": [
               "VAR _isMaterialFiltered = HASONEFILTER( 'Material Costing History'[Material Number] ) || ISFILTERED( 'Material Master' )",
               "VAR _isPlantFiltered = HASONEFILTER( 'Material Costing History'[Plant] ) || ISFILTERED( 'Plant' )",
@@ -3123,7 +3190,7 @@
           },
           {
             "name": "Overhead Cost",
-            "description": "Latest overhead cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
+            "description": "Latest official overhead cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
             "expression": [
               "VAR _isMaterialFiltered = HASONEFILTER( 'Material Costing History'[Material Number] ) || ISFILTERED( 'Material Master' )",
               "VAR _isPlantFiltered = HASONEFILTER( 'Material Costing History'[Plant] ) || ISFILTERED( 'Plant' )",
@@ -3180,7 +3247,7 @@
           },
           {
             "name": "Setup Cost",
-            "description": "Latest setup cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
+            "description": "Latest official setup cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
             "expression": [
               "VAR _isMaterialFiltered = HASONEFILTER( 'Material Costing History'[Material Number] ) || ISFILTERED( 'Material Master' )",
               "VAR _isPlantFiltered = HASONEFILTER( 'Material Costing History'[Plant] ) || ISFILTERED( 'Plant' )",
@@ -3237,7 +3304,7 @@
           },
           {
             "name": "Standard Cost",
-            "description": "Latest standard cost of the material. It is also the sum of material, labor, overhead, setup, and additive costs. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
+            "description": "Latest official standard cost of the material. It is also the sum of material, labor, overhead, setup, and additive costs. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
             "expression": [
               "VAR _isMaterialFiltered = HASONEFILTER( 'Material Costing History'[Material Number] ) || ISFILTERED( 'Material Master' )",
               "VAR _isPlantFiltered = HASONEFILTER( 'Material Costing History'[Plant] ) || ISFILTERED( 'Plant' )",
@@ -3354,7 +3421,9 @@
             "description": [
               "Total planned quantity of planned independent requirements with the change date (by material, plant, and delivery date) closest and before the material's [Commercialization Date] in the material master.",
               "",
-              "If not available, the first one available after the [Commercialization Date] is used."
+              "If not available, the first one available after the [Commercialization Date] is used.",
+              "",
+              "This forecast is static."
             ],
             "expression": [
               "",
@@ -3388,7 +3457,11 @@
           },
           {
             "name": "Flash Sales Forecast Quantity",
-            "description": "Total planned quantity of planned independent requirements with the latest change date by material, plant, and delivery date",
+            "description": [
+              "Total planned quantity of planned independent requirements with the latest change date by material, plant, and delivery date.",
+              "",
+              "This forecast value changes every month."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -3401,6 +3474,7 @@
           },
           {
             "name": "Pending Specification Count",
+            "description": "Count of specification documents that are submitted but not yet active, published, approved, nor declined by approvers",
             "expression": "SUM( 'Pending Specification'[PendingCount] )",
             "formatString": "#,0",
             "displayFolder": "EDOC"
@@ -3612,7 +3686,7 @@
           },
           {
             "name": "Safety Incident Count FYTD",
-            "description": "Number of incidents recorded in the Safety Incidents Log since October",
+            "description": "Fiscal year-to-date count of incidents recorded in the Safety Incidents Log",
             "expression": [
               "",
               "CALCULATE(",
@@ -3665,7 +3739,7 @@
           },
           {
             "name": "COMP Efficiency",
-            "description": "[COMP Projected Direct Hours] divided by the difference of [COMP Actual Hours] and [COMP Indirect Actual Hours]",
+            "description": "Projected direct hours divided by the difference between actual hours and indirect actual hours",
             "expression": [
               "",
               "DIVIDE(",
@@ -3678,7 +3752,7 @@
           },
           {
             "name": "COMP Efficiency Target",
-            "description": "Uploaded KPI target to the Power BI data warehouse. User sends the target data to IT personnel and uploads it in ARLPBIPRD.ARLPBI_STAGE SQL database in 'zTARGETS_KPI' table; KpiKey = \"Eff_COMP\"",
+            "description": "Monthly target values uploaded to the Power BI data warehouse. User sends the target data to IT personnel and uploads it in ARLPBIPRD.ARLPBI_STAGE SQL database in 'zTARGETS_KPI' table; KpiKey = \"Eff_COMP\"",
             "expression": [
               "",
               "VAR TargetVal = ",
@@ -3706,13 +3780,14 @@
           },
           {
             "name": "COMP Efficiency Target Var",
+            "description": "Difference between the compounding efficiency and the corresponding monthly target",
             "expression": "[COMP Efficiency] - [COMP Efficiency Target]",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Compounding"
           },
           {
             "name": "COMP First Pass Reliability Target",
-            "description": "Uploaded KPI target to the Power BI data warehouse. User sends the target data to IT personnel and uploads it in ARLPBIPRD.ARLPBI_STAGE SQL database in 'zTARGETS_KPI' table; KpiKey = \"FPass_COMP\"",
+            "description": "Monthly target values uploaded to the Power BI data warehouse. User sends the target data to IT personnel and uploads it in ARLPBIPRD.ARLPBI_STAGE SQL database in 'zTARGETS_KPI' table; KpiKey = \"FPass_COMP\"",
             "expression": [
               "",
               "VAR TargetVal = ",
@@ -3740,12 +3815,14 @@
           },
           {
             "name": "COMP Labor Efficiency Target Var",
+            "description": "Difference between the labor efficiency and the corresponding monthly target. The target is the same as the Compounding Efficiency target.",
             "expression": "[COMP Labor Efficiency] - [COMP Efficiency Target]",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Compounding"
           },
           {
             "name": "COMP First Pass Reliability Target Var",
+            "description": "Difference between the first pass reliability and the corresponding monthly target",
             "expression": "[COMP First Pass Reliability] - [COMP First Pass Reliability Target]",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Compounding"
@@ -3912,7 +3989,11 @@
           },
           {
             "name": "Skipped Planned Orders Duration",
-            "description": "Total duration of process orders scheduled between current production date and now. Skipped process orders have data in schedule files but none in machine data.",
+            "description": [
+              "Total duration of process orders scheduled between current production date and now.",
+              "",
+              "Skipped process orders have data in schedule files but none in machine data. In addition, an order is skipped if there is machine data on a schedule order after it."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -3920,27 +4001,9 @@
               "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 0 ), -- 0 is skipped",
               "    FILTER(",
               "        'Planning Schedule Comparison',",
-              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
+              "        'Planning Schedule Comparison'[ProductionDate] >= [Report Production Date]",
               "    )",
               ")"
-            ],
-            "formatString": "#,0.0 \"hr\"",
-            "displayFolder": "Planning Schedule"
-          },
-          {
-            "name": "Planning Schedule Hours Gained",
-            "description": "Difference of scheduled and actual start timestamps of the latest order at the time of data refresh",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    DIVIDE( SUM( 'Planning Schedule Comparison'[VarStartInMins] ), 60 ),",
-              "    KEEPFILTERS( 'Planning Schedule Comparison'[LatestFlag] = \"Yes\" ),",
-              "    FILTER(",
-              "        'Planning Schedule Comparison',",
-              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
-              "    )",
-              ") -",
-              "[Skipped Planned Orders Duration]"
             ],
             "formatString": "#,0.0 \"hr\"",
             "displayFolder": "Planning Schedule"
@@ -3953,11 +4016,7 @@
               "CALCULATE(",
               "    SUM( 'Planning Schedule Comparison'[VarQuantity] ),",
               "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
-              "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 1 ), -- 1 is orders with schedule and machine data",
-              "    FILTER(",
-              "        'Planning Schedule Comparison',",
-              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
-              "    )",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 1 ) -- 1 is orders with schedule and machine data",
               ")",
               ""
             ],
@@ -3967,41 +4026,27 @@
           {
             "name": "Planning Schedule Status",
             "description": "Log error / typo (-1); Skipped S/O (0); Other (1)",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    MAX( 'Planning Schedule Comparison'[StatusFlag] ),",
-              "    FILTER(",
-              "        'Planning Schedule Comparison',",
-              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
-              "    )",
-              ")"
-            ],
+            "expression": "MAX( 'Planning Schedule Comparison'[StatusFlag] )",
             "formatString": "0",
             "displayFolder": "Planning Schedule"
           },
           {
             "name": "Planning Schedule Duration Variance",
-            "description": "Variance between the actual and scheduled footage between start of current production date and now.",
+            "description": "Variance between the actual and scheduled duration of process orders",
             "expression": [
               "",
               "CALCULATE(",
               "    SUM( 'Planning Schedule Comparison'[VarDuration] ),",
               "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
-              "    KEEPFILTERS( 'Planning Schedule Comparison'[Actual Start Date] <> BLANK() ),",
-              "    FILTER(",
-              "        'Planning Schedule Comparison',",
-              "        'Planning Schedule Comparison'[ProductionDate] >= [Prior Report Date]",
-              "    )",
-              ")",
-              ""
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[Actual Start Date] <> BLANK() )",
+              ")"
             ],
             "formatString": "#,0.0",
             "displayFolder": "Planning Schedule"
           },
           {
             "name": "Earned Labor Budget",
-            "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
+            "description": "Total of the monthly earned labor entered in the ZBUDGET table in SAP.",
             "expression": [
               "",
               "CALCULATE(",
@@ -4018,7 +4063,7 @@
           },
           {
             "name": "Earned Overhead Budget",
-            "description": "SAP Source: ZFORECAST.OH (Type = 'B')",
+            "description": "Total of the monthly earned overhead budget entered in the ZBUDGET table in SAP.",
             "expression": [
               "",
               "CALCULATE(",
@@ -4035,7 +4080,7 @@
           },
           {
             "name": "Absorption Budget",
-            "description": "Sum of 'Earned Labor (Budget)' and 'Earned Overhead (Budget)'",
+            "description": "Total of the monthly earned labor and overhead budget entered in the ZBUDGET table in SAP.",
             "expression": " [Earned Labor Budget] + [Earned Overhead Budget]",
             "formatString": "#,0",
             "displayFolder": "Absorption"
@@ -4207,7 +4252,7 @@
           },
           {
             "name": "Weekdays Count Current Month End",
-            "description": "Number of weekdays in the entire month",
+            "description": "Number of weekdays in the entire month of the current month",
             "expression": [
               "",
               "CALCULATE(",
@@ -4246,7 +4291,7 @@
           },
           {
             "name": "Weekdays Count",
-            "description": "Number of weekdays in the entire month",
+            "description": "Number of weekdays",
             "expression": [
               "",
               "CALCULATE(",
@@ -4524,25 +4569,28 @@
           },
           {
             "name": "Complaint Amount",
+            "description": "Total amount in the complaint (in USD)",
             "expression": " SUM('Complaint'[ComplaintValueUSD])",
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "Complaint Credit Issued Amount",
+            "description": "Total amount credited to the customer in the complaint",
             "expression": " SUM('Complaint'[CreditIssueValueUSD])",
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "Complaint Open Amount",
+            "description": "Difference between the complaint amount and credit issued in the complaint",
             "expression": " SUM('Complaint'[OpenValueUSD])",
             "formatString": "#,0",
             "displayFolder": "Complaints"
           },
           {
             "name": "Product Quality Complaint Amount",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": "Total amount (in USD) of complaints with reason code marked as 'Q' (quality).",
             "expression": [
               "",
               "CALCULATE(",
@@ -4556,7 +4604,12 @@
           },
           {
             "name": "Product Quality Credit Issued",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": [
+              "Total credit issue amount of service quality complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
+              "",
+              "Service quality are complaints entered with reason codes marked as 'S' (service).",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -4570,7 +4623,12 @@
           },
           {
             "name": "Product Quality Open Amount",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": [
+              "Difference between the complaint and credit issue amount of product quality complaints.",
+              "",
+              "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality).",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -4584,52 +4642,64 @@
           },
           {
             "name": "Product Quality Index Credited",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": [
+              "Total credit issue amount of product quality complaints entered divided by the gross sales. For example, in Jan 2023, this value is the total credit issue amount of complaints entered in Jan 2023 divided by the gross sales in Jan 2023.",
+              "",
+              "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality)."
+            ],
             "expression": " DIVIDE( [Product Quality Credit Issued], [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Product Quality"
           },
           {
             "name": "Product Quality Index Open",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": [
+              "Total open amount of product quality complaints entered divided by the gross sales. For example, in Jan 2023, this value is the total open amount of complaints entered in Jan 2023 divided by the gross sales in Jan 2023.",
+              "",
+              "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality). Open amount is the difference between the complaint and credit issued amount."
+            ],
             "expression": " DIVIDE( [Product Quality Open Amount], [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Product Quality"
           },
           {
             "name": "Hold Tag Amount",
-            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
+            "description": "Total standard cost of materials in the hold tag",
             "expression": " SUM('Hold Tag'[Amount])",
             "formatString": "#,0",
             "displayFolder": "Hold Tag"
           },
           {
             "name": "Hold Tag Quantity",
-            "description": "Date grouping: 'Hold Tag Documents'[Enter Date]",
+            "description": "Total quantity of materials in the hold tag",
             "expression": " SUM('Hold Tag'[Quantity])",
             "formatString": "#,0.00",
             "displayFolder": "Hold Tag"
           },
           {
             "name": "S-Block Amount",
+            "description": "Total standard cost of inventory on S block",
             "expression": " SUM('Blocked Inventory'[SBlock Amount])",
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Q-Block Amount",
+            "description": "Total standard cost of inventory on Q block",
             "expression": " SUM('Blocked Inventory'[QBlock Amount])",
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Blocked Inventory Amount",
+            "description": "Total standard cost of materials on S block, Q block, and expired as of yesterday",
             "expression": " [S-Block Amount] + [Q-Block Amount] + [Expired Amount]",
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Expired Amount",
+            "description": "Total standard cost of inventory with expiration/SLED date on or before yesterday.",
             "expression": [
               "",
               "CALCULATE(",
@@ -4642,11 +4712,11 @@
               ""
             ],
             "formatString": "#,0",
-            "displayFolder": "Inventory\\_Expired"
+            "displayFolder": "Inventory\\_Blocked\\_Expired"
           },
           {
             "name": "Product Quality Index Target",
-            "description": "Date grouping: 'Complaint Documents'[Enter Date]",
+            "description": "Monthly target values supplied by Quality Assurance department to the IT department annually",
             "expression": [
               "",
               "CALCULATE(",
@@ -4667,7 +4737,11 @@
           },
           {
             "name": "Product Quality Complaint Cycle Time",
-            "description": "Date grouping: 'Complaint Documents'[Last Credit Date]",
+            "description": [
+              "Average number of days between the complaint creation date and latest date when a credit is issued.",
+              "",
+              "This measure only applies to product quality complaints which are complaints with reason code marked as 'Q' (quality)."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -4682,7 +4756,11 @@
           },
           {
             "name": "Service Quality Complaint Amount",
-            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
+            "description": [
+              "Total credit issue amount for service quality complaints.",
+              "",
+              "Service quality are complaints entered with reason codes marked as 'S' (service)."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -4697,7 +4775,11 @@
           },
           {
             "name": "Customer Accommodation Complaint Amount",
-            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
+            "description": [
+              "Total credit issue amount for customer accommodation complaints.",
+              "",
+              "Customer accommodation are complaints entered with reason codes marked as 'S1' (accommodation)."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -4712,7 +4794,7 @@
           },
           {
             "name": "Service Quality Index Target",
-            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
+            "description": "Monthly target values supplied by the Customer Service department to the IT department annually",
             "expression": [
               "",
               "CALCULATE(",
@@ -4733,7 +4815,7 @@
           },
           {
             "name": "Customer Accommodation Index Target",
-            "description": "Date grouping: 'Complaint Documents - Credited'[Credit Issued Date]",
+            "description": "Monthly target values supplied by the Customer Service department to the IT department annually",
             "expression": [
               "",
               "CALCULATE(",
@@ -4754,7 +4836,11 @@
           },
           {
             "name": "Sales Order Ordered Amount",
-            "description": "Total ordered amount in the sales order. This value is toggleable to local currency using the '_Currency To Use' table.",
+            "description": [
+              "Total ordered amount in the sales order.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table."
+            ],
             "expression": [
               "",
               "IF(",
@@ -4773,7 +4859,11 @@
           },
           {
             "name": "Sales Order Cost",
-            "description": "Total cost of material in the sales order. This value is toggleable to local currency using the '_Currency To Use' table.",
+            "description": [
+              "Total standard cost of material in the sales order.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table."
+            ],
             "expression": [
               "",
               "IF(",
@@ -5092,7 +5182,7 @@
           },
           {
             "name": "Sales Order Amount MTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Month-to-date total amount of sales order line items entered",
             "expression": [
               "",
               "CALCULATE(",
@@ -5111,14 +5201,14 @@
           },
           {
             "name": "Sales Order Amount MTD PY",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total amount of sales order line items entered in the entire month at the same month on previous year",
             "expression": " CALCULATE( [Sales Order Amount MTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Amount MTD PY Var",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "The amount of increase/decrease of sales order amount entered between current month and the same month on previous year",
             "expression": [
               " ",
               "IF( ",
@@ -5135,14 +5225,14 @@
           },
           {
             "name": "Sales Order Amount MTD PY Var%",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "The amount of percent increase/decrease of sales order amount entered between current month and the same month on previous year",
             "expression": " DIVIDE( [Sales Order Amount MTD PY Var], [Sales Order Amount MTD PY] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Amount FYTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Fiscal year-to-date total amount of sales order line items entered",
             "expression": [
               "",
               "VAR _DayofFiscal =",
@@ -5174,7 +5264,11 @@
           },
           {
             "name": "Sales Order Amount FYTD PY",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Total amount of sales order line items entered on previous fiscal year.",
+              "",
+              "The date range is parallel to the current fiscal year-to-date range. For example, if the current fiscal YTD range is on the 100th day of the fiscal year, then this value is the total amount of sales orders entered in the first 100 days of previous fiscal year."
+            ],
             "expression": [
               "",
               "VAR _LastDate =",
@@ -5208,7 +5302,7 @@
           },
           {
             "name": "Sales Order Amount FYTD PY Var",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total amount of increase/decrease of current fiscal year-to-date sales order amount entered compared to previous fiscal year",
             "expression": [
               " ",
               "IF( ",
@@ -5225,14 +5319,14 @@
           },
           {
             "name": "Sales Order Amount FYTD PY Var%",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total amount of percent of increase/decrease of current fiscal year-to-date sales order amount entered compared to previous fiscal year",
             "expression": " DIVIDE( [Sales Order Amount FYTD PY Var], [Sales Order Amount FYTD PY] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Open Internal Quantity",
-            "description": "If processing status is not complete, this value is ordered minus allocated minus shipped quantities; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total quantity in the sales order that is not yet shipped nor allocated to the customer. Unlike the sales order open quantity, this measure considers allocations and doesn't count them as open.",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5245,7 +5339,7 @@
           },
           {
             "name": "Sales Order Open Quantity",
-            "description": "Total quantity in the sales order that is not yet shipped to the customer including allocated items",
+            "description": "Total quantity in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
             "expression": [
               "  ",
               "CALCULATE(",
@@ -5259,7 +5353,11 @@
           },
           {
             "name": "Sales Order Open Internal Amount",
-            "description": "If processing status is not complete, this value is ordered minus allocated minus shipped amount;Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Total amount in the sales order that is not yet shipped nor allocated to the customer. Unlike the sales order open amount, this measure considers allocations and doesn't count them as open.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table."
+            ],
             "expression": [
               " ",
               "CALCULATE(",
@@ -5281,7 +5379,12 @@
           },
           {
             "name": "Sales Order Open Amount",
-            "description": "Total amount in the sales order that is not yet shipped to the customer including allocated items. This value is toggleable to local currency using the '_Currency To Use' table.",
+            "description": [
+              "Total amount in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table.",
+              ""
+            ],
             "expression": [
               " ",
               "CALCULATE(",
@@ -5310,7 +5413,7 @@
           },
           {
             "name": "Sales Order Allocated Quantity",
-            "description": "Total quantity in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "description": "Total quantity of items allocated in the sales order (or, items with delivery notes without a set actual PGI date)",
             "expression": [
               " ",
               "VAR alloc = ",
@@ -5326,7 +5429,7 @@
           },
           {
             "name": "Sales Order Shipped Quantity",
-            "description": "Total quantity in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "description": "Total quantity shipped (or, delivery notes with actual PGI date set) in the sales order line item.",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5486,12 +5589,14 @@
           },
           {
             "name": "Purchase Order Ordered Quantity",
+            "description": "Total quantity of materials ordered in the purchase order",
             "expression": " SUM( 'Purchase Order'[Ordered Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Open Quantity",
+            "description": "Difference between the ordered and received quantity of materials against a purchase order",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5504,12 +5609,14 @@
           },
           {
             "name": "Purchase Order Ordered Amount",
+            "description": "Total amount of materials ordered in the purchase order",
             "expression": " SUM( 'Purchase Order'[Ordered Amount] )",
             "formatString": "#,0",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Open Amount",
+            "description": "Difference between the ordered and received amount of materials against a purchase order",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5521,62 +5628,57 @@
             "displayFolder": "Purchase Order"
           },
           {
-            "name": "Purchase Order Delivered Quantity",
-            "expression": " SUM( 'Inventory in Transit'[Delivered Quantity] )",
-            "formatString": "#,0.00",
-            "displayFolder": "Purchase Order"
-          },
-          {
             "name": "Purchase Order In Transit Quantity",
+            "description": "Total quantity of materials that shipped but not received yet in stock transfer purchase orders",
             "expression": " SUM( 'Inventory in Transit'[In Transit Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "GRIR Amount in Document Currency",
-            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
+            "description": "Total amount in document currency of cleared and open accounting documents posted under the 0022877000 G/L account",
             "expression": " SUM('Goods and Invoice Receipt'[Amount (Document)])",
             "formatString": "#,0",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount in Local Currency",
-            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
+            "description": "Total amount in local currency of cleared and open accounting documents posted under the 0022877000 G/L account",
             "expression": " SUM('Goods and Invoice Receipt'[Amount (Local)])",
             "formatString": "#,0",
             "displayFolder": "GRIR"
           },
           {
             "name": "GRIR Amount in Local Currency2",
-            "description": "Date grouping: 'Goods and Invoice Receipts'[Posting Date]",
+            "description": "Total amount in USD of cleared and open accounting documents posted under the 0022877000 G/L account",
             "expression": " SUM( 'Goods and Invoice Receipt'[Amount (Local2)] )",
             "formatString": "#,0",
             "displayFolder": "GRIR"
           },
           {
             "name": "Purchase Order Invoice Receipt Amount",
-            "description": "Sum of invoice receipt amount in purchase order history. See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Total amount of invoice receipts in purchase order history",
             "expression": " SUM( 'Purchase Order Invoice'[Amount] )",
             "formatString": "#,0",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Invoice Receipt Quantity",
-            "description": "Sum of invoice receipt quantity in purchase order history (in purchase order unit). See 'Time Intelligence' folder for the FYTD versions; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Total quantity of invoice receipts in purchase order history",
             "expression": " SUM( 'Purchase Order Invoice'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Invoice Receipt Amount FYTD",
-            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Fiscal year-to-date total amount of invoice receipts for purchase orders according to the purchase order history",
             "expression": " CALCULATE( [Purchase Order Invoice Receipt Amount], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
             "formatString": "#,0",
             "displayFolder": "Purchase Order\\_Time-Based"
           },
           {
             "name": "Purchase Order Invoice Receipt Quantity FYTD",
-            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Fiscal year-to-date total quantity of materials in the invoice receipts for purchase orders according to the purchase order history",
             "expression": " CALCULATE( [Purchase Order Invoice Receipt Quantity], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order\\_Time-Based"
@@ -5609,7 +5711,7 @@
           },
           {
             "name": "Purchase Order Invoice Receipt Amount FYTD PY Last",
-            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number",
             "expression": [
               "CALCULATE(",
               "    AVERAGE( 'Purchase Order Invoice'[Last PY Amount] ),",
@@ -5621,7 +5723,7 @@
           },
           {
             "name": "Purchase Order Invoice Receipt Quantity FYTD PY Last",
-            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number",
             "expression": [
               "",
               "CALCULATE(",
@@ -5634,14 +5736,14 @@
           },
           {
             "name": "Purchase Order Invoice Receipt Unit Price FYTD",
-            "description": "FYTD total invoice receipt amount divided quantity; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "FYTD total of amount divided total quantity in the invoice receipts of purchase orders",
             "expression": " DIVIDE( [Purchase Order Invoice Receipt Amount FYTD], [Purchase Order Invoice Receipt Quantity FYTD] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order\\_Time-Based"
           },
           {
             "name": "Purchase Order Invoice Receipt Unit Price FYTD Last",
-            "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year",
             "expression": [
               "",
               "DIVIDE(",
@@ -5654,7 +5756,7 @@
           },
           {
             "name": "Purchase Order Invoice Receipt Amount in PY Price FYTD",
-            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5667,7 +5769,7 @@
           },
           {
             "name": "Purchase Price Difference FYTD",
-            "description": "Difference between current fiscal year's actual invoice receipt amount and the amount using prior fiscal year's last unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Difference between current fiscal year's actual invoice receipt amount and the current fiscal year's invoice receipt amount using prior fiscal year's last unit price",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5680,7 +5782,7 @@
           },
           {
             "name": "Purchase Order Invoice Receipt Unit Price FYTD PY Last",
-            "description": "Amount divided quantity of the last invoice receipt in purchase order history on previous fiscal year; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Amount divided quantity of the last invoice receipt in purchase order history on previous fiscal year",
             "expression": [
               "",
               "DIVIDE(",
@@ -5693,7 +5795,7 @@
           },
           {
             "name": "Purchase Price Index% FYTD",
-            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount using prior fiscal year's unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Current fiscal year's invoice receipt amount as a percentage of the same amount but in prior fiscal year's last unit price",
             "expression": [
               " ",
               "IF(",
@@ -5707,28 +5809,28 @@
           },
           {
             "name": "Purchase Price Index FYTD",
-            "description": "Current fiscal year's invoice receipt amount divided by the same amount using prior fiscal year's unit price; Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Current fiscal year's invoice receipt amount divided by the same amount but using prior fiscal year's last unit price",
             "expression": " ROUND(DIVIDE( [Purchase Order Invoice Receipt Amount FYTD], [Purchase Order Invoice Receipt Amount in PY Price FYTD] ), 4)",
             "formatString": "#,0.0000",
             "displayFolder": "Purchase Order\\_Time-Based"
           },
           {
             "name": "Purchase Order Invoice Receipt Amount FYTD PY",
-            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Total amount of invoice receipts for purchase orders according to the purchase order history in the entire fiscal year during the previous fiscal year",
             "expression": " CALCULATE( [Purchase Order Invoice Receipt Amount FYTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0",
             "displayFolder": "Purchase Order\\_Time-Based"
           },
           {
             "name": "Purchase Order Invoice Receipt Quantity FYTD PY",
-            "description": "Date grouping: 'Purchase Order Invoices'[Posting Date]",
+            "description": "Total quantity of materials in the invoice receipts for purchase orders according to the purchase order history in the entire fiscal year during the previous fiscal year",
             "expression": " CALCULATE( [Purchase Order Invoice Receipt Quantity FYTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order\\_Time-Based"
           },
           {
             "name": "Backorder Amount Past Due",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship before the current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "description": "Total open order amount of sales order line items with first scheduled ship date before the beginning of current month",
             "expression": [
               "",
               "CALCULATE(",
@@ -5745,7 +5847,7 @@
           },
           {
             "name": "Backorder Amount Current Month",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship on current month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "description": "Total open order amount of sales order line items with first scheduled ship date on currency month",
             "expression": [
               "",
               "CALCULATE(",
@@ -5764,7 +5866,7 @@
           },
           {
             "name": "Backorder Amount Next Month",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship starting next month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "description": "Total open order amount of sales order line items with first scheduled ship date next month",
             "expression": [
               "",
               "CALCULATE(",
@@ -5786,7 +5888,7 @@
           },
           {
             "name": "Backorder Amount Beyond Next Month",
-            "description": "Total internal open amount of sales orders (TA, ZCON, and ZDSP) originally scheduled to ship after next month; Internal open amount is ordered minus allocated minus shipped amount.",
+            "description": "Total open order amount of sales order line items with first scheduled ship date after the end of next calendar month",
             "expression": [
               "",
               "CALCULATE(",
@@ -5807,42 +5909,50 @@
           },
           {
             "name": "Sales Order Line Count FYTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Fiscal year-to-date count of sales order line items entered",
             "expression": " CALCULATE( [Sales Order Line Count], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Line Count FYTD PY",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Total count of sales order line items entered on previous fiscal year.",
+              "",
+              "The date range is parallel to the current fiscal year-to-date range. For example, if the current fiscal YTD range is on the 100th day of the fiscal year, then this value is the total count of sales order line items entered in the first 100 days of previous fiscal year.",
+              ""
+            ],
             "expression": " CALCULATE( [Sales Order Line Count FYTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
             "formatString": "#,0",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Lines Automated Entry% FYTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Fiscal year-to-date count of sales order line items entered by BATCHUSER divided by the fiscal year-to-date count of sales order line items entered by Customer Service and BATCHUSER",
             "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Lines Automated Entry% MTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Month-to-date count of sales order line items entered by BATCHUSER divided by the month-to-date count of sales order line items entered by Customer Service and BATCHUSER",
+              ""
+            ],
             "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Line Count MTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Month-to-date count of sales order line items entered",
             "expression": " CALCULATE( [Sales Order Line Count], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,0",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Lines Automated without Changes",
-            "description": "Number of sales order line items entered by BATCHUSER (sales order automation) without manual changes from Customer Service; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Number of sales order line items entered by BATCHUSER (sales order automation) without manual changes from Customer Service",
             "expression": [
               "CALCULATE (",
               "    [Sales Order Lines Automated],",
@@ -5854,28 +5964,28 @@
           },
           {
             "name": "Sales Order Automation Efficiency% FYTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Fiscal year-to-date count of sales order line items entered automatically by BATCHUSER without any manual changes divided by the fiscal year-to-date count of sales order line items entered automatically by BATCHUSER (with/without changes)",
             "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Automation Efficiency% MTD",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Month-to-date count of sales order line items entered automatically by BATCHUSER without any manual changes divided by the month-to-date count of sales order line items entered automatically by BATCHUSER (with/without changes)",
             "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESMTD( 'Calendar'[Date] ) )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Sales Order Line Count Automated and Manual",
-            "description": "Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": "Total count of sales order line items entered by Customer Service and BATCHUSER",
             "expression": " [Sales Order Lines Manual] + [Sales Order Lines Automated]",
             "formatString": "#,0",
             "displayFolder": "Sales Order"
           },
           {
             "name": "Absorption MTD",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Month-to-date total cost posted in earned labor, setup, and overhead cost elements",
             "expression": [
               " CALCULATE( [Absorption], DATESMTD( 'Calendar'[Date] ) )",
               ""
@@ -5885,7 +5995,7 @@
           },
           {
             "name": "Absorption MTD PY",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Previous year's month-to-date total cost posted in earned labor, setup, and overhead cost elements",
             "expression": [
               " CALCULATE( [Absorption MTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
               ""
@@ -5895,7 +6005,7 @@
           },
           {
             "name": "Purchase Order Backorder Amount PD",
-            "description": "Sum of open UB, NB, and ZNB purchase orders with GR requirement scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "description": "Yesterday's snapshot amount of materials in open purchase orders for incoming inventory ",
             "expression": [
               " ",
               "CALCULATE( ",
@@ -5911,14 +6021,18 @@
           },
           {
             "name": "Purchase Order Open Amount PD Var",
-            "description": "Variance of PO Open Amount to prior day's open amount (PD PO Backorder Amount) which is the sum of open UB, NB, and ZNB purchase orders with GR requirement scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "description": "Difference between the current amount of open purchase orders and yesterday's snapshot amount of open purchase orders",
             "expression": " [Purchase Order Open Amount] - [Purchase Order Backorder Amount PD]",
             "formatString": "#,0",
             "displayFolder": "Purchase Order\\_Time-Based"
           },
           {
             "name": "Sales Order Open Margin",
-            "description": "If billing status is not complete, this value is margin amount of non-shipped; Date grouping: 'Sales Order Documents'[Enter Date]",
+            "description": [
+              "Total gross margin of items in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table."
+            ],
             "expression": [
               " ",
               "CALCULATE(",
@@ -5940,7 +6054,7 @@
           },
           {
             "name": "Backorder Snapshot Amount PD",
-            "description": "Sum of open TA and ZCON sales orders with with active/pre-launch product status, no credit block, has product tier code, and scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date]). Excludes BURLINGTON GRAPHICS customer.",
+            "description": "Snapshot of the amount of open sales order line items yesterday",
             "expression": [
               " ",
               "CALCULATE(",
@@ -5956,14 +6070,14 @@
           },
           {
             "name": "Backorder Snapshot Amount PD Var",
-            "description": "Variance of SO Customer Open Amount to prior day's open amount (PD SO Customer Open Amount) which is the sum of open TA and ZCON sales orders with with active/pre-launch product status, no credit block, has product tier code, and scheduled to be delivered up to prior day (date context: Snapshot Date or 'Calendar'[Date])",
+            "description": "Difference between the snapshots of open sales order line item amount on current and previous day",
             "expression": " [Sales Order Open Amount] - [Backorder Snapshot Amount PD]",
             "formatString": "#,0",
             "displayFolder": "Sales Order\\_Time-Based"
           },
           {
             "name": "Goods Receipt Linear Footage",
-            "description": "Total footage of postings with movement types 101, 102, 531, and 532.",
+            "description": "Total footage of postings with movement types 101, 102, 531, and 532. The footage is based on the conversion factor in the alternative unit of measure section in the material master in SAP.",
             "expression": [
               "",
               "CALCULATE(",
@@ -5976,7 +6090,7 @@
           },
           {
             "name": "Goods Receipt Square Footage",
-            "description": "Total square footage of postings with movement types 101, 102, 531, and 532.",
+            "description": "Total square footage of postings with movement types 101, 102, 531, and 532. The dimensions for square footage are based on the width in the material master and the length conversion factor in the alternative unit of measure in the material master in SAP.",
             "expression": [
               "",
               "CALCULATE(",
@@ -6004,38 +6118,42 @@
           },
           {
             "name": "Goods Issue Scrap Rate",
-            "description": "GI Footage over GR Footage",
+            "description": "Goods issue linear footage divided by the goods receipt linear footage of transactions in 'Goods Movement' table",
             "expression": " DIVIDE( [Goods Issue Linear Footage], [Goods Receipt Linear Footage] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Goods Movement"
           },
           {
             "name": "Goods Movement Linear Footage",
+            "description": "Total linear footage of transactions in the 'Goods Movement' table. The footage is based on the conversion factor in the alternative unit of measure section in the material master in SAP.",
             "expression": " SUM ('Goods Movement'[Linear Feet])",
             "formatString": "#,0",
             "displayFolder": "Goods Movement"
           },
           {
             "name": "Goods Movement Square Footage",
+            "description": "Total square footage of transactions in the 'Goods Movement' table. The dimensions for square footage are based on the width in the material master and the length conversion factor in the alternative unit of measure in the material master in SAP.",
             "expression": " SUM ('Goods Movement'[Square Feet])",
             "formatString": "#,0",
             "displayFolder": "Goods Movement"
           },
           {
             "name": "Goods Movement Quantity",
+            "description": "Total quantity of transactions in the 'Goods Movement' table",
             "expression": " SUM( 'Goods Movement'[Quantity])",
             "formatString": "#,0.00",
             "displayFolder": "Goods Movement"
           },
           {
             "name": "Goods Movement Amount",
+            "description": "Total amount of transactions in the 'Goods Movement' table",
             "expression": " SUM( 'Goods Movement'[Amount] )",
             "formatString": "#,0",
             "displayFolder": "Goods Movement"
           },
           {
             "name": "Sales Order Allocated Amount",
-            "description": "Total value of items in delivery notes issued without an actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "description": "Total amount of items allocated in the sales order (or, items with delivery notes without a set actual PGI date)",
             "expression": [
               " ",
               "CALCULATE(",
@@ -6057,7 +6175,11 @@
           },
           {
             "name": "Sales Order Shipped Amount",
-            "description": "Total value of items in delivery notes issued with actual PGI date set; Date grouping: 'Sales Order Documents'[First Delivery Date]",
+            "description": [
+              "Total amount of items shipped (or, delivery notes with actual PGI date set) in the sales order line item.",
+              "",
+              "This value is toggleable to local currency using the '_Currency to Use' table."
+            ],
             "expression": [
               "CALCULATE(",
               "    IF(",
@@ -6159,19 +6281,21 @@
           },
           {
             "name": "S-Block Quantity",
+            "description": "Total quantity of inventory on S block",
             "expression": " SUM( 'Blocked Inventory'[SBlock Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Q-Block Quantity",
+            "description": "Total quantity of inventory on Q block",
             "expression": " SUM( 'Blocked Inventory'[QBlock Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Expired Quantity",
-            "description": "Sum of 'Expired Inventory'[Stock Amount] where the [Expiration Date] is less than or equal to [Report Date]. Can be toggled between quantity and amount values (default = quantity)",
+            "description": "Total quantity of inventory with expiration/SLED date on or before yesterday.",
             "expression": [
               "",
               "VAR Qty =",
@@ -6205,10 +6329,11 @@
               "    )"
             ],
             "formatString": "#,0.00",
-            "displayFolder": "Inventory\\_Expired"
+            "displayFolder": "Inventory\\_Blocked\\_Expired"
           },
           {
             "name": "Sales Order Amount %Grand MTD",
+            "description": "Total sales order amount divided by the total sales order amount of all customers and materials",
             "expression": [
               "",
               "DIVIDE(",
@@ -6311,7 +6436,7 @@
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "description": "Sum of 'Current Inventory'[Unrestricted Stock Quantity']. Can be toggled between quantity and amount values (default = quantity)",
+            "description": "Total quantity of materials on physical inventory that has no block category",
             "expression": [
               "",
               "VAR Qty = SUM('Inventory'[Unrestricted Stock Quantity])",
@@ -6334,6 +6459,7 @@
           },
           {
             "name": "Safety Stock Quantity",
+            "description": "Average safety stock quantity by material and plant. If this measure is grouped by material only and not plant, this value is the average safety stock across all the plants.",
             "expression": [
               "",
               "AVERAGEX(",
@@ -6346,20 +6472,25 @@
           },
           {
             "name": "Available Inventory Quantity after Allocations and Open Sales Orders",
-            "description": "Difference between 'Current Unrestricted Stock Quantity', 'SO Allocated Quantity', 'SO Allocated Quantity', and 'SO Internal Open Quantity'",
+            "description": "Difference between unrestricted stock and allocated and open quantities in sales orders",
             "expression": " [Unrestricted Stock Quantity] - [Sales Order Allocated Quantity] - [Sales Order Open Internal Quantity]",
             "formatString": "#,0.00",
             "displayFolder": "Inventory"
           },
           {
             "name": "Purchase Order Goods Receipt Quantity",
+            "description": "Total quantity of materials received for the purchase order line item",
             "expression": " SUM('Purchase Order'[Goods Receipt Quantity])",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Cumulative Expired Amount",
-            "description": "Cumulative stock amount by expiration date. Best used with 'Calendar' and its hierarchies.",
+            "description": [
+              "Cumulative stock amount by expiration date. For example, if 'Calendar' table is filtered to Jan 2023, this value is the expired amount of materials with expiration/SLED date on or before Jan 31, 2023/",
+              "",
+              "This measure is best used with fields in the 'Calendar' table."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6373,11 +6504,11 @@
               ")"
             ],
             "formatString": "#,0",
-            "displayFolder": "Inventory\\_Expired"
+            "displayFolder": "Inventory\\_Blocked\\_Expired"
           },
           {
             "name": "Earned Labor Budget MTD",
-            "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
+            "description": "Monthly earned labor budget entered in the ZBUDGET table in SAP.",
             "expression": [
               "",
               "CALCULATE(",
@@ -6390,7 +6521,7 @@
           },
           {
             "name": "Earned Overhead Budget MTD",
-            "description": "SAP Source: ZFORECAST.OH (Type = 'B')",
+            "description": "Monthly earned overhead budget entered in the ZBUDGET table in SAP.",
             "expression": [
               "",
               "CALCULATE(",
@@ -6403,13 +6534,14 @@
           },
           {
             "name": "Absorption Budget MTD",
+            "description": "Monthly earned labor and overhead budget entered in the ZBUDGET table in SAP.",
             "expression": " [Earned Labor Budget MTD] + [Earned Overhead Budget MTD]",
             "formatString": "#,0",
             "displayFolder": "Absorption\\_Time-Based"
           },
           {
             "name": "Earned Labor Budget FYTD",
-            "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
+            "description": "Fiscal year-to-date total of the monthly earned labor budget entered in ZBUDGET table in SAP",
             "expression": [
               "",
               "CALCULATE(",
@@ -6422,7 +6554,7 @@
           },
           {
             "name": "Earned Overhead Budget FYTD",
-            "description": "SAP Source: ZFORECAST.LABOR (Type = 'B')",
+            "description": "Fiscal year-to-date total of the monthly earned overhead budget entered in ZBUDGET table in SAP",
             "expression": [
               "",
               "CALCULATE(",
@@ -6435,13 +6567,14 @@
           },
           {
             "name": "Absorption Budget FYTD",
+            "description": "Fiscal year-to-date",
             "expression": " [Earned Labor Budget FYTD] + [Earned Overhead Budget FYTD]",
             "formatString": "#,0",
             "displayFolder": "Absorption\\_Time-Based"
           },
           {
             "name": "Earned Labor MTD",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Month-to-date total cost posted in the earned labor and setup cost elements",
             "expression": [
               " CALCULATE( [Earned Labor], DATESMTD( 'Calendar'[Date] ) )",
               ""
@@ -6451,7 +6584,7 @@
           },
           {
             "name": "Earned Overhead MTD",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Month-to-date total cost posted in the earned overhead cost elements",
             "expression": [
               " CALCULATE( [Earned Overhead], DATESMTD( 'Calendar'[Date] ) )",
               ""
@@ -6461,6 +6594,7 @@
           },
           {
             "name": "Inventory Amount",
+            "description": "Total standard cost of materials on inventory",
             "expression": [
               "",
               "-- valuated inventory",
@@ -6478,6 +6612,7 @@
           },
           {
             "name": "Purchase Order In Transit Amount",
+            "description": "Total amount of materials that shipped but not received yet in stock transfer purchase orders",
             "expression": [
               " SUM( 'Inventory in Transit'[In Transit Amount] )",
               ""
@@ -6487,13 +6622,14 @@
           },
           {
             "name": "Open WIP Amount",
+            "description": "Total standard cost of materials in process orders that are not TECO'd, closed, nor deleted yet",
             "expression": " SUM( 'Inventory Open WIP'[Net Cost Amount] )",
             "formatString": "#,0",
             "displayFolder": "Inventory"
           },
           {
             "name": "Inventory Snapshot Amount",
-            "description": "Last inventory snapshot on report date",
+            "description": "Latest snapshot of the inventory amount depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -6516,6 +6652,7 @@
           },
           {
             "name": "Inventory Amount Closing Prior Day",
+            "description": "Inventory snapshot amount yesterday",
             "expression": [
               "",
               "CALCULATE(",
@@ -6531,6 +6668,7 @@
           },
           {
             "name": "Inventory Amount Closing Prior Day Var",
+            "description": "Difference between the inventory snapshot amount on current day and yesterday",
             "expression": [
               "",
               "IF(",
@@ -6544,6 +6682,7 @@
           },
           {
             "name": "Process Order Count",
+            "description": "Count of process orders by actual/scheduled finished date",
             "expression": [
               "",
               "CALCULATE(",
@@ -6560,6 +6699,7 @@
           },
           {
             "name": "Process Order Ordered Quantity",
+            "description": "Total ordered quantity in the process order by actual/scheduled finish date",
             "expression": [
               "",
               "CALCULATE(",
@@ -6576,6 +6716,7 @@
           },
           {
             "name": "Process Order Delivered Quantity",
+            "description": "Total delivered quantity in the process order by actual/scheduled finished date",
             "expression": [
               "",
               "CALCULATE(",
@@ -6592,6 +6733,7 @@
           },
           {
             "name": "Process Order Scheduled Count",
+            "description": "Count of process orders by scheduled start date",
             "expression": [
               "",
               "CALCULATE(",
@@ -6608,6 +6750,7 @@
           },
           {
             "name": "Process Order Count Completed",
+            "description": "Count of orders with the closed flag status",
             "expression": [
               "",
               "CALCULATE(",
@@ -6620,6 +6763,7 @@
           },
           {
             "name": "Process Order with Hold Tag Count",
+            "description": "Count of process orders with hold tags. A process order has a hold tag if there is an process order entered in the hold tag.",
             "expression": [
               "",
               "CALCULATE(",
@@ -6632,12 +6776,14 @@
           },
           {
             "name": "Process Order with Hold Tag%",
+            "description": "Percentage of process orders with hold tags",
             "expression": "DIVIDE( [Process Order with Hold Tag Count], [Process Order Count] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Process Order"
           },
           {
             "name": "Process Order Count Completed FYTD",
+            "description": "Fiscal year-to-date count of orders with the closed flag status",
             "expression": [
               "",
               "CALCULATE(",
@@ -6650,19 +6796,21 @@
           },
           {
             "name": "Process Order Count Completed FYTD PY",
+            "description": "Fiscal year-to-date count of orders with the closed flag status at the same period last year",
             "expression": "CALCULATE( [Process Order Count Completed FYTD], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
             "formatString": "#,0",
             "displayFolder": "Process Order\\_Time-Based"
           },
           {
             "name": "Process Order Scheduled Count FYTD",
+            "description": "Fiscal year-to-date count of process orders by scheduled start date",
             "expression": "CALCULATE( [Process Order Scheduled Count], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
             "formatString": "#,0",
             "displayFolder": "Process Order\\_Time-Based"
           },
           {
             "name": "Planning Schedule Target Quantity",
-            "description": "Sum of 'Upstream Schedule'[Target Quantity]; This value is the total target quantity in the daily schedule files created by Planning",
+            "description": "Total target quantity in the daily schedule files created by Planning",
             "expression": [
               "",
               "CALCULATE(",
@@ -6675,6 +6823,7 @@
           },
           {
             "name": "Planning Schedule Processing Hour MTD",
+            "description": "Total processing hour in the latest planning schedule",
             "expression": [
               "",
               "CALCULATE(",
@@ -6694,6 +6843,7 @@
           },
           {
             "name": "Planning Schedule Processing Hour Month End",
+            "description": "Total processing hour in the whole month according to the planning schedule",
             "expression": [
               "",
               "CALCULATE(",
@@ -6713,6 +6863,7 @@
           },
           {
             "name": "Backorder Snapshot Amount",
+            "description": "Latest snapshot of the amount of open sales order line items based on the date filter/context. If there is no date filter/context, this value is the snapshot on current day.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -6735,6 +6886,11 @@
           },
           {
             "name": "Backorder Snapshot Shortage Amount",
+            "description": [
+              "Snapshot of the shortage amount of open sales order line items.",
+              "",
+              "Shortage is the open amount in sales orders minus the amount of unrestricted stock based on material number and plant minus the amount of in transit (STO) purchase orders."
+            ],
             "expression": [
               "",
               "VAR RefDate =",
@@ -6760,7 +6916,7 @@
           },
           {
             "name": "Accumulated Inventory Balance MTD",
-            "description": "Accumulated balance as of this month relative to [Report Date]",
+            "description": "Month-to-date balance in inventory related G/L accounts",
             "expression": [
               "",
               "VAR LastVisibleDate =",
@@ -6788,7 +6944,7 @@
           },
           {
             "name": "Accumulated Inventory Balance MTD Prior",
-            "description": "Accumulated balance as of end of last month relative to [Report Date]",
+            "description": "Closing balance in inventory related G/L accounts at the end of previous month",
             "expression": [
               "",
               "CALCULATE(",
@@ -6801,6 +6957,12 @@
           },
           {
             "name": "Inventory Balance MTD Purchases",
+            "description": [
+              "Month-to-date total of accounting documents with 'Purchases' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6813,6 +6975,12 @@
           },
           {
             "name": "Inventory Balance MTD Produced",
+            "description": [
+              "Month-to-date total of accounting documents with 'Produced' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6825,6 +6993,12 @@
           },
           {
             "name": "Inventory Balance MTD Transfers",
+            "description": [
+              "Month-to-date total of accounting documents with 'Transfers' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6842,6 +7016,12 @@
           },
           {
             "name": "Inventory Balance MTD Sales",
+            "description": [
+              "Month-to-date total of accounting documents with 'Sales' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6854,6 +7034,12 @@
           },
           {
             "name": "Inventory Balance MTD Scrap",
+            "description": [
+              "Month-to-date total of accounting documents with 'Scrap' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6866,6 +7052,12 @@
           },
           {
             "name": "Inventory Balance MTD Write-offs",
+            "description": [
+              "Month-to-date total of accounting documents with 'Write-offs' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6878,6 +7070,11 @@
           },
           {
             "name": "Inventory Balance MTD Accruals",
+            "description": [
+              "Month-to-date total of accounting documents with 'Accruals' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6895,6 +7092,12 @@
           },
           {
             "name": "Inventory Balance MTD Reversals",
+            "description": [
+              "Month-to-date total of accounting documents with 'Reversals' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6907,6 +7110,12 @@
           },
           {
             "name": "Inventory Balance MTD PPV",
+            "description": [
+              "Month-to-date total of accounting documents with 'PPV' movement type category posted in the inventory balance G/L accounts in SAP.",
+              "",
+              "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+              ""
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -6924,6 +7133,7 @@
           },
           {
             "name": "Inventory Balance MTD",
+            "description": "Month-to-date total of accounting documents posted in the inventory balance G/L accounts in SAP",
             "expression": [
               "",
               "CALCULATE(",
@@ -6936,7 +7146,7 @@
           },
           {
             "name": "Inventory Balance Check",
-            "description": "Value is 1 (or TRUE) if the [MTD Accumulated Inventory Balance] from 'Inventory Balance (Totals)' equals the sum of [MTD Prior Accumulated Inventory Balance] from 'Inventory Balance (Totals)' and [MTD Inventory Balance] from 'Inventory Balance (Items)'",
+            "description": "Checks if the month-to-date accumulated inventory aggregate balance is equal to the month-to-date total of accounting documents posted under inventory related G/L accounts. If the values are equals, this value is 1. Otherwise, it is 0.",
             "expression": [
               "",
               "VAR breakdown = ",
@@ -6966,6 +7176,7 @@
           },
           {
             "name": "Sample Request Cost",
+            "description": "Total standard cost of materials in free-of-charge or sales orders for samples",
             "expression": [
               "",
               "CALCULATE(",
@@ -7195,7 +7406,11 @@
           },
           {
             "name": "WH Picked Weight",
-            "description": "Total weight of materials picked from finished good racks (starting with X) and 901 555. Data is based on the weight in transfer orders (sum of 'Transfer Orders (Shipping)'[Weight]) done by users in ORDER ASSEMBLY and WAREHOUSE OPERATIONS departments.",
+            "description": [
+              "Total weight of materials picked from finished good racks (starting with X) and 901 555.",
+              "",
+              "Data is based on the weight in transfer orders done by users in ORDER ASSEMBLY and WAREHOUSE OPERATIONS departments. Departments are assigned in the user data in SAP."
+            ],
             "expression": [
               "",
               "CALCULATE(",
@@ -7211,7 +7426,7 @@
           },
           {
             "name": "Purchase Order Open Amount CW",
-            "description": "Total amount of open purchase orders scheduled to be delivered this week (based on delivery date in the purchase order)",
+            "description": "Total amount of open purchase orders scheduled to be delivered this week (based on the static first delivery date in the purchase order)",
             "expression": [
               " ",
               "VAR BegDate = ([Report Date] + 1) - WEEKDAY( [Report Date] + 1 )",
@@ -7231,7 +7446,7 @@
           },
           {
             "name": "Purchase Order Goods Receipt Amount CW",
-            "description": "Total amount of goods receipts of incoming purchase orders issued this week",
+            "description": "Total amount of materials in purchase orders for incoming inventory received this week",
             "expression": [
               " ",
               "VAR BegDate = ([Report Date] + 1) - WEEKDAY( [Report Date] + 1 )",
@@ -7255,12 +7470,18 @@
           },
           {
             "name": "Purchase Order Goods Receipt Amount",
+            "description": "Total amount of materials received for the purchase order line item",
             "expression": " SUM('Purchase Order'[Goods Receipt Amount])",
             "formatString": "#,0",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Sales Order Open Internal Amount CW",
+            "description": [
+              "Total amount in the sales order scheduled to ship this week that is not yet shipped nor allocated to the customer. Unlike the sales order open amount, this measure considers allocations and doesn't count them as open.",
+              "",
+              "This value is toggleable to local currency using the '_Currency To Use' table."
+            ],
             "expression": [
               " ",
               "VAR BegDate = ([Report Date] + 1) - WEEKDAY( [Report Date] + 1 )",
@@ -7280,6 +7501,11 @@
           },
           {
             "name": "Sales Order Shipped Amount CW",
+            "description": [
+              "Total amount of sales order line items that shipped (or, delivery notes with actual PGI date set) this week.",
+              "",
+              "This value is toggleable to local currency using the '_Currency to Use' table."
+            ],
             "expression": [
               " ",
               "VAR BegDate = ([Report Date] + 1) - WEEKDAY( [Report Date] + 1 )",
@@ -7318,14 +7544,18 @@
           },
           {
             "name": "WH Storage Bin Material Age in Days",
-            "description": "Average days between the material's goods receipt date and today (average of 'Current Inventory (Bins)'[Age in Days])",
+            "description": "Average days between the material's goods receipt date and today",
             "expression": "AVERAGE( 'Inventory in Storage Bin'[Age in Days] )",
             "formatString": "#,0 \"days\"",
             "displayFolder": "Warehouse"
           },
           {
             "name": "Storage Bin Utilization Snapshot%",
-            "description": "Last value of snapshot of storage bin utilitization (from 'Storage Bin Utilization (Snapshots)' table)",
+            "description": [
+              "Latest snapshot of the storage bin utilization depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+              "",
+              "Storage bin utilization is the average of the quants in the storage bin divided by the capacity of the storage bin."
+            ],
             "expression": [
               "",
               "VAR RefDate =",
@@ -7351,7 +7581,7 @@
           },
           {
             "name": "Absorption CW",
-            "description": "Current week's total absorption (relative to [Report Date])",
+            "description": "Current week's total cost posted in earned labor, setup, and overhead cost elements",
             "expression": [
               "",
               "VAR BegDate = ([Report Date]) - WEEKDAY( [Report Date] )",
@@ -7371,7 +7601,7 @@
           },
           {
             "name": "Absorption FYTD",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Fiscal year-to-date total cost posted in earned labor, setup, and overhead cost elements",
             "expression": [
               "",
               "VAR _DayofFiscal =",
@@ -7404,14 +7634,14 @@
           },
           {
             "name": "Absorption FYTD PY",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Previous fiscal year-to-date total cost posted in earned labor, setup, and overhead cost elements",
             "expression": "CALCULATE( [Absorption FYTD], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
             "formatString": "#,0",
             "displayFolder": "Absorption\\_Time-Based"
           },
           {
             "name": "Absorption Hours MTD",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Month-to-date quantity (in hours) posted in earned labor, setup, and overhead cost elements",
             "expression": [
               " CALCULATE( [Absorption Hours], DATESMTD( 'Calendar'[Date] ) )",
               ""
@@ -7421,7 +7651,7 @@
           },
           {
             "name": "Absorption Hours MTD PY",
-            "description": "Date grouping: 'Absorption'[Posting Date]",
+            "description": "Previous year's month-to-date quantity (in hours) posted in earned labor, setup, and overhead cost elements",
             "expression": [
               " CALCULATE( [Absorption Hours MTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
               ""
@@ -7572,6 +7802,7 @@
           },
           {
             "name": "Sales Order Line Count by First Ship Date",
+            "description": "Count of sales order line items by first scheduled ship date",
             "expression": [
               "",
               "CALCULATE(",
@@ -7590,7 +7821,7 @@
           },
           {
             "name": "WH Effective On Time Shipment Target",
-            "description": "Data Source: KPI Targets SharePoint List. If there is no value available, the default values are 95% for OTS and 100% for T1 OTS.",
+            "description": "Monthly target values supplied by Logistics to the IT department annually. If there is no value available, the default values are 95% for OTS and 100% for T1 OTS.",
             "expression": [
               "",
               "VAR KeyVal =",
@@ -7633,6 +7864,7 @@
           },
           {
             "name": "Sales Order Line Count by First Ship Date On Time",
+            "description": "Count of sales order line items where the ordered quantity is fully shipped on or before the first scheduled ship date",
             "expression": [
               "",
               "VAR OnTime =",
@@ -7658,6 +7890,7 @@
           },
           {
             "name": "Sales Order Line Count by First Ship Date Late Exempt",
+            "description": "Count of sales order line items where the ordered quantity is not fully delivered on or before the first scheduled ship date but marked as 'No' under 'IsArlonFault' column in the ZSDSHIP_LATE tcode in SAP",
             "expression": [
               "",
               "VAR Exempt =",
@@ -7683,7 +7916,7 @@
           },
           {
             "name": "WH Complete On Time Target",
-            "description": "Data Source: KPI Targets SharePoint List. If there is no value available, the default value is 90%.",
+            "description": "Monthly target values supplied by Logistics to the IT department annually. If there is no value available, the default value is 90%.",
             "expression": [
               "",
               "VAR Target =",
@@ -7743,7 +7976,7 @@
           },
           {
             "name": "Sales Order Late Quantity",
-            "description": "Difference between [SO Order Quantity] and [SO Shipped On Time Quantity]",
+            "description": "Count of sales order line items where the ordered quantity is not fully delivered on or before its first scheduled ship date in the schedule line",
             "expression": [
               "",
               "CALCULATE(",
@@ -7781,6 +8014,7 @@
           },
           {
             "name": "Inventory Amount Closing Prior Month",
+            "description": "Inventory snapshot amount at the end of month last month",
             "expression": [
               "",
               "CALCULATE(",
@@ -7796,6 +8030,7 @@
           },
           {
             "name": "Inventory Amount Opening Prior Week Var",
+            "description": "Difference between the inventory snapshot amount on Sundays of current and prior week",
             "expression": [
               "",
               "IF(",
@@ -7809,6 +8044,7 @@
           },
           {
             "name": "Inventory Amount Closing Prior 2 Months Var",
+            "description": "Difference between the inventory amount snapshots of last month and the month before last month",
             "expression": [
               "",
               "IF(",
@@ -7850,12 +8086,14 @@
           },
           {
             "name": "Unrestricted Stock Amount",
+            "description": "Total standard cost of materials on physical inventory that has no block category",
             "expression": "SUM('Inventory'[Unrestricted Stock Amount (USD)])",
             "formatString": "#,0",
             "displayFolder": "Inventory"
           },
           {
             "name": "Inventory Amount Closing Prior Year",
+            "description": "Inventory snapshot amount at the end of previous calendar year (Dec 31st)",
             "expression": [
               "",
               "CALCULATE(",
@@ -7871,6 +8109,7 @@
           },
           {
             "name": "Inventory Amount Closing Prior Year Var",
+            "description": "Difference between the inventory snapshot amount on current day and the end of previous calendar year",
             "expression": [
               "",
               "IF(",
@@ -7884,6 +8123,7 @@
           },
           {
             "name": "Inventory Amount Opening Current Week",
+            "description": "Inventory snapshot amount on the Sunday of current week",
             "expression": [
               "",
               "CALCULATE(",
@@ -7899,6 +8139,7 @@
           },
           {
             "name": "Inventory Amount Closing 2 Months Ago",
+            "description": "Snapshot of inventory amount of the end of the month before last month",
             "expression": [
               "",
               "CALCULATE(",
@@ -7914,6 +8155,7 @@
           },
           {
             "name": "Inventory Amount Opening Prior Week",
+            "description": "Inventory snapshot amount on the Sunday of last week",
             "expression": [
               "",
               "CALCULATE(",
@@ -7929,6 +8171,7 @@
           },
           {
             "name": "Inventory Quantity",
+            "description": "Total quantity of materials on inventory",
             "expression": [
               "",
               "-- valuated inventory",
@@ -7959,7 +8202,7 @@
           },
           {
             "name": "Inventory Snapshot Material Cost",
-            "description": "Material cost at [Snapshot Date]",
+            "description": "Latest snapshot of the material cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -7982,7 +8225,7 @@
           },
           {
             "name": "Inventory Snapshot Labor Cost",
-            "description": "Labor cost at [Snapshot Date]",
+            "description": "Latest snapshot of the labor cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -8005,7 +8248,7 @@
           },
           {
             "name": "Inventory Snapshot Overhead Cost",
-            "description": "Overhead cost at [Snapshot Date]",
+            "description": "Latest snapshot of the overhead cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -8028,7 +8271,7 @@
           },
           {
             "name": "Inventory Snapshot Setup Cost",
-            "description": "Setup cost at [Snapshot Date]",
+            "description": "Latest snapshot of the setup cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -8051,7 +8294,7 @@
           },
           {
             "name": "Inventory Snapshot MLOS Cost",
-            "description": "Material, labor, overhead, and setup cost at [Snapshot Date]",
+            "description": "Latest snapshot of the standard cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "[Inventory Snapshot Material Cost]",
@@ -8064,7 +8307,7 @@
           },
           {
             "name": "Inventory Snapshot Quantity",
-            "description": "Last total inventory quantity at [Report Date]",
+            "description": "Latest snapshot of the quantity of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
             "expression": [
               "",
               "VAR RefDate =",
@@ -8087,6 +8330,7 @@
           },
           {
             "name": "COMP Process Order Count",
+            "description": "Count of process orders finished/scheduled in Compounding",
             "expression": [
               "",
               "CALCULATE(",
@@ -8100,18 +8344,21 @@
           },
           {
             "name": "COMP Process Order Fail Count",
+            "description": "Count of process orders that failed according to the First Pass Failures database in Compounding",
             "expression": "DISTINCTCOUNT( 'Compounding Failure'[Process Order Number] )",
             "formatString": "0",
             "displayFolder": "Compounding"
           },
           {
             "name": "COMP Process Order Success Count",
+            "description": "Difference between the count of process orders finished/scheduled in Compounding and count of failed process orders",
             "expression": "[COMP Process Order Count] - [COMP Process Order Fail Count]",
             "formatString": "0",
             "displayFolder": "Compounding"
           },
           {
             "name": "Sales Order Unrestricted Stock Quantity",
+            "description": "Total unrestricted stock on inventory based on material number and plant in the sales order line item",
             "expression": [
               "",
               "IF(",
@@ -8125,6 +8372,7 @@
           },
           {
             "name": "Audit 55 Score as % of Target MTD",
+            "description": "Month-to-date 5S score. If there is no date context/filter, this value is the current month's 5S score.",
             "expression": [
               "",
               "CALCULATE(",
@@ -8143,6 +8391,7 @@
           },
           {
             "name": "Audit 5S Score as % of Target MTD PM Var",
+            "description": "Difference between month-to-date and previous month's score as a % of target",
             "expression": [
               "",
               "VAR PM =",
@@ -8169,6 +8418,7 @@
           },
           {
             "name": "Safety Incident Count MTD",
+            "description": "Month-to-date count of incidents recorded in the Safety Incidents Log",
             "expression": [
               "",
               "CALCULATE(",
@@ -8187,6 +8437,7 @@
           },
           {
             "name": "Safety Incident Count MTD PM",
+            "description": "Previous month's total count of incidents recorded in the Safety Incidents Log",
             "expression": [
               "",
               "CALCULATE(",
@@ -8299,12 +8550,13 @@
           },
           {
             "name": "Official Standard Cost",
-            "description": "This cost is the material, labor, overhead, and setup cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
+            "description": "This cost is the material, labor, overhead, setup, and additive cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
             "expression": [
               "[Official Material Cost]",
               "    + [Official Labor Cost]",
               "    + [Official Overhead Cost]",
-              "    + [Official Setup Cost]"
+              "    + [Official Setup Cost]",
+              "    + [Official Additive Cost]"
             ],
             "formatString": "#,0",
             "displayFolder": "Cost in Sales Invoice"
@@ -8384,7 +8636,7 @@
           },
           {
             "name": "Official Labor Cost per Unit",
-            "description": "Current labor cost divided by quantity sold",
+            "description": "Official labor cost divided by quantity sold",
             "expression": [
               "DIVIDE(",
               "    [Official Labor Cost],",
@@ -8396,7 +8648,7 @@
           },
           {
             "name": "Official Material Cost per Unit",
-            "description": "Current material cost divided by quantity sold",
+            "description": "Official material cost divided by quantity sold",
             "expression": [
               "DIVIDE(",
               "    [Official Material Cost],",
@@ -8408,7 +8660,7 @@
           },
           {
             "name": "Official Overhead Cost per Unit",
-            "description": "Current overhead cost divided by quantity sold",
+            "description": "Official overhead cost divided by quantity sold",
             "expression": [
               "DIVIDE(",
               "    [Official Overhead Cost],",
@@ -8420,7 +8672,7 @@
           },
           {
             "name": "Official Setup Cost per Unit",
-            "description": "Current setup cost divided by quantity sold",
+            "description": "Official setup cost divided by quantity sold",
             "expression": [
               "DIVIDE(",
               "    [Official Setup Cost],",
@@ -8432,7 +8684,7 @@
           },
           {
             "name": "Official Standard Cost per Unit",
-            "description": "Current standard cost divided by quantity sold",
+            "description": "Official standard cost divided by quantity sold",
             "expression": [
               "DIVIDE(",
               "    [Official Standard Cost],",
@@ -8441,31 +8693,6 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Cost in Sales Invoice\\_Per Unit"
-          },
-          {
-            "name": "Planning Schedule Comparison Data Integrity%",
-            "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
-            "expression": [
-              "",
-              "VAR Required = DIVIDE( DATEDIFF([Prior Production Date], [Now Date], SECOND), 60 )",
-              "VAR Actual = ",
-              "    CALCULATE(",
-              "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
-              "        FILTER(",
-              "            'Calendar',",
-              "            'Calendar'[Date] >= [Report Date] - 1",
-              "        ),",
-              "        FILTER(",
-              "            'Upstream Log Simplified',",
-              "            'Upstream Log Simplified'[Start Time] <= [Now Date]",
-              "        )",
-              "    )",
-              "",
-              "RETURN",
-              "    DIVIDE( Actual, Required )"
-            ],
-            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
-            "displayFolder": "Planning Schedule"
           },
           {
             "name": "Process Order Scheduled Output by Month End",
@@ -8534,6 +8761,212 @@
             "expression": "SUM( 'Converting OEE'[ScrapFootage] )",
             "formatString": "#,0",
             "displayFolder": "Converting\\_OEE"
+          },
+          {
+            "name": "Frozen Additive Cost",
+            "description": "Total additive cost of billing documents. Cost is based on the cost roll at the pricing date of the billing document.",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice'[AdditiveCost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[AdditiveCost] * 'Sales Invoice'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice'[AdditiveCost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice'[AdditiveCost] ) ",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Official Additive Cost",
+            "description": "This cost is the setup cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
+            "expression": [
+              "",
+              "IF(",
+              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "    SWITCH(",
+              "        VALUES( '_Currency to Use'[Currency] ),",
+              "        \"USD\", SUM( 'Sales Invoice'[CurrentAdditiveCost] ),",
+              "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[CurrentAdditiveCost] * 'Sales Invoice'[Exchange Rate] ),",
+              "        SUM( 'Sales Invoice'[CurrentAdditiveCost] )",
+              "    ),",
+              "    SUM( 'Sales Invoice'[CurrentAdditiveCost] ) ",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Cost in Sales Invoice"
+          },
+          {
+            "name": "Additive Cost",
+            "description": "Latest official additive cost of the material. This measure is best used if analyzed by 'Material Master' and/or 'Plant'. Also If this is analyzed by 'Calendar', this measure shows the last cost within a date range.",
+            "expression": [
+              "VAR _isMaterialFiltered = HASONEFILTER( 'Material Costing History'[Material Number] ) || ISFILTERED( 'Material Master' )",
+              "VAR _isPlantFiltered = HASONEFILTER( 'Material Costing History'[Plant] ) || ISFILTERED( 'Plant' )",
+              "VAR _maxVisibleDate = ",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "VAR _latestRank =",
+              "    CALCULATE(",
+              "        IF(",
+              "            _isMaterialFiltered && _isPlantFiltered,",
+              "            MIN( 'Material Costing History'[LatestRank] ),",
+              "            IF(",
+              "                _isMaterialFiltered,",
+              "                CALCULATE(",
+              "                    MIN( 'Material Costing History'[LatestRank] ),",
+              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                ),",
+              "                BLANK()",
+              "            )",
+              "        ),",
+              "        FILTER(",
+              "            'Material Costing History',",
+              "            'Material Costing History'[Costing Start Date] <= _maxVisibleDate",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(_latestRank),",
+              "        BLANK(),",
+              "        SWITCH(",
+              "            TRUE(),",
+              "            HASONEVALUE( Plant[Plant] ),",
+              "                CALCULATE(",
+              "                    AVERAGE( 'Material Costing History'[Additive Cost] ),",
+              "                    KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank )",
+              "                ),",
+              "            CALCULATE(",
+              "                AVERAGE( 'Material Costing History'[Additive Cost] ),",
+              "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
+              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "            )",
+              "        )",
+              "    )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Material Cost and Price"
+          },
+          {
+            "name": "Official Additive Cost per Unit",
+            "description": "Official additive cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Official Additive Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Cost in Sales Invoice\\_Per Unit"
+          },
+          {
+            "name": "Frozen Additive Cost per Unit",
+            "description": "Frozen setup cost divided by quantity sold",
+            "expression": [
+              "DIVIDE(",
+              "    [Frozen Additive Cost],",
+              "    [Quantity Sold]",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Cost in Sales Invoice\\_Per Unit"
+          },
+          {
+            "name": "Inventory Additive Cost",
+            "description": "Product of unrestricted stock quantity and current additive cost per unit",
+            "expression": "SUM( 'Inventory'[Additive Cost (USD)] )",
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Cost of Inventory"
+          },
+          {
+            "name": "Inventory Snapshot Additive Cost",
+            "description": "Latest snapshot of the additive cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Inventory Snapshots'[Additive Cost] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Time-Based"
+          },
+          {
+            "name": "Planning Schedule Scheduled Hours",
+            "description": "Total scheduled duration (in hours) of scheduled process orders",
+            "expression": "SUM( 'Planning Schedule Comparison'[Plan Duration] )",
+            "formatString": "#,0.0",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Actual Hours",
+            "description": "Total actual duration (in hours) of scheduled process orders",
+            "expression": "SUM( 'Planning Schedule Comparison'[Actual Duration] )",
+            "formatString": "#,0.0",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Gained Hours",
+            "description": "Difference of scheduled and actual start timestamps of the latest order at the time of data refresh. Then, subtract the total hours of skipped process orders in the schedule.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DIVIDE( SUM( 'Planning Schedule Comparison'[VarStartInMins] ), 60 ),",
+              "    KEEPFILTERS( 'Planning Schedule Comparison'[LatestFlag] = \"Yes\" ),",
+              "    FILTER(",
+              "        ALL( 'Calendar' ),",
+              "        'Calendar'[Date] >= [Report Date]",
+              "    )",
+              ") - [Skipped Planned Orders Duration]"
+            ],
+            "formatString": "#,0.0 \"hr\"",
+            "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Planning Schedule Comparison Data Integrity%",
+            "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
+            "expression": [
+              "",
+              "VAR _Required = DIVIDE( DATEDIFF([Report Production Date], [Now Date], SECOND), 60 )",
+              "",
+              "VAR _Actual =",
+              "    CALCULATE(",
+              "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] >= [Report Date]",
+              "        ),",
+              "        FILTER(",
+              "            'Upstream Log Simplified',",
+              "            'Upstream Log Simplified'[Start Time] <= [Now Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    DIVIDE( _Actual, _Required )"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Planning Schedule"
           }
         ]
       },
@@ -8927,6 +9360,24 @@
             "description": "Customer PO in the reference sales order of the invoice/billing document",
             "sourceColumn": "ExtPurchaseOrderNo",
             "displayFolder": "Header"
+          },
+          {
+            "name": "AdditiveCost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AdditiveCostUSD",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values"
+          },
+          {
+            "name": "CurrentAdditiveCost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AdditiveCurrCostUSD",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Values"
           }
         ],
         "partitions": [
@@ -9233,6 +9684,7 @@
             "isHidden": true,
             "sourceColumn": "SBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none",
             "annotations": [
               {
@@ -9247,6 +9699,7 @@
             "isHidden": true,
             "sourceColumn": "QBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none",
             "annotations": [
               {
@@ -9261,6 +9714,7 @@
             "isHidden": true,
             "sourceColumn": "ExpiredValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isAvailableInMdx": false,
             "summarizeBy": "none",
             "annotations": [
               {
@@ -13224,6 +13678,7 @@
             "isHidden": true,
             "sourceColumn": "InspectionStockQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "none"
           },
@@ -13234,6 +13689,7 @@
             "isHidden": true,
             "sourceColumn": "BlockedStockQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "none"
           },
@@ -13244,6 +13700,7 @@
             "isHidden": true,
             "sourceColumn": "StandardPrice",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\Local",
             "summarizeBy": "none"
           },
@@ -13254,6 +13711,7 @@
             "isHidden": true,
             "sourceColumn": "UnrestrictStockAmtUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -13264,6 +13722,7 @@
             "isHidden": true,
             "sourceColumn": "InspectionStockAmtUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -13274,6 +13733,7 @@
             "isHidden": true,
             "sourceColumn": "BlockedStockAmtUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -13284,6 +13744,7 @@
             "isHidden": true,
             "sourceColumn": "StandardPriceUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\USD",
             "summarizeBy": "none"
           },
@@ -13300,6 +13761,7 @@
             "isHidden": true,
             "sourceColumn": "TransferStockQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "none"
           },
@@ -13310,6 +13772,7 @@
             "isHidden": true,
             "sourceColumn": "TransferStockAmtUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -13320,6 +13783,7 @@
             "isHidden": true,
             "sourceColumn": "TotalStockQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Quantities",
             "summarizeBy": "none"
           },
@@ -13330,6 +13794,7 @@
             "isHidden": true,
             "sourceColumn": "TotalStockAmtUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Values",
             "summarizeBy": "none"
           },
@@ -13340,6 +13805,7 @@
             "isHidden": true,
             "sourceColumn": "MaterialCostUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\USD",
             "summarizeBy": "none"
           },
@@ -13350,6 +13816,7 @@
             "isHidden": true,
             "sourceColumn": "LaborCostUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\USD",
             "summarizeBy": "none"
           },
@@ -13360,6 +13827,7 @@
             "isHidden": true,
             "sourceColumn": "OverheadCostUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\USD",
             "summarizeBy": "none"
           },
@@ -13370,6 +13838,7 @@
             "isHidden": true,
             "sourceColumn": "SetupCostUSD",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\USD",
             "summarizeBy": "none"
           },
@@ -13380,6 +13849,7 @@
             "isHidden": true,
             "sourceColumn": "MaterialCost",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\Local",
             "summarizeBy": "none"
           },
@@ -13390,6 +13860,7 @@
             "isHidden": true,
             "sourceColumn": "LaborCost",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\Local",
             "summarizeBy": "none"
           },
@@ -13400,6 +13871,7 @@
             "isHidden": true,
             "sourceColumn": "OverheadCost",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\Local",
             "summarizeBy": "none"
           },
@@ -13410,6 +13882,7 @@
             "isHidden": true,
             "sourceColumn": "SetupCost",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\Local",
             "summarizeBy": "none"
           },
@@ -13427,6 +13900,24 @@
             "sourceColumn": "SafetyStockQty",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Additive Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AdditiveCost",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Standard Prices\\Local"
+          },
+          {
+            "name": "Additive Cost (USD)",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AdditiveCostUSD",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Standard Prices\\USD"
           }
         ],
         "partitions": [
@@ -13784,6 +14275,14 @@
                 "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "Additive Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AdditiveCostUSD",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -16694,6 +17193,14 @@
             "sourceColumn": "StandardCost",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Additive Cost",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AdditiveCost",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -16706,7 +17213,7 @@
                 "let",
                 "    Source = ARLPBI_STAGE,",
                 "    dbo_FACT_MaterialCostingHistory = Source{[Schema=\"dbo\",Item=\"FACT_MaterialCostingHistory\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_FACT_MaterialCostingHistory,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"CostingBy\", \"Currency\", \"StandardCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\", \"LatestRank\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_FACT_MaterialCostingHistory,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"CostingBy\", \"Currency\", \"StandardCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\", \"AdditiveCost\", \"LatestRank\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -19405,6 +19912,7 @@
           {
             "name": "Plan Duration",
             "dataType": "decimal",
+            "isHidden": true,
             "sourceColumn": "PlanDuration",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -19412,6 +19920,7 @@
           {
             "name": "Actual Duration",
             "dataType": "decimal",
+            "isHidden": true,
             "sourceColumn": "ActualDuration",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -19807,7 +20316,7 @@
         ],
         "partitions": [
           {
-            "name": "Storage Bin Utilization (Snapshots)",
+            "name": "Storage Bin Utilization Snapshots",
             "dataView": "full",
             "source": {
               "type": "m",
@@ -21322,6 +21831,13 @@
         "fromColumn": "Sales Region Alternative",
         "toTable": "BRIDGE_SalesRegion",
         "toColumn": "Sales Region"
+      },
+      {
+        "name": "47ef2365-5c35-431f-9111-3fa978f33e90",
+        "fromTable": "Planning Schedule Comparison",
+        "fromColumn": "ProductionDate",
+        "toTable": "Calendar",
+        "toColumn": "Date"
       }
     ],
     "perspectives": [
@@ -24013,6 +24529,18 @@
               },
               {
                 "name": "Official Standard Cost per Unit"
+              },
+              {
+                "name": "Frozen Additive Cost"
+              },
+              {
+                "name": "Official Additive Cost"
+              },
+              {
+                "name": "Official Additive Cost per Unit"
+              },
+              {
+                "name": "Frozen Additive Cost per Unit"
               }
             ]
           },
@@ -24209,6 +24737,12 @@
               },
               {
                 "name": "Customer PO"
+              },
+              {
+                "name": "AdditiveCost"
+              },
+              {
+                "name": "CurrentAdditiveCost"
               }
             ]
           },
@@ -24484,6 +25018,9 @@
               },
               {
                 "name": "Standard Cost"
+              },
+              {
+                "name": "Additive Cost"
               }
             ]
           },
@@ -25226,6 +25763,12 @@
               },
               {
                 "name": "Customer PO"
+              },
+              {
+                "name": "AdditiveCost"
+              },
+              {
+                "name": "CurrentAdditiveCost"
               }
             ]
           },
@@ -25701,9 +26244,6 @@
               },
               {
                 "name": "In Stock Flag"
-              },
-              {
-                "name": "Purchase Order Delivered Quantity"
               },
               {
                 "name": "Purchase Order In Transit Quantity"
@@ -27172,9 +27712,6 @@
                 "name": "Purchase Order Invoice Receipt Quantity FYTD PY Last"
               },
               {
-                "name": "Purchase Order Delivered Quantity"
-              },
-              {
                 "name": "Purchase Order In Transit Quantity"
               },
               {
@@ -28460,13 +28997,13 @@
                 "name": "Upstream Changeover Time"
               },
               {
-                "name": "Upstream Overall Equipment Efficiency (Target)"
+                "name": "Upstream Overall Equipment Efficiency Target"
               },
               {
-                "name": "Upstream First Pass Reliability (Target)"
+                "name": "Upstream First Pass Reliability Target"
               },
               {
-                "name": "Upstream Changeover Time (Target)"
+                "name": "Upstream Changeover Time Target"
               },
               {
                 "name": "Upstream Performance Impact"
@@ -28490,7 +29027,7 @@
                 "name": "Report Date"
               },
               {
-                "name": "Upstream Overall Equipment Efficiency (Target Var)"
+                "name": "Upstream Overall Equipment Efficiency Target Var"
               },
               {
                 "name": "CONV Linear Footage"
@@ -29893,9 +30430,6 @@
                 "name": "Available Inventory Quantity after Allocations and Open Sales Orders"
               },
               {
-                "name": "Purchase Order Delivered Quantity"
-              },
-              {
                 "name": "Purchase Order Open Amount"
               },
               {
@@ -30026,6 +30560,12 @@
               },
               {
                 "name": "Inventory Snapshot Quantity"
+              },
+              {
+                "name": "Inventory Additive Cost"
+              },
+              {
+                "name": "Inventory Snapshot Additive Cost"
               }
             ]
           },
@@ -30126,6 +30666,12 @@
               },
               {
                 "name": "SafetyStockQty"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "Additive Cost (USD)"
               }
             ]
           },
@@ -30662,6 +31208,9 @@
               },
               {
                 "name": "Setup Cost"
+              },
+              {
+                "name": "Additive Cost"
               }
             ]
           },
@@ -30991,6 +31540,9 @@
               },
               {
                 "name": "Standard Cost"
+              },
+              {
+                "name": "Additive Cost"
               }
             ]
           },
@@ -31268,6 +31820,12 @@
               },
               {
                 "name": "SafetyStockQty"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "Additive Cost (USD)"
               }
             ]
           },
@@ -31566,9 +32124,6 @@
                 "name": "Safety Work Hours FYTD"
               },
               {
-                "name": "Planning Schedule Hours Gained"
-              },
-              {
                 "name": "Skipped Planned Orders Duration"
               },
               {
@@ -31803,10 +32358,22 @@
                 "name": "Safety Incident Count MTD PM"
               },
               {
-                "name": "Planning Schedule Comparison Data Integrity%"
+                "name": "Process Order Scheduled Output by Month End"
               },
               {
-                "name": "Process Order Scheduled Output by Month End"
+                "name": "Inventory Additive Cost"
+              },
+              {
+                "name": "Planning Schedule Scheduled Hours"
+              },
+              {
+                "name": "Planning Schedule Actual Hours"
+              },
+              {
+                "name": "Planning Schedule Gained Hours"
+              },
+              {
+                "name": "Planning Schedule Comparison Data Integrity%"
               }
             ]
           },
@@ -32026,6 +32593,9 @@
               },
               {
                 "name": "Setup Cost"
+              },
+              {
+                "name": "Additive Cost"
               }
             ]
           },
@@ -32607,6 +33177,17 @@
               },
               {
                 "name": "VarStartInMins"
+              }
+            ]
+          },
+          {
+            "name": "_Time Intelligence",
+            "columns": [
+              {
+                "name": "Time Calculation"
+              },
+              {
+                "name": "Ordinal"
               }
             ]
           }
@@ -35413,6 +35994,12 @@
               },
               {
                 "name": "MaterialNoKey"
+              },
+              {
+                "name": "AdditiveCost"
+              },
+              {
+                "name": "CurrentAdditiveCost"
               }
             ]
           },
@@ -35686,6 +36273,21 @@
               },
               {
                 "name": "Sales Order Ordered Quantity"
+              },
+              {
+                "name": "Frozen Additive Cost"
+              },
+              {
+                "name": "Official Additive Cost"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "Official Additive Cost per Unit"
+              },
+              {
+                "name": "Frozen Additive Cost per Unit"
               }
             ]
           },

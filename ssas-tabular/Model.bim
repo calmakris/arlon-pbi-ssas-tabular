@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -1556,20 +1557,6 @@
             "displayFolder": "Upstream Log"
           },
           {
-            "name": "Upstream Overall Equipment Efficiency Target",
-            "description": "Monthly target data supplied by Engineering once every fiscal year",
-            "expression": [
-              "",
-              "SWITCH(TRUE(),",
-              "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST Overall Equipment Efficiency (Target)],",
-              "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT Overall Equipment Efficiency (Target)],",
-              "    DIVIDE( ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]), 2 )",
-              ")"
-            ],
-            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
-            "displayFolder": "Upstream Log"
-          },
-          {
             "name": "CAST First Pass Reliability (Target)",
             "expression": [
               "",
@@ -1623,33 +1610,6 @@
             ],
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "isHidden": true,
-            "displayFolder": "Upstream Log"
-          },
-          {
-            "name": "Upstream First Pass Reliability Target",
-            "description": "Monthly target data supplied by Engineering once every fiscal year",
-            "expression": [
-              "",
-              "SWITCH(TRUE(),",
-              "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST First Pass Reliability (Target)],",
-              "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT First Pass Reliability (Target)],",
-              "    DIVIDE( ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]), 2 )",
-              ")"
-            ],
-            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
-            "displayFolder": "Upstream Log"
-          },
-          {
-            "name": "Upstream Changeover Time Target",
-            "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified' table",
-            "expression": [
-              "",
-              "CALCULATE(",
-              "    [Upstream Changeover Time],",
-              "    SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\"))",
-              ")"
-            ],
-            "formatString": "#,0 \"min\"",
             "displayFolder": "Upstream Log"
           },
           {
@@ -1834,13 +1794,6 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
-          },
-          {
-            "name": "Upstream Overall Equipment Efficiency Target Var",
-            "description": "Difference between OEE and the corresponding monthly target",
-            "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency Target]",
-            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
-            "displayFolder": "Upstream Log"
           },
           {
             "name": "Helper_12MoAgo",
@@ -8967,6 +8920,54 @@
             ],
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Planning Schedule"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency Target",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST Overall Equipment Efficiency (Target)],",
+              "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT Overall Equipment Efficiency (Target)],",
+              "    DIVIDE( ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]), 2 )",
+              ")"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Upstream Log"
+          },
+          {
+            "name": "Upstream First Pass Reliability Target",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "SWITCH(TRUE(),",
+              "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST First Pass Reliability (Target)],",
+              "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT First Pass Reliability (Target)],",
+              "    DIVIDE( ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]), 2 )",
+              ")"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Upstream Log"
+          },
+          {
+            "name": "Upstream Changeover Time Target",
+            "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified' table",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Upstream Changeover Time],",
+              "    SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\"))",
+              ")"
+            ],
+            "formatString": "#,0 \"min\"",
+            "displayFolder": "Upstream Log"
+          },
+          {
+            "name": "Upstream Overall Equipment Efficiency Target Var",
+            "description": "Difference between OEE and the corresponding monthly target",
+            "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency Target]",
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Upstream Log"
           }
         ]
       },
@@ -11137,7 +11138,6 @@
             "name": "Plant",
             "dataType": "string",
             "description": "Plant assigned to the sales order item",
-            "isHidden": true,
             "sourceColumn": "PlantNoKey",
             "isAvailableInMdx": false,
             "displayFolder": "Item"
@@ -13141,57 +13141,6 @@
                 "    dbo_FACT_ConvertingHours = Source{[Schema=\"dbo\",Item=\"FACT_ConvertingHours\"]}[Data]",
                 "in",
                 "    dbo_FACT_ConvertingHours"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Converting Uptime",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "Production Date",
-            "dataType": "dateTime",
-            "description": "Production date starts at 6am and ends at 5:59am the next day",
-            "isHidden": true,
-            "sourceColumn": "ProductionDate",
-            "formatString": "Short Date",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Machine Name",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MachineName",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Uptime Seconds",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "UptimeSeconds",
-            "isAvailableInMdx": false
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Converting Uptime",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_ConvertingUptime = Source{[Schema=\"dbo\",Item=\"FACT_ConvertingUptime\"]}[Data]",
-                "in",
-                "    dbo_FACT_ConvertingUptime"
               ]
             }
           }
@@ -19915,6 +19864,7 @@
             "isHidden": true,
             "sourceColumn": "PlanDuration",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
@@ -19923,6 +19873,7 @@
             "isHidden": true,
             "sourceColumn": "ActualDuration",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false,
             "summarizeBy": "none"
           },
           {
@@ -20573,13 +20524,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "6985a741-d8a9-4d99-bee9-693dd4e5011c",
-        "fromTable": "Converting Uptime",
-        "fromColumn": "Production Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
-      },
-      {
         "name": "2a7d8317-b122-4a81-b5ba-c855ebccc8c2",
         "fromTable": "Upstream Log",
         "fromColumn": "Production Date",
@@ -21035,13 +20979,6 @@
         "isActive": false
       },
       {
-        "name": "21764f5f-1d6d-4ff2-8861-9ee6b673ce23",
-        "fromTable": "Converting Uptime",
-        "fromColumn": "Machine Name",
-        "toTable": "Machine",
-        "toColumn": "Machine"
-      },
-      {
         "name": "cadcbb5d-7078-40c2-b40a-ba9d901ee072",
         "fromTable": "Goods Movement",
         "fromColumn": "Plant",
@@ -21328,13 +21265,6 @@
         "toColumn": "Company Code",
         "crossFilteringBehavior": "bothDirections",
         "securityFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "bba6dac8-7d7b-4134-b131-4873355f8c35",
-        "fromTable": "Plant",
-        "fromColumn": "CompCode",
-        "toTable": "Company Code",
-        "toColumn": "Company Code"
       },
       {
         "name": "a67057e5-6752-4594-b29e-2899c4fc5eea",
@@ -21838,6 +21768,13 @@
         "fromColumn": "ProductionDate",
         "toTable": "Calendar",
         "toColumn": "Date"
+      },
+      {
+        "name": "81554456-4a03-49da-ac62-fd60aabbc444",
+        "fromTable": "Plant",
+        "fromColumn": "CompCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -23483,6 +23420,15 @@
               },
               {
                 "name": "Complaint Count"
+              },
+              {
+                "name": "Complaint Amount"
+              },
+              {
+                "name": "Complaint Credit Issued Amount"
+              },
+              {
+                "name": "Complaint Open Amount"
               }
             ]
           },
@@ -28997,15 +28943,6 @@
                 "name": "Upstream Changeover Time"
               },
               {
-                "name": "Upstream Overall Equipment Efficiency Target"
-              },
-              {
-                "name": "Upstream First Pass Reliability Target"
-              },
-              {
-                "name": "Upstream Changeover Time Target"
-              },
-              {
                 "name": "Upstream Performance Impact"
               },
               {
@@ -29025,9 +28962,6 @@
               },
               {
                 "name": "Report Date"
-              },
-              {
-                "name": "Upstream Overall Equipment Efficiency Target Var"
               },
               {
                 "name": "CONV Linear Footage"
@@ -29274,6 +29208,18 @@
               },
               {
                 "name": "CONV OEE Scrap Footage"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency Target"
+              },
+              {
+                "name": "Upstream First Pass Reliability Target"
+              },
+              {
+                "name": "Upstream Changeover Time Target"
+              },
+              {
+                "name": "Upstream Overall Equipment Efficiency Target Var"
               }
             ]
           },
@@ -29308,20 +29254,6 @@
               },
               {
                 "name": "Shift"
-              }
-            ]
-          },
-          {
-            "name": "Converting Uptime",
-            "columns": [
-              {
-                "name": "Machine Name"
-              },
-              {
-                "name": "Production Date"
-              },
-              {
-                "name": "Uptime Seconds"
               }
             ]
           },
@@ -37330,5 +37262,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

@@ -11208,7 +11208,7 @@
           },
           {
             "name": "Unit Price",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Price per unit of the sales order item",
             "sourceColumn": "UnitPrice",
             "formatString": "#,0.00",
@@ -11217,7 +11217,7 @@
           },
           {
             "name": "Exchange Rate",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Exchange rate to convert the value to USD.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.00",
@@ -11277,7 +11277,7 @@
           },
           {
             "name": "Gross Weight",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "The total gross weight of the item. The gross weight represents the net weight plus the weight of packaging.",
             "sourceColumn": "GrossWeight",
             "formatString": "#,0.00",
@@ -11388,7 +11388,7 @@
           },
           {
             "name": "OrderQuantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
@@ -11398,7 +11398,7 @@
           },
           {
             "name": "OrderAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11414,7 +11414,7 @@
           },
           {
             "name": "CostAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11430,7 +11430,7 @@
           },
           {
             "name": "AllocatedQuantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "AllocatedQuantity",
             "formatString": "#,0.00",
@@ -11440,7 +11440,7 @@
           },
           {
             "name": "ShippedQuantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ShippedQuantity",
             "formatString": "#,0.00",
@@ -11450,7 +11450,7 @@
           },
           {
             "name": "InternalOpenQuantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Order quantity minus allocated and shipped quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenQuantity",
@@ -11461,7 +11461,7 @@
           },
           {
             "name": "CustomerOpenQuantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomerOpenQuantity",
             "formatString": "#,0.00",
@@ -11471,7 +11471,7 @@
           },
           {
             "name": "CostAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CostAmount",
             "formatString": "#,0",
@@ -11481,7 +11481,7 @@
           },
           {
             "name": "OrderAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
@@ -11491,7 +11491,7 @@
           },
           {
             "name": "InternalOpenAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmount",
@@ -11502,7 +11502,7 @@
           },
           {
             "name": "InternalOpenAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmountUSD",
@@ -11519,7 +11519,7 @@
           },
           {
             "name": "CustomerOpenAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmount",
             "formatString": "#,0",
@@ -11529,7 +11529,7 @@
           },
           {
             "name": "CustomerOpenAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11545,7 +11545,7 @@
           },
           {
             "name": "MarginAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmount",
@@ -11556,7 +11556,7 @@
           },
           {
             "name": "MarginAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmountUSD",
@@ -11573,7 +11573,7 @@
           },
           {
             "name": "CustomerOpenMarginAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11588,7 +11588,7 @@
           },
           {
             "name": "CustomerOpenMarginAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmount",
             "formatString": "#,0",
@@ -11597,7 +11597,7 @@
           },
           {
             "name": "AllocatedAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "AllocatedAmount",
             "formatString": "#,0",
@@ -11607,7 +11607,7 @@
           },
           {
             "name": "AllocatedAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "AllocatedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11623,7 +11623,7 @@
           },
           {
             "name": "ShippedAmount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ShippedAmount",
             "formatString": "#,0",
@@ -11633,7 +11633,7 @@
           },
           {
             "name": "ShippedAmountUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ShippedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11649,7 +11649,7 @@
           },
           {
             "name": "CustomerOpenWeight",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CustomerOpenWeight",
             "formatString": "#,0.00",
@@ -11658,7 +11658,7 @@
           },
           {
             "name": "LateQuantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "description": "Difference between [Order Quantity] and [Shipped On Time Quantity]",
             "isHidden": true,
             "sourceColumn": "LateQuantity",
@@ -11668,7 +11668,7 @@
           },
           {
             "name": "UnrestrictStockQty",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
@@ -11734,6 +11734,13 @@
             "sourceColumn": "HasChanges_CS",
             "isAvailableInMdx": false,
             "displayFolder": "Header"
+          },
+          {
+            "name": "Company Code",
+            "dataType": "string",
+            "description": "Company code where the sales orders is to be billed",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -21267,13 +21274,6 @@
         "securityFilteringBehavior": "bothDirections"
       },
       {
-        "name": "a67057e5-6752-4594-b29e-2899c4fc5eea",
-        "fromTable": "Sales Order",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "8db5c5cb-9dcf-4a87-b1cf-901a7c8e2aab",
         "fromTable": "Inventory Open WIP",
         "fromColumn": "Material Number",
@@ -21773,6 +21773,13 @@
         "name": "81554456-4a03-49da-ac62-fd60aabbc444",
         "fromTable": "Plant",
         "fromColumn": "CompCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "c0cc6236-48d9-4a17-955a-05116b73ebcb",
+        "fromTable": "Sales Order",
+        "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
       }
@@ -23644,6 +23651,9 @@
               },
               {
                 "name": "InStockIndicator"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -23790,17 +23800,6 @@
             "columns": [
               {
                 "name": "Sales Region"
-              }
-            ]
-          },
-          {
-            "name": "Company Code",
-            "columns": [
-              {
-                "name": "Company Code"
-              },
-              {
-                "name": "Currency"
               }
             ]
           },
@@ -23980,6 +23979,17 @@
               },
               {
                 "name": "CycleTime"
+              }
+            ]
+          },
+          {
+            "name": "Company Code",
+            "columns": [
+              {
+                "name": "Company Code"
+              },
+              {
+                "name": "Currency"
               }
             ]
           }
@@ -24904,6 +24914,9 @@
               },
               {
                 "name": "InStockIndicator"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -25930,6 +25943,9 @@
               },
               {
                 "name": "InStockIndicator"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -26530,6 +26546,9 @@
               },
               {
                 "name": "HasChanges_CS"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -28223,6 +28242,9 @@
               },
               {
                 "name": "HasChanges_CS"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -31105,6 +31127,9 @@
               },
               {
                 "name": "InStockIndicator"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -33638,6 +33663,9 @@
               },
               {
                 "name": "InStockIndicator"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           },
@@ -36491,6 +36519,9 @@
               },
               {
                 "name": "HasChanges_CS"
+              },
+              {
+                "name": "Company Code"
               }
             ]
           }

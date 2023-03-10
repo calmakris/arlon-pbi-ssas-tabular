@@ -4631,15 +4631,29 @@
           },
           {
             "name": "S-Block Amount",
-            "description": "Total standard cost of inventory on S block",
-            "expression": " SUM('Blocked Inventory'[SBlock Amount])",
+            "description": "Total standard cost of inventory on S block but not expired",
+            "expression": [
+              "CALCULATE(",
+              "    SUM( 'Inventory'[AmountUSD] ),",
+              "    KEEPFILTERS( 'Inventory'[Stock Category] = \"S\" ),",
+              "    FILTER(",
+              "        'Inventory',",
+              "        'Inventory'[Expiration Date] > [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Q-Block Amount",
             "description": "Total standard cost of inventory on Q block",
-            "expression": " SUM('Blocked Inventory'[QBlock Amount])",
+            "expression": [
+              "CALCULATE(",
+              "    SUM( 'Inventory'[AmountUSD] ),",
+              "    KEEPFILTERS( 'Inventory'[Stock Category] = \"Q\" )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Blocked"
           },
@@ -4656,10 +4670,10 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( 'Expired Inventory'[Stock Amount] ),",
+              "    SUM( 'Inventory'[AmountUSD] ),",
               "    FILTER(",
-              "        ALL( 'Expired Inventory'[Expiration Date] ),",
-              "        'Expired Inventory'[Expiration Date] <= [Report Date]",
+              "        ALL( 'Inventory'[Expiration Date] ),",
+              "        'Inventory'[Expiration Date] <= [Report Date]",
               "    )",
               ")",
               ""
@@ -6234,15 +6248,29 @@
           },
           {
             "name": "S-Block Quantity",
-            "description": "Total quantity of inventory on S block",
-            "expression": " SUM( 'Blocked Inventory'[SBlock Quantity] )",
+            "description": "Total quantity of inventory on S block but not expired",
+            "expression": [
+              "CALCULATE(",
+              "    SUM( 'Inventory'[Quantity] ),",
+              "    KEEPFILTERS( 'Inventory'[Stock Category] = \"S\" ),",
+              "    FILTER(",
+              "        'Inventory',",
+              "        'Inventory'[Expiration Date] > [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Inventory\\_Blocked"
           },
           {
             "name": "Q-Block Quantity",
             "description": "Total quantity of inventory on Q block",
-            "expression": " SUM( 'Blocked Inventory'[QBlock Quantity] )",
+            "expression": [
+              "CALCULATE(",
+              "    SUM( 'Inventory'[Quantity] ),",
+              "    KEEPFILTERS( 'Inventory'[Stock Category] = \"Q\" )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Inventory\\_Blocked"
           },
@@ -6251,35 +6279,27 @@
             "description": "Total quantity of inventory with expiration/SLED date on or before yesterday.",
             "expression": [
               "",
-              "VAR Qty =",
-              "    CALCULATE(",
-              "        SUM( 'Expired Inventory'[Stock Quantity] ),",
-              "        FILTER(",
-              "            ALL( 'Expired Inventory'[Expiration Date] ),",
-              "            'Expired Inventory'[Expiration Date] <= [Report Date]",
-              "        )",
-              "    )",
-              "",
-              "VAR Amt =",
-              "    CALCULATE(",
-              "        SUM( 'Expired Inventory'[Stock Amount] ),",
-              "        FILTER(",
-              "            ALL( 'Expired Inventory'[Expiration Date] ),",
-              "            'Expired Inventory'[Expiration Date] <= [Report Date]",
-              "        )",
-              "    )",
+              "VAR Qty = SUM( 'Inventory'[AmountUSD] )",
+              "VAR Amt = SUM( 'Inventory'[Quantity] )",
               "",
               "RETURN",
-              "    IF(",
-              "        HASONEVALUE( '_Value to Use'[Value] ),",
-              "        SWITCH(",
-              "            VALUES( '_Value to Use'[Value] ),",
-              "            \"Quantity\", Qty,",
-              "            \"Amount\", Amt,",
+              "    CALCULATE(",
+              "        IF(",
+              "            HASONEVALUE( '_Value to Use'[Value] ),",
+              "            SWITCH(",
+              "                VALUES( '_Value to Use'[Value] ),",
+              "                \"Quantity\", Qty,",
+              "                \"Amount\", Amt,",
+              "                Qty",
+              "            ),",
               "            Qty",
               "        ),",
-              "        Qty",
-              "    )"
+              "        FILTER(",
+              "            ALL( 'Inventory'[Expiration Date] ),",
+              "            'Inventory'[Expiration Date] <= [Report Date]",
+              "        )",
+              "    )",
+              ""
             ],
             "formatString": "#,0.00",
             "displayFolder": "Inventory\\_Blocked\\_Expired"
@@ -6392,18 +6412,21 @@
             "description": "Total quantity of materials on physical inventory that has no block category",
             "expression": [
               "",
-              "VAR Qty = SUM('Inventory'[Unrestricted Stock Quantity])",
-              "VAR Amt = SUM('Inventory'[Unrestricted Stock Amount (USD)])",
+              "VAR Qty = SUM( 'Inventory'[AmountUSD] )",
+              "VAR Amt = SUM( 'Inventory'[Quantity] )",
               "RETURN",
-              "    IF(",
-              "        HASONEVALUE( '_Value to Use'[Value] ),",
-              "        SWITCH(",
-              "            VALUES( '_Value to Use'[Value] ),",
-              "            \"Quantity\", Qty,",
-              "            \"Amount\", Amt,",
+              "    CALCULATE(",
+              "        IF(",
+              "            HASONEVALUE( '_Value to Use'[Value] ),",
+              "            SWITCH(",
+              "                VALUES( '_Value to Use'[Value] ),",
+              "                \"Quantity\", Qty,",
+              "                \"Amount\", Amt,",
+              "                Qty",
+              "            ),",
               "            Qty",
               "        ),",
-              "        Qty",
+              "        KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
               "    )",
               ""
             ],
@@ -6415,9 +6438,9 @@
             "description": "Average safety stock quantity by material and plant. If this measure is grouped by material only and not plant, this value is the average safety stock across all the plants.",
             "expression": [
               "",
-              "AVERAGEX(",
-              "    VALUES( 'Inventory'[MaterialPlantKey] ),",
-              "    AVERAGE('Inventory'[SafetyStockQty])",
+              "SUMX(",
+              "    VALUES( 'FACT_SafetyStock'[MaterialPlantKey] ),",
+              "    AVERAGE( 'FACT_SafetyStock'[SafetyStockQty] )",
               ")"
             ],
             "formatString": "#,0.00",
@@ -6447,8 +6470,8 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( 'Expired Inventory'[Stock Amount] ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Expired Inventory'[Expiration Date] ),",
+              "    SUM( 'Inventory'[AmountUSD] ),",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'Inventory'[Expiration Date] ),",
               "    FILTER(",
               "        ALL( 'Calendar'[Date] ),",
               "        'Calendar'[Date] <= MAX( 'Calendar'[Date] )",
@@ -6551,7 +6574,7 @@
             "expression": [
               "",
               "-- valuated inventory",
-              "SUM( 'Inventory'[Total Stock Amount (USD)] ) +",
+              "SUM( 'Inventory'[AmountUSD] ) +",
               "-- open stock transfer purchase orders",
               "CALCULATE(",
               "    [Purchase Order In Transit Amount],",
@@ -8040,7 +8063,13 @@
           {
             "name": "Unrestricted Stock Amount",
             "description": "Total standard cost of materials on physical inventory that has no block category",
-            "expression": "SUM('Inventory'[Unrestricted Stock Amount (USD)])",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Inventory'[AmountUSD] ),",
+              "    KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Inventory"
           },
@@ -8128,7 +8157,7 @@
             "expression": [
               "",
               "-- valuated inventory",
-              "SUM( 'Inventory'[Total Stock Quantity] ) +",
+              "SUM( 'Inventory'[Quantity] ) +",
               "-- open stock transfer purchase orders",
               "CALCULATE(",
               "    [Purchase Order In Transit Quantity],",
@@ -9060,14 +9089,6 @@
             "dataCategory": "City"
           },
           {
-            "name": "CompanyCode",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "CompanyCode",
-            "isAvailableInMdx": false,
-            "displayFolder": "Header"
-          },
-          {
             "name": "Sales Order Type",
             "dataType": "string",
             "description": "Sales order type referenced in the invoice/billing document",
@@ -9086,7 +9107,9 @@
             "name": "Plant",
             "dataType": "string",
             "description": "Plant assigned in the line item in the invoice/billing document",
+            "isHidden": true,
             "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false,
             "displayFolder": "Item"
           },
           {
@@ -9507,7 +9530,16 @@
             "name": "Plant for Material",
             "dataType": "string",
             "description": "Plant assigned in the notification.",
-            "sourceColumn": "PlantMaterial"
+            "isHidden": true,
+            "sourceColumn": "PlantMaterial",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10520,7 +10552,9 @@
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: EKKO.BUKRS",
+            "isHidden": true,
             "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false,
             "displayFolder": "Header"
           },
           {
@@ -11067,7 +11101,7 @@
       },
       {
         "name": "Sales Order",
-        "description": "SAP Source: VBAK, VBAP, VBUK, VBUP, VBUK, VBPA, VBEP, LIKP, LIPS, and KNMT; Granularity: One row per sales order document and line number; Contains general and status information about sales order documents.",
+        "description": "Standard, container, buyout, free-of-charge, sample, and consignment fillup sales orders entered in SAP in the last few fiscal years",
         "columns": [
           {
             "name": "OrderNoLineKey",
@@ -11208,7 +11242,7 @@
           },
           {
             "name": "Unit Price",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Price per unit of the sales order item",
             "sourceColumn": "UnitPrice",
             "formatString": "#,0.00",
@@ -11217,7 +11251,7 @@
           },
           {
             "name": "Exchange Rate",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Exchange rate to convert the value to USD.",
             "sourceColumn": "ExchangeRate",
             "formatString": "0.00",
@@ -11274,15 +11308,6 @@
             "description": "Weight unit of measure of the sales order item",
             "sourceColumn": "WeightUoM",
             "displayFolder": "Item"
-          },
-          {
-            "name": "Gross Weight",
-            "dataType": "double",
-            "description": "The total gross weight of the item. The gross weight represents the net weight plus the weight of packaging.",
-            "sourceColumn": "GrossWeight",
-            "formatString": "#,0.00",
-            "displayFolder": "Item",
-            "summarizeBy": "none"
           },
           {
             "name": "Purchase Order Number",
@@ -11388,7 +11413,7 @@
           },
           {
             "name": "OrderQuantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OrderQuantity",
             "formatString": "#,0.00",
@@ -11398,7 +11423,7 @@
           },
           {
             "name": "OrderAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OrderAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11414,7 +11439,7 @@
           },
           {
             "name": "CostAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CostAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11430,7 +11455,7 @@
           },
           {
             "name": "AllocatedQuantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedQuantity",
             "formatString": "#,0.00",
@@ -11440,7 +11465,7 @@
           },
           {
             "name": "ShippedQuantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedQuantity",
             "formatString": "#,0.00",
@@ -11450,7 +11475,7 @@
           },
           {
             "name": "InternalOpenQuantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Order quantity minus allocated and shipped quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenQuantity",
@@ -11461,7 +11486,7 @@
           },
           {
             "name": "CustomerOpenQuantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenQuantity",
             "formatString": "#,0.00",
@@ -11471,7 +11496,7 @@
           },
           {
             "name": "CostAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CostAmount",
             "formatString": "#,0",
@@ -11481,7 +11506,7 @@
           },
           {
             "name": "OrderAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OrderAmount",
             "formatString": "#,0",
@@ -11491,7 +11516,7 @@
           },
           {
             "name": "InternalOpenAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmount",
@@ -11502,7 +11527,7 @@
           },
           {
             "name": "InternalOpenAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Total value of internal open quantity",
             "isHidden": true,
             "sourceColumn": "InternalOpenAmountUSD",
@@ -11519,7 +11544,7 @@
           },
           {
             "name": "CustomerOpenAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmount",
             "formatString": "#,0",
@@ -11529,7 +11554,7 @@
           },
           {
             "name": "CustomerOpenAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11545,7 +11570,7 @@
           },
           {
             "name": "MarginAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmount",
@@ -11556,7 +11581,7 @@
           },
           {
             "name": "MarginAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Net of order and cost amount",
             "isHidden": true,
             "sourceColumn": "MarginAmountUSD",
@@ -11573,7 +11598,7 @@
           },
           {
             "name": "CustomerOpenMarginAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11588,7 +11613,7 @@
           },
           {
             "name": "CustomerOpenMarginAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenMarginAmount",
             "formatString": "#,0",
@@ -11597,7 +11622,7 @@
           },
           {
             "name": "AllocatedAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedAmount",
             "formatString": "#,0",
@@ -11607,7 +11632,7 @@
           },
           {
             "name": "AllocatedAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AllocatedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11623,7 +11648,7 @@
           },
           {
             "name": "ShippedAmount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedAmount",
             "formatString": "#,0",
@@ -11633,7 +11658,7 @@
           },
           {
             "name": "ShippedAmountUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShippedAmountUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -11649,7 +11674,7 @@
           },
           {
             "name": "CustomerOpenWeight",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CustomerOpenWeight",
             "formatString": "#,0.00",
@@ -11658,7 +11683,7 @@
           },
           {
             "name": "LateQuantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "description": "Difference between [Order Quantity] and [Shipped On Time Quantity]",
             "isHidden": true,
             "sourceColumn": "LateQuantity",
@@ -11668,7 +11693,7 @@
           },
           {
             "name": "UnrestrictStockQty",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
@@ -11740,7 +11765,8 @@
             "dataType": "string",
             "description": "Company code where the sales orders is to be billed",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13588,7 +13614,9 @@
             "name": "Material Number",
             "dataType": "string",
             "description": "Material number of the material in inventory",
-            "sourceColumn": "MaterialNoKey"
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Plant",
@@ -13596,17 +13624,6 @@
             "isHidden": true,
             "sourceColumn": "PlantNoKey",
             "isAvailableInMdx": false
-          },
-          {
-            "name": "Unrestricted Stock Quantity",
-            "dataType": "decimal",
-            "description": "SAP Source: MARD.LABST, MSLB.LBLAB, MCHB.CLABS",
-            "isHidden": true,
-            "sourceColumn": "UnrestrictStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Quantities",
-            "summarizeBy": "none"
           },
           {
             "name": "Batch Number",
@@ -13628,28 +13645,6 @@
             ]
           },
           {
-            "name": "Inspection Stock Quantity",
-            "dataType": "decimal",
-            "description": "SAP Source: MCHB.CINSM, MSLB.LBINS, MARD.INSME",
-            "isHidden": true,
-            "sourceColumn": "InspectionStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Quantities",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Blocked Stock Quantity",
-            "dataType": "decimal",
-            "description": "SAP Source: MCHB.CSPEM, MARD.SPEME",
-            "isHidden": true,
-            "sourceColumn": "BlockedStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Quantities",
-            "summarizeBy": "none"
-          },
-          {
             "name": "Standard Price",
             "dataType": "decimal",
             "description": "SAP Source: MBEW.STPRS and MBEW.PEINH; This is a calculated field (MBEW.STPRS / MBEW.PEINH)",
@@ -13658,39 +13653,6 @@
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\Local",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Unrestricted Stock Amount (USD)",
-            "dataType": "decimal",
-            "description": "Calculated column derived from unrestricted stock quantity, standard price, and current day's exchange rate.",
-            "isHidden": true,
-            "sourceColumn": "UnrestrictStockAmtUSD",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Inspection Stock Amount (USD)",
-            "dataType": "decimal",
-            "description": "Calculated column derived from inspection stock quantity, standard price, and current day's exchange rate.",
-            "isHidden": true,
-            "sourceColumn": "InspectionStockAmtUSD",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Blocked Stock Amount (USD)",
-            "dataType": "decimal",
-            "description": "Calculated column derived from blocked stock quantity, standard price, and current day's exchange rate.",
-            "isHidden": true,
-            "sourceColumn": "BlockedStockAmtUSD",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
             "summarizeBy": "none"
           },
           {
@@ -13708,51 +13670,9 @@
             "name": "Valuation Class",
             "dataType": "string",
             "description": "Valuation class of the material in inventory. It determines if the material is raw material, semi-finished good, finished good, etc.",
-            "sourceColumn": "ValuationClass"
-          },
-          {
-            "name": "Transfer Stock Quantity",
-            "dataType": "decimal",
-            "description": "SAP Source: MARD.UMLME, MSLB.LBUML, MCHB.CUMLM",
             "isHidden": true,
-            "sourceColumn": "TransferStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Quantities",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Transfer Stock Amount (USD)",
-            "dataType": "decimal",
-            "description": "Calculated column derived from transfer stock quantity, standard price, and current day's exchange rate.",
-            "isHidden": true,
-            "sourceColumn": "TransferStockAmtUSD",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Total Stock Quantity",
-            "dataType": "decimal",
-            "description": "Sum of unrestricted, blocked, inspection, and transfer quantity",
-            "isHidden": true,
-            "sourceColumn": "TotalStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Quantities",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Total Stock Amount (USD)",
-            "dataType": "decimal",
-            "description": "Sum of unrestricted, blocked, inspection, and transfer amount in USD. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
-            "isHidden": true,
-            "sourceColumn": "TotalStockAmtUSD",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "none"
+            "sourceColumn": "ValuationClass",
+            "isAvailableInMdx": false
           },
           {
             "name": "Material Cost (USD)",
@@ -13850,14 +13770,6 @@
             "isAvailableInMdx": false
           },
           {
-            "name": "SafetyStockQty",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "SafetyStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false
-          },
-          {
             "name": "Additive Cost",
             "dataType": "decimal",
             "isHidden": true,
@@ -13874,6 +13786,94 @@
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "displayFolder": "_Standard Prices\\USD"
+          },
+          {
+            "name": "StorageKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "StorageKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Quantity",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "Quantity",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "AmountUSD",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "AmountUSD",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Standard Prices\\USD"
+          },
+          {
+            "name": "Goods Receipt Date",
+            "dataType": "dateTime",
+            "sourceColumn": "GoodsReceiptDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Stock Category",
+            "dataType": "string",
+            "sourceColumn": "StockCategory"
+          },
+          {
+            "name": "Notification Number",
+            "dataType": "string",
+            "sourceColumn": "NotificationNoKey",
+            "displayFolder": "Related Hold Tag"
+          },
+          {
+            "name": "Notification Text",
+            "dataType": "string",
+            "sourceColumn": "NotificationText",
+            "displayFolder": "Related Hold Tag"
+          },
+          {
+            "name": "Notification Code",
+            "dataType": "string",
+            "sourceColumn": "NotificationCode",
+            "displayFolder": "Related Hold Tag"
+          },
+          {
+            "name": "Notification Enter Date",
+            "dataType": "dateTime",
+            "sourceColumn": "NotificationEnterDate",
+            "displayFolder": "Related Hold Tag"
+          },
+          {
+            "name": "Notification Author",
+            "dataType": "string",
+            "sourceColumn": "NotificationAuthor",
+            "displayFolder": "Related Hold Tag"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Manufacturing Date",
+            "dataType": "dateTime",
+            "sourceColumn": "MfgDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
           }
         ],
         "partitions": [
@@ -13885,10 +13885,9 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_Inventory = Source{[Schema=\"dbo\",Item=\"FACT_Inventory\"]}[Data],",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_FACT_Inventory,{{\"ExpirationDate\", type date}})",
+                "    dbo_FACT_Inventory = Source{[Schema=\"dbo\",Item=\"FACT_Inventory\"]}[Data]",
                 "in",
-                "    #\"Changed Type\""
+                "    dbo_FACT_Inventory"
               ]
             }
           }
@@ -13925,6 +13924,13 @@
             "isHidden": true,
             "sourceColumn": "ConsumptionQty",
             "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
           }
         ],
@@ -14980,7 +14986,9 @@
           {
             "name": "Plant",
             "dataType": "string",
-            "sourceColumn": "PlantNoKey"
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
           },
           {
             "name": "Storage Location",
@@ -15085,6 +15093,13 @@
             "dataType": "string",
             "description": "SAP Source: KNA1.NAME1; Not related to 'Customer Master'",
             "sourceColumn": "CustomerName"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -15246,6 +15261,13 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
           }
         ],
@@ -16249,6 +16271,13 @@
             "dataType": "string",
             "description": "Work center of the production order of the batch number",
             "sourceColumn": "WorkCenterMfg"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -16393,6 +16422,13 @@
             "dataType": "string",
             "description": "SAP Source: CRHD.ARBPL",
             "sourceColumn": "WorkCenter"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -17157,6 +17193,13 @@
             "sourceColumn": "AdditiveCost",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -17169,7 +17212,7 @@
                 "let",
                 "    Source = ARLPBI_STAGE,",
                 "    dbo_FACT_MaterialCostingHistory = Source{[Schema=\"dbo\",Item=\"FACT_MaterialCostingHistory\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_FACT_MaterialCostingHistory,{\"MaterialNo\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"CostingBy\", \"Currency\", \"StandardCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\", \"AdditiveCost\", \"LatestRank\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_FACT_MaterialCostingHistory,{\"MaterialNo\", \"CompanyCode\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"CostingBy\", \"Currency\", \"StandardCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\", \"AdditiveCost\", \"LatestRank\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ]
@@ -17816,6 +17859,13 @@
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "summarizeBy": "none"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -17991,6 +18041,13 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "MaterialPlantKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
           }
         ],
@@ -18957,6 +19014,13 @@
             "description": "Work center of the production order of the batch number. Used for analyzing Operations Scrap.",
             "sourceColumn": "WorkCenterMfg",
             "displayFolder": "Item"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -18968,9 +19032,9 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_GoodsIssueAndReceipt = Source{[Schema=\"dbo\",Item=\"FACT_GoodsIssueAndReceipt\"]}[Data]",
+                "    dbo_FACT_GoodsMovement = Source{[Schema=\"dbo\",Item=\"FACT_GoodsMovement\"]}[Data]",
                 "in",
-                "    dbo_FACT_GoodsIssueAndReceipt"
+                "    dbo_FACT_GoodsMovement"
               ]
             }
           }
@@ -19336,6 +19400,11 @@
             "isHidden": true,
             "sourceColumn": "MaterialPlantDateKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -20140,14 +20209,6 @@
             ]
           },
           {
-            "name": "ComplaintLineKey",
-            "dataType": "string",
-            "isHidden": true,
-            "isKey": true,
-            "sourceColumn": "ComplaintLineKey",
-            "isAvailableInMdx": false
-          },
-          {
             "name": "Department",
             "dataType": "string",
             "description": [
@@ -20205,6 +20266,13 @@
             "isHidden": true,
             "sourceColumn": "CycleTime",
             "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
           }
         ],
@@ -20284,6 +20352,63 @@
                 "    dbo_zDAILY_STRBIN_UTIL = Source{[Schema=\"dbo\",Item=\"zDAILY_STRBIN_UTIL\"]}[Data]",
                 "in",
                 "    dbo_zDAILY_STRBIN_UTIL"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "FACT_SafetyStock",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "MaterialPlantKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialPlantKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "MaterialNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "PlantNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "SafetyStockQty",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "SafetyStockQty",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FACT_SafetyStock",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_SafetyStock = Source{[Schema=\"dbo\",Item=\"FACT_SafetyStock\"]}[Data]",
+                "in",
+                "    dbo_FACT_SafetyStock"
               ]
             }
           }
@@ -21295,13 +21420,6 @@
         "toColumn": "Plant"
       },
       {
-        "name": "1d432609-263e-49c4-b196-9fcc5bce8462",
-        "fromTable": "Sales Invoice",
-        "fromColumn": "CompanyCode",
-        "toTable": "Company Code",
-        "toColumn": "Company Code"
-      },
-      {
         "name": "037ca128-5949-419a-b85b-e25fd7b6e74c",
         "fromTable": "Material Costing History",
         "fromColumn": "Material Number",
@@ -21770,16 +21888,160 @@
         "toColumn": "Date"
       },
       {
-        "name": "81554456-4a03-49da-ac62-fd60aabbc444",
-        "fromTable": "Plant",
-        "fromColumn": "CompCode",
+        "name": "c0cc6236-48d9-4a17-955a-05116b73ebcb",
+        "fromTable": "Sales Order",
+        "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
       },
       {
-        "name": "c0cc6236-48d9-4a17-955a-05116b73ebcb",
+        "name": "f096111d-47e7-4b7b-bfdf-c30466116b52",
         "fromTable": "Sales Order",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "b8aee7fa-ffc7-4da8-9044-2ffc4bc812b6",
+        "fromTable": "FACT_SafetyStock",
+        "fromColumn": "PlantNo",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "600c9e42-8669-4973-a4c5-664bf73424f0",
+        "fromCardinality": "one",
+        "fromTable": "FACT_SafetyStock",
+        "fromColumn": "MaterialPlantKey",
+        "toTable": "Plant Data for Material",
+        "toColumn": "MaterialPlantKey",
+        "isActive": false,
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "eef67e2c-2335-4899-a12c-f05297c0a382",
+        "fromTable": "Complaint",
+        "fromColumn": "Plant",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "6dca95d7-f8e9-42d8-8542-247608be7bf2",
+        "fromTable": "Complaint",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "038e04b6-c15d-43c3-8b43-cc0584670506",
+        "fromTable": "Inventory",
+        "fromColumn": "StorageKey",
+        "toTable": "Storage Bin",
+        "toColumn": "StorageKey"
+      },
+      {
+        "name": "a35b78e6-d40f-461c-86f9-b99677f3ac01",
+        "fromTable": "Material Costing History",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "af875d29-57fd-4d0f-b579-bceb54d1de4c",
+        "fromTable": "Price List",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "15d5d30e-a38d-4d0a-ab43-cc44394da736",
+        "fromTable": "Hold Tag",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "fa800fc1-8a06-40c2-aba6-dcaba4602da6",
+        "fromTable": "FACT_SafetyStock",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "0c1ef1b4-21e6-473f-a77b-084e4cb97f60",
+        "fromTable": "FACT_SafetyStock",
+        "fromColumn": "MaterialNo",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "3354ed5a-9db0-4588-b329-3268e8264280",
+        "fromTable": "Inventory",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "8715d16e-1ef6-4463-94df-1ffcdaa292bf",
+        "fromTable": "Inventory",
+        "fromColumn": "Expiration Date",
+        "toTable": "Calendar",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "42da9a96-bf17-46ba-bdb5-965bf971704a",
+        "fromTable": "Process Order Reservation",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "cee84041-ef4b-400b-ba71-5411c9b97a8d",
+        "fromTable": "Transfer Order",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "69af34e5-5a2c-4aad-99cc-62788f5efd7b",
+        "fromTable": "Inventory Consumption",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "c5cc34a3-07e5-404a-b95d-5decabcfd6a0",
+        "fromTable": "Goods Movement",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "12c5a95b-d59a-435e-82b6-dd147a80e24d",
+        "fromTable": "Purchase Order",
         "fromColumn": "Company Code",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "12ccb718-eaf8-42fb-b1c1-c7001ddccd74",
+        "fromTable": "Scrap Usage",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "dbfaac1b-a78c-414d-926d-e036cd2e15ff",
+        "fromTable": "Scrap Confirmation",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "c1399da4-8c45-49ba-93e1-af32db0e69d8",
+        "fromTable": "FACT_MonthlyConsumption",
+        "fromColumn": "CompanyCode",
         "toTable": "Company Code",
         "toColumn": "Company Code"
       }
@@ -22246,6 +22508,9 @@
               },
               {
                 "name": "Plant for Material"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -22776,9 +23041,6 @@
                 "name": "Category"
               },
               {
-                "name": "ComplaintLineKey"
-              },
-              {
                 "name": "CustomerOrgKey"
               },
               {
@@ -22804,6 +23066,9 @@
               },
               {
                 "name": "CycleTime"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           }
@@ -23512,9 +23777,6 @@
                 "name": "Customer Material Number"
               },
               {
-                "name": "Gross Weight"
-              },
-              {
                 "name": "Incoterms Part 1"
               },
               {
@@ -23920,6 +24182,9 @@
               },
               {
                 "name": "UnitPriceUSD"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -23951,9 +24216,6 @@
                 "name": "Category"
               },
               {
-                "name": "ComplaintLineKey"
-              },
-              {
                 "name": "CustomerOrgKey"
               },
               {
@@ -23979,6 +24241,9 @@
               },
               {
                 "name": "CycleTime"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -24620,9 +24885,6 @@
                 "name": "Ship To City"
               },
               {
-                "name": "CompanyCode"
-              },
-              {
                 "name": "Sales Order Type"
               },
               {
@@ -24770,9 +25032,6 @@
               },
               {
                 "name": "Ship To Name"
-              },
-              {
-                "name": "Gross Weight"
               },
               {
                 "name": "Incoterms Part 1"
@@ -24980,6 +25239,9 @@
               },
               {
                 "name": "Additive Cost"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -25038,6 +25300,9 @@
               },
               {
                 "name": "MaterialPlantDateKey"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -25061,6 +25326,9 @@
               },
               {
                 "name": "UnitPriceUSD"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           }
@@ -25649,9 +25917,6 @@
                 "name": "Ship To Name"
               },
               {
-                "name": "CompanyCode"
-              },
-              {
                 "name": "Sales Order Type"
               },
               {
@@ -25811,9 +26076,6 @@
               },
               {
                 "name": "Weight Unit"
-              },
-              {
-                "name": "Gross Weight"
               },
               {
                 "name": "Purchase Order Number"
@@ -26414,9 +26676,6 @@
               },
               {
                 "name": "Weight Unit"
-              },
-              {
-                "name": "Gross Weight"
               },
               {
                 "name": "Purchase Order Number"
@@ -28112,9 +28371,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Gross Weight"
-              },
-              {
                 "name": "Purchase Order Number"
               },
               {
@@ -28681,6 +28937,9 @@
               },
               {
                 "name": "UnitPriceUSD"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -30095,6 +30354,9 @@
               },
               {
                 "name": "Manufacturing Work Center"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -30547,49 +30809,19 @@
                 "name": "Plant"
               },
               {
-                "name": "Unrestricted Stock Quantity"
-              },
-              {
                 "name": "Batch Number"
               },
               {
                 "name": "Expiration Date"
               },
               {
-                "name": "Inspection Stock Quantity"
-              },
-              {
-                "name": "Blocked Stock Quantity"
-              },
-              {
                 "name": "Standard Price"
-              },
-              {
-                "name": "Unrestricted Stock Amount (USD)"
-              },
-              {
-                "name": "Inspection Stock Amount (USD)"
-              },
-              {
-                "name": "Blocked Stock Amount (USD)"
               },
               {
                 "name": "Standard Price (USD)"
               },
               {
                 "name": "Valuation Class"
-              },
-              {
-                "name": "Transfer Stock Quantity"
-              },
-              {
-                "name": "Transfer Stock Amount (USD)"
-              },
-              {
-                "name": "Total Stock Quantity"
-              },
-              {
-                "name": "Total Stock Amount (USD)"
               },
               {
                 "name": "Material Cost (USD)"
@@ -30619,13 +30851,46 @@
                 "name": "MaterialPlantKey"
               },
               {
-                "name": "SafetyStockQty"
-              },
-              {
                 "name": "Additive Cost"
               },
               {
                 "name": "Additive Cost (USD)"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "AmountUSD"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Stock Category"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Enter Date"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Manufacturing Date"
               }
             ]
           },
@@ -30995,9 +31260,6 @@
               },
               {
                 "name": "Weight Unit"
-              },
-              {
-                "name": "Gross Weight"
               },
               {
                 "name": "Purchase Order Number"
@@ -31413,6 +31675,9 @@
               },
               {
                 "name": "Customer Name"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -31500,6 +31765,9 @@
               },
               {
                 "name": "Additive Cost"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -31537,6 +31805,9 @@
               },
               {
                 "name": "MaterialPlantKey"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -31710,43 +31981,13 @@
                 "name": "Plant"
               },
               {
-                "name": "Unrestricted Stock Quantity"
-              },
-              {
-                "name": "Inspection Stock Quantity"
-              },
-              {
-                "name": "Blocked Stock Quantity"
-              },
-              {
                 "name": "Standard Price"
-              },
-              {
-                "name": "Unrestricted Stock Amount (USD)"
-              },
-              {
-                "name": "Inspection Stock Amount (USD)"
-              },
-              {
-                "name": "Blocked Stock Amount (USD)"
               },
               {
                 "name": "Standard Price (USD)"
               },
               {
                 "name": "Valuation Class"
-              },
-              {
-                "name": "Transfer Stock Quantity"
-              },
-              {
-                "name": "Transfer Stock Amount (USD)"
-              },
-              {
-                "name": "Total Stock Quantity"
-              },
-              {
-                "name": "Total Stock Amount (USD)"
               },
               {
                 "name": "Material Cost (USD)"
@@ -31776,13 +32017,46 @@
                 "name": "MaterialPlantKey"
               },
               {
-                "name": "SafetyStockQty"
-              },
-              {
                 "name": "Additive Cost"
               },
               {
                 "name": "Additive Cost (USD)"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "AmountUSD"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Stock Category"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Enter Date"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Manufacturing Date"
               }
             ]
           },
@@ -31830,6 +32104,9 @@
               },
               {
                 "name": "Plant for Material"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -32772,6 +33049,9 @@
               },
               {
                 "name": "MaterialPlantKey"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -33533,9 +33813,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Gross Weight"
-              },
-              {
                 "name": "Purchase Order Number"
               },
               {
@@ -33719,6 +33996,9 @@
               },
               {
                 "name": "PlantNoKey"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -33885,6 +34165,9 @@
               },
               {
                 "name": "Customer Name"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -34927,6 +35210,9 @@
               },
               {
                 "name": "Manufacturing Work Center"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -34965,6 +35251,9 @@
               },
               {
                 "name": "Work Center"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -35278,6 +35567,9 @@
               },
               {
                 "name": "Manufacturing Work Center"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -35851,9 +36143,6 @@
             "name": "Sales Invoice",
             "columns": [
               {
-                "name": "CompanyCode"
-              },
-              {
                 "name": "Currency"
               },
               {
@@ -36304,6 +36593,9 @@
               },
               {
                 "name": "Pricing Unit"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -36387,9 +36679,6 @@
               },
               {
                 "name": "Weight Unit"
-              },
-              {
-                "name": "Gross Weight"
               },
               {
                 "name": "Purchase Order Number"
@@ -37293,6 +37582,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

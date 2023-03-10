@@ -6279,25 +6279,34 @@
             "description": "Total quantity of inventory with expiration/SLED date on or before yesterday.",
             "expression": [
               "",
-              "VAR Qty = SUM( 'Inventory'[AmountUSD] )",
-              "VAR Amt = SUM( 'Inventory'[Quantity] )",
-              "",
-              "RETURN",
+              "VAR Qty = ",
               "    CALCULATE(",
-              "        IF(",
-              "            HASONEVALUE( '_Value to Use'[Value] ),",
-              "            SWITCH(",
-              "                VALUES( '_Value to Use'[Value] ),",
-              "                \"Quantity\", Qty,",
-              "                \"Amount\", Amt,",
-              "                Qty",
-              "            ),",
-              "            Qty",
-              "        ),",
+              "        SUM( 'Inventory'[Quantity] ),",
               "        FILTER(",
               "            ALL( 'Inventory'[Expiration Date] ),",
               "            'Inventory'[Expiration Date] <= [Report Date]",
               "        )",
+              "    )",
+              "",
+              "VAR Amt =",
+              "    CALCULATE(",
+              "        SUM( 'Inventory'[AmountUSD] ),",
+              "        FILTER(",
+              "            ALL( 'Inventory'[Expiration Date] ),",
+              "            'Inventory'[Expiration Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    IF(",
+              "        HASONEVALUE( '_Value to Use'[Value] ),",
+              "        SWITCH(",
+              "            VALUES( '_Value to Use'[Value] ),",
+              "            \"Quantity\", Qty,",
+              "            \"Amount\", Amt,",
+              "            Qty",
+              "        ),",
+              "        Qty",
               "    )",
               ""
             ],
@@ -6412,21 +6421,28 @@
             "description": "Total quantity of materials on physical inventory that has no block category",
             "expression": [
               "",
-              "VAR Qty = SUM( 'Inventory'[AmountUSD] )",
-              "VAR Amt = SUM( 'Inventory'[Quantity] )",
-              "RETURN",
+              "VAR Qty = ",
               "    CALCULATE(",
-              "        IF(",
-              "            HASONEVALUE( '_Value to Use'[Value] ),",
-              "            SWITCH(",
-              "                VALUES( '_Value to Use'[Value] ),",
-              "                \"Quantity\", Qty,",
-              "                \"Amount\", Amt,",
-              "                Qty",
-              "            ),",
+              "        SUM( 'Inventory'[Quantity] ),",
+              "        KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+              "    )",
+              "",
+              "VAR Amt =",
+              "    CALCULATE(",
+              "        SUM( 'Inventory'[AmountUSD] ),",
+              "        KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+              "    )",
+              "",
+              "RETURN",
+              "    IF(",
+              "        HASONEVALUE( '_Value to Use'[Value] ),",
+              "        SWITCH(",
+              "            VALUES( '_Value to Use'[Value] ),",
+              "            \"Quantity\", Qty,",
+              "            \"Amount\", Amt,",
               "            Qty",
               "        ),",
-              "        KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+              "        Qty",
               "    )",
               ""
             ],
@@ -9560,132 +9576,6 @@
         ]
       },
       {
-        "name": "Expired Inventory",
-        "description": [
-          "Contains inventory of materials with shelf-life or expiration dates.",
-          "",
-          "Use the 'Material Master' and 'Plant' tables for additional details on this table."
-        ],
-        "columns": [
-          {
-            "name": "Batch Number",
-            "dataType": "string",
-            "description": "Assigns a material that is manufactured in batches or production lots to a specific batch.",
-            "sourceColumn": "BatchNo"
-          },
-          {
-            "name": "Plant",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "PlantNo",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Manufacturing Date",
-            "dataType": "dateTime",
-            "description": "Date on which the material is manufactured.",
-            "sourceColumn": "MfgDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Goods Receipt Date",
-            "dataType": "dateTime",
-            "description": "Date on which the last goods receipt for a purchase order or production order for this batch was posted.",
-            "sourceColumn": "GoodsReceiptDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Expiration Date",
-            "dataType": "dateTime",
-            "description": [
-              "The date is set upon goods receipt in one of the following ways:",
-              "- You enter it yourself.",
-              "- You enter a date of production, and the system calculates the shelf life expiration date from the date of production plus the shelf life in days (from the material master record)."
-            ],
-            "sourceColumn": "ExpirationDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Stock Quantity",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "StockQuantityValue",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values"
-          },
-          {
-            "name": "Stock Amount",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "StockAmountUSD",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Storage Location",
-            "dataType": "string",
-            "description": "Number of the storage location at which the material is stored.",
-            "sourceColumn": "StorageLoc"
-          },
-          {
-            "name": "Storage Bin",
-            "dataType": "string",
-            "description": "Identifies the exact location in the warehouse where goods can be stored.",
-            "sourceColumn": "StorageBin"
-          },
-          {
-            "name": "MaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey",
-            "isAvailableInMdx": false
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Expired Inventory",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_FACT_ExpiredInventory = Source{[Schema=\"dbo\",Item=\"FACT_ExpiredInventory\"]}[Data],",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_FACT_ExpiredInventory,{\"MaterialNoKey\", \"BatchNo\", \"PlantNo\", \"StorageLoc\", \"StorageBin\", \"MfgDate\", \"GoodsReceiptDate\", \"ExpirationDate\", \"StockQuantityValue\", \"StockAmountUSD\"})",
-                "in",
-                "    #\"Removed Other Columns\""
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "Blocked Inventory Snapshots",
         "description": "Daily midnight snapshot of S-block, Q-block, and expired inventory values in USD. Inventory of non-USD warehouses are converted to USD using the exchange rate at the time of the snapshot.",
         "isHidden": true,
@@ -9713,7 +9603,7 @@
           },
           {
             "name": "SBlock Value",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "SBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -9728,7 +9618,7 @@
           },
           {
             "name": "QBlock Value",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "QBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -9743,7 +9633,7 @@
           },
           {
             "name": "Expired Value",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ExpiredValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -9755,6 +9645,12 @@
                 "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
               }
             ]
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -12958,7 +12854,7 @@
           },
           {
             "name": "Incoming Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "IncomingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12973,7 +12869,7 @@
           },
           {
             "name": "Outgoing Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OutgoingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12988,7 +12884,7 @@
           },
           {
             "name": "Unrestricted Stock Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -13003,7 +12899,7 @@
           },
           {
             "name": "Remaining by Month End Transit Stock Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "TransitStockEOMAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -13018,7 +12914,7 @@
           },
           {
             "name": "Incoming Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "IncomingQty",
             "formatString": "#,0.00",
@@ -13027,7 +12923,7 @@
           },
           {
             "name": "Outgoing Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OutgoingQty",
             "formatString": "#,0.00",
@@ -13036,7 +12932,7 @@
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
@@ -13045,7 +12941,7 @@
           },
           {
             "name": "Remaining by Month End Transit Stock Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "TransitStockEOMQty",
             "formatString": "#,0.00",
@@ -13054,7 +12950,7 @@
           },
           {
             "name": "Shortage Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ShortageAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -13069,12 +12965,18 @@
           },
           {
             "name": "Shortage Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ShortageQty",
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
             "summarizeBy": "none"
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -13830,31 +13732,31 @@
             "name": "Notification Number",
             "dataType": "string",
             "sourceColumn": "NotificationNoKey",
-            "displayFolder": "Related Hold Tag"
+            "displayFolder": "_Related Hold Tag"
           },
           {
             "name": "Notification Text",
             "dataType": "string",
             "sourceColumn": "NotificationText",
-            "displayFolder": "Related Hold Tag"
+            "displayFolder": "_Related Hold Tag"
           },
           {
             "name": "Notification Code",
             "dataType": "string",
             "sourceColumn": "NotificationCode",
-            "displayFolder": "Related Hold Tag"
+            "displayFolder": "_Related Hold Tag"
           },
           {
             "name": "Notification Enter Date",
             "dataType": "dateTime",
             "sourceColumn": "NotificationEnterDate",
-            "displayFolder": "Related Hold Tag"
+            "displayFolder": "_Related Hold Tag"
           },
           {
             "name": "Notification Author",
             "dataType": "string",
             "sourceColumn": "NotificationAuthor",
-            "displayFolder": "Related Hold Tag"
+            "displayFolder": "_Related Hold Tag"
           },
           {
             "name": "CompanyCode",
@@ -14157,7 +14059,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -14166,7 +14068,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "AmountUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14180,7 +14082,7 @@
           },
           {
             "name": "Material Cost",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "MatCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14195,7 +14097,7 @@
           },
           {
             "name": "Labor Cost",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "LaborCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14210,7 +14112,7 @@
           },
           {
             "name": "Overhead Cost",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OverheadCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14225,7 +14127,7 @@
           },
           {
             "name": "Setup Cost",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "SetupCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14240,11 +14142,17 @@
           },
           {
             "name": "Additive Cost",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "AdditiveCostUSD",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode"
           }
         ],
         "partitions": [
@@ -14643,162 +14551,6 @@
                 "    dbo_DIM_CompanyCode = Source{[Schema=\"dbo\",Item=\"DIM_CompanyCode\"]}[Data]",
                 "in",
                 "    dbo_DIM_CompanyCode"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Blocked Inventory",
-        "description": "Contains inventory with S and Q stock category or with expiration date as of yesterday.",
-        "columns": [
-          {
-            "name": "MaterialNoKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Batch Number",
-            "dataType": "string",
-            "description": "Batch number of the material",
-            "sourceColumn": "BatchNoKey"
-          },
-          {
-            "name": "Notification Number",
-            "dataType": "string",
-            "description": "Hold tag number based on the process order and batch number of the material",
-            "sourceColumn": "NotificationNoKey"
-          },
-          {
-            "name": "Plant",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "PlantNo",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Storage Location",
-            "dataType": "string",
-            "description": "Number of the storage location at which the material is stored.",
-            "sourceColumn": "StorageLoc"
-          },
-          {
-            "name": "SBlock Quantity",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "SBlockQuantityValue",
-            "formatString": "0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "SBlock Amount",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "SBlockAmountUSD",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "QBlock Quantity",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "QBlockQuantityValue",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "QBlock Amount",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "QBlockAmountUSD",
-            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Values",
-            "summarizeBy": "sum",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
-              }
-            ]
-          },
-          {
-            "name": "Notification Text",
-            "dataType": "string",
-            "description": "Description in the hold tag related to the blocked material",
-            "sourceColumn": "NotificationText"
-          },
-          {
-            "name": "Notification Code",
-            "dataType": "string",
-            "description": "Determines the type of hold tag such as hold, conditional use, scrap, etc.",
-            "sourceColumn": "NotificationCode"
-          },
-          {
-            "name": "Notification Enter Date",
-            "dataType": "dateTime",
-            "description": "Date on which the hold tag is created",
-            "sourceColumn": "NotificationEnterDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Notification Author",
-            "dataType": "string",
-            "description": "Name of the person who entered the hold tag",
-            "sourceColumn": "NotificationAuthor"
-          },
-          {
-            "name": "Storage Bin",
-            "dataType": "string",
-            "description": "Identifies the exact location in the warehouse where goods can be stored.",
-            "sourceColumn": "StorageBin"
-          },
-          {
-            "name": "Expiration Date",
-            "dataType": "dateTime",
-            "description": "Shelf life expiration or best-before date of the material",
-            "sourceColumn": "ExpirationDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Blocked Inventory",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = #\"ARLPBI_STAGE\",",
-                "    dbo_FACT_BlockedInventory = Source{[Schema=\"dbo\",Item=\"FACT_BlockedInventory\"]}[Data]",
-                "in",
-                "    dbo_FACT_BlockedInventory"
               ]
             }
           }
@@ -20466,13 +20218,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "75f7059e-5891-4145-8c3b-08cf13009c2f",
-        "fromTable": "Expired Inventory",
-        "fromColumn": "MaterialNoKey",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
         "name": "392923c6-b921-4da9-a0eb-847df9a9ca69",
         "fromTable": "Blocked Inventory Snapshots",
         "fromColumn": "Plant",
@@ -20698,13 +20443,6 @@
         "toColumn": "Date"
       },
       {
-        "name": "edb1d743-a11d-4e2b-b292-ab8dba773adb",
-        "fromTable": "Expired Inventory",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "844c8296-06d1-4a91-b5f5-cf5d22120e79",
         "fromTable": "Inventory",
         "fromColumn": "Plant",
@@ -20888,41 +20626,11 @@
         "toColumn": "Company Code"
       },
       {
-        "name": "774c8489-a2be-42c4-8a1b-8dffc10c2904",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "MaterialNoKey",
-        "toTable": "Material Master",
-        "toColumn": "Material Number"
-      },
-      {
-        "name": "69c625ce-25c0-497d-9c3e-a2d15262abe1",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "def38767-e23d-4a2c-b94b-f024d4394589",
         "fromTable": "Backorder Snapshots",
         "fromColumn": "Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
-      },
-      {
-        "name": "db31a6cf-aa59-456a-9f13-dd196ad9c0ff",
-        "fromTable": "Expired Inventory",
-        "fromColumn": "Expiration Date",
-        "toTable": "Calendar",
-        "toColumn": "Date",
-        "isActive": false
-      },
-      {
-        "name": "72c7c6a1-aabc-4bfc-8491-7d49d9138e2e",
-        "fromTable": "Blocked Inventory",
-        "fromColumn": "Notification Number",
-        "toTable": "Hold Tag",
-        "toColumn": "Notification Number",
-        "isActive": false
       },
       {
         "name": "de55efee-f414-4fd4-ac01-40cda075e4a8",
@@ -22044,6 +21752,27 @@
         "fromColumn": "CompanyCode",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "052e3a24-e87d-4838-bf52-e9c3f23e48ed",
+        "fromTable": "Backorder Snapshots",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "4ab5a684-1c99-42e0-82e3-c25a4426e185",
+        "fromTable": "Inventory Snapshots",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "11edddfe-5390-452d-b1ee-8354f9224e28",
+        "fromTable": "Blocked Inventory Snapshots",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -22067,6 +21796,9 @@
               },
               {
                 "name": "Plant"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -22430,41 +22162,6 @@
             ]
           },
           {
-            "name": "Expired Inventory",
-            "columns": [
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "Expiration Date"
-              },
-              {
-                "name": "Goods Receipt Date"
-              },
-              {
-                "name": "Manufacturing Date"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "Stock Amount"
-              },
-              {
-                "name": "Stock Quantity"
-              },
-              {
-                "name": "Storage Location"
-              },
-              {
-                "name": "Storage Bin"
-              },
-              {
-                "name": "MaterialNoKey"
-              }
-            ]
-          },
-          {
             "name": "Hold Tag",
             "columns": [
               {
@@ -22633,56 +22330,6 @@
             "columns": [
               {
                 "name": "Time Calculation"
-              }
-            ]
-          },
-          {
-            "name": "Blocked Inventory",
-            "columns": [
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "MaterialNoKey"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "QBlock Amount"
-              },
-              {
-                "name": "QBlock Quantity"
-              },
-              {
-                "name": "SBlock Amount"
-              },
-              {
-                "name": "SBlock Quantity"
-              },
-              {
-                "name": "Storage Location"
-              },
-              {
-                "name": "Expiration Date"
-              },
-              {
-                "name": "Notification Author"
-              },
-              {
-                "name": "Notification Code"
-              },
-              {
-                "name": "Notification Enter Date"
-              },
-              {
-                "name": "Notification Number"
-              },
-              {
-                "name": "Notification Text"
-              },
-              {
-                "name": "Storage Bin"
               }
             ]
           },
@@ -23069,6 +22716,148 @@
               },
               {
                 "name": "CompanyCode"
+              }
+            ]
+          },
+          {
+            "name": "Inventory",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Expiration Date"
+              },
+              {
+                "name": "Standard Price"
+              },
+              {
+                "name": "Standard Price (USD)"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost (USD)"
+              },
+              {
+                "name": "Labor Cost (USD)"
+              },
+              {
+                "name": "Overhead Cost (USD)"
+              },
+              {
+                "name": "Setup Cost (USD)"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "Additive Cost (USD)"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "AmountUSD"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Stock Category"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Enter Date"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Manufacturing Date"
+              }
+            ]
+          },
+          {
+            "name": "Storage Bin",
+            "columns": [
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Cell Group"
+              },
+              {
+                "name": "Cell Group Number"
+              },
+              {
+                "name": "Cell Height Number"
+              },
+              {
+                "name": "Cell Row"
+              },
+              {
+                "name": "Cell Column"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "CellGroupSort"
+              },
+              {
+                "name": "Storage Bin Type"
+              },
+              {
+                "name": "Capacity"
+              },
+              {
+                "name": "Remaining Capacity"
+              },
+              {
+                "name": "Storage Bin Type Description"
+              },
+              {
+                "name": "Storage Type Description"
               }
             ]
           }
@@ -27132,6 +26921,9 @@
               },
               {
                 "name": "Shortage Quantity"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -31430,6 +31222,9 @@
               },
               {
                 "name": "Additive Cost"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -31682,41 +31477,6 @@
             ]
           },
           {
-            "name": "Expired Inventory",
-            "columns": [
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "Expiration Date"
-              },
-              {
-                "name": "Goods Receipt Date"
-              },
-              {
-                "name": "Manufacturing Date"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "Stock Amount"
-              },
-              {
-                "name": "Stock Quantity"
-              },
-              {
-                "name": "Storage Location"
-              },
-              {
-                "name": "Storage Bin"
-              },
-              {
-                "name": "MaterialNoKey"
-              }
-            ]
-          },
-          {
             "name": "_Value to Use",
             "columns": [
               {
@@ -31828,6 +31588,53 @@
               },
               {
                 "name": "MRP Type"
+              }
+            ]
+          },
+          {
+            "name": "Storage Bin",
+            "columns": [
+              {
+                "name": "Storage Type"
+              },
+              {
+                "name": "Storage Bin"
+              },
+              {
+                "name": "Cell Group"
+              },
+              {
+                "name": "Cell Group Number"
+              },
+              {
+                "name": "Cell Height Number"
+              },
+              {
+                "name": "Cell Row"
+              },
+              {
+                "name": "Cell Column"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "CellGroupSort"
+              },
+              {
+                "name": "Storage Bin Type"
+              },
+              {
+                "name": "Capacity"
+              },
+              {
+                "name": "Remaining Capacity"
+              },
+              {
+                "name": "Storage Bin Type Description"
+              },
+              {
+                "name": "Storage Type Description"
               }
             ]
           }
@@ -32612,41 +32419,6 @@
             ]
           },
           {
-            "name": "Expired Inventory",
-            "columns": [
-              {
-                "name": "Batch Number"
-              },
-              {
-                "name": "Expiration Date"
-              },
-              {
-                "name": "Goods Receipt Date"
-              },
-              {
-                "name": "Manufacturing Date"
-              },
-              {
-                "name": "Plant"
-              },
-              {
-                "name": "Stock Amount"
-              },
-              {
-                "name": "Stock Quantity"
-              },
-              {
-                "name": "Storage Location"
-              },
-              {
-                "name": "Storage Bin"
-              },
-              {
-                "name": "MaterialNoKey"
-              }
-            ]
-          },
-          {
             "name": "Plant",
             "columns": [
               {
@@ -32830,6 +32602,9 @@
               },
               {
                 "name": "Additive Cost"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -32877,6 +32652,9 @@
               },
               {
                 "name": "Shortage Quantity"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -34487,6 +34265,9 @@
               },
               {
                 "name": "Valuation Class"
+              },
+              {
+                "name": "CompanyCode"
               }
             ]
           },
@@ -37582,5 +37363,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

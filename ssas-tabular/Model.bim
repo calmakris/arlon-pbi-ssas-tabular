@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -939,16 +940,51 @@
             "description": "Monthly gross sales plan per sales territory as provided by Commercial Leadership Team (CLT)",
             "expression": [
               " ",
-              "CALCULATE(",
-              "    SUM( TARGET_Sales[GrossSales] ),",
-              "    TREATAS(",
-              "        VALUES( 'Customer Master'[Sales Person Code] ),",
-              "        TARGET_Sales[SalesPersonKey]",
-              "    ),",
-              "    TREATAS(",
-              "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
-              "        TARGET_Sales[CalendarTimeKey]",
+              "VAR _IsFilteredByPerson =",
+              "    ISFILTERED( 'Customer Master'[Sales Person] )",
+              "        || ISFILTERED( 'Customer Master'[Sales Person Code] )",
+              "        || ISFILTERED( 'Customer Master'[Sales Territory] )",
+              "        || ISFILTERED( 'Customer Master'[Sales Territory Name] )",
+              "",
+              "VAR _BySalesPerson =",
+              "    CALCULATE(",
+              "        SUM( TARGET_Sales[GrossSales] ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Organization] ),",
+              "            TARGET_Sales[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Person Code] ),",
+              "            TARGET_Sales[SalesPersonKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            TARGET_Sales[CalendarTimeKey]",
+              "        )",
               "    )",
+              "",
+              "VAR _ByRegion =",
+              "    CALCULATE(",
+              "        SUM( TARGET_Sales[GrossSales] ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Organization] ),",
+              "            TARGET_Sales[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Customer Master'[Sales Region] ),",
+              "            TARGET_Sales[SalesPersonKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            TARGET_Sales[CalendarTimeKey]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "SWITCH(",
+              "    TRUE(),",
+              "    _IsFilteredByPerson, _BySalesPerson,",
+              "    _ByRegion",
               ")"
             ],
             "formatString": "#,0",
@@ -11813,7 +11849,7 @@
           },
           {
             "name": "GrossSales",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossSales",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -11827,7 +11863,7 @@
           },
           {
             "name": "GrossMarginMTD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossMarginMTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11835,7 +11871,7 @@
           },
           {
             "name": "GrossMarginYTD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "GrossMarginYTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11847,6 +11883,12 @@
             "isHidden": true,
             "sourceColumn": "SalesPersonKey",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "LocationKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "LocationKey"
           }
         ],
         "partitions": [
@@ -37409,5 +37451,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

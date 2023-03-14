@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -9013,6 +9012,44 @@
             "expression": "[Upstream Overall Equipment Efficiency] - [Upstream Overall Equipment Efficiency Target]",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Upstream Log"
+          },
+          {
+            "name": "CONV Efficiency Target",
+            "description": "Monthly target data supplied by Engineering once every fiscal year",
+            "expression": [
+              "",
+              "VAR TargetVal = ",
+              "    CALCULATE(",
+              "        AVERAGE( TARGET_KPI[TargetValue] ),",
+              "        TARGET_KPI[KpiKey] = \"OEE_CONV\",",
+              "        TREATAS(",
+              "            VALUES( 'Company Code'[Company Code] ),",
+              "            TARGET_KPI[LocationKey]",
+              "        ),",
+              "        TREATAS(",
+              "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+              "            TARGET_KPI[CalendarTimeKey]",
+              "        )",
+              "    )    ",
+              "RETURN",
+              "    IF(",
+              "        ISBLANK(TargetVal),",
+              "        0.30,",
+              "        TargetVal",
+              "    )"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Converting\\_OEE"
+          },
+          {
+            "name": "CONV Efficiency Target Var",
+            "description": "Difference between OEE and the corresponding monthly target",
+            "expression": [
+              "",
+              "[CONV Efficiency] - [CONV Efficiency Target]"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Converting\\_OEE"
           }
         ]
       },
@@ -9603,7 +9640,7 @@
           },
           {
             "name": "SBlock Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -9618,7 +9655,7 @@
           },
           {
             "name": "QBlock Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "QBlockValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -9633,7 +9670,7 @@
           },
           {
             "name": "Expired Value",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ExpiredValueUSD",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
@@ -9650,7 +9687,8 @@
             "name": "CompanyCode",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -12854,7 +12892,7 @@
           },
           {
             "name": "Incoming Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "IncomingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12869,7 +12907,7 @@
           },
           {
             "name": "Outgoing Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OutgoingAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12884,7 +12922,7 @@
           },
           {
             "name": "Unrestricted Stock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12899,7 +12937,7 @@
           },
           {
             "name": "Remaining by Month End Transit Stock Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "TransitStockEOMAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12914,7 +12952,7 @@
           },
           {
             "name": "Incoming Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "IncomingQty",
             "formatString": "#,0.00",
@@ -12923,7 +12961,7 @@
           },
           {
             "name": "Outgoing Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OutgoingQty",
             "formatString": "#,0.00",
@@ -12932,7 +12970,7 @@
           },
           {
             "name": "Unrestricted Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
@@ -12941,7 +12979,7 @@
           },
           {
             "name": "Remaining by Month End Transit Stock Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "TransitStockEOMQty",
             "formatString": "#,0.00",
@@ -12950,7 +12988,7 @@
           },
           {
             "name": "Shortage Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShortageAmt",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -12965,7 +13003,7 @@
           },
           {
             "name": "Shortage Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ShortageQty",
             "formatString": "#,0.00",
@@ -12976,7 +13014,8 @@
             "name": "CompanyCode",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -14059,7 +14098,7 @@
           },
           {
             "name": "Quantity",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "Quantity",
             "formatString": "#,0.00",
@@ -14068,7 +14107,7 @@
           },
           {
             "name": "Amount",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AmountUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14082,7 +14121,7 @@
           },
           {
             "name": "Material Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "MatCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14097,7 +14136,7 @@
           },
           {
             "name": "Labor Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "LaborCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14112,7 +14151,7 @@
           },
           {
             "name": "Overhead Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OverheadCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14127,7 +14166,7 @@
           },
           {
             "name": "Setup Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "SetupCostUSD",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -14142,7 +14181,7 @@
           },
           {
             "name": "Additive Cost",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "AdditiveCostUSD",
             "formatString": "#,0.00",
@@ -14152,7 +14191,8 @@
             "name": "CompanyCode",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "CompanyCode"
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -29293,6 +29333,12 @@
               },
               {
                 "name": "Upstream Overall Equipment Efficiency Target Var"
+              },
+              {
+                "name": "CONV Efficiency Target"
+              },
+              {
+                "name": "CONV Efficiency Target Var"
               }
             ]
           },
@@ -37363,6 +37409,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -6621,18 +6620,10 @@
           },
           {
             "name": "Inventory Amount",
-            "description": "Total standard cost of materials on inventory",
+            "description": "Total standard cost of materials on physical inventory",
             "expression": [
-              "",
-              "-- valuated inventory",
-              "SUM( 'Inventory'[AmountUSD] ) +",
-              "-- open stock transfer purchase orders",
-              "CALCULATE(",
-              "    [Purchase Order In Transit Amount],",
-              "    KEEPFILTERS( 'Purchase Order'[Receiving Plant] <> \"1001\" )",
-              ") +",
-              "-- open WIP process orders",
-              "[Open WIP Amount]"
+              "SUM( 'Inventory'[AmountUSD] )",
+              ""
             ],
             "formatString": "#,0",
             "displayFolder": "Inventory"
@@ -6649,7 +6640,7 @@
           },
           {
             "name": "Open WIP Amount",
-            "description": "Total standard cost of materials in process orders that are not TECO'd, closed, nor deleted yet",
+            "description": "Total standard cost of materials of WIP process orders that are not TECO'd, closed, nor deleted yet",
             "expression": " SUM( 'Inventory Open WIP'[Net Cost Amount] )",
             "formatString": "#,0",
             "displayFolder": "Inventory"
@@ -8204,19 +8195,8 @@
           },
           {
             "name": "Inventory Quantity",
-            "description": "Total quantity of materials on inventory",
-            "expression": [
-              "",
-              "-- valuated inventory",
-              "SUM( 'Inventory'[Quantity] ) +",
-              "-- open stock transfer purchase orders",
-              "CALCULATE(",
-              "    [Purchase Order In Transit Quantity],",
-              "    KEEPFILTERS( 'Purchase Order'[Receiving Plant] <> \"1001\" )",
-              ") +",
-              "-- open WIP process orders",
-              "SUM( 'Inventory Open WIP'[Quantity] )"
-            ],
+            "description": "Total quantity of materials on physical inventory",
+            "expression": "SUM( 'Inventory'[Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Inventory"
           },
@@ -9086,6 +9066,42 @@
             ],
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Converting\\_OEE"
+          },
+          {
+            "name": "Overall Inventory Amount",
+            "description": "Total of standard costs of physical inventory, in transit purchase orders, and open WIP process orders. Use this measure by material master and plant only.",
+            "expression": [
+              "",
+              "-- valuated inventory",
+              "SUM( 'Inventory'[AmountUSD] ) +",
+              "-- open stock transfer purchase orders",
+              "CALCULATE(",
+              "    [Purchase Order In Transit Amount],",
+              "    KEEPFILTERS( 'Purchase Order'[Receiving Plant] <> \"1001\" )",
+              ") +",
+              "-- open WIP process orders",
+              "[Open WIP Amount]"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Overall Inventory Quantity",
+            "description": "Total quantity of physical inventory, in transit purchase orders, and open WIP process orders. Use this measure by material master and plant only.",
+            "expression": [
+              "",
+              "-- valuated inventory",
+              "SUM( 'Inventory'[Quantity] ) +",
+              "-- open stock transfer purchase orders",
+              "CALCULATE(",
+              "    [Purchase Order In Transit Quantity],",
+              "    KEEPFILTERS( 'Purchase Order'[Receiving Plant] <> \"1001\" )",
+              ") +",
+              "-- open WIP process orders",
+              "SUM( 'Inventory Open WIP'[Quantity] )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Inventory"
           }
         ]
       },
@@ -30662,6 +30678,12 @@
               },
               {
                 "name": "Inventory Snapshot Additive Cost"
+              },
+              {
+                "name": "Overall Inventory Amount"
+              },
+              {
+                "name": "Overall Inventory Quantity"
               }
             ]
           },
@@ -32503,6 +32525,12 @@
               },
               {
                 "name": "Planning Schedule Comparison Data Integrity%"
+              },
+              {
+                "name": "Overall Inventory Amount"
+              },
+              {
+                "name": "Overall Inventory Quantity"
               }
             ]
           },

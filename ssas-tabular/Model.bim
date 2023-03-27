@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -3085,7 +3086,7 @@
               "                _isMaterialFiltered,",
               "                CALCULATE(",
               "                    MIN( 'Material Costing History'[LatestRank] ),",
-              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                    KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "                ),",
               "                BLANK()",
               "            )",
@@ -3110,7 +3111,7 @@
               "            CALCULATE(",
               "                AVERAGE( 'Material Costing History'[Material Cost] ),",
               "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
-              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "                KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "            )",
               "        )",
               "    )"
@@ -3142,7 +3143,7 @@
               "                _isMaterialFiltered,",
               "                CALCULATE(",
               "                    MIN( 'Material Costing History'[LatestRank] ),",
-              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                    KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "                ),",
               "                BLANK()",
               "            )",
@@ -3167,7 +3168,7 @@
               "            CALCULATE(",
               "                AVERAGE( 'Material Costing History'[Labor Cost] ),",
               "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
-              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "                KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "            )",
               "        )",
               "    )"
@@ -3199,7 +3200,7 @@
               "                _isMaterialFiltered,",
               "                CALCULATE(",
               "                    MIN( 'Material Costing History'[LatestRank] ),",
-              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                    KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "                ),",
               "                BLANK()",
               "            )",
@@ -3224,7 +3225,7 @@
               "            CALCULATE(",
               "                AVERAGE( 'Material Costing History'[Overhead Cost] ),",
               "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
-              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "                KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "            )",
               "        )",
               "    )"
@@ -3256,7 +3257,7 @@
               "                _isMaterialFiltered,",
               "                CALCULATE(",
               "                    MIN( 'Material Costing History'[LatestRank] ),",
-              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                    KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "                ),",
               "                BLANK()",
               "            )",
@@ -3281,7 +3282,7 @@
               "            CALCULATE(",
               "                AVERAGE( 'Material Costing History'[Setup Cost] ),",
               "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
-              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "                KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "            )",
               "        )",
               "    )"
@@ -3313,7 +3314,7 @@
               "                _isMaterialFiltered,",
               "                CALCULATE(",
               "                    MIN( 'Material Costing History'[LatestRank] ),",
-              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                    KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "                ),",
               "                BLANK()",
               "            )",
@@ -3338,7 +3339,7 @@
               "            CALCULATE(",
               "                AVERAGE( 'Material Costing History'[Standard Cost] ),",
               "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
-              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "                KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "            )",
               "        )",
               "    )"
@@ -8837,7 +8838,7 @@
               "                _isMaterialFiltered,",
               "                CALCULATE(",
               "                    MIN( 'Material Costing History'[LatestRank] ),",
-              "                    KEEPFILTERS( 'Plant'[Plant] = \"1001\" )",
+              "                    KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "                ),",
               "                BLANK()",
               "            )",
@@ -8862,7 +8863,7 @@
               "            CALCULATE(",
               "                AVERAGE( 'Material Costing History'[Additive Cost] ),",
               "                KEEPFILTERS( 'Material Costing History'[LatestRank] = _latestRank ),",
-              "                KEEPFILTERS( Plant[Plant] = \"1001\" )",
+              "                KEEPFILTERS( 'Plant'[Plant] IN {\"1001\", \"1501\"} )",
               "            )",
               "        )",
               "    )"
@@ -11865,7 +11866,7 @@
           },
           {
             "name": "GrossSales",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossSales",
             "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
@@ -11879,7 +11880,7 @@
           },
           {
             "name": "GrossMarginMTD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossMarginMTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11887,7 +11888,7 @@
           },
           {
             "name": "GrossMarginYTD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "GrossMarginYTD",
             "formatString": "0.00%;-0.00%;0.00%",
@@ -11904,7 +11905,8 @@
             "name": "LocationKey",
             "dataType": "string",
             "isHidden": true,
-            "sourceColumn": "LocationKey"
+            "sourceColumn": "LocationKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -20263,6 +20265,161 @@
             }
           }
         ]
+      },
+      {
+        "name": "Material Trace",
+        "description": [
+          "This table filters the 'Material Master' table using related materials that are above or below the hierarchy in the bill of materials. Discontinued materials are excluded. For example, if the 'Material Number' field in this table is filtered to 745250, it filters the 'Material Master' table to any material that uses 745250 adhesive.",
+          "",
+          "Note the fields in this table are solely for filtering so add them in the filters pane or as a slicer visual in Power BI."
+        ],
+        "columns": [
+          {
+            "name": "MaterialNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false,
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Color",
+            "dataType": "string",
+            "description": "Color name and number of the related material",
+            "sourceColumn": "Color",
+            "displayFolder": "FG Categories"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "Part number of the related material",
+            "sourceColumn": "TraceMaterialNo",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "description": "Description of the related material",
+            "sourceColumn": "MaterialDescription",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "description": "Determines if the related material is a raw material, WIP, finished good, etc.",
+            "sourceColumn": "MaterialType",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "description": "Material group of the related material",
+            "sourceColumn": "MaterialGroup",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Specification Number",
+            "dataType": "string",
+            "description": "Specification number of the related material",
+            "sourceColumn": "SpecNo",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Product Series",
+            "dataType": "string",
+            "description": "Product series of the related material. This classification applies to finished goods only.",
+            "sourceColumn": "ProductSeries",
+            "displayFolder": "FG Categories"
+          },
+          {
+            "name": "Film Type",
+            "dataType": "string",
+            "description": "Determines if the related material is PVC cast, calendered, etc.",
+            "sourceColumn": "FilmType",
+            "displayFolder": "FG Categories"
+          },
+          {
+            "name": "Product Hierarchy L1",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL1",
+            "displayFolder": "FG Categories\\Product Hierarchy"
+          },
+          {
+            "name": "Product Hierarchy L2",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL2",
+            "displayFolder": "FG Categories\\Product Hierarchy"
+          },
+          {
+            "name": "Product Hierarchy L3",
+            "dataType": "string",
+            "sourceColumn": "ProductHierarchyDescriptionL3",
+            "displayFolder": "FG Categories\\Product Hierarchy"
+          },
+          {
+            "name": "Recipe Group",
+            "dataType": "string",
+            "description": "Recipe group of the related material",
+            "sourceColumn": "RecipeGroup",
+            "displayFolder": "BOM"
+          },
+          {
+            "name": "Primary BOM Flag",
+            "dataType": "string",
+            "description": [
+              "Determines if the material is part of the main/primary bill of material.",
+              "",
+              "A bill of material is a primary BOM if it is an unlocked recipe and the latest production version."
+            ],
+            "sourceColumn": "PrimaryFlag",
+            "displayFolder": "BOM"
+          },
+          {
+            "name": "Parent Material Number",
+            "dataType": "string",
+            "description": "Part number of the parent material in the BOM",
+            "sourceColumn": "ParentMaterialNo",
+            "displayFolder": "BOM"
+          },
+          {
+            "name": "Level",
+            "dataType": "int64",
+            "description": "Postive increments refer to top-down levels of the BOM hierarchy while decrementing negative values is bottom-up.",
+            "sourceColumn": "LevelNo",
+            "formatString": "0",
+            "displayFolder": "BOM"
+          },
+          {
+            "name": "Top Down Explosion Flag",
+            "dataType": "string",
+            "description": "This value is 'Yes' if the relationship between the [Material Number] and [Parent Material Number] field in this table is top-down in terms of levels in the BOM hierarchy",
+            "sourceColumn": "TopDownExplosion",
+            "displayFolder": "BOM"
+          },
+          {
+            "name": "PlantNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Material Trace",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_DIM_MaterialTrace = Source{[Schema=\"dbo\",Item=\"DIM_MaterialTrace\"]}[Data]",
+                "in",
+                "    dbo_DIM_MaterialTrace"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -21871,6 +22028,21 @@
         "fromColumn": "CompanyCode",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "1257d371-0cdc-4988-8773-46ca7880db1f",
+        "fromTable": "Material Trace",
+        "fromColumn": "MaterialNo",
+        "toTable": "Material Master",
+        "toColumn": "Material Number",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "ace15164-0ecb-4ff1-86f2-7069085a3c5d",
+        "fromTable": "Material Trace",
+        "fromColumn": "PlantNo",
+        "toTable": "Plant",
+        "toColumn": "Plant"
       }
     ],
     "perspectives": [
@@ -31747,6 +31919,65 @@
                 "name": "Storage Type Description"
               }
             ]
+          },
+          {
+            "name": "Material Trace",
+            "columns": [
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "Color"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Recipe Group"
+              },
+              {
+                "name": "Primary BOM Flag"
+              },
+              {
+                "name": "Parent Material Number"
+              },
+              {
+                "name": "Level"
+              },
+              {
+                "name": "Top Down Explosion Flag"
+              },
+              {
+                "name": "PlantNo"
+              }
+            ]
           }
         ]
       },
@@ -33319,6 +33550,65 @@
               },
               {
                 "name": "Ordinal"
+              }
+            ]
+          },
+          {
+            "name": "Material Trace",
+            "columns": [
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Color"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Recipe Group"
+              },
+              {
+                "name": "Primary BOM Flag"
+              },
+              {
+                "name": "Parent Material Number"
+              },
+              {
+                "name": "Level"
+              },
+              {
+                "name": "Top Down Explosion Flag"
+              },
+              {
+                "name": "PlantNo"
               }
             ]
           }
@@ -36434,6 +36724,36 @@
               },
               {
                 "name": "Frozen Additive Cost per Unit"
+              },
+              {
+                "name": "Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Unrestricted Stock Amount"
+              },
+              {
+                "name": "Cumulative Expired Amount"
+              },
+              {
+                "name": "Expired Amount"
+              },
+              {
+                "name": "Expired Quantity"
+              },
+              {
+                "name": "Blocked Inventory Amount"
+              },
+              {
+                "name": "Q-Block Amount"
+              },
+              {
+                "name": "Q-Block Quantity"
+              },
+              {
+                "name": "S-Block Amount"
+              },
+              {
+                "name": "S-Block Quantity"
               }
             ]
           },
@@ -36708,6 +37028,65 @@
               },
               {
                 "name": "Company Code"
+              }
+            ]
+          },
+          {
+            "name": "Material Trace",
+            "columns": [
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "Color"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Specification Number"
+              },
+              {
+                "name": "Product Series"
+              },
+              {
+                "name": "Film Type"
+              },
+              {
+                "name": "Product Hierarchy L1"
+              },
+              {
+                "name": "Product Hierarchy L2"
+              },
+              {
+                "name": "Product Hierarchy L3"
+              },
+              {
+                "name": "Recipe Group"
+              },
+              {
+                "name": "Primary BOM Flag"
+              },
+              {
+                "name": "Parent Material Number"
+              },
+              {
+                "name": "Level"
+              },
+              {
+                "name": "Top Down Explosion Flag"
+              },
+              {
+                "name": "PlantNo"
               }
             ]
           }
@@ -37161,10 +37540,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8884"
           },
           {
-            "memberName": "DOMAIN\\eldiaz",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8700"
-          },
-          {
             "memberName": "DOMAIN\\fesparza",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8456"
           },
@@ -37451,6 +37826,10 @@
           {
             "memberName": "DOMAIN\\tsmith",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21533"
+          },
+          {
+            "memberName": "DOMAIN\\mmedina",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21531"
           }
         ],
         "tablePermissions": [
@@ -37479,6 +37858,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

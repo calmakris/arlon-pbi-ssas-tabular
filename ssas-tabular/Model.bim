@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -20161,7 +20162,7 @@
           },
           {
             "name": "ComplaintValueUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "ComplaintValueUSD",
             "formatString": "#,0.00",
@@ -20171,7 +20172,7 @@
           },
           {
             "name": "CreditIssueValueUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "CreditIssueValueUSD",
             "formatString": "#,0.00",
@@ -20181,7 +20182,7 @@
           },
           {
             "name": "OpenValueUSD",
-            "dataType": "decimal",
+            "dataType": "double",
             "isHidden": true,
             "sourceColumn": "OpenValueUSD",
             "formatString": "#,0.00",
@@ -20203,6 +20204,12 @@
             "isHidden": true,
             "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Credit Memo Number",
+            "dataType": "string",
+            "description": "Last credit memo in reference to the complaint. If there are multiple credit memos, an asterisk is appended.",
+            "sourceColumn": "CreditMemoNo"
           }
         ],
         "partitions": [
@@ -23063,6 +23070,9 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Credit Memo Number"
               }
             ]
           },
@@ -24392,6 +24402,9 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Credit Memo Number"
               }
             ]
           },

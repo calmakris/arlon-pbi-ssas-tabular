@@ -8377,7 +8377,13 @@
               "",
               "IF(",
               "    ISFILTERED(Plant[Plant]) || ISFILTERED('Material Master'[Material Number]) || ISFILTERED('Sales Order'[Material Number]),",
-              "    SUMX( VALUES('Sales Order'[MaterialPlantKey]), AVERAGE('Sales Order'[UnrestrictStockQty]) ),",
+              "    CALCULATE(",
+              "        SUMX(",
+              "            VALUES('Sales Order'[MaterialPlantKey]),",
+              "            AVERAGE('Sales Order'[UnrestrictStockQty])",
+              "        ),",
+              "        ALL( 'Calendar' )",
+              "    ),",
               "    BLANK()",
               ")"
             ],
@@ -9103,6 +9109,45 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Inventory"
+          },
+          {
+            "name": "Sales Order WIP Linear Feet Shortage",
+            "description": "Total linear feet of coated WIP needed to fulfill the sales order's open quantity that is not already in stock. This measure only considers shortages. If there is enough material on inventory, this value is blank.",
+            "expression": [
+              "  ",
+              "VAR _Stock =",
+              "    IF(",
+              "        ISFILTERED(Plant[Plant]) || ISFILTERED('Material Master'[Material Number]) || ISFILTERED('Sales Order'[Material Number]),",
+              "        CALCULATE(",
+              "            SUMX(",
+              "                VALUES('Sales Order'[MaterialPlantKey]),",
+              "                AVERAGE('Sales Order'[UnrestrictStockBOMLinearFeet])",
+              "            ),",
+              "            ALL( 'Calendar' )",
+              "        ),",
+              "        BLANK()",
+              "    )",
+              "",
+              "VAR _Open = ",
+              "    CALCULATE(",
+              "        SUM( 'Sales Order'[CustomerOpenLinearFeet] ),",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+              "    )",
+              "",
+              "VAR _Needed =",
+              "    IF(",
+              "        [Sales Order Open Quantity] <> BLANK(),",
+              "        _Stock - _Open",
+              "    )",
+              "",
+              "RETURN",
+              "IF(",
+              "    [Sales Order Open Quantity] <> BLANK(),",
+              "    _Needed",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Order"
           }
         ]
       },
@@ -11753,7 +11798,39 @@
             "description": "Company code where the sales orders is to be billed",
             "isHidden": true,
             "sourceColumn": "CompanyCode",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Header"
+          },
+          {
+            "name": "CustomerOpenLinearFeet",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "CustomerOpenLinearFeet",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "UnrestrictStockBOMLinearFeet",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "UnrestrictStockBOMLinearFeet",
+            "isAvailableInMdx": false,
+            "displayFolder": "_Quantities"
+          },
+          {
+            "name": "Coated WIP Material Number",
+            "dataType": "string",
+            "description": "The coated WIP part number of the ordered material based on the latest and unlocked product version of the BOM",
+            "sourceColumn": "CoatWIPMaterialNo",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Coated WIP BOM Usage Quantity",
+            "dataType": "decimal",
+            "description": "Quantity needed to fulfill one unit of the ordered material based on the latest and unlocked product version of the BOM",
+            "sourceColumn": "BOMUsageQty",
+            "formatString": "#,##0.00",
+            "displayFolder": "Item"
           }
         ],
         "partitions": [
@@ -23975,6 +24052,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -24821,6 +24910,9 @@
               },
               {
                 "name": "Frozen Additive Cost per Unit"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -25235,6 +25327,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -25853,6 +25957,9 @@
               },
               {
                 "name": "Gross Sales MTD"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -26267,6 +26374,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -26566,6 +26685,9 @@
               },
               {
                 "name": "Sales Order Unrestricted Stock Quantity"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -26867,6 +26989,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -28563,6 +28697,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -28869,6 +29015,9 @@
               },
               {
                 "name": "Sales Order Shipped Amount"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -30856,6 +31005,9 @@
               },
               {
                 "name": "Overall Inventory Quantity"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -31466,6 +31618,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -34127,6 +34291,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -34525,6 +34701,9 @@
               },
               {
                 "name": "Safety Incident Count MTD PM"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -36754,6 +36933,9 @@
               },
               {
                 "name": "S-Block Quantity"
+              },
+              {
+                "name": "Sales Order WIP Linear Feet Shortage"
               }
             ]
           },
@@ -37028,6 +37210,18 @@
               },
               {
                 "name": "Company Code"
+              },
+              {
+                "name": "CustomerOpenLinearFeet"
+              },
+              {
+                "name": "UnrestrictStockBOMLinearFeet"
+              },
+              {
+                "name": "Coated WIP Material Number"
+              },
+              {
+                "name": "Coated WIP BOM Usage Quantity"
               }
             ]
           },
@@ -37858,5 +38052,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

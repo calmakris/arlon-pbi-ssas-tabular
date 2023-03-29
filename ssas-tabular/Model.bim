@@ -11729,14 +11729,6 @@
             "displayFolder": "_Quantities"
           },
           {
-            "name": "Unrestrict Stock Quantity",
-            "dataType": "decimal",
-            "sourceColumn": "UnrestrictStockQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "displayFolder": "_Quantities"
-          },
-          {
             "name": "First Scheduled Ship Date",
             "dataType": "dateTime",
             "description": "First schedule line date of the sales order item",
@@ -11835,6 +11827,13 @@
             "sourceColumn": "BOMUsageQty",
             "formatString": "#,##0.00",
             "displayFolder": "Item"
+          },
+          {
+            "name": "Unrestrict Stock Quantity",
+            "dataType": "decimal",
+            "sourceColumn": "UnrestrictStockQty",
+            "formatString": "#,0.00",
+            "displayFolder": "_Quantities"
           }
         ],
         "partitions": [
@@ -24040,9 +24039,6 @@
                 "name": "ShippedAmount"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "First Scheduled Ship Date"
               },
               {
@@ -24077,6 +24073,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -25318,9 +25317,6 @@
                 "name": "ShippedAmount"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "First Scheduled Ship Date"
               },
               {
@@ -25355,6 +25351,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -26365,9 +26364,6 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "First Scheduled Ship Date"
               },
               {
@@ -26402,6 +26398,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -26980,9 +26979,6 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "First Scheduled Ship Date"
               },
               {
@@ -27017,6 +27013,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -28688,9 +28687,6 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "Customer PO"
               },
               {
@@ -28725,6 +28721,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -31609,9 +31608,6 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "Customer PO"
               },
               {
@@ -31646,6 +31642,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -34282,9 +34281,6 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "Customer PO"
               },
               {
@@ -34319,6 +34315,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -37201,9 +37200,6 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "Unrestrict Stock Quantity"
-              },
-              {
                 "name": "First Scheduled Ship Date"
               },
               {
@@ -37238,6 +37234,9 @@
               },
               {
                 "name": "Coated WIP BOM Usage Quantity"
+              },
+              {
+                "name": "Unrestrict Stock Quantity"
               }
             ]
           },
@@ -38068,5 +38067,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

@@ -20,8 +20,6 @@
         "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -8381,7 +8379,7 @@
               "    CALCULATE(",
               "        SUMX(",
               "            VALUES('Sales Order'[MaterialPlantKey]),",
-              "            AVERAGE('Sales Order'[UnrestrictStockQty])",
+              "            AVERAGE('Sales Order'[Unrestrict Stock Quantity])",
               "        ),",
               "        ALL( 'Calendar' )",
               "    ),",
@@ -9113,7 +9111,7 @@
           },
           {
             "name": "Sales Order WIP Linear Feet Shortage",
-            "description": "Total linear feet of coated WIP needed to fulfill the sales order's open quantity that is not already in stock. This measure only considers shortages. If there is enough material on inventory, this value is blank.",
+            "description": "Cumulative total linear feet of coated WIP needed to fulfill the current and past sales order's open quantity using current unresticted stock. If this value is negative, it means the current stock has a shortage to fulfill the open sales orders.",
             "expression": [
               "  ",
               "VAR _Stock =",
@@ -9121,7 +9119,7 @@
               "        ISFILTERED(Plant[Plant]) || ISFILTERED('Material Master'[Material Number]) || ISFILTERED('Sales Order'[Material Number]),",
               "        CALCULATE(",
               "            SUMX(",
-              "                VALUES('Sales Order'[MaterialPlantKey]),",
+              "                VALUES('Sales Order'[Material Number]),",
               "                AVERAGE('Sales Order'[UnrestrictStockBOMLinearFeet])",
               "            ),",
               "            ALL( 'Calendar' )",
@@ -9129,10 +9127,16 @@
               "        BLANK()",
               "    )",
               "",
+              "VAR _MaxVisibleDate = MAX( 'Calendar'[Date] )",
+              "",
               "VAR _Open = ",
               "    CALCULATE(",
               "        SUM( 'Sales Order'[CustomerOpenLinearFeet] ),",
-              "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+              "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] ),",
+              "        FILTER(",
+              "            ALL( 'Calendar' ),",
+              "            'Calendar'[Date] <= _MaxVisibleDate",
+              "        )",
               "    )",
               "",
               "VAR _Needed =",
@@ -11725,9 +11729,8 @@
             "displayFolder": "_Quantities"
           },
           {
-            "name": "UnrestrictStockQty",
+            "name": "Unrestrict Stock Quantity",
             "dataType": "decimal",
-            "isHidden": true,
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
             "isAvailableInMdx": false,
@@ -20162,7 +20165,7 @@
           },
           {
             "name": "ComplaintValueUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "ComplaintValueUSD",
             "formatString": "#,0.00",
@@ -20172,7 +20175,7 @@
           },
           {
             "name": "CreditIssueValueUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "CreditIssueValueUSD",
             "formatString": "#,0.00",
@@ -20182,7 +20185,7 @@
           },
           {
             "name": "OpenValueUSD",
-            "dataType": "double",
+            "dataType": "decimal",
             "isHidden": true,
             "sourceColumn": "OpenValueUSD",
             "formatString": "#,0.00",
@@ -24037,7 +24040,7 @@
                 "name": "ShippedAmount"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "First Scheduled Ship Date"
@@ -25315,7 +25318,7 @@
                 "name": "ShippedAmount"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "First Scheduled Ship Date"
@@ -26362,7 +26365,7 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "First Scheduled Ship Date"
@@ -26977,7 +26980,7 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "First Scheduled Ship Date"
@@ -28685,7 +28688,7 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "Customer PO"
@@ -31606,7 +31609,7 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "Customer PO"
@@ -34279,7 +34282,7 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "Customer PO"
@@ -37198,7 +37201,7 @@
                 "name": "LateQuantity"
               },
               {
-                "name": "UnrestrictStockQty"
+                "name": "Unrestrict Stock Quantity"
               },
               {
                 "name": "First Scheduled Ship Date"
@@ -38065,6 +38068,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

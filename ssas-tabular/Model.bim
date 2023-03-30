@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "Username": "DOMAIN\\PBI-ETL",
@@ -9153,6 +9152,22 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Order"
+          },
+          {
+            "name": "Sales Order Lines Shipped Count CD",
+            "description": "Count of sales order line items posted with current date as actual goods movement date in the delivery notes",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DISTINCTCOUNT( 'Sales Order Shipment'[OrderNoLineKey] ),",
+              "    FILTER(",
+              "        ALL( 'Sales Order Shipment' ),",
+              "        'Sales Order Shipment'[Actual Goods Movement Date] = [Report Date]",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Sales Order\\_Time-Based"
           }
         ]
       },
@@ -23849,6 +23864,9 @@
               },
               {
                 "name": "Complaint Open Amount"
+              },
+              {
+                "name": "Sales Order Lines Shipped Count CD"
               }
             ]
           },
@@ -29033,6 +29051,9 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Sales Order Lines Shipped Count CD"
               }
             ]
           },
@@ -34719,6 +34740,9 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Sales Order Lines Shipped Count CD"
               }
             ]
           },
@@ -38039,6 +38063,42 @@
           {
             "memberName": "DOMAIN\\mmedina",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21531"
+          },
+          {
+            "memberName": "DOMAIN\\buceda",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21117"
+          },
+          {
+            "memberName": "DOMAIN\\cdo",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20429"
+          },
+          {
+            "memberName": "DOMAIN\\cchan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7267"
+          },
+          {
+            "memberName": "DOMAIN\\ewalker",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21073"
+          },
+          {
+            "memberName": "DOMAIN\\jfan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8881"
+          },
+          {
+            "memberName": "DOMAIN\\NFontelera",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1073"
+          },
+          {
+            "memberName": "DOMAIN\\rmatteson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7238"
+          },
+          {
+            "memberName": "DOMAIN\\sprommete",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21075"
+          },
+          {
+            "memberName": "DOMAIN\\vgonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20442"
           }
         ],
         "tablePermissions": [

@@ -19,6 +19,8 @@
         },
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -10039,6 +10041,18 @@
             "dataType": "string",
             "description": "This value is true if the material is created in the last 36 months from today",
             "sourceColumn": "NewProductFlag",
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Discontinued Flag",
+            "dataType": "string",
+            "description": [
+              "A material is discontinued if it meets any of the following criteria:",
+              "1. The material description starts with a carat (^) or contains \"DO NOT USE\"",
+              "2. For finished good and buyouts, the cross-distribution status is not blank, active (AT), pre-launch (PR), and halted (H)",
+              "3. For non-finished good and non-buyouts, the cross-plant material status is not blank"
+            ],
+            "sourceColumn": "DiscontinuedFlag",
             "displayFolder": "Master"
           }
         ],
@@ -20502,7 +20516,20 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "PlantNo",
-            "isAvailableInMdx": false
+            "isAvailableInMdx": false,
+            "displayFolder": "Master"
+          },
+          {
+            "name": "Discontinued Flag",
+            "dataType": "string",
+            "description": [
+              "Determines if the traced material is discontinued or not. A material is discontinued if it meets any of the following criteria:",
+              "1. The material description starts with a carat (^) or contains \"DO NOT USE\"",
+              "2. For finished good and buyouts, the cross-distribution status is not blank, active (AT), pre-launch (PR), and halted (H)",
+              "3. For non-finished good and non-buyouts, the cross-plant material status is not blank"
+            ],
+            "sourceColumn": "DiscontinuedFlag",
+            "displayFolder": "Master"
           }
         ],
         "partitions": [
@@ -22665,6 +22692,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -23737,6 +23767,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -25032,6 +25065,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -26079,6 +26115,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -26807,6 +26846,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -27783,6 +27825,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -28285,6 +28330,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -28515,6 +28563,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -29410,6 +29461,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -30841,6 +30895,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -32176,6 +32233,9 @@
               },
               {
                 "name": "PlantNo"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           }
@@ -32541,6 +32601,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -33809,6 +33872,9 @@
               },
               {
                 "name": "PlantNo"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           }
@@ -34098,6 +34164,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -35345,6 +35414,9 @@
               },
               {
                 "name": "New Product Flag"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -36541,6 +36613,9 @@
               },
               {
                 "name": "X Distribution Status"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           },
@@ -37320,6 +37395,9 @@
               },
               {
                 "name": "PlantNo"
+              },
+              {
+                "name": "Discontinued Flag"
               }
             ]
           }

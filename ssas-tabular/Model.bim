@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -4701,11 +4700,16 @@
           },
           {
             "name": "Expired Amount",
-            "description": "Total standard cost of inventory with expiration/SLED date on or before yesterday.",
+            "description": [
+              "Total standard cost of batch managed inventory with expiration/SLED date on or before yesterday.",
+              "",
+              "A material is batch managed if it is indicated so in the material master in SAP."
+            ],
             "expression": [
               "",
               "CALCULATE(",
               "    SUM( 'Inventory'[AmountUSD] ),",
+              "    KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
               "    FILTER(",
               "        ALL( 'Inventory'[Expiration Date] ),",
               "        'Inventory'[Expiration Date] <= [Report Date]",
@@ -6311,12 +6315,17 @@
           },
           {
             "name": "Expired Quantity",
-            "description": "Total quantity of inventory with expiration/SLED date on or before yesterday.",
+            "description": [
+              "Total quantity of batch managed inventory with expiration/SLED date on or before yesterday.",
+              "",
+              "A material is batch managed if it is indicated so in the material master in SAP."
+            ],
             "expression": [
               "",
               "VAR Qty = ",
               "    CALCULATE(",
               "        SUM( 'Inventory'[Quantity] ),",
+              "        KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
               "        FILTER(",
               "            ALL( 'Inventory'[Expiration Date] ),",
               "            'Inventory'[Expiration Date] <= [Report Date]",
@@ -6326,6 +6335,7 @@
               "VAR Amt =",
               "    CALCULATE(",
               "        SUM( 'Inventory'[AmountUSD] ),",
+              "        KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
               "        FILTER(",
               "            ALL( 'Inventory'[Expiration Date] ),",
               "            'Inventory'[Expiration Date] <= [Report Date]",
@@ -6514,14 +6524,17 @@
           {
             "name": "Cumulative Expired Amount",
             "description": [
-              "Cumulative stock amount by expiration date. For example, if 'Calendar' table is filtered to Jan 2023, this value is the expired amount of materials with expiration/SLED date on or before Jan 31, 2023/",
+              "Cumulative stock amount by expiration date of batch managed materials. For example, if 'Calendar' table is filtered to Jan 2023, this value is the expired amount of materials with expiration/SLED date on or before Jan 31, 2023.",
               "",
-              "This measure is best used with fields in the 'Calendar' table."
+              "This measure is best used with fields in the 'Calendar' table.",
+              "",
+              "A material is batch managed if it is indicated so in the material master in SAP."
             ],
             "expression": [
               "",
               "CALCULATE(",
               "    SUM( 'Inventory'[AmountUSD] ),",
+              "    KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
               "    USERELATIONSHIP( 'Calendar'[Date], 'Inventory'[Expiration Date] ),",
               "    FILTER(",
               "        ALL( 'Calendar'[Date] ),",
@@ -13984,6 +13997,13 @@
                 "value": "<Format Format=\"DateTimeShortDatePattern\" />"
               }
             ]
+          },
+          {
+            "name": "BatchManagedFlag",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "BatchManagedFlag",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -23215,6 +23235,9 @@
               },
               {
                 "name": "Manufacturing Date"
+              },
+              {
+                "name": "BatchManagedFlag"
               }
             ]
           },
@@ -31210,6 +31233,9 @@
               },
               {
                 "name": "Manufacturing Date"
+              },
+              {
+                "name": "BatchManagedFlag"
               }
             ]
           },
@@ -32465,6 +32491,9 @@
               },
               {
                 "name": "Manufacturing Date"
+              },
+              {
+                "name": "BatchManagedFlag"
               }
             ]
           },

@@ -20550,6 +20550,13 @@
             ],
             "sourceColumn": "DiscontinuedFlag",
             "displayFolder": "Master"
+          },
+          {
+            "name": "Material Number and Description",
+            "dataType": "string",
+            "description": "Part number and description of the related material",
+            "sourceColumn": "MaterialNoDescription",
+            "displayFolder": "Master"
           }
         ],
         "partitions": [
@@ -32262,6 +32269,9 @@
               },
               {
                 "name": "Discontinued Flag"
+              },
+              {
+                "name": "Material Number and Description"
               }
             ]
           }
@@ -33904,6 +33914,9 @@
               },
               {
                 "name": "Discontinued Flag"
+              },
+              {
+                "name": "Material Number and Description"
               }
             ]
           }
@@ -37427,6 +37440,9 @@
               },
               {
                 "name": "Discontinued Flag"
+              },
+              {
+                "name": "Material Number and Description"
               }
             ]
           }
@@ -38234,5 +38250,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

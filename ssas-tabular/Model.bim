@@ -9177,7 +9177,7 @@
               "    DISTINCTCOUNT( 'Sales Order Shipment'[OrderNoLineKey] ),",
               "    FILTER(",
               "        ALL( 'Sales Order Shipment' ),",
-              "        'Sales Order Shipment'[Actual Goods Movement Date] = [Report Date]",
+              "        'Sales Order Shipment'[Actual Goods Movement Date] = [Last Working Day]",
               "    )",
               ")"
             ],
@@ -38234,6 +38234,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

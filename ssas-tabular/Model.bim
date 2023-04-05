@@ -1411,7 +1411,7 @@
           },
           {
             "name": "CAST Clean Up Count",
-            "expression": "COUNTROWS(FILTER('Upstream Log Simplified', 'Upstream Log Simplified'[Category] = \"Clean Up\" && 'Upstream Log Simplified'[Causes] IN { \"Planned\", \"Unplanned\", \"Unplanned - Casting\" })) + 0",
+            "expression": "COUNTROWS(FILTER('Upstream Log Simplified', 'Upstream Log Simplified'[Category] = \"Clean Up\" && 'Upstream Log Simplified'[Causes] IN { \"Planned\", \"Unplanned - Casting\" })) + 0",
             "formatString": "#,0",
             "isHidden": true,
             "displayFolder": "Upstream Log"
@@ -38222,6 +38222,10 @@
           {
             "memberName": "DOMAIN\\vgonzalez",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20442"
+          },
+          {
+            "memberName": "DOMAIN\\shamilton",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21122"
           }
         ],
         "tablePermissions": [
@@ -38250,6 +38254,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

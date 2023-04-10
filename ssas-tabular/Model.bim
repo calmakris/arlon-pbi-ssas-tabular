@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -11868,14 +11869,32 @@
             "description": "Quantity needed to fulfill one unit of the ordered material based on the latest and unlocked product version of the BOM",
             "sourceColumn": "BOMUsageQty",
             "formatString": "#,##0.00",
-            "displayFolder": "Item"
+            "displayFolder": "Item",
+            "summarizeBy": "none"
           },
           {
             "name": "Unrestrict Stock Quantity",
             "dataType": "decimal",
             "sourceColumn": "UnrestrictStockQty",
             "formatString": "#,0.00",
-            "displayFolder": "_Quantities"
+            "displayFolder": "_Quantities",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Ship To Country",
+            "dataType": "string",
+            "description": "Country of the sales order's destination",
+            "sourceColumn": "ShipToCountry",
+            "displayFolder": "Header",
+            "dataCategory": "Country"
+          },
+          {
+            "name": "Ship To Region",
+            "dataType": "string",
+            "description": "Region of the sales order's destination",
+            "sourceColumn": "ShipToRegion",
+            "displayFolder": "Header",
+            "dataCategory": "Region"
           }
         ],
         "partitions": [
@@ -20522,7 +20541,8 @@
             "description": "Postive increments refer to top-down levels of the BOM hierarchy while decrementing negative values is bottom-up.",
             "sourceColumn": "LevelNo",
             "formatString": "0",
-            "displayFolder": "BOM"
+            "displayFolder": "BOM",
+            "summarizeBy": "none"
           },
           {
             "name": "Top Down Explosion Flag",
@@ -24157,6 +24177,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -25438,6 +25464,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -26488,6 +26520,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -27106,6 +27144,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -28823,6 +28867,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -31756,6 +31806,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -34450,6 +34506,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -37378,6 +37440,12 @@
               },
               {
                 "name": "Unrestrict Stock Quantity"
+              },
+              {
+                "name": "Ship To Country"
+              },
+              {
+                "name": "Ship To Region"
               }
             ]
           },
@@ -37482,10 +37550,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21023"
           },
           {
-            "memberName": "DOMAIN\\jjing",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
-          },
-          {
             "memberName": "DOMAIN\\jmcmanus",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
           },
@@ -37502,8 +37566,16 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8862"
           },
           {
+            "memberName": "DOMAIN\\ktran",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8825"
+          },
+          {
             "memberName": "DOMAIN\\LBabilo",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1731"
+          },
+          {
+            "memberName": "DOMAIN\\LTorres",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
           },
           {
             "memberName": "DOMAIN\\mebin",
@@ -37512,6 +37584,10 @@
           {
             "memberName": "DOMAIN\\mqadir",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
+          },
+          {
+            "memberName": "DOMAIN\\nsoto",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21525"
           },
           {
             "memberName": "DOMAIN\\rfaust",
@@ -37524,135 +37600,6 @@
           {
             "memberName": "DOMAIN\\sdong",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
-          },
-          {
-            "memberName": "DOMAIN\\LTorres",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
-          },
-          {
-            "memberName": "DOMAIN\\nsoto",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21525"
-          },
-          {
-            "memberName": "DOMAIN\\ktran",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8825"
-          }
-        ]
-      },
-      {
-        "name": "Company",
-        "description": "Restricts data based on assigned company code and sales organization",
-        "modelPermission": "read",
-        "members": [
-          {
-            "memberName": "DOMAIN\\abratter",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8513"
-          },
-          {
-            "memberName": "DOMAIN\\achang",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21055"
-          },
-          {
-            "memberName": "DOMAIN\\ahuddlestone",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7281"
-          },
-          {
-            "memberName": "DOMAIN\\cgalvan",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21054"
-          },
-          {
-            "memberName": "DOMAIN\\CRussell",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1426"
-          },
-          {
-            "memberName": "DOMAIN\\frodriguez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21053"
-          },
-          {
-            "memberName": "DOMAIN\\grose",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21056"
-          },
-          {
-            "memberName": "DOMAIN\\jignacio",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7164"
-          },
-          {
-            "memberName": "DOMAIN\\jjimenez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21057"
-          },
-          {
-            "memberName": "DOMAIN\\jsadler",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21051"
-          },
-          {
-            "memberName": "DOMAIN\\jstommel",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21063"
-          },
-          {
-            "memberName": "DOMAIN\\mdean",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21048"
-          },
-          {
-            "memberName": "DOMAIN\\mgrant",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21060"
-          },
-          {
-            "memberName": "DOMAIN\\mnavejar",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21062"
-          },
-          {
-            "memberName": "DOMAIN\\mperez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21050"
-          },
-          {
-            "memberName": "DOMAIN\\mrubio",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21041"
-          },
-          {
-            "memberName": "DOMAIN\\nthompson",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21049"
-          },
-          {
-            "memberName": "DOMAIN\\pgonzales",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21061"
-          },
-          {
-            "memberName": "DOMAIN\\phiggins",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21052"
-          },
-          {
-            "memberName": "DOMAIN\\prisinger",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21047"
-          },
-          {
-            "memberName": "DOMAIN\\johngonzalez",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
-          },
-          {
-            "memberName": "DOMAIN\\jwolfert",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20499"
-          },
-          {
-            "memberName": "DOMAIN\\jsalazar",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20505"
-          },
-          {
-            "memberName": "DOMAIN\\janderson",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21534"
-          },
-          {
-            "memberName": "DOMAIN\\pbitest1",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
-          }
-        ],
-        "tablePermissions": [
-          {
-            "name": "RLS_CompanyCode",
-            "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
-          },
-          {
-            "name": "RLS_SalesOrganization",
-            "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
           }
         ]
       },
@@ -38226,6 +38173,10 @@
           {
             "memberName": "DOMAIN\\shamilton",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21122"
+          },
+          {
+            "memberName": "DOMAIN\\nthompson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21049"
           }
         ],
         "tablePermissions": [
@@ -38233,6 +38184,119 @@
             "name": "RLS_CostCenter",
             "filterExpression": "RLS_CostCenter[DomainName]=USERNAME() && RLS_CostCenter[InactiveDate] < TODAY()"
           },
+          {
+            "name": "RLS_CompanyCode",
+            "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+          },
+          {
+            "name": "RLS_SalesOrganization",
+            "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
+          }
+        ]
+      },
+      {
+        "name": "Company",
+        "description": "Restricts data based on assigned company code and sales organization",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "DOMAIN\\abratter",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8513"
+          },
+          {
+            "memberName": "DOMAIN\\achang",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21055"
+          },
+          {
+            "memberName": "DOMAIN\\ahuddlestone",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7281"
+          },
+          {
+            "memberName": "DOMAIN\\cgalvan",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21054"
+          },
+          {
+            "memberName": "DOMAIN\\CRussell",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1426"
+          },
+          {
+            "memberName": "DOMAIN\\frodriguez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21053"
+          },
+          {
+            "memberName": "DOMAIN\\grose",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21056"
+          },
+          {
+            "memberName": "DOMAIN\\janderson",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21534"
+          },
+          {
+            "memberName": "DOMAIN\\jignacio",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7164"
+          },
+          {
+            "memberName": "DOMAIN\\jjimenez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21057"
+          },
+          {
+            "memberName": "DOMAIN\\jjing",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7288"
+          },
+          {
+            "memberName": "DOMAIN\\johngonzalez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21059"
+          },
+          {
+            "memberName": "DOMAIN\\jsadler",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21051"
+          },
+          {
+            "memberName": "DOMAIN\\jsalazar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20505"
+          },
+          {
+            "memberName": "DOMAIN\\jstommel",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21063"
+          },
+          {
+            "memberName": "DOMAIN\\jwolfert",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20499"
+          },
+          {
+            "memberName": "DOMAIN\\mdean",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21048"
+          },
+          {
+            "memberName": "DOMAIN\\mgrant",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21060"
+          },
+          {
+            "memberName": "DOMAIN\\mnavejar",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21062"
+          },
+          {
+            "memberName": "DOMAIN\\mperez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21050"
+          },
+          {
+            "memberName": "DOMAIN\\pbitest1",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20421"
+          },
+          {
+            "memberName": "DOMAIN\\pgonzales",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21061"
+          },
+          {
+            "memberName": "DOMAIN\\phiggins",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21052"
+          },
+          {
+            "memberName": "DOMAIN\\prisinger",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21047"
+          }
+        ],
+        "tablePermissions": [
           {
             "name": "RLS_CompanyCode",
             "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
@@ -38254,5 +38318,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

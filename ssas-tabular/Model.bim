@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -9184,6 +9183,40 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Sales Order\\_Time-Based"
+          },
+          {
+            "name": "Inventory FIFO Violation Batch Count",
+            "description": [
+              "The number of batches that violated FIFO per batch in stock.",
+              "",
+              "A batch violated FIFO if it has been transacted with 261, 541, 601, and 641 movement types and it's expiration date is after the expiration date of a batch currently in stock. The currency stock only includes batches without stock category."
+            ],
+            "expression": "COUNTX( 'Inventory FIFO Violation', 'Inventory FIFO Violation'[Skip By Batch Number] )",
+            "formatString": "#,0",
+            "displayFolder": "Inventory"
+          },
+          {
+            "name": "Inventory FIFO Violation Snapshot Batch Count",
+            "description": "Latest snapshot of the number of batch on inventory with FIFO violations per company, plant, and department. If there is no date filter/context, then this value is yesterday's snapshot.",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Inventory FIFO Violation Snapshot'[SnapshotDateKey]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Inventory FIFO Violation Snapshot'[BatchCount] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Time-Based"
           }
         ]
       },
@@ -14022,6 +14055,14 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "BatchManagedFlag",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Department Responsible",
+            "dataType": "string",
+            "description": "The department who is primarily responsible for managing or using the material",
+            "isHidden": true,
+            "sourceColumn": "DeptResponsible",
             "isAvailableInMdx": false
           }
         ],
@@ -20595,6 +20636,145 @@
             }
           }
         ]
+      },
+      {
+        "name": "Inventory FIFO Violation",
+        "description": [
+          "This table complements the 'Inventory' table only. It contains batch numbers of transactions that violated FIFO based on the current inventory.",
+          "",
+          "A transaction violates FIFO if the material has an expiration date after the expiration date of the same material in stock.",
+          "",
+          "Only transactions with movement types 261, 601, 641, and 541 are considered in this table. Meanwhile, current inventory refers to inventory without stock category."
+        ],
+        "columns": [
+          {
+            "name": "BatchNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "BatchNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Skip By Batch Number",
+            "dataType": "string",
+            "description": "Batch number that violated FIFO",
+            "sourceColumn": "SkipBatch",
+            "formatString": "Short Date"
+          },
+          {
+            "name": "Skip By Expiration Date",
+            "dataType": "dateTime",
+            "description": "The expiration/SLED date of the material that violated FIFO",
+            "sourceColumn": "SkipExpireDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Last Skip Date",
+            "dataType": "dateTime",
+            "description": "The maximum posting date among the transactions that violated FIFO",
+            "sourceColumn": "LastSkipDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Skip By User",
+            "dataType": "string",
+            "description": "List of users that posted the transaction that violated FIFO",
+            "sourceColumn": "PostingUser"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Inventory FIFO Violation",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_InventoryFifoViolation = Source{[Schema=\"dbo\",Item=\"FACT_InventoryFifoViolation\"]}[Data]",
+                "in",
+                "    dbo_FACT_InventoryFifoViolation"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Inventory FIFO Violation Snapshot",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SnapshotDateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "SnapshotDateKey",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "PlantNoKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNoKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "BatchCount",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "BatchCount",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Inventory FIFO Violation Snapshot",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_InventoryFifoViolationSnapshot = Source{[Schema=\"dbo\",Item=\"FACT_InventoryFifoViolationSnapshot\"]}[Data]",
+                "in",
+                "    dbo_FACT_InventoryFifoViolationSnapshot"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -22218,6 +22398,50 @@
         "fromColumn": "PlantNo",
         "toTable": "Plant",
         "toColumn": "Plant"
+      },
+      {
+        "name": "b178877e-f50b-4941-9fec-08c38c85030f",
+        "toCardinality": "many",
+        "fromTable": "Inventory",
+        "fromColumn": "Batch Number",
+        "toTable": "Inventory FIFO Violation",
+        "toColumn": "BatchNo",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "20038531-0658-4c1f-888e-c8866b30a74f",
+        "fromTable": "Inventory FIFO Violation Snapshot",
+        "fromColumn": "SnapshotDateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "0ff2b051-e1b6-4672-96b8-479ec20ab99e",
+        "fromTable": "Inventory FIFO Violation Snapshot",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "e04d269f-26a8-4842-a8c8-acf2f40bfb81",
+        "fromTable": "Inventory FIFO Violation Snapshot",
+        "fromColumn": "PlantNoKey",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "635b6a6c-67f2-4aa1-bdc7-89c0ecfb0d60",
+        "fromTable": "Inventory FIFO Violation Snapshot",
+        "fromColumn": "Department",
+        "toTable": "Department",
+        "toColumn": "Department"
+      },
+      {
+        "name": "482dce93-abb0-4763-8390-f55f302c1fa9",
+        "fromTable": "Inventory",
+        "fromColumn": "Department Responsible",
+        "toTable": "Department",
+        "toColumn": "Department"
       }
     ],
     "perspectives": [
@@ -23265,6 +23489,9 @@
               },
               {
                 "name": "BatchManagedFlag"
+              },
+              {
+                "name": "Department Responsible"
               }
             ]
           },
@@ -31181,6 +31408,12 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Inventory FIFO Violation Batch Count"
+              },
+              {
+                "name": "Inventory FIFO Violation Snapshot Batch Count"
               }
             ]
           },
@@ -31293,6 +31526,9 @@
               },
               {
                 "name": "BatchManagedFlag"
+              },
+              {
+                "name": "Department Responsible"
               }
             ]
           },
@@ -32330,6 +32566,40 @@
                 "name": "Material Number and Description"
               }
             ]
+          },
+          {
+            "name": "Inventory FIFO Violation",
+            "columns": [
+              {
+                "name": "BatchNo"
+              },
+              {
+                "name": "Skip By Batch Number"
+              },
+              {
+                "name": "Skip By Expiration Date"
+              },
+              {
+                "name": "Last Skip Date"
+              },
+              {
+                "name": "Skip By User"
+              }
+            ]
+          },
+          {
+            "name": "Department",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "SortKey"
+              }
+            ]
           }
         ]
       },
@@ -32560,6 +32830,9 @@
               },
               {
                 "name": "BatchManagedFlag"
+              },
+              {
+                "name": "Department Responsible"
               }
             ]
           },
@@ -33120,6 +33393,12 @@
               },
               {
                 "name": "Overall Inventory Quantity"
+              },
+              {
+                "name": "Inventory FIFO Violation Batch Count"
+              },
+              {
+                "name": "Inventory FIFO Violation Snapshot Batch Count"
               }
             ]
           },
@@ -35706,6 +35985,18 @@
               },
               {
                 "name": "Safety Incident Count MTD PM"
+              },
+              {
+                "name": "Inventory FIFO Violation Batch Count"
+              },
+              {
+                "name": "Inventory Quantity"
+              },
+              {
+                "name": "Inventory Amount"
+              },
+              {
+                "name": "Inventory FIFO Violation Snapshot Batch Count"
               }
             ]
           },
@@ -36224,6 +36515,127 @@
               },
               {
                 "name": "AuditID"
+              }
+            ]
+          },
+          {
+            "name": "Inventory",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Expiration Date"
+              },
+              {
+                "name": "Standard Price"
+              },
+              {
+                "name": "Standard Price (USD)"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost (USD)"
+              },
+              {
+                "name": "Labor Cost (USD)"
+              },
+              {
+                "name": "Overhead Cost (USD)"
+              },
+              {
+                "name": "Setup Cost (USD)"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "Additive Cost (USD)"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "AmountUSD"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Stock Category"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Enter Date"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Manufacturing Date"
+              },
+              {
+                "name": "BatchManagedFlag"
+              },
+              {
+                "name": "Department Responsible"
+              }
+            ]
+          },
+          {
+            "name": "Inventory FIFO Violation",
+            "columns": [
+              {
+                "name": "BatchNo"
+              },
+              {
+                "name": "Skip By Batch Number"
+              },
+              {
+                "name": "Skip By Expiration Date"
+              },
+              {
+                "name": "Last Skip Date"
+              },
+              {
+                "name": "Skip By User"
               }
             ]
           }

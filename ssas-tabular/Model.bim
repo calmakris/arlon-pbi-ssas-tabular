@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -4592,7 +4593,7 @@
           {
             "name": "Product Quality Credit Issued",
             "description": [
-              "Total credit issue amount of service quality complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
+              "Total credit issue amount of product quality complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
               "",
               "Service quality are complaints entered with reason codes marked as 'S' (service).",
               ""
@@ -14064,6 +14065,12 @@
             "isHidden": true,
             "sourceColumn": "DeptResponsible",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "description": "Number of the storage location at which the material is stored. A plant may contain one or more storage locations.",
+            "sourceColumn": "StorageLoc"
           }
         ],
         "partitions": [
@@ -23492,6 +23499,9 @@
               },
               {
                 "name": "Department Responsible"
+              },
+              {
+                "name": "Storage Location"
               }
             ]
           },
@@ -31529,6 +31539,9 @@
               },
               {
                 "name": "Department Responsible"
+              },
+              {
+                "name": "Storage Location"
               }
             ]
           },
@@ -32833,6 +32846,9 @@
               },
               {
                 "name": "Department Responsible"
+              },
+              {
+                "name": "Storage Location"
               }
             ]
           },
@@ -36616,6 +36632,9 @@
               },
               {
                 "name": "Department Responsible"
+              },
+              {
+                "name": "Storage Location"
               }
             ]
           },
@@ -38730,6 +38749,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

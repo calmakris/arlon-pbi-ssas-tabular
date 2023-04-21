@@ -17,6 +17,7 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -20699,6 +20700,12 @@
             "dataType": "string",
             "description": "List of users that posted the transaction that violated FIFO",
             "sourceColumn": "PostingUser"
+          },
+          {
+            "name": "Last Process Order Number",
+            "dataType": "string",
+            "description": "Process order of the last usage transaction posted per Skip By Batch",
+            "sourceColumn": "LastProcessOrderNo"
           }
         ],
         "partitions": [
@@ -32597,6 +32604,9 @@
               },
               {
                 "name": "Skip By User"
+              },
+              {
+                "name": "Last Process Order Number"
               }
             ]
           },
@@ -36655,6 +36665,9 @@
               },
               {
                 "name": "Skip By User"
+              },
+              {
+                "name": "Last Process Order Number"
               }
             ]
           }
@@ -38749,5 +38762,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

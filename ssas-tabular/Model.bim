@@ -17,7 +17,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -14316,7 +14315,11 @@
       },
       {
         "name": "Inventory Snapshots",
-        "isHidden": true,
+        "description": [
+          "This table contains fields to filter the daily snapshots of inventory. The snapshot occurs daily at 11:55 PM PST.",
+          "",
+          "Use the fields in the related tables such as 'Company Code', 'Plant', 'Valuation Class', 'Material Master', and 'Calendar' for further details on this table."
+        ],
         "columns": [
           {
             "name": "Snapshot Date",
@@ -14450,6 +14453,12 @@
             "isHidden": true,
             "sourceColumn": "CompanyCode",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Expired Flag",
+            "dataType": "string",
+            "description": "Filters expired or non-expired materials only in the inventory snapshot",
+            "sourceColumn": "ExpiredFlag"
           }
         ],
         "partitions": [
@@ -20727,7 +20736,12 @@
       },
       {
         "name": "Inventory FIFO Violation Snapshot",
-        "isHidden": true,
+        "description": [
+          "This table contains fields to filter the daily snapshots of batches on inventory with FIFO violations. The snapshot occurs daily at 11:55 PM PST.",
+          "",
+          "Use the fields in the related tables such as 'Company Code', 'Plant', 'Department', and 'Calendar' for further details on this table.",
+          ""
+        ],
         "columns": [
           {
             "name": "SnapshotDateKey",
@@ -20771,6 +20785,18 @@
             "sourceColumn": "BatchCount",
             "formatString": "#,0",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "Storage Location",
+            "dataType": "string",
+            "description": "Determines the storage location of the material on inventory with FIFO violation. Sometimes Operations put materials in specific storage location so they cannot be used for production for specific reasons.",
+            "sourceColumn": "StorageLoc"
+          },
+          {
+            "name": "Stock Category",
+            "dataType": "string",
+            "description": "Determines if the material with FIFO violation is blocked or not. Blank stock category means it is unrestricted while the other categories are blocked for specific reasons like quality defects, etc.",
+            "sourceColumn": "StockCategory"
           }
         ],
         "partitions": [
@@ -32109,6 +32135,9 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Expired Flag"
               }
             ]
           },
@@ -32621,6 +32650,32 @@
               },
               {
                 "name": "SortKey"
+              }
+            ]
+          },
+          {
+            "name": "Inventory FIFO Violation Snapshot",
+            "columns": [
+              {
+                "name": "SnapshotDateKey"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "PlantNoKey"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "BatchCount"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Stock Category"
               }
             ]
           }
@@ -33615,6 +33670,9 @@
               },
               {
                 "name": "CompanyCode"
+              },
+              {
+                "name": "Expired Flag"
               }
             ]
           },
@@ -36670,6 +36728,76 @@
                 "name": "Last Process Order Number"
               }
             ]
+          },
+          {
+            "name": "Inventory FIFO Violation Snapshot",
+            "columns": [
+              {
+                "name": "SnapshotDateKey"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "PlantNoKey"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "BatchCount"
+              },
+              {
+                "name": "Storage Location"
+              },
+              {
+                "name": "Stock Category"
+              }
+            ]
+          },
+          {
+            "name": "Inventory Snapshots",
+            "columns": [
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Expired Flag"
+              }
+            ]
           }
         ]
       },
@@ -38762,6 +38890,5 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  },
-  "id": "SemanticModel"
+  }
 }

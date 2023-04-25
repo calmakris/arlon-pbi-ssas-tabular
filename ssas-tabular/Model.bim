@@ -9218,6 +9218,87 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Time-Based"
+          },
+          {
+            "name": "Expired Inventory Snapshot Amount",
+            "description": "Latest snapshot of the expired inventory amount depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Inventory Snapshots'[Amount] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate ),",
+              "        KEEPFILTERS( 'Inventory Snapshots'[Expired Flag] = \"Yes\" )",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Time-Based"
+          },
+          {
+            "name": "Expired Raw Material Inventory Snapshot Amount",
+            "description": "Latest snapshot of the raw material inventory amount depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Inventory Snapshots'[Amount] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate ),",
+              "        KEEPFILTERS( 'Inventory Snapshots'[Expired Flag] = \"Yes\" ),",
+              "        KEEPFILTERS( 'Material Master'[Material Type] = \"ROH\" )",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Time-Based"
+          },
+          {
+            "name": "Expired Products Inventory Snapshot Amount",
+            "description": "Latest snapshot of the non-raw material inventory amount depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+            "expression": [
+              "",
+              "VAR RefDate =",
+              "    CALCULATE(",
+              "        MAX('Calendar'[Date]),",
+              "        FILTER(",
+              "            'Calendar',",
+              "            'Calendar'[Date] <= [Report Date]",
+              "        )",
+              "    )",
+              "",
+              "RETURN",
+              "    CALCULATE(",
+              "        SUM( 'Inventory Snapshots'[Amount] ),",
+              "        KEEPFILTERS( 'Calendar'[Date] = RefDate ),",
+              "        KEEPFILTERS( 'Inventory Snapshots'[Expired Flag] = \"Yes\" ),",
+              "        KEEPFILTERS( 'Material Master'[Material Type] <> \"ROH\" )",
+              "    )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Time-Based"
+          },
+          {
+            "name": "Expired Amount Target",
+            "description": "Fixed target at $33K. This is defined by the Product Management department.",
+            "expression": "33000",
+            "formatString": "#,0",
+            "displayFolder": "Inventory\\_Blocked\\_Expired"
           }
         ]
       },
@@ -22867,6 +22948,9 @@
               },
               {
                 "name": "Safety Incident Count MTD PM"
+              },
+              {
+                "name": "Expired Amount Target"
               }
             ]
           },
@@ -31457,6 +31541,18 @@
               },
               {
                 "name": "Inventory FIFO Violation Snapshot Batch Count"
+              },
+              {
+                "name": "Expired Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Raw Material Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Products Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Amount Target"
               }
             ]
           },
@@ -33480,6 +33576,18 @@
               },
               {
                 "name": "Inventory FIFO Violation Snapshot Batch Count"
+              },
+              {
+                "name": "Expired Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Raw Material Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Products Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Amount Target"
               }
             ]
           },
@@ -37726,6 +37834,24 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Inventory Snapshot Amount"
+              },
+              {
+                "name": "Inventory Snapshot Quantity"
+              },
+              {
+                "name": "Expired Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Raw Material Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Products Inventory Snapshot Amount"
+              },
+              {
+                "name": "Expired Amount Target"
               }
             ]
           },
@@ -38083,6 +38209,154 @@
               },
               {
                 "name": "Material Number and Description"
+              }
+            ]
+          },
+          {
+            "name": "Inventory Snapshots",
+            "columns": [
+              {
+                "name": "Snapshot Date"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "Amount"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Expired Flag"
+              }
+            ]
+          },
+          {
+            "name": "Inventory",
+            "columns": [
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Plant"
+              },
+              {
+                "name": "Batch Number"
+              },
+              {
+                "name": "Expiration Date"
+              },
+              {
+                "name": "Standard Price"
+              },
+              {
+                "name": "Standard Price (USD)"
+              },
+              {
+                "name": "Valuation Class"
+              },
+              {
+                "name": "Material Cost (USD)"
+              },
+              {
+                "name": "Labor Cost (USD)"
+              },
+              {
+                "name": "Overhead Cost (USD)"
+              },
+              {
+                "name": "Setup Cost (USD)"
+              },
+              {
+                "name": "Material Cost"
+              },
+              {
+                "name": "Labor Cost"
+              },
+              {
+                "name": "Overhead Cost"
+              },
+              {
+                "name": "Setup Cost"
+              },
+              {
+                "name": "MaterialPlantKey"
+              },
+              {
+                "name": "Additive Cost"
+              },
+              {
+                "name": "Additive Cost (USD)"
+              },
+              {
+                "name": "StorageKey"
+              },
+              {
+                "name": "Quantity"
+              },
+              {
+                "name": "AmountUSD"
+              },
+              {
+                "name": "Goods Receipt Date"
+              },
+              {
+                "name": "Stock Category"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "Notification Text"
+              },
+              {
+                "name": "Notification Code"
+              },
+              {
+                "name": "Notification Enter Date"
+              },
+              {
+                "name": "Notification Author"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Manufacturing Date"
+              },
+              {
+                "name": "BatchManagedFlag"
+              },
+              {
+                "name": "Department Responsible"
+              },
+              {
+                "name": "Storage Location"
               }
             ]
           }

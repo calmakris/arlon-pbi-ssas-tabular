@@ -17,10 +17,9 @@
           "authentication": null,
           "query": null
         },
+        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
-          "kind": "SQL",
-          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -5994,8 +5993,16 @@
             "name": "Absorption MTD",
             "description": "Month-to-date total cost posted in earned labor, setup, and overhead cost elements",
             "expression": [
-              " CALCULATE( [Absorption], DATESMTD( 'Calendar'[Date] ) )",
-              ""
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Absorption],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
             ],
             "formatString": "#,0",
             "displayFolder": "Absorption\\_Time-Based"
@@ -6551,10 +6558,15 @@
             "name": "Earned Labor Budget MTD",
             "description": "Monthly earned labor budget entered in the ZBUDGET table in SAP.",
             "expression": [
-              "",
               "CALCULATE(",
-              "    [Earned Labor Budget],",
-              "    DATESMTD( 'Calendar'[Date] )",
+              "    CALCULATE(",
+              "        [Earned Labor Budget],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
               ")"
             ],
             "formatString": "#,0",
@@ -6564,10 +6576,15 @@
             "name": "Earned Overhead Budget MTD",
             "description": "Monthly earned overhead budget entered in the ZBUDGET table in SAP.",
             "expression": [
-              "",
               "CALCULATE(",
-              "    [Earned Overhead Budget],",
-              "    DATESMTD( 'Calendar'[Date] )",
+              "    CALCULATE(",
+              "        [Earned Overhead Budget],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
               ")"
             ],
             "formatString": "#,0",
@@ -6617,7 +6634,16 @@
             "name": "Earned Labor MTD",
             "description": "Month-to-date total cost posted in the earned labor and setup cost elements",
             "expression": [
-              " CALCULATE( [Earned Labor], DATESMTD( 'Calendar'[Date] ) )",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Earned Labor],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")",
               ""
             ],
             "formatString": "#,0",
@@ -6627,7 +6653,16 @@
             "name": "Earned Overhead MTD",
             "description": "Month-to-date total cost posted in the earned overhead cost elements",
             "expression": [
-              " CALCULATE( [Earned Overhead], DATESMTD( 'Calendar'[Date] ) )",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Earned Overhead],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")",
               ""
             ],
             "formatString": "#,0",
@@ -7676,7 +7711,16 @@
             "name": "Absorption Hours MTD",
             "description": "Month-to-date quantity (in hours) posted in earned labor, setup, and overhead cost elements",
             "expression": [
-              " CALCULATE( [Absorption Hours], DATESMTD( 'Calendar'[Date] ) )",
+              "CALCULATE(",
+              "    CALCULATE(",
+              "        [Absorption Hours],",
+              "        DATESMTD( 'Calendar'[Date] )",
+              "    ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")",
               ""
             ],
             "formatString": "#,0",

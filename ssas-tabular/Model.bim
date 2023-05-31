@@ -762,7 +762,6 @@
             "name": "Gross Sales",
             "description": "Total revenue amount of billing documents posted in SAP. This value is toggleable to local currency using the \"_Currency To Use\" table.",
             "expression": [
-              "",
               "IF(",
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
@@ -781,7 +780,6 @@
             "name": "Net Sales",
             "description": "Difference between gross sales and discounts applied to gross sales",
             "expression": [
-              "",
               "IF(",
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
@@ -834,7 +832,7 @@
               "",
               "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality)."
             ],
-            "expression": " DIVIDE( [Product Quality Complaint Amount], [Gross Sales] )",
+            "expression": " DIVIDE( [Product Quality Complaint Amount] + 0, [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Product Quality"
           },
@@ -899,7 +897,7 @@
               "Service are complaints entered with reason codes marked as 'S' (service).",
               ""
             ],
-            "expression": " DIVIDE( [Service Quality Complaint Amount], [Gross Sales] )",
+            "expression": " DIVIDE( [Service Quality Complaint Amount] + 0, [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Service Quality"
           },
@@ -910,7 +908,7 @@
               "",
               "Customer accommodation are complaints entered with reason codes marked as 'S1' (accommodation)."
             ],
-            "expression": " DIVIDE( [Customer Accommodation Complaint Amount], [Gross Sales] )",
+            "expression": " DIVIDE( [Customer Accommodation Complaint Amount] + 0, [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Customer Accommodation"
           },
@@ -1058,7 +1056,7 @@
           {
             "name": "Quantity Sold",
             "description": "Total of quantity in the billing documents posted in SAP.",
-            "expression": " SUM( 'Sales Invoice'[Quantity] )",
+            "expression": "SUM( 'Sales Invoice'[Quantity] )",
             "formatString": "#,0",
             "displayFolder": "Sales Invoice"
           },
@@ -2536,13 +2534,6 @@
             "displayFolder": "Operations Scrap"
           },
           {
-            "name": "Upstream Avg Scanned Tag Value",
-            "description": "Average of values recorded in the PLC tags. Filter or grouped this measure by tag names to get the intended values per PLC tag.",
-            "expression": "AVERAGE( 'Upstream Process Log'[Tag Value] )",
-            "formatString": "#,0",
-            "displayFolder": "Upstream Process Log"
-          },
-          {
             "name": "CONV Square Footage",
             "description": "Total linear footage of goods movement transaction with movement types 101/102 and 531/532 from the Converting machines posted in Converting storage bins. The dimensions are based on the width and length in the alternative unit of measure in the material master.",
             "expression": [
@@ -2556,13 +2547,6 @@
             ],
             "formatString": "#,0",
             "displayFolder": "Converting"
-          },
-          {
-            "name": "Upstream Avg Cross Web Value",
-            "description": "Average of values in the NDC profile",
-            "expression": "AVERAGE( 'Upstream NDC Profile'[Average Cross Web Value] )",
-            "formatString": "#,0.00000",
-            "displayFolder": "Upstream Process Log"
           },
           {
             "name": "Website Bounce Rate",
@@ -2939,16 +2923,21 @@
             "name": "Gross Sales Discount",
             "description": "Total discount applied to the gross sales revenue. This number is different from cash discount or the discount applied to the selling price based on price book or sales quote.",
             "expression": [
-              "",
-              "IF(",
-              "    HASONEVALUE( '_Currency to Use'[Currency] ),",
-              "    SWITCH(",
-              "        VALUES( '_Currency to Use'[Currency] ),",
-              "        \"USD\", SUM( 'Sales Invoice'[SalesDiscount] ),",
-              "        \"Local\", SUMX( 'Sales Invoice',  'Sales Invoice'[SalesDiscount] * 'Sales Invoice'[Exchange Rate] ),",
-              "        SUM('Sales Invoice'[SalesDiscount] )",
+              "CALCULATE(",
+              "    IF(",
+              "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+              "        SWITCH(",
+              "            VALUES( '_Currency to Use'[Currency] ),",
+              "            \"USD\", SUM( 'Sales Invoice'[SalesDiscount] ),",
+              "            \"Local\", SUMX( 'Sales Invoice',  'Sales Invoice'[SalesDiscount] * 'Sales Invoice'[Exchange Rate] ),",
+              "            SUM('Sales Invoice'[SalesDiscount] )",
+              "        ),",
+              "        SUM('Sales Invoice'[SalesDiscount] )    ",
               "    ),",
-              "    SUM('Sales Invoice'[SalesDiscount] )    ",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
               ")"
             ],
             "formatString": "#,0",
@@ -4102,14 +4091,14 @@
               "",
               "VAR Other_Out = ",
               "    CALCULATE(",
-              "        SUM('Process Order'[DeliveredQuantity] ),",
+              "        SUM('FACT_ProcessOrder'[DeliveredQuantity] ),",
               "        ALL( 'Calendar' ),",
               "        FILTER(",
-              "            ALL( 'Process Order'[EndDateKey] ),",
-              "            'Process Order'[EndDateKey] >= BegDate",
-              "                && 'Process Order'[EndDateKey] < [Beginning of Month]",
+              "            ALL( 'FACT_ProcessOrder'[EndDateKey] ),",
+              "            'FACT_ProcessOrder'[EndDateKey] >= BegDate",
+              "                && 'FACT_ProcessOrder'[EndDateKey] < [Beginning of Month]",
               "        ),",
-              "        'Process Order'[Close Flag] = \"Yes\"",
+              "        KEEPFILTERS( 'Process Order'[Close Flag] = \"Yes\" )",
               "    )",
               "",
               "RETURN",
@@ -4634,7 +4623,7 @@
               "",
               "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality)."
             ],
-            "expression": " DIVIDE( [Product Quality Credit Issued], [Gross Sales] )",
+            "expression": " DIVIDE( [Product Quality Credit Issued] + 0, [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Product Quality"
           },
@@ -4645,7 +4634,7 @@
               "",
               "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality). Open amount is the difference between the complaint and credit issued amount."
             ],
-            "expression": " DIVIDE( [Product Quality Open Amount], [Gross Sales] )",
+            "expression": " DIVIDE( [Product Quality Open Amount] + 0, [Gross Sales] )",
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Complaints\\_Product Quality"
           },
@@ -4891,12 +4880,21 @@
             "description": "Fiscal year-to-date total of gross sales",
             "expression": [
               "",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -4921,7 +4919,15 @@
           {
             "name": "Gross Margin MTD",
             "description": "Month-to-date total of gross margin",
-            "expression": " CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              " CALCULATE(",
+              "    CALCULATE( [Gross Margin], DATESMTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
@@ -4930,12 +4936,21 @@
             "description": "Fiscal year-to-date total of gross margin",
             "expression": [
               "",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "    ",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -4969,14 +4984,21 @@
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
-              "VAR _LastDate =",
-              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5003,14 +5025,21 @@
             "description": "Fiscal year-to-date total of gross margin of previous fiscal year up to the same current period to the day",
             "expression": [
               "",
-              "VAR _LastDate =",
-              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5035,7 +5064,15 @@
           {
             "name": "Gross Margin% MTD",
             "description": "Month-to-date total of gross margin divided by the month-to-date total of gross sales",
-            "expression": " CALCULATE( [Gross Margin%], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "CALCULATE(",
+              "    CALCULATE( [Gross Margin%], DATESMTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
@@ -5044,12 +5081,21 @@
             "description": "Fiscal year-to-date total of gross margin divided by fiscal year-to-date total of gross sales",
             "expression": [
               "",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5083,14 +5129,21 @@
             "description": "Fiscal year-to-date total of gross margin divided by fiscal year-to-date total of gross sales of previous fiscal year up to the same current period to the day",
             "expression": [
               "",
-              "VAR _LastDate =",
-              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5150,7 +5203,15 @@
           {
             "name": "Quantity Sold MTD",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Quantity Sold], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "CALCULATE(",
+              "    CALCULATE( [Quantity Sold], DATESMTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
@@ -5159,12 +5220,21 @@
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
             "expression": [
               "",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5241,12 +5311,21 @@
             "description": "Fiscal year-to-date total amount of sales order line items entered",
             "expression": [
               "",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "    ",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5277,14 +5356,21 @@
             ],
             "expression": [
               "",
-              "VAR _LastDate =",
-              "    LASTDATE( 'Calendar'[Date] )",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "    ",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -5596,40 +5682,28 @@
           {
             "name": "Purchase Order Ordered Quantity",
             "description": "Total quantity of materials ordered in the purchase order",
-            "expression": " SUM( 'Purchase Order'[Ordered Quantity] )",
+            "expression": " SUM( 'FACT_PurchaseOrder'[Ordered Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Open Quantity",
             "description": "Difference between the ordered and received quantity of materials against a purchase order",
-            "expression": [
-              " ",
-              "CALCULATE(",
-              "    SUM( 'Purchase Order Delivery'[Open Quantity] ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Purchase Order Delivery'[First Delivery Date] )",
-              ")"
-            ],
+            "expression": "SUM( 'FACT_PurchaseOrder'[Open Quantity] )",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Ordered Amount",
             "description": "Total amount of materials ordered in the purchase order",
-            "expression": " SUM( 'Purchase Order'[Ordered Amount] )",
+            "expression": " SUM( 'FACT_PurchaseOrder'[Ordered Amount] )",
             "formatString": "#,0",
             "displayFolder": "Purchase Order"
           },
           {
             "name": "Purchase Order Open Amount",
             "description": "Difference between the ordered and received amount of materials against a purchase order",
-            "expression": [
-              " ",
-              "CALCULATE(",
-              "    SUM( 'Purchase Order Delivery'[Open Amount] ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Purchase Order Delivery'[First Delivery Date] )",
-              ")"
-            ],
+            "expression": "SUM( 'FACT_PurchaseOrder'[Open Amount] )",
             "formatString": "#,0",
             "displayFolder": "Purchase Order"
           },
@@ -6416,21 +6490,45 @@
           {
             "name": "Gross Sales YTD",
             "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
-            "expression": " CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "CALCULATE(",
+              "    CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
           {
             "name": "Gross Margin YTD",
             "description": "Calendar year-to-date total of gross margin",
-            "expression": " CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "CALCULATE(",
+              "    CALCULATE( [Gross Margin], DATESYTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
           {
             "name": "Gross Margin% YTD",
             "description": "Calendar year-to-date total of gross margin divided by calendar year-to-date total of gross sales",
-            "expression": " CALCULATE( [Gross Margin%], DATESYTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "CALCULATE(",
+              "    CALCULATE( [Gross Margin%], DATESYTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
@@ -6525,7 +6623,7 @@
           {
             "name": "Purchase Order Goods Receipt Quantity",
             "description": "Total quantity of materials received for the purchase order line item",
-            "expression": " SUM('Purchase Order'[Goods Receipt Quantity])",
+            "expression": " SUM('FACT_PurchaseOrder'[Goods Receipt Quantity])",
             "formatString": "#,0.00",
             "displayFolder": "Purchase Order"
           },
@@ -6754,12 +6852,12 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    DISTINCTCOUNT( 'Process Order'[Process Order Number] ),",
+              "    DISTINCTCOUNT( 'FACT_ProcessOrder'[Process Order Number] ),",
               "    FILTER(",
               "        'Calendar',",
               "        'Calendar'[Date] <= [Report Date]",
               "    ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Process Order'[EndDateKey] )",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
               ")"
             ],
             "formatString": "#,0",
@@ -6771,12 +6869,12 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( 'Process Order'[OrderQuantity] ),",
+              "    SUM( 'FACT_ProcessOrder'[OrderQuantity] ),",
               "    FILTER(",
               "        'Calendar',",
               "        'Calendar'[Date] <= [Report Date]",
               "    ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Process Order'[EndDateKey] )",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
               ")"
             ],
             "formatString": "#,0.00",
@@ -6788,12 +6886,12 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    SUM( 'Process Order'[DeliveredQuantity] ),",
+              "    SUM( 'FACT_ProcessOrder'[DeliveredQuantity] ),",
               "    FILTER(",
               "        'Calendar',",
               "        'Calendar'[Date] <= [Report Date]",
               "    ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Process Order'[EndDateKey] )",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
               ")"
             ],
             "formatString": "#,0.00",
@@ -6805,12 +6903,12 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    DISTINCTCOUNT( 'Process Order'[Process Order Number] ),",
+              "    DISTINCTCOUNT( 'FACT_ProcessOrder'[Process Order Number] ),",
               "    FILTER(",
               "        'Calendar',",
               "        'Calendar'[Date] <= [Report Date]",
               "    ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Process Order'[Basic Start Date] )",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[Basic Start Date] )",
               ")"
             ],
             "formatString": "#,0",
@@ -6823,7 +6921,7 @@
               "",
               "CALCULATE(",
               "    [Process Order Count],",
-              "    'Process Order'[Close Flag] = \"Yes\"",
+              "    KEEPFILTERS( 'Process Order'[Close Flag] = \"Yes\" )",
               ")"
             ],
             "formatString": "#,0",
@@ -6836,7 +6934,7 @@
               "",
               "CALCULATE(",
               "    [Process Order Count],",
-              "    'Process Order'[Notification Number] <> BLANK()",
+              "    'FACT_ProcessOrder'[Notification Number] <> BLANK()",
               ")"
             ],
             "formatString": "#,0",
@@ -7539,7 +7637,7 @@
           {
             "name": "Purchase Order Goods Receipt Amount",
             "description": "Total amount of materials received for the purchase order line item",
-            "expression": " SUM('Purchase Order'[Goods Receipt Amount])",
+            "expression": " SUM('FACT_PurchaseOrder'[Goods Receipt Amount])",
             "formatString": "#,0",
             "displayFolder": "Purchase Order"
           },
@@ -7672,12 +7770,21 @@
             "description": "Fiscal year-to-date total cost posted in earned labor, setup, and overhead cost elements",
             "expression": [
               "",
+              "VAR _ReportDate =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+              "    )",
+              "    ",
+              "VAR _BegYear =",
+              "    CALCULATE(",
+              "        MAX( 'Calendar'[Date] ),",
+              "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+              "    )",
+              "",
               "VAR _DayofFiscal =",
-              "    DATEDIFF(",
-              "        [Beginning of Fiscal Year],",
-              "        [Report Date],",
-              "        DAY",
-              "    ) + 1",
+              "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+              "",
               "RETURN",
               "    CALCULATE(",
               "        CALCULATE(",
@@ -7694,8 +7801,7 @@
               "            'Calendar',",
               "            'Calendar'[Date] <= [Report Date]",
               "        )",
-              "    )",
-              ""
+              "    )"
             ],
             "formatString": "#,0",
             "displayFolder": "Absorption\\_Time-Based"
@@ -8406,9 +8512,9 @@
             "expression": [
               "",
               "CALCULATE(",
-              "    DISTINCTCOUNT( 'Process Order'[Process Order Number] ),",
+              "    DISTINCTCOUNT( 'FACT_ProcessOrder'[Process Order Number] ),",
               "    KEEPFILTERS( 'Work Center'[Department] = \"COMP\" ),",
-              "    USERELATIONSHIP( 'Calendar'[Date], 'Process Order'[EndDateKey] )",
+              "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
               ")"
             ],
             "formatString": "#,0",
@@ -8554,7 +8660,6 @@
             "name": "Official Material Cost",
             "description": "This cost is the material cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
             "expression": [
-              "",
               "IF(",
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
@@ -8592,7 +8697,6 @@
             "name": "Official Overhead Cost",
             "description": "This cost is the overhead cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
             "expression": [
-              "",
               "IF(",
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
@@ -8643,6 +8747,7 @@
             "name": "Previous Official Standard Cost",
             "description": "This cost is based on the the previous cost roll. It is the quantity sold multiplied by the total of previous material, labor, overhead, and setup cost of the material.",
             "expression": [
+              "",
               "IF(",
               "    HASONEVALUE( '_Currency to Use'[Currency] ),",
               "    SWITCH(",
@@ -8660,7 +8765,15 @@
           {
             "name": "Gross Sales MTD",
             "description": "MTD gross sales as of yesterday or whatever is the last date filtered in 'Calendar'[Date] field.",
-            "expression": " CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) )",
+            "expression": [
+              "CALCULATE(",
+              "    CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) ),",
+              "    FILTER(",
+              "        'Calendar',",
+              "        'Calendar'[Date] <= [Report Date]",
+              "    )",
+              ")"
+            ],
             "formatString": "#,0",
             "displayFolder": "Sales Invoice\\_Time-Based"
           },
@@ -9142,7 +9255,7 @@
               "-- open stock transfer purchase orders",
               "CALCULATE(",
               "    [Purchase Order In Transit Amount],",
-              "    KEEPFILTERS( 'Purchase Order'[Receiving Plant] <> \"1001\" )",
+              "    KEEPFILTERS( 'FACT_PurchaseOrder'[Receiving Plant] <> \"1001\" )",
               ") +",
               "-- open WIP process orders",
               "[Open WIP Amount]"
@@ -9160,7 +9273,7 @@
               "-- open stock transfer purchase orders",
               "CALCULATE(",
               "    [Purchase Order In Transit Quantity],",
-              "    KEEPFILTERS( 'Purchase Order'[Receiving Plant] <> \"1001\" )",
+              "    KEEPFILTERS( 'FACT_PurchaseOrder'[Receiving Plant] <> \"1001\" )",
               ") +",
               "-- open WIP process orders",
               "SUM( 'Inventory Open WIP'[Quantity] )"
@@ -9343,6 +9456,165 @@
             "expression": "33000",
             "formatString": "#,0",
             "displayFolder": "Inventory\\_Blocked\\_Expired"
+          },
+          {
+            "name": "Actual Labor Hours",
+            "description": "Total regular, overtime, and doubletime hours from Paylocity. Filter the 'Pay Category' field in the 'Payroll' table to include regular, overtime, or doubletime hours only.",
+            "expression": "SUM( 'Payroll'[HoursWorked] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Operations"
+          },
+          {
+            "name": "Earned Labor Hours",
+            "description": "Total hours posted in the earned labor and setup cost elements",
+            "expression": [
+              " ",
+              "CALCULATE(",
+              "    SUM( Absorption[Quantity] ),",
+              "    KEEPFILTERS( 'Cost Element'[Category] = \"Earned Labor\" )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Operations"
+          },
+          {
+            "name": "Labor Efficiency",
+            "description": "Total earned labor hours from SAP divided by total actual hours from Paylocity. This metric only applies to direct labor cost centers.",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    DIVIDE(",
+              "        [Earned Labor Hours],",
+              "        [Actual Labor Hours per Crew]",
+              "    ),",
+              "    KEEPFILTERS( 'Cost Center'[Operations Category] = \"Direct\" )",
+              ")"
+            ],
+            "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+            "displayFolder": "Operations"
+          },
+          {
+            "name": "Actual Labor Hours per Crew",
+            "description": "Total regular, overtime, and doubletime hours from Paylocity divided by the crew size defined for the department. Filter the 'Pay Category' field in the 'Payroll' table to include regular, overtime, or doubletime hours only.",
+            "expression": "SUM( 'Payroll'[HoursWorkedPerCrew] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Operations"
+          },
+          {
+            "name": "Process Order Actual/Target Variance",
+            "description": "Variance between the actual and target cost/quantity of the process order",
+            "expression": [
+              "",
+              "[Process Order Actual Cost/Rate/Quantity] - [Process Order Target Cost/Rate/Quantity]"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Process Order Dynamic Target Flag",
+            "description": "Determines if the target cost/quantity in the process order is dynamically calculated (1 = Yes, 0 = No). The Power BI system calculates the target cost/quantity for process orders where their variance is not yet official calculated during month-end. Once Finance calculates the variances, this flag should turn to 0 (No).",
+            "expression": [
+              "",
+              "MAX( 'Process Order Cost'[Dynamic Target Flag] )"
+            ],
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Process Order Actual Cost/Rate/Quantity",
+            "description": [
+              "This measure is similar to the actual cost/quantity in the 'Cost Analysis' function in COR3 transaction code in SAP.",
+              "",
+              "Filter the 'Category' field in the 'Process Order Cost' table to distinguish between actual cost and quantity."
+            ],
+            "expression": [
+              "",
+              "SUM( 'Process Order Cost'[Actual] )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Process Order Target Cost/Rate/Quantity",
+            "description": [
+              "This measure is similar to the target cost/quantity in the 'Cost Analysis' function in COR3 transaction code in SAP.",
+              "",
+              "Filter the 'Category' field in the 'Process Order Cost' table to distinguish between target cost and quantity."
+            ],
+            "expression": [
+              "",
+              "SUM( 'Process Order Cost'[Target] )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Process Order Actual Cost",
+            "description": [
+              "This measure is similar to the actual cost/quantity in the 'Cost Analysis' function in COR3 transaction code in SAP.",
+              "",
+              "Filter the 'Category' field in the 'Process Order Cost' table to distinguish between actual cost and quantity."
+            ],
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    SUM( 'Process Order Cost'[Actual] ),",
+              "    FILTER(",
+              "        ALL( 'Process Order Cost'[Category] ),",
+              "        'Process Order Cost'[Category] = \"Cost\"",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Process Order Actual Cost Absolute",
+            "description": [
+              "This measure is similar to the actual cost/quantity in the 'Cost Analysis' function in COR3 transaction code in SAP.",
+              "",
+              "Filter the 'Category' field in the 'Process Order Cost' table to distinguish between actual cost and quantity."
+            ],
+            "expression": [
+              "",
+              "ABS( [Process Order Actual Cost] )"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Process Order Actual/Target Cost Variance",
+            "description": "Variance between the actual and target cost of the process order",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Process Order Actual/Target Variance],",
+              "    KEEPFILTERS( 'Process Order Cost'[Category] = \"Cost\" )",
+              ")"
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Process Order"
+          },
+          {
+            "name": "Backorder Quantity",
+            "description": [
+              "Total sales order open quantity scheduled to ship in the past and current month.",
+              "",
+              "Scheduled ship date is the first date in the schedule line."
+            ],
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Sales Order Open Quantity],",
+              "    ALL( 'Calendar'[Date] ),",
+              "    FILTER(",
+              "        ALL( 'Sales Order'[First Scheduled Ship Date] ),",
+              "        'Sales Order'[First Scheduled Ship Date] <= [End of Month]",
+              "    )",
+              ")",
+              ""
+            ],
+            "formatString": "#,0.00",
+            "displayFolder": "Sales Order"
           }
         ]
       },
@@ -10517,34 +10789,6 @@
             "sourceColumn": "MaterialName"
           },
           {
-            "name": "Purchase Document Number",
-            "dataType": "string",
-            "description": [
-              "Purchase document referenced in the accounting document.",
-              "",
-              "This field is not related to the 'Purchase Order' table."
-            ],
-            "sourceColumn": "PurchaseDocNo"
-          },
-          {
-            "name": "Purchase Document Line Number",
-            "dataType": "string",
-            "description": "Number of line item in the referenced purchase order",
-            "sourceColumn": "PurchaseDocLineNo"
-          },
-          {
-            "name": "Purchase Order Item Text",
-            "dataType": "string",
-            "description": "General description of the item in the purchase order",
-            "sourceColumn": "PurchaseItemText"
-          },
-          {
-            "name": "Purchase Requisition Track Number",
-            "dataType": "string",
-            "description": "Custom text field that provides additional information about the purchase order item.",
-            "sourceColumn": "PurchaseReqTrackNo"
-          },
-          {
             "name": "CostCenter",
             "dataType": "string",
             "isHidden": true,
@@ -10576,6 +10820,13 @@
             "dataType": "string",
             "description": "Determines if the document is reversed by another document",
             "sourceColumn": "IsReversed"
+          },
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -10596,8 +10847,9 @@
         ]
       },
       {
-        "name": "Purchase Order",
+        "name": "FACT_PurchaseOrder",
         "description": "Contains purchase orders entered in SAP in the last few fiscal years. Items with deletion flag are excluded.",
+        "isHidden": true,
         "columns": [
           {
             "name": "PurchaseOrderLineKey",
@@ -10610,34 +10862,6 @@
             "displayFolder": "Header"
           },
           {
-            "name": "Purchase Order Number",
-            "dataType": "string",
-            "description": "SAP Source: EKKO.EBELN",
-            "sourceColumn": "PurchaseOrderNoKey",
-            "displayFolder": "Header"
-          },
-          {
-            "name": "Purchase Line Number",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.EBELN",
-            "sourceColumn": "PurchaseOrderLineNo",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Document Date",
-            "dataType": "dateTime",
-            "description": "SAP Source: EKKO.AEDAT",
-            "sourceColumn": "DocumentDateKey",
-            "formatString": "Short Date",
-            "displayFolder": "Header",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
             "name": "VendorNoKey",
             "dataType": "string",
             "description": "SAP Source: EKKO.LIFNR",
@@ -10647,61 +10871,22 @@
             "displayFolder": "Header"
           },
           {
-            "name": "Material Group",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.MATKL",
-            "sourceColumn": "MaterialGroup",
-            "displayFolder": "Item"
-          },
-          {
             "name": "Material Number",
             "dataType": "string",
             "description": "SAP Source: EKPO.MATNR",
+            "isHidden": true,
             "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false,
             "displayFolder": "Item"
-          },
-          {
-            "name": "Material Description",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.TXZ01",
-            "sourceColumn": "MaterialText",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Req Track Number",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.BEDNR",
-            "sourceColumn": "RequisitionTrackNo",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Unit Price",
-            "dataType": "decimal",
-            "description": "SAP Source: EKPO.NETPR",
-            "sourceColumn": "UnitPrice",
-            "displayFolder": "Item",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Unit of Measure",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.MEINS",
-            "sourceColumn": "UnitOfMeasure",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Document Type",
-            "dataType": "string",
-            "description": "SAP Source: EKKO.BSART",
-            "sourceColumn": "PurchaseDocType",
-            "displayFolder": "Header"
           },
           {
             "name": "First Delivery Date",
             "dataType": "dateTime",
             "description": "SAP Source: EKET.SLFDT",
+            "isHidden": true,
             "sourceColumn": "FirstDeliveryDateKey",
             "formatString": "MM/dd/yyyy",
+            "isAvailableInMdx": false,
             "displayFolder": "Item",
             "annotations": [
               {
@@ -10711,32 +10896,13 @@
             ]
           },
           {
-            "name": "Issuing Plant",
-            "dataType": "string",
-            "description": "SAP Source: EKKO.RESWK",
-            "sourceColumn": "IssuingPlantNo",
-            "displayFolder": "Header"
-          },
-          {
             "name": "Receiving Plant",
             "dataType": "string",
             "description": "SAP Source: EKPO.WERKS",
+            "isHidden": true,
             "sourceColumn": "ReceivingPlantNo",
+            "isAvailableInMdx": false,
             "displayFolder": "Item"
-          },
-          {
-            "name": "Material Type",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.MTART",
-            "sourceColumn": "MaterialType",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Currency",
-            "dataType": "string",
-            "description": "SAP Source: EKKO.WAERS",
-            "sourceColumn": "Currency",
-            "displayFolder": "Header"
           },
           {
             "name": "Ordered Quantity",
@@ -10781,13 +10947,6 @@
             "summarizeBy": "none"
           },
           {
-            "name": "Purchase Order Unit",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.BPRME",
-            "sourceColumn": "POUnitOfMeasure",
-            "displayFolder": "Item"
-          },
-          {
             "name": "Company Code",
             "dataType": "string",
             "description": "SAP Source: EKKO.BUKRS",
@@ -10823,46 +10982,11 @@
             "sourceColumn": "ValuationClassKey",
             "isAvailableInMdx": false,
             "displayFolder": "Item"
-          },
-          {
-            "name": "Item Delivery Date",
-            "dataType": "dateTime",
-            "description": "SAP Source: EKPO.EINDT",
-            "sourceColumn": "ItemDeliveryDate",
-            "formatString": "Short Date",
-            "displayFolder": "Item",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Requisitioner Name",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.AFNAM",
-            "sourceColumn": "RequisitionerName",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Complete Delivery Flag",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.ELIKZ",
-            "sourceColumn": "CompleteDeliverIndicator",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Goods Receipt Required Flag",
-            "dataType": "string",
-            "description": "SAP Source: EKPO.WEPOS",
-            "sourceColumn": "GoodsReceiptIndicator",
-            "displayFolder": "Item"
           }
         ],
         "partitions": [
           {
-            "name": "Purchase Order",
+            "name": "FACT_PurchaseOrder",
             "dataView": "full",
             "source": {
               "type": "m",
@@ -11148,6 +11272,20 @@
                 ")"
               ],
               "ordinal": 12
+            },
+            {
+              "name": "CW",
+              "expression": [
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    FILTER(",
+                "        'Calendar',",
+                "        'Calendar'[Date] >= [Sunday of Current Week]",
+                "            && 'Calendar'[Date] <= [Report Date]",
+                "    )",
+                ")"
+              ],
+              "ordinal": 20
             }
           ]
         },
@@ -11546,20 +11684,6 @@
             "dataType": "string",
             "description": "Weight unit of measure of the sales order item",
             "sourceColumn": "WeightUoM",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Purchase Order Number",
-            "dataType": "string",
-            "description": "Line number in the purchase order number if the sales order is a buyout order (ZDSP order type)",
-            "sourceColumn": "PurchaseOrderNo",
-            "displayFolder": "Item"
-          },
-          {
-            "name": "Purchase Order Line Number",
-            "dataType": "string",
-            "description": "Purchase order number if the sales order is a buyout order (ZDSP order type)",
-            "sourceColumn": "PurchaseOrderLineNo",
             "displayFolder": "Item"
           },
           {
@@ -12054,6 +12178,14 @@
             "sourceColumn": "ShipToRegion",
             "displayFolder": "Header",
             "dataCategory": "Region"
+          },
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
           }
         ],
         "partitions": [
@@ -12625,18 +12757,6 @@
             "sourceColumn": "AssignmentNo"
           },
           {
-            "name": "Purchase Order Number",
-            "dataType": "string",
-            "description": "Purchase order referenced in the accounting document",
-            "sourceColumn": "PurchaseOrderNo"
-          },
-          {
-            "name": "Purchase Order Line Number",
-            "dataType": "string",
-            "description": "Line number of the purchase order item referenced in the accounting document",
-            "sourceColumn": "PurchaseOrderLineNo"
-          },
-          {
             "name": "Process Order Number",
             "dataType": "string",
             "description": "Process order number referenced in the accounting document",
@@ -12848,16 +12968,6 @@
             "isAvailableInMdx": false
           },
           {
-            "name": "Purchase Order Number",
-            "dataType": "string",
-            "sourceColumn": "PurchaseOrderNo"
-          },
-          {
-            "name": "Purchase Order Line Number",
-            "dataType": "string",
-            "sourceColumn": "PurchaseOrderLineNo"
-          },
-          {
             "name": "VendorNo",
             "dataType": "string",
             "isHidden": true,
@@ -12892,6 +13002,13 @@
             "name": "Fiscal Year",
             "dataType": "string",
             "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -13128,83 +13245,6 @@
                 "    dbo_FACT_SalesOrderChangelog = Source{[Schema=\"dbo\",Item=\"FACT_SalesOrderChangelog\"]}[Data]",
                 "in",
                 "    dbo_FACT_SalesOrderChangelog"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Purchase Order Delivery",
-        "isHidden": true,
-        "columns": [
-          {
-            "name": "PurchaseOrderLineKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "PurchaseOrderLineKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "First Delivery Date",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "FirstDeliveryDateKey",
-            "formatString": "Short Date",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Open Quantity",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "OpenQuantity",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Open Amount",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "OpenAmount",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Goods Receipt Quantity",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "GoodsReceiptQuantity",
-            "formatString": "0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "Goods Receipt Amount",
-            "dataType": "decimal",
-            "isHidden": true,
-            "sourceColumn": "GoodsReceiptAmount",
-            "formatString": "0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Purchase Order Delivery",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_PurchaseOrderDelivery = Source{[Schema=\"dbo\",Item=\"FACT_PurchaseOrderDelivery\"]}[Data]",
-                "in",
-                "    dbo_FACT_PurchaseOrderDelivery"
               ]
             }
           }
@@ -14768,18 +14808,6 @@
             "sourceColumn": "LocalCurrency2"
           },
           {
-            "name": "Purchase Order Number",
-            "dataType": "string",
-            "description": "SAP Source: ACCTIT.EBELN",
-            "sourceColumn": "PurchaseOrderNo"
-          },
-          {
-            "name": "Purchase Order Line Number",
-            "dataType": "string",
-            "description": "SAP Source: ACCTIT.EBELP",
-            "sourceColumn": "PurchaseOrderLineNo"
-          },
-          {
             "name": "PurchaseOrderLineKey",
             "dataType": "string",
             "isHidden": true,
@@ -15896,123 +15924,6 @@
         ]
       },
       {
-        "name": "Bill of Material (Adhesive)",
-        "description": "Adhesive used by the leading process order. This table is used to filter the 'Process Order' table by the adhesive used based on the order's BOM.",
-        "columns": [
-          {
-            "name": "BomKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "BomKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "sourceColumn": "CompMaterialNo"
-          },
-          {
-            "name": "Material Description",
-            "dataType": "string",
-            "sourceColumn": "CompMaterialDescription"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Bill of Material (Adhesive)",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_DIM_BillOfMaterial_Adhesive = Source{[Schema=\"dbo\",Item=\"DIM_BillOfMaterial_Adhesive\"]}[Data]",
-                "in",
-                "    dbo_DIM_BillOfMaterial_Adhesive"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Bill of Material (Liner)",
-        "description": "Liner used by the leading process order. This table is used to filter the 'Process Order' table by the liner used based on the order's BOM.",
-        "columns": [
-          {
-            "name": "BomKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "BomKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "sourceColumn": "CompMaterialNo"
-          },
-          {
-            "name": "Material Description",
-            "dataType": "string",
-            "sourceColumn": "CompMaterialDescription"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Bill of Material (Liner)",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_DIM_BillOfMaterial_Liner = Source{[Schema=\"dbo\",Item=\"DIM_BillOfMaterial_Liner\"]}[Data]",
-                "in",
-                "    dbo_DIM_BillOfMaterial_Liner"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "Bill of Material (Facestock)",
-        "description": "Facestock used by the leading process order. This table is used to filter the 'Process Order' table by the facestock used based on the order's BOM.",
-        "columns": [
-          {
-            "name": "BomKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "BomKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "sourceColumn": "CompMaterialNo"
-          },
-          {
-            "name": "Material Description",
-            "dataType": "string",
-            "sourceColumn": "CompMaterialDescription"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Bill of Material (Facestock)",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_DIM_BillOfMaterial_Facestock = Source{[Schema=\"dbo\",Item=\"DIM_BillOfMaterial_Facestock\"]}[Data]",
-                "in",
-                "    dbo_DIM_BillOfMaterial_Facestock"
-              ]
-            }
-          }
-        ]
-      },
-      {
         "name": "FG Filters for Absorption",
         "description": "This table is used to filter the 'Absorption' table using values related to finished good materials.",
         "columns": [
@@ -16106,6 +16017,12 @@
             "dataType": "int64",
             "isHidden": true,
             "sourceColumn": "SortKey"
+          },
+          {
+            "name": "Manufacture Group",
+            "dataType": "string",
+            "description": "Determines if the department is Upstream, Downstream, or Indirect",
+            "sourceColumn": "ManufactureGroup"
           }
         ],
         "partitions": [
@@ -16305,7 +16222,11 @@
       },
       {
         "name": "Scrap Usage",
-        "description": "SAP Source: BSIS, ACCTIT, and MSEG. Filters BSIS via HKONT with scrap/usage accounts. ACCTIT and MSEG tables are used for quantities and material data.",
+        "description": [
+          "This table contains financial documents posted under scrap and usage related G/L accounts.",
+          "",
+          "Use the related tables such as Cost Element, Calendar, Material Master, Scrap Category, Plan, Reason for Movement, Work Center, MFG Work Center, Company Code, and Process Order for more details."
+        ],
         "columns": [
           {
             "name": "Document Number",
@@ -16380,7 +16301,9 @@
             "name": "Process Order Number",
             "dataType": "string",
             "description": "SAP Source: ACCTIT.AUFNR",
-            "sourceColumn": "ProcessOrderNo"
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNo",
+            "isAvailableInMdx": false
           },
           {
             "name": "Posting Date",
@@ -16412,7 +16335,7 @@
           {
             "name": "Amount",
             "dataType": "decimal",
-            "description": "SAP Source: BSIS.DMBE2 (negated if BSIS.SHKZH = 'H')",
+            "description": "Amount posted in the financial document in local currency 2 (USD)",
             "sourceColumn": "Amount",
             "formatString": "#,0.00",
             "summarizeBy": "none"
@@ -16677,105 +16600,6 @@
         ]
       },
       {
-        "name": "Upstream Process Log",
-        "description": "Related to job index of 'Upstream Logs - Raw' table.",
-        "columns": [
-          {
-            "name": "MachineJobIndexKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MachineJobIndexKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Scan Date",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ScanDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Scan Hour",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "ScanHour",
-            "formatString": "#,0",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Scan Minute",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "ScanMinute",
-            "formatString": "#,0",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Tag Name",
-            "dataType": "string",
-            "sourceColumn": "TagName"
-          },
-          {
-            "name": "Tag Value",
-            "dataType": "int64",
-            "sourceColumn": "TagValue",
-            "formatString": "#,0",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "MachineTagNameKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MachineTagNameKey",
-            "isAvailableInMdx": false
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Upstream Process Log",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_UpstreamProcessLog = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamProcessLog\"]}[Data]",
-                "in",
-                "    dbo_FACT_UpstreamProcessLog"
-              ]
-            }
-          }
-        ],
-        "hierarchies": [
-          {
-            "name": "Scan Timestamp Hierarchy",
-            "levels": [
-              {
-                "name": "Date",
-                "ordinal": 0,
-                "column": "Scan Date"
-              },
-              {
-                "name": "Hour",
-                "ordinal": 1,
-                "column": "Scan Hour"
-              },
-              {
-                "name": "Minute",
-                "ordinal": 2,
-                "column": "Scan Minute"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "Machine Tag",
         "description": "Contains PLC tags. This table contains tags as specified by the Engineering department. Not all PLC tags are in this table.",
         "columns": [
@@ -16817,105 +16641,6 @@
                 "    dbo_DIM_UpstreamTagName"
               ]
             }
-          }
-        ]
-      },
-      {
-        "name": "Upstream NDC Profile",
-        "description": "Related to job index of 'Upstream Logs - Raw' table.",
-        "columns": [
-          {
-            "name": "MachineJobIndexKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "MachineJobIndexKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Job Index",
-            "dataType": "int64",
-            "sourceColumn": "JobIndex",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Average Cross Web Value",
-            "dataType": "decimal",
-            "description": "Average of the NDC/Net/Adjusted Profile columns in the NDC or Profile tables",
-            "sourceColumn": "CrossWebValue",
-            "formatString": "0.00000",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Scan Date",
-            "dataType": "dateTime",
-            "isHidden": true,
-            "sourceColumn": "ScanDate",
-            "formatString": "Short Date",
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "Scan Hour",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "ScanHour",
-            "formatString": "0",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Scan Minute",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "ScanMinute",
-            "formatString": "0",
-            "summarizeBy": "none"
-          },
-          {
-            "name": "Tag Name",
-            "dataType": "string",
-            "sourceColumn": "TagName"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "Upstream NDC Profile",
-            "dataView": "full",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_UpstreamProfile = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamProfile\"]}[Data]",
-                "in",
-                "    dbo_FACT_UpstreamProfile"
-              ]
-            }
-          }
-        ],
-        "hierarchies": [
-          {
-            "name": "Scan Timestamp Hierarchy",
-            "levels": [
-              {
-                "name": "Date",
-                "ordinal": 0,
-                "column": "Scan Date"
-              },
-              {
-                "name": "Hour",
-                "ordinal": 1,
-                "column": "Scan Hour"
-              },
-              {
-                "name": "Minute",
-                "ordinal": 2,
-                "column": "Scan Minute"
-              }
-            ]
           }
         ]
       },
@@ -18258,66 +17983,16 @@
           {
             "name": "Process Order Number",
             "dataType": "string",
-            "description": "SAP Source: AFKO.AUFNR",
-            "isUnique": true,
             "isKey": true,
             "sourceColumn": "OrderNoKey"
           },
           {
-            "name": "Work Center",
-            "dataType": "string",
-            "description": "SAP Source: CRHD.ARBPL or AFVC.KTSCH",
-            "isHidden": true,
-            "sourceColumn": "WorkCenterKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Deliver Flag",
-            "dataType": "string",
-            "description": "SAP Source: AFPO.ELIKZ",
-            "sourceColumn": "DeliverFlag",
-            "displayFolder": "_Flags"
-          },
-          {
-            "name": "Final Deliver Flag",
-            "dataType": "string",
-            "description": "SAP Source: AFPO.WEPOS",
-            "sourceColumn": "FinalDeliverFlag",
-            "displayFolder": "_Flags"
-          },
-          {
-            "name": "Same Day Flag",
-            "dataType": "string",
-            "description": "Calculated column. Value is 'X' if the order comment contains 'SAMEDAY' or 'SAME-DAY'.",
-            "sourceColumn": "SameDayFlag",
-            "displayFolder": "_Flags"
-          },
-          {
-            "name": "Comment",
-            "dataType": "string",
-            "description": "SAP Source: AFPO.ABLAD",
-            "sourceColumn": "OrderComment"
-          },
-          {
-            "name": "Material Number",
-            "dataType": "string",
-            "description": "SAP Source: AFKO.PLNBEZ",
-            "isHidden": true,
-            "sourceColumn": "MaterialNoKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Document Group",
-            "dataType": "string",
-            "description": "SAP Source: AFKO.PLNNR",
-            "sourceColumn": "DocGroup"
-          },
-          {
             "name": "Basic Start Date",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GSTRP",
+            "description": "Date in which the process order is scheduled to start",
             "sourceColumn": "StartDate",
             "formatString": "Short Date",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -18326,24 +18001,73 @@
             ]
           },
           {
+            "name": "Delivery Required Flag",
+            "dataType": "string",
+            "description": "Specifies whether the item involves a goods receipt.",
+            "sourceColumn": "DeliverFlag",
+            "displayFolder": "_Flags"
+          },
+          {
+            "name": "Delivery Completed Flag",
+            "dataType": "string",
+            "description": "Indicates that the item is to be regarded as closed.",
+            "sourceColumn": "FinalDeliverFlag",
+            "displayFolder": "_Flags"
+          },
+          {
+            "name": "Same Day Flag",
+            "dataType": "string",
+            "description": "Calculated column. Value is 'Yes' if the order comment contains 'SAMEDAY' or 'SAME-DAY'.",
+            "sourceColumn": "SameDayFlag",
+            "displayFolder": "_Flags"
+          },
+          {
+            "name": "Close Flag",
+            "dataType": "string",
+            "description": "Calculated column; Value is 'Yes' if the order has TECO, CLSD, or DLFL status.",
+            "sourceColumn": "CloseFlag",
+            "displayFolder": "_Flags"
+          },
+          {
+            "name": "Count in COMP First Pass Flag",
+            "dataType": "string",
+            "description": "This value is \"Yes\" if either the [Delivery Completed Flag] or [Close Flag] is \"Yes\" and the order's work center belongs to Compounding department",
+            "sourceColumn": "CountForCompFPassFlag",
+            "displayFolder": "_Flags"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "description": "Comment entered by the Planner in the process order",
+            "sourceColumn": "OrderComment"
+          },
+          {
+            "name": "Recipe Group",
+            "dataType": "string",
+            "description": "Group identifier that determines the recipe of the material in the process order",
+            "sourceColumn": "DocGroup"
+          },
+          {
             "name": "Basic Start Time",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GSUZP",
+            "description": "Time in which the process order is scheduled to start",
             "sourceColumn": "StartTime",
-            "formatString": "HH:mm:ss",
+            "formatString": "HH:mm",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
               }
             ]
           },
           {
             "name": "Basic End Date",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GLTRP",
+            "description": "Date in which the process order is scheduled to finish based on the material's lead time",
             "sourceColumn": "EndDate",
             "formatString": "Short Date",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -18354,22 +18078,24 @@
           {
             "name": "Basic End Time",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GLUZP",
+            "description": "Time in which the process order is scheduled to finish based on the material's lead time",
             "sourceColumn": "EndTime",
-            "formatString": "HH:mm:ss",
+            "formatString": "HH:mm",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
               }
             ]
           },
           {
             "name": "Actual Start Date",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GSTRI",
+            "description": "Date when the process order is actually started in production",
             "sourceColumn": "ActualStartDate",
             "formatString": "Short Date",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -18380,22 +18106,24 @@
           {
             "name": "Actual Start Time",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GSUZI",
+            "description": "Time when the process order is actually started in production",
             "sourceColumn": "ActualStartTime",
-            "formatString": "HH:mm:ss",
+            "formatString": "HH:mm",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
               }
             ]
           },
           {
             "name": "Actual End Date",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GLTRI or AFPO.LTRMI",
+            "description": "Date when the process order is actually finished in production",
             "sourceColumn": "ActualEndDate",
             "formatString": "Short Date",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -18406,22 +18134,24 @@
           {
             "name": "Actual End Time",
             "dataType": "dateTime",
-            "description": "SAP Source: AFKO.GEUZI",
+            "description": "Time when the process order is actually finished in production",
             "sourceColumn": "ActualEndTime",
-            "formatString": "HH:mm:ss",
+            "formatString": "HH:mm",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
-                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+                "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
               }
             ]
           },
           {
             "name": "Confirm Date",
             "dataType": "dateTime",
-            "description": "SAP Source: AFPO.LTRMI",
+            "description": "Date when the process order's cost is confirmed by the supervisor",
             "sourceColumn": "ConfirmDate",
             "formatString": "Short Date",
+            "displayFolder": "_Dates",
             "annotations": [
               {
                 "name": "Format",
@@ -18430,196 +18160,10 @@
             ]
           },
           {
-            "name": "Unit of Measure",
+            "name": "Quantity Unit",
             "dataType": "string",
-            "description": "SAP Source: AFKO.GMEIN",
+            "description": "This is the base unit of measure in which the process order is managed. The system converts all the quantities entered in other units of measure (alternative units of measure) to the base unit of measure.",
             "sourceColumn": "QtyUoM"
-          },
-          {
-            "name": "OrderQuantity",
-            "dataType": "decimal",
-            "description": "SAP Source: AFKO.GAMNG",
-            "isHidden": true,
-            "sourceColumn": "OrderQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "DeliveredQuantity",
-            "dataType": "decimal",
-            "description": "SAP Source: AFPO.WEMNG",
-            "isHidden": true,
-            "sourceColumn": "DeliverQty",
-            "formatString": "#,0.00",
-            "isAvailableInMdx": false,
-            "summarizeBy": "sum"
-          },
-          {
-            "name": "Close Flag",
-            "dataType": "string",
-            "description": "Calculated column; Value is 'X' if the order has TECO, CLSD, or DLFL status. ",
-            "sourceColumn": "CloseFlag",
-            "displayFolder": "_Flags"
-          },
-          {
-            "name": "Specification Number",
-            "dataType": "string",
-            "description": "SAP Source: MARA.ZEINR",
-            "sourceColumn": "SpecNo"
-          },
-          {
-            "name": "LeadOrderBomKey",
-            "dataType": "string",
-            "isHidden": true,
-            "sourceColumn": "LeadOrderBomKey",
-            "isAvailableInMdx": false
-          },
-          {
-            "name": "Facestock Material Number 1",
-            "dataType": "string",
-            "description": "First facestock based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "FacestockMatNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Facestock Batch Number 1",
-            "dataType": "string",
-            "description": "First facestock based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "FacestockBatchNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Facestock Material Number 2",
-            "dataType": "string",
-            "description": "Second facestock based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "FacestockMatNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Facestock Batch Number 2",
-            "dataType": "string",
-            "description": "Second facestock based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "FacestockBatchNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Liner Material Number 1",
-            "dataType": "string",
-            "description": "First liner based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "LinerMatNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Liner Batch Number 1",
-            "dataType": "string",
-            "description": "First liner based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "LinerBatchNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Liner Material Number 2",
-            "dataType": "string",
-            "description": "Second liner based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "LinerMatNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Liner Batch Number 2",
-            "dataType": "string",
-            "description": "Second liner based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "LinerBatchNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Adhesive Material Number 1",
-            "dataType": "string",
-            "description": "First adhesive based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "AdhesiveMatNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Adhesive Batch Number 1",
-            "dataType": "string",
-            "description": "First adhesive based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "AdhesiveBatchNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Adhesive Material Number 2",
-            "dataType": "string",
-            "description": "Second adhesive based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "AdhesiveMatNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Adhesive Batch Number 2",
-            "dataType": "string",
-            "description": "Second adhesive based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "AdhesiveBatchNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Organosol Material Number 1",
-            "dataType": "string",
-            "description": "First organosol based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "OrganosolMatNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Organosol Batch Number 1",
-            "dataType": "string",
-            "description": "First organosol based on the process order's goods movement in order of posting date and batch number",
-            "sourceColumn": "OrganosolBatchNo1",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Organosol Material Number 2",
-            "dataType": "string",
-            "sourceColumn": "OrganosolMatNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Organosol Batch Number 2",
-            "dataType": "string",
-            "sourceColumn": "OrganosolBatchNo2",
-            "displayFolder": "_Components Used"
-          },
-          {
-            "name": "Count in COMP First Pass Flag",
-            "dataType": "string",
-            "description": "This value is set if either the [Final Deliver Indicator] or [Close Indicator] is set",
-            "sourceColumn": "CountForCompFPassFlag",
-            "displayFolder": "_Flags"
-          },
-          {
-            "name": "Notification Number",
-            "dataType": "string",
-            "description": "First matching notification number",
-            "sourceColumn": "NotificationNoKey"
-          },
-          {
-            "name": "EndDateKey",
-            "dataType": "dateTime",
-            "description": "Calculated column; If Actual End Date is available, use it. Otherwise, use the Basic End Date. Related to 'Calendar'[Date]",
-            "isHidden": true,
-            "sourceColumn": "EndDateKey",
-            "formatString": "Short Date",
-            "isAvailableInMdx": false,
-            "annotations": [
-              {
-                "name": "Format",
-                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-              }
-            ]
-          },
-          {
-            "name": "PlanningPlant",
-            "dataType": "string",
-            "description": "SAP Source: AFPO.PWERK",
-            "isHidden": true,
-            "sourceColumn": "PlanningPlant",
-            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -18631,9 +18175,9 @@
               "expression": [
                 "let",
                 "    Source = ARLPBI_STAGE,",
-                "    dbo_FACT_ProcessOrder = Source{[Schema=\"dbo\",Item=\"FACT_ProcessOrder\"]}[Data]",
+                "    dbo_DIM_ProcessOrder = Source{[Schema=\"dbo\",Item=\"DIM_ProcessOrder\"]}[Data]",
                 "in",
-                "    dbo_FACT_ProcessOrder"
+                "    dbo_DIM_ProcessOrder"
               ]
             }
           }
@@ -18996,7 +18540,9 @@
             "name": "Process Order Number",
             "dataType": "string",
             "description": "Proess order assigned to the goods movement.",
+            "isHidden": true,
             "sourceColumn": "ProcessOrderNoKey",
+            "isAvailableInMdx": false,
             "displayFolder": "Item"
           },
           {
@@ -19157,7 +18703,9 @@
             "name": "Cost Element",
             "dataType": "string",
             "description": "G/L account assigned to the transaction",
+            "isHidden": true,
             "sourceColumn": "CostElement",
+            "isAvailableInMdx": false,
             "displayFolder": "Item"
           },
           {
@@ -20940,6 +20488,528 @@
             }
           }
         ]
+      },
+      {
+        "name": "FACT_ProcessOrder",
+        "description": "Contains general information of all process orders entered in SAP in the last few fiscal years",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Process Order Number",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.AUFNR",
+            "isHidden": true,
+            "sourceColumn": "OrderNoKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Work Center",
+            "dataType": "string",
+            "description": "SAP Source: CRHD.ARBPL or AFVC.KTSCH",
+            "isHidden": true,
+            "sourceColumn": "WorkCenterKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "SAP Source: AFKO.PLNBEZ",
+            "isHidden": true,
+            "sourceColumn": "MaterialNoKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Basic Start Date",
+            "dataType": "dateTime",
+            "description": "SAP Source: AFKO.GSTRP",
+            "isHidden": true,
+            "sourceColumn": "StartDate",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "OrderQuantity",
+            "dataType": "decimal",
+            "description": "SAP Source: AFKO.GAMNG",
+            "isHidden": true,
+            "sourceColumn": "OrderQty",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "DeliveredQuantity",
+            "dataType": "decimal",
+            "description": "SAP Source: AFPO.WEMNG",
+            "isHidden": true,
+            "sourceColumn": "DeliverQty",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false,
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Notification Number",
+            "dataType": "string",
+            "description": "First matching notification number",
+            "isHidden": true,
+            "sourceColumn": "NotificationNoKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "EndDateKey",
+            "dataType": "dateTime",
+            "description": "Calculated column; If Actual End Date is available, use it. Otherwise, use the Basic End Date. Related to 'Calendar'[Date]",
+            "isHidden": true,
+            "sourceColumn": "EndDateKey",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "PlanningPlant",
+            "dataType": "string",
+            "description": "SAP Source: AFPO.PWERK",
+            "isHidden": true,
+            "sourceColumn": "PlanningPlant",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FACT_ProcessOrder",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_ProcessOrder = Source{[Schema=\"dbo\",Item=\"FACT_ProcessOrder\"]}[Data]",
+                "in",
+                "    dbo_FACT_ProcessOrder"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Payroll",
+        "description": [
+          "This table contains the daily regular, overtime, and doubletime hours per cost center.",
+          "",
+          "Use the related tables such as 'Company Code', 'Cost Center', 'Department', and 'Calendar' for further details."
+        ],
+        "columns": [
+          {
+            "name": "WorkDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "WorkDate",
+            "formatString": "Short Date",
+            "isAvailableInMdx": false,
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CostCenter",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostCenter",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "HoursWorked",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "HoursWorked",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Pay Category",
+            "dataType": "string",
+            "sourceColumn": "PayCategory"
+          },
+          {
+            "name": "HoursWorkedPerCrew",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "HoursWorkedPerCrew",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Payroll",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_Payroll = Source{[Schema=\"dbo\",Item=\"FACT_Payroll\"]}[Data]",
+                "in",
+                "    dbo_FACT_Payroll"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Order",
+        "description": "Contains general information on purchase orders",
+        "columns": [
+          {
+            "name": "PurchaseOrderLineKey",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false,
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Currency",
+            "dataType": "string",
+            "description": "Currency of items in the purchase order document",
+            "sourceColumn": "Currency",
+            "displayFolder": "Header"
+          },
+          {
+            "name": "Purchase Order Number",
+            "dataType": "string",
+            "description": "Identifier of the purchase order",
+            "sourceColumn": "PurchaseOrderNoKey",
+            "displayFolder": "Header"
+          },
+          {
+            "name": "Purchase Line Number",
+            "dataType": "string",
+            "description": "Identifier of the line item in the purchase order",
+            "sourceColumn": "PurchaseOrderLineNo",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Document Type",
+            "dataType": "string",
+            "description": "Two-letter code that determines if the purchase order is a regular purchase order, purchase requisition, stock transfer order, etc.",
+            "sourceColumn": "PurchaseDocType",
+            "displayFolder": "Header"
+          },
+          {
+            "name": "Complete Delivery Flag",
+            "dataType": "string",
+            "description": "Determines if the item has been closed or completely delivered to its destination",
+            "sourceColumn": "CompleteDeliverIndicator",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Goods Receipt Required Flag",
+            "dataType": "string",
+            "description": "Determines if there is a physical item coming to the destination",
+            "sourceColumn": "GoodsReceiptIndicator",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Document Date",
+            "dataType": "dateTime",
+            "description": "Date when the purchase order is created",
+            "sourceColumn": "DocumentDateKey",
+            "formatString": "Short Date",
+            "displayFolder": "Header",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "First Delivery Date",
+            "dataType": "dateTime",
+            "description": "Also known as the Statistical Delivery Date. This date determines when the material is scheduled to arrive at the destination based on the information from the vendor. This date never change since the PO is created.",
+            "sourceColumn": "FirstDeliveryDateKey",
+            "formatString": "Short Date",
+            "displayFolder": "Item",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Item Delivery Date",
+            "dataType": "dateTime",
+            "description": "Date when the item is scheduled to arrive at the destination. This date may change at a discretion of the PO's creator.",
+            "sourceColumn": "ItemDeliveryDate",
+            "formatString": "Short Date",
+            "displayFolder": "Item",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          },
+          {
+            "name": "Issuing Plant",
+            "dataType": "string",
+            "description": "The plant/warehouse that supplies the material",
+            "sourceColumn": "IssuingPlantNo",
+            "displayFolder": "Header"
+          },
+          {
+            "name": "Receiving Plant",
+            "dataType": "string",
+            "description": "Plant/warehouse of the destination of the item",
+            "sourceColumn": "ReceivingPlantNo",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Material Group",
+            "dataType": "string",
+            "description": "The group the item belongs to (if any)",
+            "sourceColumn": "MaterialGroup",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Material Type",
+            "dataType": "string",
+            "description": "Determines if the item is a raw material, WIP, finished good, etc. This category only applies to inventory materials.",
+            "sourceColumn": "MaterialType",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Material Number",
+            "dataType": "string",
+            "description": "Identifier of the item. Non-inventory items may have blank values.",
+            "sourceColumn": "MaterialNoKey",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Material Description",
+            "dataType": "string",
+            "description": "Short text that describes the item",
+            "sourceColumn": "MaterialText",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Req Track Number",
+            "dataType": "string",
+            "description": "A free-text field used for multiple purposes like material category, department, etc.",
+            "sourceColumn": "RequisitionTrackNo",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Requisitioner Name",
+            "dataType": "string",
+            "description": "Name of person who requested the purchase order/requisition",
+            "sourceColumn": "RequisitionerName",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "decimal",
+            "description": "Price (after discounts & surcharges) per unit of the item",
+            "sourceColumn": "UnitPrice",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Quantity Unit",
+            "dataType": "string",
+            "description": "Unit of measure of the quantity at the purchase order level",
+            "sourceColumn": "UnitOfMeasure",
+            "displayFolder": "Item"
+          },
+          {
+            "name": "Purchase Order Unit",
+            "dataType": "string",
+            "description": "Indicates the unit of measurement to which the purchase order price relates. This is usually the unit of measure the vendor uses.",
+            "sourceColumn": "POUnitOfMeasure",
+            "displayFolder": "Item"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Purchase Order",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_DIM_PurchaseOrder = Source{[Schema=\"dbo\",Item=\"DIM_PurchaseOrder\"]}[Data]",
+                "in",
+                "    dbo_DIM_PurchaseOrder"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Process Order Cost",
+        "columns": [
+          {
+            "name": "ProcessOrderNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ProcessOrderNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "PlantNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PlantNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "MaterialNo",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "MaterialNo",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Department",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "WorkCenter",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "WorkCenter",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CostElement",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CostElement",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Origin",
+            "dataType": "string",
+            "sourceColumn": "Origin"
+          },
+          {
+            "name": "Target",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "Target",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Actual",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "Actual",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Variance",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "Variance",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "CompanyCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CompanyCode",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Dynamic Target Flag",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DynamicTargetFlag",
+            "formatString": "#,0",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Last Goods Movement Date",
+            "dataType": "dateTime",
+            "description": "The posting date of the last goods receipt (101/102) or goods issue (261/262) related to the process order",
+            "sourceColumn": "LastGoodsMvmtDate",
+            "formatString": "Short Date",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Process Order Cost",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = ARLPBI_STAGE,",
+                "    dbo_FACT_ProcessOrderCost = Source{[Schema=\"dbo\",Item=\"FACT_ProcessOrderCost\"]}[Data]",
+                "in",
+                "    dbo_FACT_ProcessOrderCost"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -21030,7 +21100,7 @@
       },
       {
         "name": "d8be19f9-8a2d-4705-87ba-97ce6a35808d",
-        "fromTable": "Purchase Order",
+        "fromTable": "FACT_PurchaseOrder",
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
@@ -21084,7 +21154,7 @@
       },
       {
         "name": "ce291ef4-f6d6-43db-989e-e636805941b6",
-        "fromTable": "Purchase Order",
+        "fromTable": "FACT_PurchaseOrder",
         "fromColumn": "VendorNoKey",
         "toTable": "Vendor Master",
         "toColumn": "Vendor Number"
@@ -21139,20 +21209,6 @@
         "fromColumn": "Changed By",
         "toTable": "DIM_UsersSAP",
         "toColumn": "UsernameKey"
-      },
-      {
-        "name": "9428d940-fbc3-4bdb-8689-20a209035670",
-        "fromTable": "Purchase Order Delivery",
-        "fromColumn": "PurchaseOrderLineKey",
-        "toTable": "Purchase Order",
-        "toColumn": "PurchaseOrderLineKey"
-      },
-      {
-        "name": "48cb8180-79ac-45f5-b7ad-8912c6e44e15",
-        "fromTable": "Purchase Order Delivery",
-        "fromColumn": "First Delivery Date",
-        "toTable": "Calendar",
-        "toColumn": "Date"
       },
       {
         "name": "d1ed3275-cbe1-4844-937e-a4d48686f5a3",
@@ -21310,7 +21366,7 @@
       },
       {
         "name": "1fe727ce-d640-4f9b-9406-0e31ca90416e",
-        "fromTable": "Process Order",
+        "fromTable": "FACT_ProcessOrder",
         "fromColumn": "Basic Start Date",
         "toTable": "Calendar",
         "toColumn": "Date",
@@ -21485,14 +21541,6 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "38bd7d9e-00ca-4269-9665-ab39abff8b56",
-        "fromTable": "Purchase Order",
-        "fromColumn": "Issuing Plant",
-        "toTable": "Plant",
-        "toColumn": "Plant",
-        "isActive": false
-      },
-      {
         "name": "4c9e8d56-e6c0-418e-a497-9403fd192815",
         "fromTable": "Inventory in Storage Bin",
         "fromColumn": "MaterialNoKey",
@@ -21587,7 +21635,7 @@
       },
       {
         "name": "3e41e512-8f01-4a73-9078-6bcd75912b48",
-        "fromTable": "Process Order",
+        "fromTable": "FACT_ProcessOrder",
         "fromColumn": "EndDateKey",
         "toTable": "Calendar",
         "toColumn": "Date",
@@ -21723,65 +21771,6 @@
         "toColumn": "MvmtReasonKey"
       },
       {
-        "name": "bbf3b046-bc32-4c38-8d24-e4c0aa872f55",
-        "toCardinality": "many",
-        "fromTable": "Upstream Log",
-        "fromColumn": "MachineJobIndex",
-        "toTable": "Upstream Process Log",
-        "toColumn": "MachineJobIndexKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "c88064c9-8b2a-41a2-9373-88b32d4c8954",
-        "fromTable": "Upstream Process Log",
-        "fromColumn": "MachineTagNameKey",
-        "toTable": "Machine Tag",
-        "toColumn": "MachineTagNameKey"
-      },
-      {
-        "name": "0ada833e-dbf6-4c68-a750-2ee5c4b29441",
-        "fromTable": "Process Order",
-        "fromColumn": "Work Center",
-        "toTable": "Work Center",
-        "toColumn": "Work Center"
-      },
-      {
-        "name": "09605f92-8033-4f14-a82a-a31ee432ee08",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Adhesive)",
-        "fromColumn": "BomKey",
-        "toTable": "Process Order",
-        "toColumn": "LeadOrderBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "ea43ce13-978b-43b8-834b-04f7bcee9906",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Liner)",
-        "fromColumn": "BomKey",
-        "toTable": "Process Order",
-        "toColumn": "LeadOrderBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "eba64548-450b-4960-93be-2e3ea9ebf397",
-        "toCardinality": "many",
-        "fromTable": "Bill of Material (Facestock)",
-        "fromColumn": "BomKey",
-        "toTable": "Process Order",
-        "toColumn": "LeadOrderBomKey",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
-        "name": "e6cb894c-c90d-440b-835e-af0e55e8c5ac",
-        "toCardinality": "many",
-        "fromTable": "Upstream NDC Profile",
-        "fromColumn": "MachineJobIndexKey",
-        "toTable": "Upstream Log",
-        "toColumn": "MachineJobIndex",
-        "crossFilteringBehavior": "bothDirections"
-      },
-      {
         "name": "56b529a4-2015-4b1d-93da-dc1b3769a6e2",
         "fromTable": "Website Traffic",
         "fromColumn": "Date",
@@ -21889,15 +21878,8 @@
         "toColumn": "Material Number"
       },
       {
-        "name": "3b7125d9-4045-49ee-ba0f-186e4ec1ed23",
-        "fromTable": "Purchase Order",
-        "fromColumn": "ValuationClassKey",
-        "toTable": "Valuation Class",
-        "toColumn": "Valuation Class"
-      },
-      {
         "name": "fe589058-e599-4cb0-a92c-ea2e6d85844a",
-        "fromTable": "Purchase Order",
+        "fromTable": "FACT_PurchaseOrder",
         "fromColumn": "Receiving Plant",
         "toTable": "Plant",
         "toColumn": "Plant"
@@ -21999,20 +21981,6 @@
       {
         "name": "a012ea05-346d-4273-85da-d3fa028dcb0d",
         "fromTable": "Machine",
-        "fromColumn": "Department",
-        "toTable": "Department",
-        "toColumn": "Department"
-      },
-      {
-        "name": "ccff7469-2f46-41bf-8467-6ce4b29538c0",
-        "fromTable": "Work Center",
-        "fromColumn": "Department",
-        "toTable": "Department",
-        "toColumn": "Department"
-      },
-      {
-        "name": "3abd8e64-f49a-4249-9da4-bd39b2c1de9f",
-        "fromTable": "Cost Center",
         "fromColumn": "Department",
         "toTable": "Department",
         "toColumn": "Department"
@@ -22215,21 +22183,14 @@
       },
       {
         "name": "ea79756f-b455-45af-b774-29f1c824504e",
-        "fromTable": "Process Order",
+        "fromTable": "FACT_ProcessOrder",
         "fromColumn": "PlanningPlant",
         "toTable": "Plant",
         "toColumn": "Plant"
       },
       {
-        "name": "a6d067cc-7a15-43fc-9ffc-5ad5e4de6569",
-        "fromTable": "Test Result",
-        "fromColumn": "Process Order Number",
-        "toTable": "Process Order",
-        "toColumn": "Process Order Number"
-      },
-      {
         "name": "b1456500-dbc5-4008-8230-dec81113de98",
-        "fromTable": "Process Order",
+        "fromTable": "FACT_ProcessOrder",
         "fromColumn": "Material Number",
         "toTable": "Material Master",
         "toColumn": "Material Number"
@@ -22502,7 +22463,7 @@
       },
       {
         "name": "12c5a95b-d59a-435e-82b6-dd147a80e24d",
-        "fromTable": "Purchase Order",
+        "fromTable": "FACT_PurchaseOrder",
         "fromColumn": "Company Code",
         "toTable": "Company Code",
         "toColumn": "Company Code"
@@ -22607,6 +22568,279 @@
         "fromColumn": "Department Responsible",
         "toTable": "Department",
         "toColumn": "Department"
+      },
+      {
+        "name": "60853b74-82e0-42f5-93ad-c61bbb21b624",
+        "fromTable": "Absorption",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "6153cd8d-3268-45b6-943a-6e9eb7dce4f8",
+        "fromTable": "Test Result",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "753a8c5f-d57f-4d6c-842b-416827df0bf6",
+        "fromTable": "Absorption",
+        "fromColumn": "Department",
+        "toTable": "Department",
+        "toColumn": "Department"
+      },
+      {
+        "name": "35cf30d6-4a84-433a-aa46-9ba87651c0f6",
+        "fromTable": "FACT_ProcessOrder",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "6349664f-1332-48f8-bacd-33f25ca842da",
+        "fromTable": "FACT_ProcessOrder",
+        "fromColumn": "Work Center",
+        "toTable": "Work Center",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "713fb7b4-d941-451d-ac3f-163d3bc2a931",
+        "fromTable": "FACT_ProcessOrder",
+        "fromColumn": "Department",
+        "toTable": "Department",
+        "toColumn": "Department"
+      },
+      {
+        "name": "83a0da32-a36f-43d1-91e2-23c2fe2dc549",
+        "fromTable": "Compounding Log",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "5690ca45-425f-4a14-bec1-2a2c63fa6cec",
+        "fromTable": "Compounding Failure",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "a15e0e7d-25dd-4a4e-942d-4159dca11091",
+        "fromTable": "Converting OEE",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "af325ff1-aaae-4997-81f1-69482dc197d5",
+        "fromTable": "Goods Movement",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "6b30af72-0c37-429b-89be-5496f1f52adb",
+        "fromTable": "Goods and Invoice Receipt",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "781f9bc2-cfdd-4048-9ec3-d2a65f86e29a",
+        "fromTable": "Hold Tag",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "9852bb3b-6dc5-4dd5-82d7-d7425032eb10",
+        "fromTable": "Inventory Balance Item",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "093ba947-5bb2-433a-bf0e-cfd112ccd3ce",
+        "fromTable": "Inventory Consumption",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "ba80bbdc-328e-4779-8e0a-df72e626a9e1",
+        "fromTable": "Inventory Open WIP",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "72fd68ce-0bef-4d27-a2e6-79b731c18bb9",
+        "fromTable": "Scrap Confirmation",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "11101a0a-879c-4d60-bdd4-53876e0847ce",
+        "fromTable": "Scrap Usage",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "89a884b4-2023-492c-a8ee-1521a8a1e51a",
+        "fromTable": "Upstream Log",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "914a2992-c460-4308-a5e8-5f3906905022",
+        "fromTable": "Upstream Log Simplified",
+        "fromColumn": "Process Order Number",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "39a5fcf6-9dad-41ce-97e2-434bf6aafb13",
+        "fromTable": "Payroll",
+        "fromColumn": "WorkDate",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "50eab4cf-bd4b-4302-a6c9-d7cf352c6d00",
+        "fromTable": "Payroll",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
+      },
+      {
+        "name": "5d0dcd96-b5cc-417c-9f47-bb7f3576e7b5",
+        "fromTable": "Payroll",
+        "fromColumn": "CostCenter",
+        "toTable": "Cost Center",
+        "toColumn": "Cost Center"
+      },
+      {
+        "name": "7e2cd959-7eb6-49f5-97de-6766393305a5",
+        "fromTable": "Payroll",
+        "fromColumn": "Department",
+        "toTable": "Department",
+        "toColumn": "Department"
+      },
+      {
+        "name": "c0333761-7405-4e03-b8ad-a31dafde94c6",
+        "fromTable": "FACT_PurchaseOrder",
+        "fromColumn": "First Delivery Date",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "703d0d07-389c-4e78-a9b8-b65a7a3b8183",
+        "fromTable": "FACT_PurchaseOrder",
+        "fromColumn": "ValuationClassKey",
+        "toTable": "Valuation Class",
+        "toColumn": "Valuation Class"
+      },
+      {
+        "name": "80d29966-0ee7-4c36-9af1-2a566b2faded",
+        "fromTable": "FACT_PurchaseOrder",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Order",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "6497aace-1f36-4ea6-9372-2020d498b1d6",
+        "fromTable": "Purchase Order Invoice",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Order",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "e8dec166-0f9b-4787-9fa0-7185a6e7f5c5",
+        "fromTable": "Expenses",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Order",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "7584c74d-fae4-4a74-9154-d0d5031b64d2",
+        "fromTable": "Goods and Invoice Receipt",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Order",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "25d6547b-dc6c-4f7e-abed-51f9975ede94",
+        "fromTable": "Inventory Balance Item",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Order",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "048acbee-f4f4-4a05-ae0e-0d7a4102e689",
+        "fromTable": "Sales Order",
+        "fromColumn": "PurchaseOrderLineKey",
+        "toTable": "Purchase Order",
+        "toColumn": "PurchaseOrderLineKey"
+      },
+      {
+        "name": "5fa889e4-5c51-41c2-bab1-69d35c0ffbfc",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "ProcessOrderNo",
+        "toTable": "Process Order",
+        "toColumn": "Process Order Number"
+      },
+      {
+        "name": "ac20c282-fe40-438f-8024-c1a79ba5e4bb",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "MaterialNo",
+        "toTable": "Material Master",
+        "toColumn": "Material Number"
+      },
+      {
+        "name": "f55b0909-02d9-4078-8ecc-cdf2016b3624",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "DateKey",
+        "toTable": "Calendar",
+        "toColumn": "Date"
+      },
+      {
+        "name": "7a8f266a-d372-487d-ae63-ce9c88f7f919",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "PlantNo",
+        "toTable": "Plant",
+        "toColumn": "Plant"
+      },
+      {
+        "name": "85d66590-6f52-4661-809b-2a495219c2e6",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "Department",
+        "toTable": "Department",
+        "toColumn": "Department"
+      },
+      {
+        "name": "14ef6b33-790c-43dc-9b98-5bb6c93fdd3b",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "WorkCenter",
+        "toTable": "Work Center",
+        "toColumn": "Work Center"
+      },
+      {
+        "name": "c8876065-6b10-4822-a116-62c4dacad6f7",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "CostElement",
+        "toTable": "Cost Element",
+        "toColumn": "Cost Element"
+      },
+      {
+        "name": "a4dddf1c-3ca3-4525-ad8c-1df2cdf5d8fd",
+        "fromTable": "Process Order Cost",
+        "fromColumn": "CompanyCode",
+        "toTable": "Company Code",
+        "toColumn": "Company Code"
       }
     ],
     "perspectives": [
@@ -23245,48 +23479,6 @@
             ]
           },
           {
-            "name": "Bill of Material (Adhesive)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Facestock)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "Material Description"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Liner)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              }
-            ]
-          },
-          {
             "name": "Company Code",
             "columns": [
               {
@@ -23337,137 +23529,6 @@
               },
               {
                 "name": "Recordable Flag"
-              }
-            ]
-          },
-          {
-            "name": "Process Order",
-            "columns": [
-              {
-                "name": "Actual End Date"
-              },
-              {
-                "name": "Actual End Time"
-              },
-              {
-                "name": "Actual Start Date"
-              },
-              {
-                "name": "Actual Start Time"
-              },
-              {
-                "name": "Adhesive Batch Number 1"
-              },
-              {
-                "name": "Adhesive Batch Number 2"
-              },
-              {
-                "name": "Adhesive Material Number 1"
-              },
-              {
-                "name": "Adhesive Material Number 2"
-              },
-              {
-                "name": "Basic End Date"
-              },
-              {
-                "name": "Basic End Time"
-              },
-              {
-                "name": "Basic Start Date"
-              },
-              {
-                "name": "Basic Start Time"
-              },
-              {
-                "name": "Close Flag"
-              },
-              {
-                "name": "Comment"
-              },
-              {
-                "name": "Confirm Date"
-              },
-              {
-                "name": "Deliver Flag"
-              },
-              {
-                "name": "DeliveredQuantity"
-              },
-              {
-                "name": "Document Group"
-              },
-              {
-                "name": "Facestock Batch Number 1"
-              },
-              {
-                "name": "Facestock Batch Number 2"
-              },
-              {
-                "name": "Facestock Material Number 1"
-              },
-              {
-                "name": "Facestock Material Number 2"
-              },
-              {
-                "name": "Final Deliver Flag"
-              },
-              {
-                "name": "LeadOrderBomKey"
-              },
-              {
-                "name": "Liner Batch Number 1"
-              },
-              {
-                "name": "Liner Batch Number 2"
-              },
-              {
-                "name": "Liner Material Number 1"
-              },
-              {
-                "name": "Liner Material Number 2"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "OrderQuantity"
-              },
-              {
-                "name": "Organosol Batch Number 1"
-              },
-              {
-                "name": "Organosol Batch Number 2"
-              },
-              {
-                "name": "Organosol Material Number 1"
-              },
-              {
-                "name": "Organosol Material Number 2"
-              },
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Same Day Flag"
-              },
-              {
-                "name": "Specification Number"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Work Center"
-              },
-              {
-                "name": "Notification Number"
-              },
-              {
-                "name": "EndDateKey"
-              },
-              {
-                "name": "PlanningPlant"
               }
             ]
           },
@@ -23712,6 +23773,38 @@
                 "name": "Storage Type Description"
               }
             ]
+          },
+          {
+            "name": "FACT_ProcessOrder",
+            "columns": [
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "DeliveredQuantity"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "OrderQuantity"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Work Center"
+              },
+              {
+                "name": "Notification Number"
+              },
+              {
+                "name": "EndDateKey"
+              },
+              {
+                "name": "PlanningPlant"
+              }
+            ]
           }
         ]
       },
@@ -23900,18 +23993,6 @@
                 "name": "Material Description"
               },
               {
-                "name": "Purchase Document Number"
-              },
-              {
-                "name": "Purchase Document Line Number"
-              },
-              {
-                "name": "Purchase Order Item Text"
-              },
-              {
-                "name": "Purchase Requisition Track Number"
-              },
-              {
                 "name": "CompanyCode"
               },
               {
@@ -23925,6 +24006,9 @@
               },
               {
                 "name": "Reversed Flag"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -23998,6 +24082,74 @@
               },
               {
                 "name": "Supplies Flag"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order",
+            "columns": [
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Complete Delivery Flag"
+              },
+              {
+                "name": "Goods Receipt Required Flag"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Item Delivery Date"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Requisitioner Name"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Purchase Order Unit"
               }
             ]
           }
@@ -24442,12 +24594,6 @@
                 "name": "Processing Status"
               },
               {
-                "name": "Purchase Order Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -24581,6 +24727,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -25433,6 +25582,9 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Backorder Quantity"
               }
             ]
           },
@@ -25726,12 +25878,6 @@
                 "name": "Processing Status"
               },
               {
-                "name": "Purchase Order Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -25868,6 +26014,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -26489,6 +26638,9 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Backorder Quantity"
               }
             ]
           },
@@ -26776,12 +26928,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -26924,6 +27070,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -27226,6 +27375,9 @@
               },
               {
                 "name": "Sales Order WIP Linear Feet Shortage"
+              },
+              {
+                "name": "Backorder Quantity"
               }
             ]
           },
@@ -27400,12 +27552,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -27548,6 +27694,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -27720,34 +27869,13 @@
             ]
           },
           {
-            "name": "Purchase Order",
+            "name": "FACT_PurchaseOrder",
             "columns": [
-              {
-                "name": "Currency"
-              },
-              {
-                "name": "Document Date"
-              },
-              {
-                "name": "Document Type"
-              },
               {
                 "name": "First Delivery Date"
               },
               {
-                "name": "Issuing Plant"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
                 "name": "Material Number"
-              },
-              {
-                "name": "Material Type"
               },
               {
                 "name": "Open Amount"
@@ -27762,31 +27890,13 @@
                 "name": "Ordered Quantity"
               },
               {
-                "name": "Purchase Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
                 "name": "PurchaseOrderLineKey"
               },
               {
                 "name": "Receiving Plant"
               },
               {
-                "name": "Req Track Number"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Unit Price"
-              },
-              {
                 "name": "VendorNoKey"
-              },
-              {
-                "name": "Purchase Order Unit"
               },
               {
                 "name": "Company Code"
@@ -27799,18 +27909,6 @@
               },
               {
                 "name": "ValuationClassKey"
-              },
-              {
-                "name": "Item Delivery Date"
-              },
-              {
-                "name": "Requisitioner Name"
-              },
-              {
-                "name": "Complete Delivery Flag"
-              },
-              {
-                "name": "Goods Receipt Required Flag"
               }
             ]
           },
@@ -27976,6 +28074,74 @@
               },
               {
                 "name": "MRP Type"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order",
+            "columns": [
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Complete Delivery Flag"
+              },
+              {
+                "name": "Goods Receipt Required Flag"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Item Delivery Date"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Requisitioner Name"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Purchase Order Unit"
               }
             ]
           }
@@ -28183,12 +28349,6 @@
                 "name": "Process Order Number"
               },
               {
-                "name": "Purchase Order Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
                 "name": "Quantity"
               },
               {
@@ -28348,6 +28508,74 @@
               },
               {
                 "name": "Currency"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order",
+            "columns": [
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Complete Delivery Flag"
+              },
+              {
+                "name": "Goods Receipt Required Flag"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Item Delivery Date"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Requisitioner Name"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Purchase Order Unit"
               }
             ]
           }
@@ -28514,12 +28742,6 @@
                 "name": "MaterialNo"
               },
               {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
                 "name": "VendorNo"
               },
               {
@@ -28536,38 +28758,20 @@
               },
               {
                 "name": "Fiscal Year"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
           {
-            "name": "Purchase Order",
+            "name": "FACT_PurchaseOrder",
             "columns": [
-              {
-                "name": "Currency"
-              },
-              {
-                "name": "Document Date"
-              },
-              {
-                "name": "Document Type"
-              },
               {
                 "name": "First Delivery Date"
               },
               {
-                "name": "Issuing Plant"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
                 "name": "Material Number"
-              },
-              {
-                "name": "Material Type"
               },
               {
                 "name": "Open Amount"
@@ -28582,31 +28786,13 @@
                 "name": "Ordered Quantity"
               },
               {
-                "name": "Purchase Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
                 "name": "PurchaseOrderLineKey"
               },
               {
                 "name": "Receiving Plant"
               },
               {
-                "name": "Req Track Number"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Unit Price"
-              },
-              {
                 "name": "VendorNoKey"
-              },
-              {
-                "name": "Purchase Order Unit"
               },
               {
                 "name": "Company Code"
@@ -28619,18 +28805,6 @@
               },
               {
                 "name": "ValuationClassKey"
-              },
-              {
-                "name": "Item Delivery Date"
-              },
-              {
-                "name": "Requisitioner Name"
-              },
-              {
-                "name": "Complete Delivery Flag"
-              },
-              {
-                "name": "Goods Receipt Required Flag"
               }
             ]
           },
@@ -28853,6 +29027,74 @@
               },
               {
                 "name": "MaterialPlantKey"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order",
+            "columns": [
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Complete Delivery Flag"
+              },
+              {
+                "name": "Goods Receipt Required Flag"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Item Delivery Date"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Requisitioner Name"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Purchase Order Unit"
               }
             ]
           }
@@ -29123,12 +29365,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -29271,6 +29507,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -29583,6 +29822,9 @@
               },
               {
                 "name": "Sales Order Lines Shipped Count CD"
+              },
+              {
+                "name": "Backorder Quantity"
               }
             ]
           },
@@ -30063,13 +30305,7 @@
                 "name": "Testing Standard Deviation Result"
               },
               {
-                "name": "Upstream Avg Scanned Tag Value"
-              },
-              {
                 "name": "CONV Square Footage"
-              },
-              {
-                "name": "Upstream Avg Cross Web Value"
               },
               {
                 "name": "COMP Actual Hours"
@@ -30286,6 +30522,27 @@
               },
               {
                 "name": "CONV Efficiency Target Var"
+              },
+              {
+                "name": "Process Order Actual/Target Variance"
+              },
+              {
+                "name": "Process Order Dynamic Target Flag"
+              },
+              {
+                "name": "Process Order Actual Cost/Rate/Quantity"
+              },
+              {
+                "name": "Process Order Target Cost/Rate/Quantity"
+              },
+              {
+                "name": "Process Order Actual Cost"
+              },
+              {
+                "name": "Process Order Actual Cost Absolute"
+              },
+              {
+                "name": "Process Order Actual/Target Cost Variance"
               }
             ]
           },
@@ -30564,37 +30821,6 @@
             ]
           },
           {
-            "name": "Upstream Process Log",
-            "columns": [
-              {
-                "name": "MachineJobIndexKey"
-              },
-              {
-                "name": "Scan Date"
-              },
-              {
-                "name": "Scan Minute"
-              },
-              {
-                "name": "Scan Hour"
-              },
-              {
-                "name": "Tag Name"
-              },
-              {
-                "name": "Tag Value"
-              },
-              {
-                "name": "MachineTagNameKey"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Scan Timestamp Hierarchy"
-              }
-            ]
-          },
-          {
             "name": "Machine Tag",
             "columns": [
               {
@@ -30608,79 +30834,6 @@
               },
               {
                 "name": "Tag Rename"
-              }
-            ]
-          },
-          {
-            "name": "Upstream NDC Profile",
-            "columns": [
-              {
-                "name": "MachineJobIndexKey"
-              },
-              {
-                "name": "Job Index"
-              },
-              {
-                "name": "Average Cross Web Value"
-              },
-              {
-                "name": "Scan Date"
-              },
-              {
-                "name": "Scan Hour"
-              },
-              {
-                "name": "Scan Minute"
-              },
-              {
-                "name": "Tag Name"
-              }
-            ],
-            "hierarchies": [
-              {
-                "name": "Scan Timestamp Hierarchy"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Adhesive)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Facestock)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Liner)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
               }
             ]
           },
@@ -30869,6 +31022,9 @@
               },
               {
                 "name": "SortKey"
+              },
+              {
+                "name": "Manufacture Group"
               }
             ]
           },
@@ -30919,137 +31075,6 @@
               },
               {
                 "name": "Plant"
-              }
-            ]
-          },
-          {
-            "name": "Process Order",
-            "columns": [
-              {
-                "name": "Actual End Date"
-              },
-              {
-                "name": "Actual End Time"
-              },
-              {
-                "name": "Actual Start Date"
-              },
-              {
-                "name": "Actual Start Time"
-              },
-              {
-                "name": "Basic End Date"
-              },
-              {
-                "name": "Basic End Time"
-              },
-              {
-                "name": "Basic Start Date"
-              },
-              {
-                "name": "Basic Start Time"
-              },
-              {
-                "name": "Close Flag"
-              },
-              {
-                "name": "Comment"
-              },
-              {
-                "name": "Confirm Date"
-              },
-              {
-                "name": "Deliver Flag"
-              },
-              {
-                "name": "DeliveredQuantity"
-              },
-              {
-                "name": "Document Group"
-              },
-              {
-                "name": "Final Deliver Flag"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "OrderQuantity"
-              },
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Same Day Flag"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Work Center"
-              },
-              {
-                "name": "LeadOrderBomKey"
-              },
-              {
-                "name": "Facestock Material Number 1"
-              },
-              {
-                "name": "Facestock Batch Number 1"
-              },
-              {
-                "name": "Facestock Material Number 2"
-              },
-              {
-                "name": "Facestock Batch Number 2"
-              },
-              {
-                "name": "Liner Material Number 1"
-              },
-              {
-                "name": "Liner Batch Number 1"
-              },
-              {
-                "name": "Liner Material Number 2"
-              },
-              {
-                "name": "Liner Batch Number 2"
-              },
-              {
-                "name": "Adhesive Material Number 1"
-              },
-              {
-                "name": "Adhesive Batch Number 1"
-              },
-              {
-                "name": "Adhesive Material Number 2"
-              },
-              {
-                "name": "Adhesive Batch Number 2"
-              },
-              {
-                "name": "Organosol Material Number 1"
-              },
-              {
-                "name": "Organosol Batch Number 1"
-              },
-              {
-                "name": "Organosol Material Number 2"
-              },
-              {
-                "name": "Organosol Batch Number 2"
-              },
-              {
-                "name": "Specification Number"
-              },
-              {
-                "name": "Count in COMP First Pass Flag"
-              },
-              {
-                "name": "EndDateKey"
-              },
-              {
-                "name": "PlanningPlant"
               }
             ]
           },
@@ -31271,6 +31296,94 @@
               },
               {
                 "name": "UptimeSecs"
+              }
+            ]
+          },
+          {
+            "name": "FACT_ProcessOrder",
+            "columns": [
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "DeliveredQuantity"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "OrderQuantity"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Work Center"
+              },
+              {
+                "name": "EndDateKey"
+              },
+              {
+                "name": "PlanningPlant"
+              }
+            ]
+          },
+          {
+            "name": "Process Order",
+            "columns": [
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Delivery Required Flag"
+              },
+              {
+                "name": "Delivery Completed Flag"
+              },
+              {
+                "name": "Same Day Flag"
+              },
+              {
+                "name": "Close Flag"
+              },
+              {
+                "name": "Count in COMP First Pass Flag"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Recipe Group"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Quantity Unit"
               }
             ]
           }
@@ -31837,37 +31950,16 @@
             ]
           },
           {
-            "name": "Purchase Order",
+            "name": "FACT_PurchaseOrder",
             "columns": [
               {
                 "name": "Company Code"
               },
               {
-                "name": "Currency"
-              },
-              {
-                "name": "Document Date"
-              },
-              {
-                "name": "Document Type"
-              },
-              {
                 "name": "First Delivery Date"
               },
               {
-                "name": "Issuing Plant"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
                 "name": "Material Number"
-              },
-              {
-                "name": "Material Type"
               },
               {
                 "name": "Open Amount"
@@ -31882,28 +31974,10 @@
                 "name": "Ordered Quantity"
               },
               {
-                "name": "Purchase Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Unit"
-              },
-              {
                 "name": "PurchaseOrderLineKey"
               },
               {
                 "name": "Receiving Plant"
-              },
-              {
-                "name": "Req Track Number"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Unit Price"
               },
               {
                 "name": "VendorNoKey"
@@ -31916,41 +31990,6 @@
               },
               {
                 "name": "ValuationClassKey"
-              },
-              {
-                "name": "Item Delivery Date"
-              },
-              {
-                "name": "Requisitioner Name"
-              },
-              {
-                "name": "Complete Delivery Flag"
-              },
-              {
-                "name": "Goods Receipt Required Flag"
-              }
-            ]
-          },
-          {
-            "name": "Purchase Order Delivery",
-            "columns": [
-              {
-                "name": "First Delivery Date"
-              },
-              {
-                "name": "Open Amount"
-              },
-              {
-                "name": "Open Quantity"
-              },
-              {
-                "name": "PurchaseOrderLineKey"
-              },
-              {
-                "name": "Goods Receipt Quantity"
-              },
-              {
-                "name": "Goods Receipt Amount"
               }
             ]
           },
@@ -32084,12 +32123,6 @@
               },
               {
                 "name": "Weight Unit"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
               },
               {
                 "name": "Reason for Late Shipment"
@@ -32234,6 +32267,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -32360,12 +32396,6 @@
               },
               {
                 "name": "Process Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
               },
               {
                 "name": "PurchaseOrderLineKey"
@@ -32790,6 +32820,9 @@
               },
               {
                 "name": "SortKey"
+              },
+              {
+                "name": "Manufacture Group"
               }
             ]
           },
@@ -33632,6 +33665,27 @@
               },
               {
                 "name": "Expired Amount Target"
+              },
+              {
+                "name": "Process Order Actual/Target Variance"
+              },
+              {
+                "name": "Process Order Dynamic Target Flag"
+              },
+              {
+                "name": "Process Order Actual Cost/Rate/Quantity"
+              },
+              {
+                "name": "Process Order Target Cost/Rate/Quantity"
+              },
+              {
+                "name": "Process Order Actual Cost"
+              },
+              {
+                "name": "Process Order Actual Cost Absolute"
+              },
+              {
+                "name": "Process Order Actual/Target Cost Variance"
               }
             ]
           },
@@ -33667,37 +33721,16 @@
             ]
           },
           {
-            "name": "Purchase Order",
+            "name": "FACT_PurchaseOrder",
             "columns": [
               {
                 "name": "Company Code"
               },
               {
-                "name": "Currency"
-              },
-              {
-                "name": "Document Date"
-              },
-              {
-                "name": "Document Type"
-              },
-              {
                 "name": "First Delivery Date"
               },
               {
-                "name": "Issuing Plant"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
                 "name": "Material Number"
-              },
-              {
-                "name": "Material Type"
               },
               {
                 "name": "Open Amount"
@@ -33712,28 +33745,10 @@
                 "name": "Ordered Quantity"
               },
               {
-                "name": "Purchase Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Unit"
-              },
-              {
                 "name": "PurchaseOrderLineKey"
               },
               {
                 "name": "Receiving Plant"
-              },
-              {
-                "name": "Req Track Number"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Unit Price"
               },
               {
                 "name": "VendorNoKey"
@@ -33746,18 +33761,6 @@
               },
               {
                 "name": "ValuationClassKey"
-              },
-              {
-                "name": "Item Delivery Date"
-              },
-              {
-                "name": "Requisitioner Name"
-              },
-              {
-                "name": "Complete Delivery Flag"
-              },
-              {
-                "name": "Goods Receipt Required Flag"
               }
             ]
           },
@@ -33924,6 +33927,9 @@
               },
               {
                 "name": "SortKey"
+              },
+              {
+                "name": "Manufacture Group"
               }
             ]
           },
@@ -34050,137 +34056,6 @@
               },
               {
                 "name": "CompanyCode"
-              }
-            ]
-          },
-          {
-            "name": "Process Order",
-            "columns": [
-              {
-                "name": "Actual End Date"
-              },
-              {
-                "name": "Actual End Time"
-              },
-              {
-                "name": "Actual Start Date"
-              },
-              {
-                "name": "Actual Start Time"
-              },
-              {
-                "name": "Basic End Date"
-              },
-              {
-                "name": "Basic End Time"
-              },
-              {
-                "name": "Basic Start Date"
-              },
-              {
-                "name": "Basic Start Time"
-              },
-              {
-                "name": "Comment"
-              },
-              {
-                "name": "Confirm Date"
-              },
-              {
-                "name": "Deliver Flag"
-              },
-              {
-                "name": "DeliveredQuantity"
-              },
-              {
-                "name": "Document Group"
-              },
-              {
-                "name": "Final Deliver Flag"
-              },
-              {
-                "name": "Material Number"
-              },
-              {
-                "name": "OrderQuantity"
-              },
-              {
-                "name": "Process Order Number"
-              },
-              {
-                "name": "Same Day Flag"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Work Center"
-              },
-              {
-                "name": "Close Flag"
-              },
-              {
-                "name": "LeadOrderBomKey"
-              },
-              {
-                "name": "Facestock Material Number 1"
-              },
-              {
-                "name": "Facestock Batch Number 1"
-              },
-              {
-                "name": "Facestock Material Number 2"
-              },
-              {
-                "name": "Facestock Batch Number 2"
-              },
-              {
-                "name": "Liner Material Number 1"
-              },
-              {
-                "name": "Liner Batch Number 1"
-              },
-              {
-                "name": "Liner Material Number 2"
-              },
-              {
-                "name": "Liner Batch Number 2"
-              },
-              {
-                "name": "Adhesive Material Number 1"
-              },
-              {
-                "name": "Adhesive Batch Number 1"
-              },
-              {
-                "name": "Adhesive Material Number 2"
-              },
-              {
-                "name": "Adhesive Batch Number 2"
-              },
-              {
-                "name": "Organosol Material Number 1"
-              },
-              {
-                "name": "Organosol Batch Number 1"
-              },
-              {
-                "name": "Organosol Material Number 2"
-              },
-              {
-                "name": "Organosol Batch Number 2"
-              },
-              {
-                "name": "Count in COMP First Pass Flag"
-              },
-              {
-                "name": "Specification Number"
-              },
-              {
-                "name": "EndDateKey"
-              },
-              {
-                "name": "PlanningPlant"
               }
             ]
           },
@@ -34488,6 +34363,162 @@
               },
               {
                 "name": "Material Number and Description"
+              }
+            ]
+          },
+          {
+            "name": "FACT_ProcessOrder",
+            "columns": [
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "DeliveredQuantity"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "OrderQuantity"
+              },
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Work Center"
+              },
+              {
+                "name": "EndDateKey"
+              },
+              {
+                "name": "PlanningPlant"
+              }
+            ]
+          },
+          {
+            "name": "Purchase Order",
+            "columns": [
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Complete Delivery Flag"
+              },
+              {
+                "name": "Goods Receipt Required Flag"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Item Delivery Date"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Requisitioner Name"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Purchase Order Unit"
+              }
+            ]
+          },
+          {
+            "name": "Process Order",
+            "columns": [
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Delivery Required Flag"
+              },
+              {
+                "name": "Delivery Completed Flag"
+              },
+              {
+                "name": "Same Day Flag"
+              },
+              {
+                "name": "Close Flag"
+              },
+              {
+                "name": "Count in COMP First Pass Flag"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Recipe Group"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Quantity Unit"
               }
             ]
           }
@@ -34879,12 +34910,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -35027,6 +35052,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -35087,37 +35115,16 @@
             ]
           },
           {
-            "name": "Purchase Order",
+            "name": "FACT_PurchaseOrder",
             "columns": [
               {
                 "name": "Company Code"
               },
               {
-                "name": "Currency"
-              },
-              {
-                "name": "Document Date"
-              },
-              {
-                "name": "Document Type"
-              },
-              {
                 "name": "First Delivery Date"
               },
               {
-                "name": "Issuing Plant"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Group"
-              },
-              {
                 "name": "Material Number"
-              },
-              {
-                "name": "Material Type"
               },
               {
                 "name": "Open Amount"
@@ -35132,28 +35139,10 @@
                 "name": "Ordered Quantity"
               },
               {
-                "name": "Purchase Line Number"
-              },
-              {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Unit"
-              },
-              {
                 "name": "PurchaseOrderLineKey"
               },
               {
                 "name": "Receiving Plant"
-              },
-              {
-                "name": "Req Track Number"
-              },
-              {
-                "name": "Unit of Measure"
-              },
-              {
-                "name": "Unit Price"
               },
               {
                 "name": "VendorNoKey"
@@ -35166,18 +35155,6 @@
               },
               {
                 "name": "ValuationClassKey"
-              },
-              {
-                "name": "Item Delivery Date"
-              },
-              {
-                "name": "Requisitioner Name"
-              },
-              {
-                "name": "Complete Delivery Flag"
-              },
-              {
-                "name": "Goods Receipt Required Flag"
               }
             ]
           },
@@ -36233,6 +36210,39 @@
               },
               {
                 "name": "Inventory FIFO Violation Snapshot Batch Count"
+              },
+              {
+                "name": "Actual Labor Hours"
+              },
+              {
+                "name": "Earned Labor Hours"
+              },
+              {
+                "name": "Labor Efficiency"
+              },
+              {
+                "name": "Actual Labor Hours per Crew"
+              },
+              {
+                "name": "Process Order Actual/Target Variance"
+              },
+              {
+                "name": "Process Order Dynamic Target Flag"
+              },
+              {
+                "name": "Process Order Actual Cost/Rate/Quantity"
+              },
+              {
+                "name": "Process Order Target Cost/Rate/Quantity"
+              },
+              {
+                "name": "Process Order Actual Cost"
+              },
+              {
+                "name": "Process Order Actual Cost Absolute"
+              },
+              {
+                "name": "Process Order Actual/Target Cost Variance"
               }
             ]
           },
@@ -36425,6 +36435,9 @@
               },
               {
                 "name": "SortKey"
+              },
+              {
+                "name": "Manufacture Group"
               }
             ]
           },
@@ -36442,48 +36455,6 @@
               },
               {
                 "name": "Reason Text for Movement"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Adhesive)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Facestock)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
-              }
-            ]
-          },
-          {
-            "name": "Bill of Material (Liner)",
-            "columns": [
-              {
-                "name": "BomKey"
-              },
-              {
-                "name": "Material Description"
-              },
-              {
-                "name": "Material Number"
               }
             ]
           },
@@ -36948,6 +36919,141 @@
               },
               {
                 "name": "Expired Flag"
+              }
+            ]
+          },
+          {
+            "name": "Payroll",
+            "columns": [
+              {
+                "name": "WorkDate"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "CostCenter"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "HoursWorked"
+              },
+              {
+                "name": "Pay Category"
+              },
+              {
+                "name": "HoursWorkedPerCrew"
+              }
+            ]
+          },
+          {
+            "name": "Process Order",
+            "columns": [
+              {
+                "name": "Process Order Number"
+              },
+              {
+                "name": "Basic Start Date"
+              },
+              {
+                "name": "Delivery Required Flag"
+              },
+              {
+                "name": "Delivery Completed Flag"
+              },
+              {
+                "name": "Same Day Flag"
+              },
+              {
+                "name": "Close Flag"
+              },
+              {
+                "name": "Count in COMP First Pass Flag"
+              },
+              {
+                "name": "Comment"
+              },
+              {
+                "name": "Recipe Group"
+              },
+              {
+                "name": "Basic Start Time"
+              },
+              {
+                "name": "Basic End Date"
+              },
+              {
+                "name": "Basic End Time"
+              },
+              {
+                "name": "Actual Start Date"
+              },
+              {
+                "name": "Actual Start Time"
+              },
+              {
+                "name": "Actual End Date"
+              },
+              {
+                "name": "Actual End Time"
+              },
+              {
+                "name": "Confirm Date"
+              },
+              {
+                "name": "Quantity Unit"
+              }
+            ]
+          },
+          {
+            "name": "Process Order Cost",
+            "columns": [
+              {
+                "name": "ProcessOrderNo"
+              },
+              {
+                "name": "PlantNo"
+              },
+              {
+                "name": "MaterialNo"
+              },
+              {
+                "name": "DateKey"
+              },
+              {
+                "name": "Department"
+              },
+              {
+                "name": "WorkCenter"
+              },
+              {
+                "name": "CostElement"
+              },
+              {
+                "name": "Category"
+              },
+              {
+                "name": "Origin"
+              },
+              {
+                "name": "Target"
+              },
+              {
+                "name": "Actual"
+              },
+              {
+                "name": "Variance"
+              },
+              {
+                "name": "CompanyCode"
+              },
+              {
+                "name": "Dynamic Target Flag"
+              },
+              {
+                "name": "Last Goods Movement Date"
               }
             ]
           }
@@ -38040,12 +38146,6 @@
                 "name": "Weight Unit"
               },
               {
-                "name": "Purchase Order Number"
-              },
-              {
-                "name": "Purchase Order Line Number"
-              },
-              {
                 "name": "Reason for Late Shipment"
               },
               {
@@ -38188,6 +38288,9 @@
               },
               {
                 "name": "Ship To Region"
+              },
+              {
+                "name": "PurchaseOrderLineKey"
               }
             ]
           },
@@ -38476,10 +38579,6 @@
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
           },
           {
-            "memberName": "DOMAIN\\nsoto",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21525"
-          },
-          {
             "memberName": "DOMAIN\\rfaust",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
           },
@@ -38490,6 +38589,10 @@
           {
             "memberName": "DOMAIN\\sdong",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
+          },
+          {
+            "memberName": "DOMAIN\\fzhong",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21125"
           }
         ]
       },
@@ -38691,10 +38794,6 @@
           {
             "memberName": "DOMAIN\\bnovotny",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8604"
-          },
-          {
-            "memberName": "DOMAIN\\caguilar",
-            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21008"
           },
           {
             "memberName": "DOMAIN\\CDagher",
@@ -39067,6 +39166,10 @@
           {
             "memberName": "DOMAIN\\nthompson",
             "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21049"
+          },
+          {
+            "memberName": "DOMAIN\\aYanez",
+            "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20521"
           }
         ],
         "tablePermissions": [
@@ -39208,5 +39311,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

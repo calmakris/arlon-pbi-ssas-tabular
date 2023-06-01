@@ -17,9 +17,10 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "arlpbidev;ARLPBI_STAGE",
           "Username": "DOMAIN\\PBI-ETL",
           "EncryptConnection": false,
           "PrivacySetting": "Organizational"
@@ -2054,8 +2055,8 @@
               "DIVIDE(",
               "    CALCULATE(",
               "        [Expenses Amount],",
-              "        'Cost Center'[Department] = \"DIST\",",
-              "        ALL( Plant[Plant] )",
+              "        ALL( Plant[Plant] ),",
+              "        KEEPFILTERS( Department[Department] = \"DIST\" )",
               "    ),",
               "    [WH Picked Weight]",
               ")"
@@ -9618,6 +9619,13 @@
             ],
             "formatString": "#,0.00",
             "displayFolder": "Sales Order"
+          },
+          {
+            "name": "Department Crew Size",
+            "description": "Average department crew size used to scale the actual hours",
+            "expression": "AVERAGE( 'Payroll'[CrewSize] )",
+            "formatString": "#,0.00",
+            "displayFolder": "Operations"
           }
         ]
       },
@@ -10829,6 +10837,13 @@
             "dataType": "string",
             "isHidden": true,
             "sourceColumn": "PurchaseOrderLineKey",
+            "isAvailableInMdx": false
+          },
+          {
+            "name": "Department",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Department",
             "isAvailableInMdx": false
           }
         ],
@@ -13115,6 +13130,7 @@
             "name": "Department",
             "dataType": "string",
             "description": "Department of the primary work center of the process order",
+            "isHidden": true,
             "sourceColumn": "Department"
           },
           {
@@ -16259,6 +16275,7 @@
           {
             "name": "Cost Center",
             "dataType": "string",
+            "isHidden": true,
             "sourceColumn": "CostCenter",
             "isAvailableInMdx": false
           },
@@ -18793,13 +18810,6 @@
             "sourceColumn": "CostCenterName"
           },
           {
-            "name": "Department",
-            "dataType": "string",
-            "description": "Department assigned to the cost center. This data is not in SAP. Instead, it is maintained manually in the Power BI data warehouse.",
-            "sourceColumn": "Department",
-            "sortByColumn": "DepartmentSortKey"
-          },
-          {
             "name": "Company Category",
             "dataType": "string",
             "description": "Category of the cost center as they are known in the company. This data is not in SAP. Instead, it is maintained manually in the Power BI data warehouse.",
@@ -18808,14 +18818,8 @@
           {
             "name": "Operations Category",
             "dataType": "string",
-            "description": "If the cost center belongs to Operations, this is the subcategory within Operations.",
+            "description": "Category of the cost center within Operations",
             "sourceColumn": "OperationsCategory"
-          },
-          {
-            "name": "DepartmentSortKey",
-            "dataType": "int64",
-            "isHidden": true,
-            "sourceColumn": "DepartmentSortKey"
           }
         ],
         "partitions": [
@@ -20675,6 +20679,14 @@
             "sourceColumn": "HoursWorkedPerCrew",
             "formatString": "#,0.00",
             "isAvailableInMdx": false
+          },
+          {
+            "name": "CrewSize",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "CrewSize",
+            "formatString": "#,0.00",
+            "isAvailableInMdx": false
           }
         ],
         "partitions": [
@@ -20851,7 +20863,8 @@
             "dataType": "decimal",
             "description": "Price (after discounts & surcharges) per unit of the item",
             "sourceColumn": "UnitPrice",
-            "displayFolder": "Item"
+            "displayFolder": "Item",
+            "summarizeBy": "none"
           },
           {
             "name": "Quantity Unit",
@@ -22844,6 +22857,20 @@
         "fromColumn": "CompanyCode",
         "toTable": "Company Code",
         "toColumn": "Company Code"
+      },
+      {
+        "name": "c55c0d52-8f61-48ee-a9d1-bedd4268643d",
+        "fromTable": "Expenses",
+        "fromColumn": "Department",
+        "toTable": "Department",
+        "toColumn": "Department"
+      },
+      {
+        "name": "21f277ba-70df-4e7d-bcce-0f77acce55e1",
+        "fromTable": "Scrap Usage",
+        "fromColumn": "Cost Center",
+        "toTable": "Cost Center",
+        "toColumn": "Cost Center"
       }
     ],
     "perspectives": [
@@ -24012,6 +24039,9 @@
               },
               {
                 "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Department"
               }
             ]
           },
@@ -24053,9 +24083,6 @@
               },
               {
                 "name": "Cost Center Name"
-              },
-              {
-                "name": "Department"
               }
             ]
           },
@@ -24153,6 +24180,23 @@
               },
               {
                 "name": "Purchase Order Unit"
+              }
+            ]
+          },
+          {
+            "name": "Department",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "SortKey"
+              },
+              {
+                "name": "Manufacture Group"
               }
             ]
           }
@@ -27144,15 +27188,6 @@
               },
               {
                 "name": "Cost Center Name"
-              },
-              {
-                "name": "Department"
-              },
-              {
-                "name": "DepartmentSortKey"
-              },
-              {
-                "name": "Operations Category"
               }
             ]
           },
@@ -34095,12 +34130,6 @@
                 "name": "Cost Center Name"
               },
               {
-                "name": "Department"
-              },
-              {
-                "name": "DepartmentSortKey"
-              },
-              {
                 "name": "Operations Category"
               }
             ]
@@ -35713,12 +35742,6 @@
                 "name": "Cost Center Name"
               },
               {
-                "name": "Department"
-              },
-              {
-                "name": "DepartmentSortKey"
-              },
-              {
                 "name": "Operations Category"
               }
             ]
@@ -35793,6 +35816,23 @@
               },
               {
                 "name": "AuditID"
+              }
+            ]
+          },
+          {
+            "name": "Department",
+            "columns": [
+              {
+                "name": "Department"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "SortKey"
+              },
+              {
+                "name": "Manufacture Group"
               }
             ]
           }
@@ -36246,6 +36286,9 @@
               },
               {
                 "name": "Process Order Actual/Target Cost Variance"
+              },
+              {
+                "name": "Department Crew Size"
               }
             ]
           },
@@ -36948,6 +36991,9 @@
               },
               {
                 "name": "HoursWorkedPerCrew"
+              },
+              {
+                "name": "CrewSize"
               }
             ]
           },
@@ -37057,6 +37103,23 @@
               },
               {
                 "name": "Last Goods Movement Date"
+              }
+            ]
+          },
+          {
+            "name": "Cost Center",
+            "columns": [
+              {
+                "name": "Company Category"
+              },
+              {
+                "name": "Cost Center"
+              },
+              {
+                "name": "Cost Center Name"
+              },
+              {
+                "name": "Operations Category"
               }
             ]
           }

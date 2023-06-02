@@ -1,0 +1,13 @@
+{
+  "name": "New Product Flag",
+  "dataType": "string",
+  "description": "This value is true if the material is created in the last 36 months from today",
+  "sourceColumn": "NewProductFlag",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

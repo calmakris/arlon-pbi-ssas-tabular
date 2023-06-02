@@ -1,0 +1,12 @@
+{
+  "name": "Purchase Order Number",
+  "dataType": "string",
+  "description": "SAP Source: EKKO.EBELN",
+  "sourceColumn": "PurchaseOrderNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\"]"
+    }
+  ]
+}

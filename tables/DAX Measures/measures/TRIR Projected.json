@@ -1,0 +1,22 @@
+{
+  "name": "TRIR Projected",
+  "description": "Projected TRIR based on the fiscal year-to-date work hours and last fiscal year's work hours",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Safety Incident Count FYTD] * 200000,",
+    "    CALCULATE(",
+    "        SUM( 'Safety Work Hours'[Work Hours Projected] ),",
+    "        DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

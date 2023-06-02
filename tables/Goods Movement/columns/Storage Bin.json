@@ -1,0 +1,13 @@
+{
+  "name": "Storage Bin",
+  "dataType": "string",
+  "description": "Identifies the exact location in the warehouse where goods can be stored.",
+  "sourceColumn": "StorageBin",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

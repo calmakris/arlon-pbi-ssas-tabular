@@ -1,0 +1,12 @@
+{
+  "name": "Material Description",
+  "dataType": "string",
+  "description": "Description of the item in the accounting document",
+  "sourceColumn": "MaterialName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Labor Cost (USD)",
+  "dataType": "decimal",
+  "description": "SAP Source: KEPH.KST003. Based on latest costing posted. Inventory from non-USD plants are converted to USD using the exchange rate at current date.",
+  "isHidden": true,
+  "sourceColumn": "LaborCostUSD",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Standard Prices\\USD",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

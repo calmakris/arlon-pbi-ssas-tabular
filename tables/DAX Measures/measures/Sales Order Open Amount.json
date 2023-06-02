@@ -1,0 +1,33 @@
+{
+  "name": "Sales Order Open Amount",
+  "description": [
+    "Total amount in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
+    "",
+    "This value is toggleable to local currency using the '_Currency To Use' table.",
+    ""
+  ],
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", SUM( 'Sales Order'[CustomerOpenAmountUSD] ),",
+    "            \"Local\", SUM( 'Sales Order'[CustomerOpenAmount] ),",
+    "            SUM( 'Sales Order'[CustomerOpenAmountUSD] )",
+    "        ),",
+    "        SUM( 'Sales Order'[CustomerOpenAmountUSD] )   ",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

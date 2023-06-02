@@ -1,0 +1,14 @@
+{
+  "name": "Valuation Class",
+  "description": "SAP Source: T025T. Contains valuation class mainly used for categorizing inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

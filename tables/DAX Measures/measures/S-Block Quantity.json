@@ -1,0 +1,22 @@
+{
+  "name": "S-Block Quantity",
+  "description": "Total quantity of inventory on S block but not expired",
+  "expression": [
+    "CALCULATE(",
+    "    SUM( 'Inventory'[Quantity] ),",
+    "    KEEPFILTERS( 'Inventory'[Stock Category] = \"S\" ),",
+    "    FILTER(",
+    "        'Inventory',",
+    "        'Inventory'[Expiration Date] > [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Blocked",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

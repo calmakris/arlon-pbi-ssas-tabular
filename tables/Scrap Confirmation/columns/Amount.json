@@ -1,0 +1,15 @@
+{
+  "name": "Amount",
+  "dataType": "decimal",
+  "description": "Based on 'Scrap Confirmations'[Quantity] and standard price from MBEW table.",
+  "sourceColumn": "Amount",
+  "formatString": "0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

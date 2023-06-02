@@ -1,0 +1,22 @@
+{
+  "name": "Sales Order Allocated Quantity",
+  "description": "Total quantity of items allocated in the sales order (or, items with delivery notes without a set actual PGI date)",
+  "expression": [
+    " ",
+    "VAR alloc = ",
+    "    CALCULATE(",
+    "        SUM( 'Sales Order'[AllocatedQuantity] ),",
+    "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    "    )",
+    "RETURN",
+    "    IF( alloc, alloc, BLANK() )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

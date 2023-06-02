@@ -1,0 +1,11 @@
+{
+  "name": "Remake Code Text",
+  "dataType": "string",
+  "sourceColumn": "RemakeCodeText",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

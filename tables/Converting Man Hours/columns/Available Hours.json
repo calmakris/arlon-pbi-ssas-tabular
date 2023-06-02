@@ -1,0 +1,16 @@
+{
+  "name": "Available Hours",
+  "dataType": "decimal",
+  "description": "The total number of hours converting is scheduled to work within a shift (excluding breaks and lunch)",
+  "isHidden": true,
+  "sourceColumn": "AvailableHours",
+  "formatString": "0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

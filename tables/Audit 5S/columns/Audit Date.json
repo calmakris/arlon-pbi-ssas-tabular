@@ -1,0 +1,17 @@
+{
+  "name": "Audit Date",
+  "dataType": "dateTime",
+  "description": "Date when the audit is performed",
+  "sourceColumn": "ReportDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

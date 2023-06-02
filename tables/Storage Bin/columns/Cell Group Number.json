@@ -1,0 +1,13 @@
+{
+  "name": "Cell Group Number",
+  "dataType": "int64",
+  "description": "Numerical value in the [Cell Group]",
+  "sourceColumn": "CellGroupNo",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

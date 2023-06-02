@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Automation Efficiency%",
+  "description": "Count of sales order line items entered automatically but without any manual changes divided by the count of sales order line items entered automatically",
+  "expression": " DIVIDE( [Sales Order Lines Automated without Changes], [Sales Order Lines Automated] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

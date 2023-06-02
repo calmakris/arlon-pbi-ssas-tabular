@@ -1,0 +1,13 @@
+{
+  "name": "ScrapCategoryKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "ScrapCategoryKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

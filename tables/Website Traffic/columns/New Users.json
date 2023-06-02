@@ -1,0 +1,15 @@
+{
+  "name": "New Users",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "NewUsers",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "FACT_ProcessOrder",
+  "description": "Contains general information of all process orders entered in SAP in the last few fiscal years",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\",\"QA Dashboard\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"Basic Start Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"EndDateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"PlanningPlant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_ProcessOrder\",",
+        "    \"fromColumn\": \"Work Center\",",
+        "    \"toTable\": \"Work Center\",",
+        "    \"toColumn\": \"Work Center\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

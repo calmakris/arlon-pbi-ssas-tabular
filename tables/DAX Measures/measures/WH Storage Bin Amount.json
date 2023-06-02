@@ -1,0 +1,13 @@
+{
+  "name": "WH Storage Bin Amount",
+  "description": "Total amount (in USD) of materials in storage bins",
+  "expression": "SUM( 'Inventory in Storage Bin'[Amount in USD] )",
+  "formatString": "#,0",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

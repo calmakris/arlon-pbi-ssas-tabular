@@ -1,0 +1,13 @@
+{
+  "name": "Pending Specification Count",
+  "description": "Count of specification documents that are submitted but not yet active, published, approved, nor declined by approvers",
+  "expression": "SUM( 'Pending Specification'[PendingCount] )",
+  "formatString": "#,0",
+  "displayFolder": "EDOC",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    }
+  ]
+}

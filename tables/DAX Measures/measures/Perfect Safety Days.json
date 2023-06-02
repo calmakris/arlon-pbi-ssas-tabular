@@ -1,0 +1,34 @@
+{
+  "name": "Perfect Safety Days",
+  "description": "Number of days where there is no incident marked as 'NO' under 'Safety Incidents'[Is Perfect Day]",
+  "expression": [
+    "",
+    "VAR AllDays =",
+    "COUNTROWS(",
+    "    FILTER('Calendar', 'Calendar'[Date] <= [Report Date])",
+    ")",
+    "",
+    "VAR NonPerfectDays =",
+    "    COUNTROWS(",
+    "        FILTER(",
+    "            SUMMARIZE(",
+    "                FILTER('Calendar', 'Calendar'[Date] <= [Report Date]),",
+    "                'Calendar'[Date],",
+    "                \"SCORE\", COUNTROWS( FILTER( 'Safety Incident Log', NOT('Safety Incident Log'[Perfect Day Flag] = \"Yes\") ) ) + 0",
+    "            ),",
+    "            [SCORE] <> 0",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "AllDays - NonPerfectDays"
+  ],
+  "formatString": "#,0 \"days\"",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

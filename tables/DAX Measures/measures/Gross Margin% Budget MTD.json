@@ -1,0 +1,34 @@
+{
+  "name": "Gross Margin% Budget MTD",
+  "description": "Monthly gross margin% budget submitted by Commercial Leadership Team (CLT) to IT",
+  "expression": [
+    "",
+    "IF(",
+    "    ISFILTERED( 'Customer Master' ),",
+    "    CALCULATE(",
+    "        CALCULATE(",
+    "            AVERAGE( TARGET_Sales[GrossMarginMTD] ),",
+    "            FILTER( TARGET_Sales, TARGET_Sales[GrossMarginMTD] <> 0 ),",
+    "            TREATAS(",
+    "                VALUES( 'Customer Master'[Sales Person Code] ),",
+    "                TARGET_Sales[SalesPersonKey]",
+    "            ),",
+    "            TREATAS(",
+    "                VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "                TARGET_Sales[CalendarTimeKey]",
+    "            )",
+    "        ),",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    BLANK()",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

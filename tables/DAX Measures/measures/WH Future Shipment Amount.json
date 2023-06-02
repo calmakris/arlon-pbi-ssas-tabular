@@ -1,0 +1,29 @@
+{
+  "name": "WH Future Shipment Amount",
+  "description": "Total amount (in USD) of material transactions with 601, 641, 643, and Z43 movement types plus the total amount of open sales orders",
+  "expression": [
+    "",
+    "VAR MinVisibleDate = MIN('Calendar'[Date])",
+    "",
+    "RETURN",
+    "-- Show previous month as actual ship amount",
+    "-- Current and future shows actual ship plus customer open",
+    "IF(",
+    "    MinVisibleDate < [Beginning of Last Month],",
+    "    BLANK(),",
+    "    IF(",
+    "        MinVisibleDate < [Beginning of Month],",
+    "        [WH Shipment Amount],",
+    "        [WH Shipment Amount] + [Sales Order Open Amount]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

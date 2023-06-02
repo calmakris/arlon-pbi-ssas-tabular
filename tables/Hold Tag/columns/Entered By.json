@@ -1,0 +1,12 @@
+{
+  "name": "Entered By",
+  "dataType": "string",
+  "description": "Name of person who created the hold tag",
+  "sourceColumn": "EnteredBy",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

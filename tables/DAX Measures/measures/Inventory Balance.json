@@ -1,0 +1,29 @@
+{
+  "name": "Inventory Balance",
+  "description": [
+    "Total of accounting documents posted in the inventory related G/L accounts in SAP.",
+    "",
+    "By default, this value is in USD but it is toggleable to local currency using the '_Currency to Use' table."
+  ],
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] ),",
+    "        \"Local\", SUM( 'Inventory Balance Item'[Amount (Local Currency)] ),",
+    "        SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] )",
+    "    ),",
+    "    SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] )  ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory Balance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

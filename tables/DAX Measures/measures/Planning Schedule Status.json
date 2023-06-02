@@ -1,0 +1,13 @@
+{
+  "name": "Planning Schedule Status",
+  "description": "Log error / typo (-1); Skipped S/O (0); Other (1)",
+  "expression": "MAX( 'Planning Schedule Comparison'[StatusFlag] )",
+  "formatString": "0",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Absorption Projected",
+  "description": "[Average Daily Absorption based on Estimate] multiplied by the number of days between [Actual Product Start Datetime] and an end date. If current date is before 15th day of the month, the end date is the calendar month end datetime before midnight. Otherwise, it is the [Scheduled Production Stop Datetime].",
+  "expression": [
+    "",
+    "VAR EndDate = [End of Month] + TIME(23, 59, 59)",
+    "",
+    "VAR MinVisibleDate = MIN('Calendar'[Date])",
+    "",
+    "VAR Proj =",
+    "    SUMX( ",
+    "        VALUES('Department'[Department]), ",
+    "        [Absorption Estimated based on Scheduled Output by Month End]",
+    "            + ([Absorption Estimated Daily Avg] * DIVIDE((DATEDIFF([Scheduled Production End Timestamp], EndDate, MINUTE) - ([Production Off Hours After Schedule End] * 60)), 1440)) ",
+    "    )",
+    "",
+    "RETURN",
+    "-- Only project current month",
+    "-- Display MTD of previous month only. Otherwise, blank",
+    "IF(",
+    "    ISFILTERED( 'Calendar' ),",
+    "    IF(",
+    "        MinVisibleDate < [Beginning of Last Month],",
+    "        BLANK(),",
+    "        IF(",
+    "            MinVisibleDate < [Beginning of Month],",
+    "            [Absorption MTD],",
+    "            Proj",
+    "        )",
+    "    ),",
+    "    Proj",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Projection",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

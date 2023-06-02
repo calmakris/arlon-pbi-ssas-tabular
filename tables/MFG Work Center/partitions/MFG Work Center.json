@@ -1,0 +1,14 @@
+{
+  "name": "MFG Work Center",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_WorkCenter = Source{[Schema=\"dbo\",Item=\"DIM_WorkCenter\"]}[Data]",
+      "in",
+      "    dbo_DIM_WorkCenter"
+    ]
+  }
+}

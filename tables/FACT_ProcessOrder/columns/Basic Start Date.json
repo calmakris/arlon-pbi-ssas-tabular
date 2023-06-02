@@ -1,0 +1,19 @@
+{
+  "name": "Basic Start Date",
+  "dataType": "dateTime",
+  "description": "SAP Source: AFKO.GSTRP",
+  "isHidden": true,
+  "sourceColumn": "StartDate",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

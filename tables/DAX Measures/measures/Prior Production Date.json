@@ -1,0 +1,17 @@
+{
+  "name": "Prior Production Date",
+  "expression": " ([Report Date] - 1) + TIME(6, 0, 0)",
+  "formatString": "MM/dd/yyyy HH:mm",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

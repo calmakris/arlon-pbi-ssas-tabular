@@ -1,0 +1,36 @@
+{
+  "name": "WH Complete On Time Target",
+  "description": "Monthly target values supplied by Logistics to the IT department annually. If there is no value available, the default value is 90%.",
+  "expression": [
+    "",
+    "VAR Target =",
+    "    CALCULATE(",
+    "        AVERAGE( TARGET_KPI[TargetValue] ),",
+    "        TARGET_KPI[KpiKey] = \"COT\",",
+    "        TREATAS(",
+    "            VALUES( Plant[Plant] ),",
+    "            TARGET_KPI[LocationKey]",
+    "        ),",
+    "        TREATAS(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            TARGET_KPI[CalendarTimeKey]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "IF(",
+    "    ISBLANK( Target ),",
+    "    0.90,",
+    "    Target",
+    ")",
+    ""
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

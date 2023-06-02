@@ -1,0 +1,14 @@
+{
+  "name": "MvmtReasonKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MvmtReasonKey",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

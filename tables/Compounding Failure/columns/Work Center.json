@@ -1,0 +1,16 @@
+{
+  "name": "Work Center",
+  "dataType": "string",
+  "description": [
+    "Work center according to the base category assigned.",
+    "",
+    "Use the 'Work Center' table for further details on this field."
+  ],
+  "sourceColumn": "WorkCenter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

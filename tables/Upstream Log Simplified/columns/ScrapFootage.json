@@ -1,0 +1,15 @@
+{
+  "name": "ScrapFootage",
+  "dataType": "int64",
+  "description": "Total footage of caliper or setup scrap during clean ups",
+  "isHidden": true,
+  "sourceColumn": "ScrapFootage",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

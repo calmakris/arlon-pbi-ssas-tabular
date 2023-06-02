@@ -1,0 +1,16 @@
+{
+  "name": "Production Hours",
+  "dataType": "decimal",
+  "description": "The number of hours across all converting employees when they are producing material",
+  "isHidden": true,
+  "sourceColumn": "ProductionHours",
+  "formatString": "0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

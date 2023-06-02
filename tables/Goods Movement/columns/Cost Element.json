@@ -1,0 +1,15 @@
+{
+  "name": "Cost Element",
+  "dataType": "string",
+  "description": "G/L account assigned to the transaction",
+  "isHidden": true,
+  "sourceColumn": "CostElement",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

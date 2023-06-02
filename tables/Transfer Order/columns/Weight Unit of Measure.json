@@ -1,0 +1,12 @@
+{
+  "name": "Weight Unit of Measure",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.GEWEI",
+  "sourceColumn": "WeightUoM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

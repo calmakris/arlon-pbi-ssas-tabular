@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Order Invoice Receipt Quantity",
+  "description": "Total quantity of invoice receipts in purchase order history",
+  "expression": " SUM( 'Purchase Order Invoice'[Quantity] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Purchase Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

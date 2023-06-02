@@ -1,0 +1,18 @@
+{
+  "name": "Basic End Time",
+  "dataType": "dateTime",
+  "description": "Time in which the process order is scheduled to finish based on the material's lead time",
+  "sourceColumn": "EndTime",
+  "formatString": "HH:mm",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

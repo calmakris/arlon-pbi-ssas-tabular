@@ -1,0 +1,13 @@
+{
+  "name": "Amount at Last PY Price",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "InvoiceValue_LastPYPrice",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

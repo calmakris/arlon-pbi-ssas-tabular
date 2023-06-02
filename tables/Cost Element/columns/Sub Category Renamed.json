@@ -1,0 +1,12 @@
+{
+  "name": "Sub Category Renamed",
+  "dataType": "string",
+  "description": "Sub category renamed to be more specific. This data is not in SAP. It is manually maintained in the Power BI data warehouse.",
+  "sourceColumn": "CatRenamed",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

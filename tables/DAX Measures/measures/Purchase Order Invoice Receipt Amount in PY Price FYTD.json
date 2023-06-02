@@ -1,0 +1,19 @@
+{
+  "name": "Purchase Order Invoice Receipt Amount in PY Price FYTD",
+  "description": "Current year's invoice receipt amount using prior fiscal year's last unit price. If the material is not sold in the previous fiscal year, use current fiscal year's amount",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( 'Purchase Order Invoice'[Amount at Last PY Price] ),",
+    "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

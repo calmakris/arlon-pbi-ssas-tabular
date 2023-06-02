@@ -1,0 +1,18 @@
+{
+  "name": "Service Quality Index",
+  "description": [
+    "Total credit issue amount of service complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
+    "",
+    "Service are complaints entered with reason codes marked as 'S' (service).",
+    ""
+  ],
+  "expression": " DIVIDE( [Service Quality Complaint Amount] + 0, [Gross Sales] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Complaints\\_Service Quality",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

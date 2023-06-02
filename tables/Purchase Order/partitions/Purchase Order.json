@@ -1,0 +1,14 @@
+{
+  "name": "Purchase Order",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_PurchaseOrder = Source{[Schema=\"dbo\",Item=\"DIM_PurchaseOrder\"]}[Data]",
+      "in",
+      "    dbo_DIM_PurchaseOrder"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Plant",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_DIM_Plant = Source{[Schema=\"dbo\",Item=\"DIM_Plant\"]}[Data]",
+      "in",
+      "    dbo_DIM_Plant"
+    ]
+  }
+}

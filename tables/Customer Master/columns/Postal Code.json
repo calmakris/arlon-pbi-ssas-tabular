@@ -1,0 +1,14 @@
+{
+  "name": "Postal Code",
+  "dataType": "string",
+  "description": "Postal code in the customer account information in SAP",
+  "sourceColumn": "PostalCode",
+  "displayFolder": "Address",
+  "dataCategory": "PostalCode",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

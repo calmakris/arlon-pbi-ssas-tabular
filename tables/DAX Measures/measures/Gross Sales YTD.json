@@ -1,0 +1,21 @@
+{
+  "name": "Gross Sales YTD",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE( [Gross Sales], DATESYTD( 'Calendar'[Date] ) ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

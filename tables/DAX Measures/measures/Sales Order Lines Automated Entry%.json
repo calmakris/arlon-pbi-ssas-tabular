@@ -1,0 +1,19 @@
+{
+  "name": "Sales Order Lines Automated Entry%",
+  "description": "Number of sales order line items entered by BATCHUSER divided by sales order line count entered by Customer Service and BATCHUSER",
+  "expression": [
+    " ",
+    "DIVIDE( ",
+    "    [Sales Order Lines Automated],",
+    "    [Sales Order Line Count Automated and Manual]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

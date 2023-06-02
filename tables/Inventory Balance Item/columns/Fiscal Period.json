@@ -1,0 +1,12 @@
+{
+  "name": "Fiscal Period",
+  "dataType": "string",
+  "description": "SAP Source: BSIS/BSAS.MONAT",
+  "sourceColumn": "FiscalPeriod",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Additive Cost",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "AdditiveCost",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Standard Prices\\Local",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

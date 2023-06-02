@@ -1,0 +1,12 @@
+{
+  "name": "Notification Code",
+  "dataType": "string",
+  "description": "Determines if the hold tag is on hold, conditional use, scrap, etc.",
+  "sourceColumn": "NotificationCode",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

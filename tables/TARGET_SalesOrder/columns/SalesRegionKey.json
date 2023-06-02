@@ -1,0 +1,7 @@
+{
+  "name": "SalesRegionKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "SalesRegionKey",
+  "isAvailableInMdx": false
+}

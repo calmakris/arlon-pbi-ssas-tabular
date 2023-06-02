@@ -1,0 +1,15 @@
+{
+  "name": "InStockIndicator",
+  "dataType": "int64",
+  "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date)",
+  "isHidden": true,
+  "sourceColumn": "InStockIndicator",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

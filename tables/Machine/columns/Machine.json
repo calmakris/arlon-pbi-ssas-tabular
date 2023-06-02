@@ -1,0 +1,12 @@
+{
+  "name": "Machine",
+  "dataType": "string",
+  "isKey": true,
+  "sourceColumn": "MachineName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\"]"
+    }
+  ]
+}

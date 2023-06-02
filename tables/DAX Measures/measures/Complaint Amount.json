@@ -1,0 +1,13 @@
+{
+  "name": "Complaint Amount",
+  "description": "Total amount in the complaint (in USD)",
+  "expression": " SUM('Complaint'[ComplaintValueUSD])",
+  "formatString": "#,0",
+  "displayFolder": "Complaints",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

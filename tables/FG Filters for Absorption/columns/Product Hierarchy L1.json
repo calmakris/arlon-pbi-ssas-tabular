@@ -1,0 +1,11 @@
+{
+  "name": "Product Hierarchy L1",
+  "dataType": "string",
+  "sourceColumn": "ProductHierarchyDescriptionL1",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Tier",
+  "dataType": "string",
+  "description": "Indicator that classifies a material as an A, B, or C part according to its consumption value.",
+  "sourceColumn": "Tier",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Operator Badge",
+  "dataType": "string",
+  "description": "Badge number of the operator according to the Converting OEE table in AAS database",
+  "sourceColumn": "OperatorNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

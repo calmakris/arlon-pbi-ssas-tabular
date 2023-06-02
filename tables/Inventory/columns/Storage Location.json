@@ -1,0 +1,12 @@
+{
+  "name": "Storage Location",
+  "dataType": "string",
+  "description": "Number of the storage location at which the material is stored. A plant may contain one or more storage locations.",
+  "sourceColumn": "StorageLoc",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

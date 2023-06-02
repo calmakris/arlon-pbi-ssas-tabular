@@ -1,0 +1,16 @@
+{
+  "name": "OpenValueUSD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OpenValueUSD",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

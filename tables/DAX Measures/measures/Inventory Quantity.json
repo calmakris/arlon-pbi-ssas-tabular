@@ -1,0 +1,13 @@
+{
+  "name": "Inventory Quantity",
+  "description": "Total quantity of materials on physical inventory",
+  "expression": "SUM( 'Inventory'[Quantity] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

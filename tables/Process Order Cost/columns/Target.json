@@ -1,0 +1,13 @@
+{
+  "name": "Target",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "Target",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

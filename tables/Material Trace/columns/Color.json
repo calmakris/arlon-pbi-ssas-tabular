@@ -1,0 +1,13 @@
+{
+  "name": "Color",
+  "dataType": "string",
+  "description": "Color name and number of the related material",
+  "sourceColumn": "Color",
+  "displayFolder": "FG Categories",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

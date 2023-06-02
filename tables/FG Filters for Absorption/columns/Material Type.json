@@ -1,0 +1,11 @@
+{
+  "name": "Material Type",
+  "dataType": "string",
+  "sourceColumn": "MaterialType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

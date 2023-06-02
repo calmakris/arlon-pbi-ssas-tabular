@@ -1,0 +1,13 @@
+{
+  "name": "Quantity Unit",
+  "dataType": "string",
+  "description": "Unit of measure of the quantity sold",
+  "sourceColumn": "QuantityUoM",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

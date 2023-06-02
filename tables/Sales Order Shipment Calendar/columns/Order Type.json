@@ -1,0 +1,13 @@
+{
+  "name": "Order Type",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "OrderType",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

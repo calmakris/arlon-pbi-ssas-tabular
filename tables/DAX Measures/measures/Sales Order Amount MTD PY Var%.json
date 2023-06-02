@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Amount MTD PY Var%",
+  "description": "The amount of percent increase/decrease of sales order amount entered between current month and the same month on previous year",
+  "expression": " DIVIDE( [Sales Order Amount MTD PY Var], [Sales Order Amount MTD PY] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Sales Orders\"]"
+    }
+  ]
+}

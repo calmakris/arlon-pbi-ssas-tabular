@@ -1,0 +1,13 @@
+{
+  "name": "Gross Sales FYTD & Backorder Margin",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": " [Gross Margin FYTD] + [Backorder Margin]",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

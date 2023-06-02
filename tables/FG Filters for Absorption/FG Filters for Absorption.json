@@ -1,0 +1,14 @@
+{
+  "name": "FG Filters for Absorption",
+  "description": "This table is used to filter the 'Absorption' table using values related to finished good materials.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

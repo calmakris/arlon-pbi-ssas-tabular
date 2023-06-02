@@ -1,0 +1,12 @@
+{
+  "name": "Reason Code",
+  "dataType": "string",
+  "description": "Reason of complaint.",
+  "sourceColumn": "ReasonCodeDescription",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

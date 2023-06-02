@@ -1,0 +1,11 @@
+{
+  "name": "Ticket Description",
+  "dataType": "string",
+  "sourceColumn": "SampleText",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

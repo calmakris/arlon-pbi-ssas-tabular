@@ -1,0 +1,14 @@
+{
+  "name": "Last PY Amount",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "LastInvoiceValue_PY",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

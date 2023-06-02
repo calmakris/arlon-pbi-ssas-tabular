@@ -1,0 +1,12 @@
+{
+  "name": "MRP Type",
+  "dataType": "string",
+  "description": "Determines whether and how the material is planned.",
+  "sourceColumn": "MRPType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

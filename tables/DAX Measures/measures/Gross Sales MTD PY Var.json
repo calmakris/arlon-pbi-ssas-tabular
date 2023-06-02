@@ -1,0 +1,13 @@
+{
+  "name": "Gross Sales MTD PY Var",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": " IF( NOT( OR(ISBLANK([Gross Sales MTD]), ISBLANK([Gross Sales MTD PY]) ) ), [Gross Sales MTD] - [Gross Sales MTD PY], BLANK() )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

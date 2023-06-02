@@ -1,0 +1,29 @@
+{
+  "name": "Inventory Balance MTD PPV",
+  "description": [
+    "Month-to-date total of accounting documents with 'PPV' movement type category posted in the inventory balance G/L accounts in SAP.",
+    "",
+    "Movement type category is manually assigned per movement type. Finance provided the category per movement type data to IT.",
+    ""
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Inventory Balance MTD],",
+    "    'Inventory Balance Item'[Movement Type Category] = \"PPV\"",
+    ") +",
+    "CALCULATE(",
+    "    [Inventory Balance MTD],",
+    "    'Inventory Balance Item'[Document Type] = \"PR\",",
+    "    'Inventory Balance Item'[Movement Type Category] = \"\"",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory Balance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

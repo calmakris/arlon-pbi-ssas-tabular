@@ -1,0 +1,23 @@
+{
+  "name": "Sales Order Amount FYTD PY Var",
+  "description": "Total amount of increase/decrease of current fiscal year-to-date sales order amount entered compared to previous fiscal year",
+  "expression": [
+    " ",
+    "IF( ",
+    "    AND( ",
+    "        NOT(ISBLANK([Sales Order Amount FYTD])), ",
+    "        NOT(ISBLANK([Sales Order Amount FYTD PY])) ",
+    "    ), ",
+    "    [Sales Order Amount FYTD] - [Sales Order Amount FYTD PY], ",
+    "    BLANK() ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Sales Orders\"]"
+    }
+  ]
+}

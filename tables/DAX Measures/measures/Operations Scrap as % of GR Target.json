@@ -1,0 +1,27 @@
+{
+  "name": "Operations Scrap as % of GR Target",
+  "description": "Monthly KPI target manually assigned in the beginning of the fiscal year. Operations provides this data to IT for upload.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    AVERAGE( TARGET_KPI[TargetValue] ),",
+    "    TARGET_KPI[KpiKey] = \"ScrapGR\",",
+    "    TREATAS(",
+    "        VALUES( 'Company Code'[Company Code] ),",
+    "        TARGET_KPI[LocationKey]",
+    "    ),",
+    "    TREATAS(",
+    "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "        TARGET_KPI[CalendarTimeKey]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Operations Scrap",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

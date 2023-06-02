@@ -1,0 +1,12 @@
+{
+  "name": "Machine",
+  "dataType": "string",
+  "description": "Calculated column derived from the name of the database",
+  "sourceColumn": "Machine",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

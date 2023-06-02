@@ -1,0 +1,19 @@
+{
+  "name": "Audit 5S Score as % of Target",
+  "description": "5S score divided by the monthly target. Total target value per department is 18 points while the total target value per category is 3 points.",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Audit 5S Score],",
+    "    SUM( 'Audit 5S'[Target Value] )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "5S",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "GoodsFootage",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "GoodsFootage",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

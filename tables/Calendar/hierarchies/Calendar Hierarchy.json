@@ -1,0 +1,31 @@
+{
+  "name": "Calendar Hierarchy",
+  "levels": [
+    {
+      "name": "Year",
+      "ordinal": 0,
+      "column": "Calendar Year"
+    },
+    {
+      "name": "Quarter",
+      "ordinal": 1,
+      "column": "Calendar Quarter"
+    },
+    {
+      "name": "Date",
+      "ordinal": 3,
+      "column": "Date"
+    },
+    {
+      "name": "Month",
+      "ordinal": 2,
+      "column": "Calendar Month"
+    }
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

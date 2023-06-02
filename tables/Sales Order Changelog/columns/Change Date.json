@@ -1,0 +1,17 @@
+{
+  "name": "Change Date",
+  "dataType": "dateTime",
+  "description": "SAP Source: CDHDR.UDATE",
+  "sourceColumn": "ChangedDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "PostingRank",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "PostingRank",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

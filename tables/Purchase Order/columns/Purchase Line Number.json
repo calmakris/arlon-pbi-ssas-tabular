@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Line Number",
+  "dataType": "string",
+  "description": "Identifier of the line item in the purchase order",
+  "sourceColumn": "PurchaseOrderLineNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

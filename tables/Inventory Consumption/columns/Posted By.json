@@ -1,0 +1,11 @@
+{
+  "name": "Posted By",
+  "dataType": "string",
+  "sourceColumn": "PostingUsername",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Warehouse\"]"
+    }
+  ]
+}

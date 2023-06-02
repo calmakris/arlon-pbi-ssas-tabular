@@ -1,0 +1,24 @@
+{
+  "name": "Net Sales",
+  "description": "Difference between gross sales and discounts applied to gross sales",
+  "expression": [
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Invoice'[NetSales] ),",
+    "        \"Local\", SUMX( 'Sales Invoice',  'Sales Invoice'[NetSales] * 'Sales Invoice'[Exchange Rate] ),",
+    "        SUM('Sales Invoice'[NetSales] )",
+    "    ),",
+    "    SUM('Sales Invoice'[NetSales] )    ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

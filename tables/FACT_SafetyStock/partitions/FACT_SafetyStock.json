@@ -1,0 +1,14 @@
+{
+  "name": "FACT_SafetyStock",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_SafetyStock = Source{[Schema=\"dbo\",Item=\"FACT_SafetyStock\"]}[Data]",
+      "in",
+      "    dbo_FACT_SafetyStock"
+    ]
+  }
+}

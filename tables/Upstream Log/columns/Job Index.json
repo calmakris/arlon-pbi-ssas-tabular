@@ -1,0 +1,13 @@
+{
+  "name": "Job Index",
+  "dataType": "int64",
+  "description": "Source: jobdata.JobIndex",
+  "sourceColumn": "JobIndex",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

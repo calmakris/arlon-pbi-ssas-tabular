@@ -1,0 +1,31 @@
+{
+  "name": "FACT_MonthlyConsumption",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_MonthlyConsumption\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_MonthlyConsumption\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_MonthlyConsumption\",",
+        "    \"fromColumn\": \"PlantNoKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

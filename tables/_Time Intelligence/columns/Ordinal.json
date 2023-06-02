@@ -1,0 +1,12 @@
+{
+  "name": "Ordinal",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "Ordinal",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Generic Sales\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Absorption CW",
+  "description": "Current week's total cost posted in earned labor, setup, and overhead cost elements",
+  "expression": [
+    "",
+    "VAR BegDate = ([Report Date]) - WEEKDAY( [Report Date] )",
+    "VAR EndDate = BegDate + 7",
+    "RETURN",
+    "CALCULATE(",
+    "    [Absorption],",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] >= BegDate",
+    "            && 'Calendar'[Date] <= EndDate",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Absorption\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

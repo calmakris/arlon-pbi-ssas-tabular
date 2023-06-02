@@ -1,0 +1,12 @@
+{
+  "name": "Unit of Measure",
+  "dataType": "string",
+  "description": "SAP Source: LQUA.MEINS",
+  "sourceColumn": "QuantityUoM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

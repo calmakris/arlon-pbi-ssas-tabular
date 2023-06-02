@@ -1,0 +1,11 @@
+{
+  "name": "Campaign Name",
+  "dataType": "string",
+  "sourceColumn": "CampaignName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

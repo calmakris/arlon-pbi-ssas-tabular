@@ -1,0 +1,13 @@
+{
+  "name": "Is Fiscal YTD",
+  "dataType": "boolean",
+  "description": "Fiscal year starts in October 1st. This value is true if the date's day of fiscal year is on or before yesterday's day of fiscal year. For example, if yesterday is June 10 which is the 252th day of fiscal year, all dates with day of fiscal year <= 252 are set to true.",
+  "sourceColumn": "Is_Fiscal_Ytd",
+  "displayFolder": "Helper Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

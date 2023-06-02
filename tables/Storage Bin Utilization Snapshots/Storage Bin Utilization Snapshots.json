@@ -1,0 +1,26 @@
+{
+  "name": "Storage Bin Utilization Snapshots",
+  "description": "Snapshots of quantity and capacity per storage bin at midnight",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Storage Bin Utilization Snapshots\",",
+        "    \"fromColumn\": \"Snapshot Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Storage Bin Utilization Snapshots\",",
+        "    \"fromColumn\": \"StorageKey\",",
+        "    \"toTable\": \"Storage Bin\",",
+        "    \"toColumn\": \"StorageKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

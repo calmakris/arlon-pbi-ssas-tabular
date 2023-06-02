@@ -1,0 +1,12 @@
+{
+  "name": "Specification Number",
+  "dataType": "string",
+  "description": "Specification of the material ran",
+  "sourceColumn": "SpecNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

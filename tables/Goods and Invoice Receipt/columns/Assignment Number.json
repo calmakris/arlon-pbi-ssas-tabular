@@ -1,0 +1,12 @@
+{
+  "name": "Assignment Number",
+  "dataType": "string",
+  "description": "Additional information reference field in the line item. It mostly contains the purchase order number and line item.",
+  "sourceColumn": "AssignmentNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

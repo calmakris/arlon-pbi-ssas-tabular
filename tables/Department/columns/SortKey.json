@@ -1,0 +1,12 @@
+{
+  "name": "SortKey",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "SortKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Expenses\",\"Inventory\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

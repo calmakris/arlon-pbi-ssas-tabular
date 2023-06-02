@@ -1,0 +1,11 @@
+{
+  "name": "Keyword User Count",
+  "expression": "SUM( 'Website Keyword'[Users] )",
+  "formatString": "#,0",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

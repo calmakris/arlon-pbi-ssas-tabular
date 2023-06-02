@@ -1,0 +1,14 @@
+{
+  "name": "Amount (Group Currency)",
+  "dataType": "decimal",
+  "description": "SAP Source: FAGLFLEXT.HSL01 to HSL12",
+  "sourceColumn": "AmountInGroup",
+  "formatString": "0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

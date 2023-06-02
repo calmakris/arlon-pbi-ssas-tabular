@@ -1,0 +1,12 @@
+{
+  "name": "Storage Location",
+  "dataType": "string",
+  "description": "Determines the storage location of the material on inventory with FIFO violation. Sometimes Operations put materials in specific storage location so they cannot be used for production for specific reasons.",
+  "sourceColumn": "StorageLoc",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

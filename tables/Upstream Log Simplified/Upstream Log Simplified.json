@@ -1,0 +1,41 @@
+{
+  "name": "Upstream Log Simplified",
+  "description": "A transformed version of the Upstream Log where production records are split during shift and day transitions, consecutively similar clean ups and setups are combined as changeovers, and transition flags for changeovers",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Upstream Log Simplified\",",
+        "    \"fromColumn\": \"Machine\",",
+        "    \"toTable\": \"Machine\",",
+        "    \"toColumn\": \"Machine\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log Simplified\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log Simplified\",",
+        "    \"fromColumn\": \"Production Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log Simplified\",",
+        "    \"fromColumn\": \"Production Shift\",",
+        "    \"toTable\": \"Production Shift\",",
+        "    \"toColumn\": \"Production Shift\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

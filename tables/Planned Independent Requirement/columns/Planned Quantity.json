@@ -1,0 +1,13 @@
+{
+  "name": "Planned Quantity",
+  "dataType": "decimal",
+  "sourceColumn": "PlannedQty",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

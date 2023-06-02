@@ -1,0 +1,14 @@
+{
+  "name": "Amount",
+  "dataType": "decimal",
+  "description": "Amount posted in the financial document in local currency 2 (USD)",
+  "sourceColumn": "Amount",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

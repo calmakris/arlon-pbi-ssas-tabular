@@ -1,0 +1,14 @@
+{
+  "name": "Plant Data for Material",
+  "description": "Plant-specific data per material",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

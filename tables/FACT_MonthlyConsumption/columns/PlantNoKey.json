@@ -1,0 +1,7 @@
+{
+  "name": "PlantNoKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "PlantNoKey",
+  "isAvailableInMdx": false
+}

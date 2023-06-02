@@ -1,0 +1,13 @@
+{
+  "name": "Process Order with Hold Tag%",
+  "description": "Percentage of process orders with hold tags",
+  "expression": "DIVIDE( [Process Order with Hold Tag Count], [Process Order Count] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

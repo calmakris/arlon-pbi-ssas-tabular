@@ -1,0 +1,12 @@
+{
+  "name": "Document Type",
+  "dataType": "string",
+  "description": "SAP Source: BSIS.BLART",
+  "sourceColumn": "DocType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

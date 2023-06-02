@@ -1,0 +1,52 @@
+{
+  "name": "Sales Order Amount FY End Regional Budget Var",
+  "description": "FYTD gross sales up to last month plus current and future month end projections of sales order entry minus total FY sales order entry budget",
+  "expression": [
+    "--- FYTD gross sales up to last month plus current and future month end projections of sales order entry minus total FY sales order entry budget",
+    "VAR _RestOfYearProj =",
+    "    CALCULATE(",
+    "        SUMX(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            [Sales Order Amount Projected Month End]",
+    "        ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] >= [Beginning of Month]",
+    "                && 'Calendar'[Date] <= [End of Fiscal Year]",
+    "        )",
+    "    )",
+    "",
+    "VAR _FYTDSales =",
+    "--- FYTD gross sales up to last month",
+    "    CALCULATE(",
+    "        [Gross Sales FYTD],",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+    "                && 'Calendar'[Date] < [Beginning of Month]",
+    "        )",
+    "    )",
+    "",
+    "VAR _YearBudget =",
+    "--- Total year sales order entry budget",
+    "    CALCULATE(",
+    "        [Sales Order Amount Regional Budget],",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+    "                && 'Calendar'[Date] <= [End of Fiscal Year]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "_FYTDSales + _RestOfYearProj - _YearBudget"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

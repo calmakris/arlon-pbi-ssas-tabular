@@ -1,0 +1,12 @@
+{
+  "name": "G/L Account",
+  "dataType": "string",
+  "description": "Contains the number of the G/L account to which the transaction figures are updated.",
+  "sourceColumn": "GeneralLedgerAcctNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

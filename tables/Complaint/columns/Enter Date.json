@@ -1,0 +1,21 @@
+{
+  "name": "Enter Date",
+  "dataType": "dateTime",
+  "description": [
+    "Date on which the complaint was created.",
+    "",
+    "Use the 'Calendar' table for further breakdowns of this field."
+  ],
+  "sourceColumn": "EnterDateKey",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

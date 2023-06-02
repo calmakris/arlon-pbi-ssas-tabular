@@ -1,0 +1,14 @@
+{
+  "name": "Scrap Category",
+  "description": "Contains manually assigned categories given the [ScrapID] - mainly the cost element except for goods issues where it uses the movement types.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

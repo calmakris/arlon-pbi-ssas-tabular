@@ -1,0 +1,12 @@
+{
+  "name": "Document Header Text",
+  "dataType": "string",
+  "description": "Contains explanations or notes which apply to the document as a whole, that is, not only for certain line items.",
+  "sourceColumn": "DocHeaderText",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Hold Tag",
+  "description": "Contains hold tags created in the last few fiscal years.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Hold Tag\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Hold Tag\",",
+        "    \"fromColumn\": \"Enter Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Hold Tag\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Hold Tag\",",
+        "    \"fromColumn\": \"Plant for Material\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Hold Tag\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

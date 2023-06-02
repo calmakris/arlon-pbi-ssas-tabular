@@ -1,0 +1,40 @@
+{
+  "name": "FACT_SafetyStock",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_SafetyStock\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_SafetyStock\",",
+        "    \"fromColumn\": \"MaterialNo\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromCardinality\": \"one\",",
+        "    \"fromTable\": \"FACT_SafetyStock\",",
+        "    \"fromColumn\": \"MaterialPlantKey\",",
+        "    \"toTable\": \"Plant Data for Material\",",
+        "    \"toColumn\": \"MaterialPlantKey\",",
+        "    \"isActive\": false,",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_SafetyStock\",",
+        "    \"fromColumn\": \"PlantNo\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

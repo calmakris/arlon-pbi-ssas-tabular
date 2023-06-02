@@ -1,0 +1,26 @@
+{
+  "name": "Cost of Goods Sold",
+  "description": "Cost of goods sold aggregated by posting date. Only 0057020000 G/L account is filtered.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Cost of Goods Sold\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Cost of Goods Sold\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

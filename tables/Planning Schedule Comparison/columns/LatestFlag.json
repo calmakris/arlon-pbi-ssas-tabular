@@ -1,0 +1,13 @@
+{
+  "name": "LatestFlag",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "LatestFlag",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

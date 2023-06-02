@@ -1,0 +1,14 @@
+{
+  "name": "Actual Hours Spent",
+  "dataType": "decimal",
+  "description": "Number of hours the operator took to finish the task",
+  "sourceColumn": "ActualHours",
+  "formatString": "0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

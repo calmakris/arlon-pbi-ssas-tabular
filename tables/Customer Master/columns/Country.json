@@ -1,0 +1,14 @@
+{
+  "name": "Country",
+  "dataType": "string",
+  "description": "Country in the customer account information in SAP",
+  "sourceColumn": "Country",
+  "displayFolder": "Address",
+  "dataCategory": "Country",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

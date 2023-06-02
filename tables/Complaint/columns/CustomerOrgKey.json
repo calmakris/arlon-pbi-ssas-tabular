@@ -1,0 +1,13 @@
+{
+  "name": "CustomerOrgKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CustomerOrgKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Sales Order Lines Shipped Count CD",
+  "description": "Count of sales order line items posted with current date as actual goods movement date in the delivery notes",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'Sales Order Shipment'[OrderNoLineKey] ),",
+    "    FILTER(",
+    "        ALL( 'Sales Order Shipment' ),",
+    "        'Sales Order Shipment'[Actual Goods Movement Date] = [Last Working Day]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

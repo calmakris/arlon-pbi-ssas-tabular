@@ -1,0 +1,17 @@
+{
+  "name": "Primary BOM Flag",
+  "dataType": "string",
+  "description": [
+    "Determines if the material is part of the main/primary bill of material.",
+    "",
+    "A bill of material is a primary BOM if it is an unlocked recipe and the latest production version."
+  ],
+  "sourceColumn": "PrimaryFlag",
+  "displayFolder": "BOM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

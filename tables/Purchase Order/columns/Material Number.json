@@ -1,0 +1,13 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "Identifier of the item. Non-inventory items may have blank values.",
+  "sourceColumn": "MaterialNoKey",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "CompCode",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CompCode",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Audit 5S",
+  "description": [
+    "Contains the scores recorded per area and 5S category during audit.",
+    "",
+    "Use the 'Company Code' and 'Calendar' table for further breakdowns of this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Audit 5S\",",
+        "    \"fromColumn\": \"AuditID\",",
+        "    \"toTable\": \"Audit 5S Comments\",",
+        "    \"toColumn\": \"AuditID\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Audit 5S\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Audit 5S\",",
+        "    \"fromColumn\": \"DateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

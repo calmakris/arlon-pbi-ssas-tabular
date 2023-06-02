@@ -1,0 +1,23 @@
+{
+  "name": "Related Process Order",
+  "description": "This table is related to the 'Sales Order' table. It contains the related process order per MTO sales orders.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Related Process Order\",",
+        "    \"fromColumn\": \"SalesOrderNoKey\",",
+        "    \"toTable\": \"Sales Order\",",
+        "    \"toColumn\": \"OrderNoLineKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Footage",
+  "dataType": "int64",
+  "description": "Source: jobdata.LastRollFt",
+  "sourceColumn": "Footage",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

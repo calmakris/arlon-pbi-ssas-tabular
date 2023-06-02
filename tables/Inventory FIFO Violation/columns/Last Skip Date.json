@@ -1,0 +1,17 @@
+{
+  "name": "Last Skip Date",
+  "dataType": "dateTime",
+  "description": "The maximum posting date among the transactions that violated FIFO",
+  "sourceColumn": "LastSkipDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "TargetValue",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "TargetValue",
+  "isAvailableInMdx": false
+}

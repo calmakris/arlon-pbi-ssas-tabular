@@ -1,0 +1,17 @@
+{
+  "name": "End of Month",
+  "expression": " EOMONTH( [Report Date], 0 )",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

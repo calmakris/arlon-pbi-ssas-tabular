@@ -1,0 +1,23 @@
+{
+  "name": "Process Order Count",
+  "description": "Count of process orders by actual/scheduled finished date",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'FACT_ProcessOrder'[Process Order Number] ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

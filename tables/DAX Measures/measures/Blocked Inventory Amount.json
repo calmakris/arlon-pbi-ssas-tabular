@@ -1,0 +1,13 @@
+{
+  "name": "Blocked Inventory Amount",
+  "description": "Total standard cost of materials on S block, Q block, and expired as of yesterday",
+  "expression": " [S-Block Amount] + [Q-Block Amount] + [Expired Amount]",
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Blocked",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Inventory Labor Cost",
+  "description": "Product of unrestricted stock quantity and current labor cost per unit",
+  "expression": "SUM( 'Inventory'[Labor Cost (USD)] )",
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Cost of Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

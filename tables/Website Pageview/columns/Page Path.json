@@ -1,0 +1,11 @@
+{
+  "name": "Page Path",
+  "dataType": "string",
+  "sourceColumn": "PagePath",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

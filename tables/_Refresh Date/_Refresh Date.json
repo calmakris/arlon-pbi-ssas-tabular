@@ -1,0 +1,10 @@
+{
+  "name": "_Refresh Date",
+  "description": "This table is not related to other table. It is used to determine when was the last time the data model is processed/refreshed.",
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

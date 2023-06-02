@@ -1,0 +1,13 @@
+{
+  "name": "Material Document Number",
+  "dataType": "string",
+  "description": "Number of the material document with which a goods movement was posted.",
+  "sourceColumn": "MaterialDocNo",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Notification Number",
+  "dataType": "string",
+  "description": "Unique identifier of the hold tag",
+  "isKey": true,
+  "sourceColumn": "NotificationNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

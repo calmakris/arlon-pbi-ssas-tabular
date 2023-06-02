@@ -1,0 +1,17 @@
+{
+  "name": "Sales Order Amount Daily Entry Rate Hidden",
+  "description": [
+    "MTD ordered value of sales orders divided by MTD number of weekdays.",
+    "",
+    "For future months, the daily order entry average amount between the beginning and end of last month is taken and multiplied by the assigned monthly index. The monthly index is manually assigned per sales region."
+  ],
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Sales Order Ordered Amount],",
+    "    [Weekdays Count]",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis"
+}

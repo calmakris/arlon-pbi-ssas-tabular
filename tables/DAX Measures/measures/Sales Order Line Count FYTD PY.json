@@ -1,0 +1,18 @@
+{
+  "name": "Sales Order Line Count FYTD PY",
+  "description": [
+    "Total count of sales order line items entered on previous fiscal year.",
+    "",
+    "The date range is parallel to the current fiscal year-to-date range. For example, if the current fiscal YTD range is on the 100th day of the fiscal year, then this value is the total count of sales order line items entered in the first 100 days of previous fiscal year.",
+    ""
+  ],
+  "expression": " CALCULATE( [Sales Order Line Count FYTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

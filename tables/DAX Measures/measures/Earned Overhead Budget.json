@@ -1,0 +1,23 @@
+{
+  "name": "Earned Overhead Budget",
+  "description": "Total of the monthly earned overhead budget entered in the ZBUDGET table in SAP.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( TARGET_Absorption[Overhead] ),",
+    "    TARGET_Absorption[ForecastType] = \"B\",",
+    "    TREATAS(",
+    "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "        TARGET_Absorption[CalendarTimeKey]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

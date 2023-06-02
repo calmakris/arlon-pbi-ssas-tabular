@@ -1,0 +1,13 @@
+{
+  "name": "SalesOrderNoKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "SalesOrderNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

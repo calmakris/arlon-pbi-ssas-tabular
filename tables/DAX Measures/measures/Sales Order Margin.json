@@ -1,0 +1,29 @@
+{
+  "name": "Sales Order Margin",
+  "description": [
+    "Difference between the ordered amount and standard cost in the sales order.",
+    "",
+    "This value is toggleable to local currency using the '_Currency To Use' table."
+  ],
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Order'[MarginAmountUSD] ),",
+    "        \"Local\", SUM( 'Sales Order'[MarginAmount] ),",
+    "        SUM( 'Sales Order'[MarginAmountUSD] )",
+    "    ),",
+    "    SUM( 'Sales Order'[MarginAmountUSD] )  ",
+    ") + 0"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\",\"Sales Orders\"]"
+    }
+  ]
+}

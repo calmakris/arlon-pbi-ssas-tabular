@@ -1,0 +1,25 @@
+{
+  "name": "Previous Official Standard Cost",
+  "description": "This cost is based on the the previous cost roll. It is the quantity sold multiplied by the total of previous material, labor, overhead, and setup cost of the material.",
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Invoice'[PreviousStdCost] ),",
+    "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[PreviousStdCost] * 'Sales Invoice'[Exchange Rate] ),",
+    "        SUM( 'Sales Invoice'[PreviousStdCost] )",
+    "    ),",
+    "    SUM( 'Sales Invoice'[PreviousStdCost] ) ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Cost in Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

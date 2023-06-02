@@ -1,0 +1,12 @@
+{
+  "name": "Email Delivered Count",
+  "description": "The number of emails succesfully delivered to an inbox",
+  "expression": "SUM( 'Marketing Email'[Delivered] )",
+  "formatString": "#,0",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

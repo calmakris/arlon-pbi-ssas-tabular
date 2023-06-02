@@ -1,0 +1,12 @@
+{
+  "name": "Last Process Order Number",
+  "dataType": "string",
+  "description": "Process order of the last usage transaction posted per Skip By Batch",
+  "sourceColumn": "LastProcessOrderNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

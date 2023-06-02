@@ -1,0 +1,14 @@
+{
+  "name": "Vendor Master",
+  "description": "SAP Source: LFA1",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

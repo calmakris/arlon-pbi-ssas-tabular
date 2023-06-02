@@ -1,0 +1,13 @@
+{
+  "name": "Currency",
+  "dataType": "string",
+  "description": "Currency in the invoice/billing document",
+  "sourceColumn": "Currency",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

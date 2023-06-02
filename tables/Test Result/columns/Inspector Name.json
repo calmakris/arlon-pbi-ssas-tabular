@@ -1,0 +1,11 @@
+{
+  "name": "Inspector Name",
+  "dataType": "string",
+  "sourceColumn": "InspectorName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

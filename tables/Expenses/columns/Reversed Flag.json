@@ -1,0 +1,12 @@
+{
+  "name": "Reversed Flag",
+  "dataType": "string",
+  "description": "Determines if the document is reversed by another document",
+  "sourceColumn": "IsReversed",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

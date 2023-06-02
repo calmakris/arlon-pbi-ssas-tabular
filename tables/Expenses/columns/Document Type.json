@@ -1,0 +1,12 @@
+{
+  "name": "Document Type",
+  "dataType": "string",
+  "description": "The document type classifies the accounting documents. It is stored in the document header.",
+  "sourceColumn": "DocumentType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

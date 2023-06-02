@@ -1,0 +1,13 @@
+{
+  "name": "Inventory Material Cost",
+  "description": "Product of unrestricted stock quantity and current material cost per unit",
+  "expression": "SUM( 'Inventory'[Material Cost (USD)] )",
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Cost of Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

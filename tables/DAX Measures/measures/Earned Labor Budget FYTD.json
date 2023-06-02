@@ -1,0 +1,19 @@
+{
+  "name": "Earned Labor Budget FYTD",
+  "description": "Fiscal year-to-date total of the monthly earned labor budget entered in ZBUDGET table in SAP",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Earned Labor Budget],",
+    "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

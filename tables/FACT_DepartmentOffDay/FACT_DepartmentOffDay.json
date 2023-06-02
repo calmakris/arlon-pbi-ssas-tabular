@@ -1,0 +1,25 @@
+{
+  "name": "FACT_DepartmentOffDay",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_DepartmentOffDay\",",
+        "    \"fromColumn\": \"Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_DepartmentOffDay\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Delivery Required Flag",
+  "dataType": "string",
+  "description": "Specifies whether the item involves a goods receipt.",
+  "sourceColumn": "DeliverFlag",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

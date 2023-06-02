@@ -1,0 +1,12 @@
+{
+  "name": "Item Text",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.SGTXT",
+  "sourceColumn": "ItemText",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

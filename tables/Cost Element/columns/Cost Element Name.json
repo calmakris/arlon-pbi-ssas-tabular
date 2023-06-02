@@ -1,0 +1,12 @@
+{
+  "name": "Cost Element Name",
+  "dataType": "string",
+  "description": "General description of the cost element.",
+  "sourceColumn": "CostElementName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

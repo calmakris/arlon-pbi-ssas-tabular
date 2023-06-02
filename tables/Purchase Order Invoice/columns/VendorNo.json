@@ -1,0 +1,13 @@
+{
+  "name": "VendorNo",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "VendorNo",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

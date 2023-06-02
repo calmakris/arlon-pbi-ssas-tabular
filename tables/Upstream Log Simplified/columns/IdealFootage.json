@@ -1,0 +1,15 @@
+{
+  "name": "IdealFootage",
+  "dataType": "int64",
+  "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+  "isHidden": true,
+  "sourceColumn": "IdealFootage",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

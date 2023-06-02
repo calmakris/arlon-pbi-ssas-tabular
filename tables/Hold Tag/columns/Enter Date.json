@@ -1,0 +1,17 @@
+{
+  "name": "Enter Date",
+  "dataType": "dateTime",
+  "description": "Date on which the hold tag was created",
+  "sourceColumn": "EnterDateKey",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

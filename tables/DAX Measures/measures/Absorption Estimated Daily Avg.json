@@ -1,0 +1,19 @@
+{
+  "name": "Absorption Estimated Daily Avg",
+  "description": "[Estimated Absorption based on Scheduled Output by Month End] divided by the number of days between [Actual Production Start Datetime] and [Scheduled Production Stop Datetime]",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Absorption Estimated based on Scheduled Output by Month End],",
+    "    DIVIDE( DATEDIFF( [Actual Production Start Timestamp], [Scheduled Production End Timestamp], MINUTE ), 1440 )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Projection",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

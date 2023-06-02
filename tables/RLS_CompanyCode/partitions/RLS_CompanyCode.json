@@ -1,0 +1,14 @@
+{
+  "name": "RLS_CompanyCode",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_RLS_CompanyCode = Source{[Schema=\"dbo\",Item=\"RLS_CompanyCode\"]}[Data]",
+      "in",
+      "    dbo_RLS_CompanyCode"
+    ]
+  }
+}

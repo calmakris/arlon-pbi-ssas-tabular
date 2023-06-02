@@ -1,0 +1,13 @@
+{
+  "name": "OrderNoLineKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "OrderNoLineKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

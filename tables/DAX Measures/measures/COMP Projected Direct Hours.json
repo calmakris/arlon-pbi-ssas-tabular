@@ -1,0 +1,20 @@
+{
+  "name": "COMP Projected Direct Hours",
+  "description": "Expected total hours spent by operators to perform a task directly related to production in Compounding",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Compounding Log'[Projected Hours Spent] ),",
+    "    KEEPFILTERS( 'Compounding Log'[Labor Flag] = \"Yes\" ),",
+    "    KEEPFILTERS( 'Compounding Log'[Task] <> \"MIXING\" )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

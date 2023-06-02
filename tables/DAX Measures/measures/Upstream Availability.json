@@ -1,0 +1,28 @@
+{
+  "name": "Upstream Availability",
+  "description": "Upstream uptime duration minutes divided by runtime duration minutes",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    DIVIDE( [Upstream Uptime Minutes], [Upstream Runtime Minutes] ),",
+    "    ALLSELECTED(",
+    "        'Upstream Log Simplified'[Category],",
+    "        'Upstream Log Simplified'[Causes],",
+    "        'Upstream Log Simplified'[Further Detail],",
+    "        'Upstream Log Simplified'[Comments],",
+    "        'Upstream Log Simplified'[Non Uptime Reason],",
+    "        'Upstream Log Simplified'[Specification Number],",
+    "        'Upstream Log Simplified'[Efficiency Hitter]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

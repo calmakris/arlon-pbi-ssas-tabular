@@ -1,0 +1,14 @@
+{
+  "name": "Amount in USD",
+  "dataType": "decimal",
+  "description": "Calculated column based on the quantity and standard price of material (by plant and converted to USD using today's exchange rate)",
+  "sourceColumn": "AmountUSD",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

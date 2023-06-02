@@ -1,0 +1,14 @@
+{
+  "name": "Inventory Snapshots",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_InventorySnapshots = Source{[Schema=\"dbo\",Item=\"FACT_InventorySnapshots\"]}[Data]",
+      "in",
+      "    dbo_FACT_InventorySnapshots"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "G/L Account Number",
+  "dataType": "string",
+  "description": "SAP Source: BSIS/BSAS.HKONT",
+  "sourceColumn": "GLAccountNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

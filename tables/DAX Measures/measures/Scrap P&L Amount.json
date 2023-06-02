@@ -1,0 +1,20 @@
+{
+  "name": "Scrap P&L Amount",
+  "description": "Total amount of documents in the 'Scrap Usage' and 'Absorption' table",
+  "expression": [
+    "",
+    "VAR Scrap = SUM( 'Scrap Usage'[Amount] )",
+    "VAR Absorb = [Absorption]",
+    "",
+    "RETURN",
+    "Scrap + Absorb"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Scrap P&L",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

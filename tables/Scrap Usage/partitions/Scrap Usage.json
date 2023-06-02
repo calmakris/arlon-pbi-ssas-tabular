@@ -1,0 +1,14 @@
+{
+  "name": "Scrap Usage",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_ScrapUsage = Source{[Schema=\"dbo\",Item=\"FACT_ScrapUsage\"]}[Data]",
+      "in",
+      "    dbo_FACT_ScrapUsage"
+    ]
+  }
+}

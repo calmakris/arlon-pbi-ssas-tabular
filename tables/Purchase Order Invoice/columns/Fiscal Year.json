@@ -1,0 +1,11 @@
+{
+  "name": "Fiscal Year",
+  "dataType": "string",
+  "sourceColumn": "FiscalYear",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

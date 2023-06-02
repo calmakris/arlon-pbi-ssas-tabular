@@ -1,0 +1,12 @@
+{
+  "name": "Product Hierarchy L3",
+  "dataType": "string",
+  "sourceColumn": "ProductHierarchyDescriptionL3",
+  "displayFolder": "FG Categories\\Product Hierarchy",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

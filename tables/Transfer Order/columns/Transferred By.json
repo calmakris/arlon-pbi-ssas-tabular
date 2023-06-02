@@ -1,0 +1,12 @@
+{
+  "name": "Transferred By",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.QNAME",
+  "sourceColumn": "TransferAuthor",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "UsernameKey",
+  "dataType": "string",
+  "description": "SAP Source: USR21.BNAME",
+  "isHidden": true,
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "UsernameKey",
+  "isAvailableInMdx": false
+}

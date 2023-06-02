@@ -1,0 +1,15 @@
+{
+  "name": "MaterialPlantKey",
+  "dataType": "string",
+  "isHidden": true,
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "MaterialPlantKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Reason Type for Late Shipment",
+  "dataType": "string",
+  "description": "1st party means the reason why the item is late is controllable by Arlon. On the other hand, 3rd party means the item is late of external reasons.",
+  "sourceColumn": "LateReasonType",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

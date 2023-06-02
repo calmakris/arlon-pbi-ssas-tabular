@@ -1,0 +1,20 @@
+{
+  "name": "COMP Process Order Count",
+  "description": "Count of process orders finished/scheduled in Compounding",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'FACT_ProcessOrder'[Process Order Number] ),",
+    "    KEEPFILTERS( 'Work Center'[Department] = \"COMP\" ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

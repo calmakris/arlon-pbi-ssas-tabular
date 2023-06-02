@@ -1,0 +1,12 @@
+{
+  "name": "Recipe Group",
+  "dataType": "string",
+  "description": "Group identifier that determines the recipe of the material in the process order",
+  "sourceColumn": "DocGroup",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

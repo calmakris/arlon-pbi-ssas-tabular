@@ -1,0 +1,13 @@
+{
+  "name": "Adhesive Quantity",
+  "dataType": "int64",
+  "sourceColumn": "AdhesiveQuantity",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

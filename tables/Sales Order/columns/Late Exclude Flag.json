@@ -1,0 +1,13 @@
+{
+  "name": "Late Exclude Flag",
+  "dataType": "string",
+  "description": "Value is 'Yes' if this line is indicated to be excluded in On Time Shipping metrics.",
+  "sourceColumn": "LateExcludeFlag",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

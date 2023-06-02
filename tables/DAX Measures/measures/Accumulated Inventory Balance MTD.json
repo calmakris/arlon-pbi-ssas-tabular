@@ -1,0 +1,34 @@
+{
+  "name": "Accumulated Inventory Balance MTD",
+  "description": "Month-to-date balance in inventory related G/L accounts",
+  "expression": [
+    "",
+    "VAR LastVisibleDate =",
+    "    MAX ( 'Calendar'[Date] )",
+    "VAR FirstVisibleDate =",
+    "    MIN ( 'Calendar'[Date] )",
+    "VAR LastDateWithData =",
+    "    CALCULATE (",
+    "        MAX ( 'Inventory Balance'[MonthDateKey] ),",
+    "        REMOVEFILTERS ()",
+    "    )",
+    "VAR Result =",
+    "    IF (",
+    "        FirstVisibleDate <= LastDateWithData,",
+    "        CALCULATE (",
+    "            SUM( 'Inventory Balance'[Amount (Group Currency)] ),",
+    "            'Calendar'[Date] <= LastVisibleDate ",
+    "        )",
+    "    )",
+    "RETURN",
+    "    Result"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory Balance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

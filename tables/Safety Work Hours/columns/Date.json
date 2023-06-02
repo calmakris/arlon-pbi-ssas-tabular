@@ -1,0 +1,14 @@
+{
+  "name": "Date",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "DateKey",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

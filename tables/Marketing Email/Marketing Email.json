@@ -1,0 +1,14 @@
+{
+  "name": "Marketing Email",
+  "description": "Contains all the email campaigns delivered. Campaigns without any delivered emails are excluded.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

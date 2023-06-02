@@ -1,0 +1,11 @@
+{
+  "name": "Full Referrer",
+  "dataType": "string",
+  "sourceColumn": "FullReferrer",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

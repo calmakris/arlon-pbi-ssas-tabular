@@ -1,0 +1,51 @@
+{
+  "name": "Sales Order Amount Daily Entry Rate",
+  "description": [
+    "MTD ordered value of sales orders divided by MTD number of weekdays.",
+    "",
+    "For future months, the daily order entry average amount between the beginning and end of last month is taken and multiplied by the assigned monthly index. The monthly index is manually assigned per sales region."
+  ],
+  "expression": [
+    "",
+    "VAR _YtdAvg =",
+    "    CALCULATE(",
+    "        AVERAGEX(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            [Sales Order Amount Daily Entry Rate Hidden]",
+    "        ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] >= [Beginning of Fiscal Year]",
+    "                && 'Calendar'[Date] < [Beginning of Month]",
+    "        )",
+    "    )",
+    "",
+    "VAR _Index =",
+    "    CALCULATE(",
+    "        AVERAGE( TARGET_SalesOrder[MonthlyIndex] ),",
+    "        TREATAS(",
+    "            VALUES( 'Customer Master'[Sales Region] ),",
+    "            TARGET_SalesOrder[SalesRegionKey]",
+    "        ),",
+    "        TREATAS(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            TARGET_SalesOrder[CalendarTimeKey]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    IF(",
+    "        [Sales Order Amount Daily Entry Rate Hidden] <> BLANK(),",
+    "        [Sales Order Amount Daily Entry Rate Hidden],",
+    "        _YtdAvg * _Index",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

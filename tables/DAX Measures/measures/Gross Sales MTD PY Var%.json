@@ -1,0 +1,13 @@
+{
+  "name": "Gross Sales MTD PY Var%",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": " DIVIDE( [Gross Sales MTD PY Var], [Gross Sales MTD PY] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

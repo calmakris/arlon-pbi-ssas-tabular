@@ -1,0 +1,13 @@
+{
+  "name": "Manufacturing Work Center",
+  "dataType": "string",
+  "description": "Work center of the production order of the batch number. Used for analyzing Operations Scrap.",
+  "sourceColumn": "WorkCenterMfg",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "ForecastType",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "ForecastType",
+  "isAvailableInMdx": false
+}

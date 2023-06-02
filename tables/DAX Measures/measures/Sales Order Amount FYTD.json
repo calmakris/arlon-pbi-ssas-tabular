@@ -1,0 +1,47 @@
+{
+  "name": "Sales Order Amount FYTD",
+  "description": "Fiscal year-to-date total amount of sales order line items entered",
+  "expression": [
+    "",
+    "VAR _ReportDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+    "    )",
+    "    ",
+    "VAR _BegYear =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+    "    )",
+    "",
+    "VAR _DayofFiscal =",
+    "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+    "    ",
+    "RETURN",
+    "    CALCULATE(",
+    "        CALCULATE(",
+    "            CALCULATE(",
+    "                [Sales Order Ordered Amount],",
+    "                FILTER(",
+    "                    'Calendar',",
+    "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+    "                )",
+    "            ),",
+    "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    "        ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Sales Orders\"]"
+    }
+  ]
+}

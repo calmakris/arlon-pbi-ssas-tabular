@@ -1,0 +1,13 @@
+{
+  "name": "Testing Average Result",
+  "description": "Average testing result from online tests in Manufacturing and/or aged testing in QA",
+  "expression": "AVERAGE( 'Test Result'[Result Value] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

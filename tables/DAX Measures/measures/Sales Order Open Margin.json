@@ -1,0 +1,32 @@
+{
+  "name": "Sales Order Open Margin",
+  "description": [
+    "Total gross margin of items in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
+    "",
+    "This value is toggleable to local currency using the '_Currency To Use' table."
+  ],
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", SUM( 'Sales Order'[CustomerOpenMarginAmountUSD] ),",
+    "            \"Local\", SUM( 'Sales Order'[CustomerOpenMarginAmount] ),",
+    "            SUM( 'Sales Order'[CustomerOpenMarginAmountUSD] )",
+    "        ),",
+    "        SUM( 'Sales Order'[CustomerOpenMarginAmountUSD] )   ",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

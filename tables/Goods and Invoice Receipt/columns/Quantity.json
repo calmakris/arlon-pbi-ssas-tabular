@@ -1,0 +1,17 @@
+{
+  "name": "Quantity",
+  "dataType": "decimal",
+  "description": "SAP Source: ACCTIT.ERFMG",
+  "isHidden": true,
+  "sourceColumn": "Quantity",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Quantities",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

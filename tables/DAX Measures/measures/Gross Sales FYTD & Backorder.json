@@ -1,0 +1,13 @@
+{
+  "name": "Gross Sales FYTD & Backorder",
+  "description": "Fiscal year-to-date total of gross sales plus ",
+  "expression": " [Gross Sales FYTD] + [Backorder Amount]",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

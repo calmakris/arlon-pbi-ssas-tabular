@@ -1,0 +1,13 @@
+{
+  "name": "Backorder Snapshot Amount PD Var",
+  "description": "Difference between the snapshots of open sales order line item amount on current and previous day",
+  "expression": " [Sales Order Open Amount] - [Backorder Snapshot Amount PD]",
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\"]"
+    }
+  ]
+}

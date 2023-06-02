@@ -1,0 +1,13 @@
+{
+  "name": "Sales Territory Name",
+  "dataType": "string",
+  "description": "Description of the sales territory",
+  "sourceColumn": "SalesTerritoryName",
+  "displayFolder": "Sales Related",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

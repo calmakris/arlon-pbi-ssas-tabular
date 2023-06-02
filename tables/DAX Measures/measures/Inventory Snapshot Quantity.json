@@ -1,0 +1,29 @@
+{
+  "name": "Inventory Snapshot Quantity",
+  "description": "Latest snapshot of the quantity of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+  "expression": [
+    "",
+    "VAR RefDate =",
+    "    CALCULATE(",
+    "        MAX('Calendar'[Date]),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        SUM( 'Inventory Snapshots'[Quantity] ),",
+    "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Product Management\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Expenses Plan Var%",
+  "description": "Difference between expenses amount and plan divided by the plan",
+  "expression": "DIVIDE([Expenses Amount] - [Expenses Plan], [Expenses Plan])",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Expenses",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

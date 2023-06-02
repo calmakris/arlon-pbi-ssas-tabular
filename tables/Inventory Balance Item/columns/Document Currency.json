@@ -1,0 +1,12 @@
+{
+  "name": "Document Currency",
+  "dataType": "string",
+  "description": "SAP Source: BSIS/BSAS.WAERS",
+  "sourceColumn": "DocCurrency",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

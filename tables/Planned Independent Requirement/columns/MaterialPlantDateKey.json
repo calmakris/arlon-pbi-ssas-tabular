@@ -1,0 +1,13 @@
+{
+  "name": "MaterialPlantDateKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialPlantDateKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

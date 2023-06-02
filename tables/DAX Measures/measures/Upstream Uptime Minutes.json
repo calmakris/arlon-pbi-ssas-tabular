@@ -1,0 +1,23 @@
+{
+  "name": "Upstream Uptime Minutes",
+  "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of production records excluding FEs",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Upstream Log Simplified'[DurationMinute] ),",
+    "    FILTER(",
+    "        'Upstream Log Simplified',",
+    "        'Upstream Log Simplified'[Category] = \"Production\"",
+    "            && NOT(CONTAINSSTRING('Upstream Log Simplified'[Causes], \"FE\"))",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

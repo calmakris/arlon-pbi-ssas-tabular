@@ -1,0 +1,14 @@
+{
+  "name": "OrderNoKey",
+  "dataType": "string",
+  "description": "SAP Source: CDHDR.OBJECTID",
+  "isHidden": true,
+  "sourceColumn": "OrderNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Safety Work Hours",
+  "description": "Monthly total work hours per company according to Paylocity. This data is provided by HR upon request.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Safety Work Hours\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Safety Work Hours\",",
+        "    \"fromColumn\": \"Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

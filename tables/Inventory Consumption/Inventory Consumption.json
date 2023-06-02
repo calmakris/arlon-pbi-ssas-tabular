@@ -1,0 +1,51 @@
+{
+  "name": "Inventory Consumption",
+  "description": [
+    "Contains goods movement transactions with movement types considered as consumption.",
+    "",
+    "In this query, there is no indicator if a movement type is considered as consumption. Therefore, the filter is hardcoded to 261/262, 601, 641, 643, Z43, and 101 with consumption posting indicator."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Inventory Consumption\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Consumption\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Consumption\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Consumption\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Consumption\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

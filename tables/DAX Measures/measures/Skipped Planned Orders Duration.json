@@ -1,0 +1,27 @@
+{
+  "name": "Skipped Planned Orders Duration",
+  "description": [
+    "Total duration of process orders scheduled between current production date and now.",
+    "",
+    "Skipped process orders have data in schedule files but none in machine data. In addition, an order is skipped if there is machine data on a schedule order after it."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Planning Schedule Comparison'[Plan Duration] ),",
+    "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 0 ), -- 0 is skipped",
+    "    FILTER(",
+    "        'Planning Schedule Comparison',",
+    "        'Planning Schedule Comparison'[ProductionDate] >= [Report Production Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0 \"hr\"",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

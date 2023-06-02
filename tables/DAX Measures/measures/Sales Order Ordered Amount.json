@@ -1,0 +1,29 @@
+{
+  "name": "Sales Order Ordered Amount",
+  "description": [
+    "Total ordered amount in the sales order.",
+    "",
+    "This value is toggleable to local currency using the '_Currency To Use' table."
+  ],
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Order'[OrderAmountUSD] ),",
+    "        \"Local\", SUM( 'Sales Order'[OrderAmount] ),",
+    "        SUM( 'Sales Order'[OrderAmountUSD] )",
+    "    ),",
+    "    SUM( 'Sales Order'[OrderAmountUSD] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\"]"
+    }
+  ]
+}

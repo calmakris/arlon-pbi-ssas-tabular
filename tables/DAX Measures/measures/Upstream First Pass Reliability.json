@@ -1,0 +1,13 @@
+{
+  "name": "Upstream First Pass Reliability",
+  "description": "Number of planned clean ups divided by the total planned and unplanned clean ups",
+  "expression": " DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Specification Linespeed",
+  "dataType": "int64",
+  "description": "Source: primarystruct.SpecLS",
+  "sourceColumn": "SpecLinespeed",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

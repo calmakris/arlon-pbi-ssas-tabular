@@ -1,0 +1,11 @@
+{
+  "name": "Requirement Type",
+  "dataType": "string",
+  "sourceColumn": "ReqType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

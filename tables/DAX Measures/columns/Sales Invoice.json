@@ -1,0 +1,8 @@
+{
+  "type": "calculated",
+  "name": "Sales Invoice",
+  "dataType": "int64",
+  "isDataTypeInferred": true,
+  "isHidden": true,
+  "isAvailableInMdx": false
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Prior Report Date",
+  "expression": "([Report Date] - 1) + TIME(0,0,0)",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

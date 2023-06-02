@@ -1,0 +1,51 @@
+{
+  "name": "Inventory Snapshots",
+  "description": [
+    "This table contains fields to filter the daily snapshots of inventory. The snapshot occurs daily at 11:55 PM PST.",
+    "",
+    "Use the fields in the related tables such as 'Company Code', 'Plant', 'Valuation Class', 'Material Master', and 'Calendar' for further details on this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Inventory Snapshots\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Snapshots\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Snapshots\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Snapshots\",",
+        "    \"fromColumn\": \"Snapshot Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Snapshots\",",
+        "    \"fromColumn\": \"Valuation Class\",",
+        "    \"toTable\": \"Valuation Class\",",
+        "    \"toColumn\": \"Valuation Class\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

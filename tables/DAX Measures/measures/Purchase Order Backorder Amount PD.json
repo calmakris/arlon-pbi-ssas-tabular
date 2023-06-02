@@ -1,0 +1,22 @@
+{
+  "name": "Purchase Order Backorder Amount PD",
+  "description": "Yesterday's snapshot amount of materials in open purchase orders for incoming inventory ",
+  "expression": [
+    " ",
+    "CALCULATE( ",
+    "    SUM( 'Backorder Snapshots'[Incoming Amount] ), ",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] = MAX( 'Calendar'[Date] ) - 1",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\"]"
+    }
+  ]
+}

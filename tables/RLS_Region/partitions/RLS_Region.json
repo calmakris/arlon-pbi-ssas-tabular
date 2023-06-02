@@ -1,0 +1,14 @@
+{
+  "name": "RLS_Region",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_RLS_SalesRegion = Source{[Schema=\"dbo\",Item=\"RLS_SalesRegion\"]}[Data]",
+      "in",
+      "    dbo_RLS_SalesRegion"
+    ]
+  }
+}

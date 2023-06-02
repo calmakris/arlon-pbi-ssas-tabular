@@ -1,0 +1,16 @@
+{
+  "name": "Department",
+  "dataType": "string",
+  "description": [
+    "Department assigned based on the reason code. The values Q, S, and S1 corresponds to QA, Service (customer service), and Customer accommodations (customer service) respectively.",
+    "",
+    "This table is not related to the 'Department' table."
+  ],
+  "sourceColumn": "Department",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

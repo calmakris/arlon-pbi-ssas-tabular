@@ -1,0 +1,31 @@
+{
+  "name": "Sales Order Changelog",
+  "description": "SAP Source: CDHDR; Granularity: Multiple rows per sales order document number",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Sales Order Changelog\",",
+        "    \"fromColumn\": \"Changed By\",",
+        "    \"toTable\": \"DIM_UsersSAP\",",
+        "    \"toColumn\": \"UsernameKey\"",
+        "  },",
+        "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Sales Order Changelog\",",
+        "    \"fromColumn\": \"OrderNoKey\",",
+        "    \"toTable\": \"Sales Order\",",
+        "    \"toColumn\": \"Order Number\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

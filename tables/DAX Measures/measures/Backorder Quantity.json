@@ -1,0 +1,28 @@
+{
+  "name": "Backorder Quantity",
+  "description": [
+    "Total sales order open quantity scheduled to ship in the past and current month.",
+    "",
+    "Scheduled ship date is the first date in the schedule line."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Sales Order Open Quantity],",
+    "    ALL( 'Calendar'[Date] ),",
+    "    FILTER(",
+    "        ALL( 'Sales Order'[First Scheduled Ship Date] ),",
+    "        'Sales Order'[First Scheduled Ship Date] <= [End of Month]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

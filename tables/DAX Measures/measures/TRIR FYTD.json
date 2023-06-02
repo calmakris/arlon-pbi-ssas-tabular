@@ -1,0 +1,29 @@
+{
+  "name": "TRIR FYTD",
+  "description": [
+    "Product of number of incidents and 200000 divided by total work hours. The number of incidents and work hours are the total since October.",
+    "",
+    "Filter the 'Safety Incidents Log' table to measure the TRIR of certain types of incidents."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DIVIDE(",
+    "        [Safety Incident Count FYTD] * 200000,",
+    "        [Safety Work Hours FYTD]",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

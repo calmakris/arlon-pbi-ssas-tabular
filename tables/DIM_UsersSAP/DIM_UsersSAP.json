@@ -1,0 +1,11 @@
+{
+  "name": "DIM_UsersSAP",
+  "description": "SAP Source: USR21 and ADCP",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

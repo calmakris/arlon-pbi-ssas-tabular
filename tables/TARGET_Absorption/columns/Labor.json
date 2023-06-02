@@ -1,0 +1,8 @@
+{
+  "name": "Labor",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "Labor",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false
+}

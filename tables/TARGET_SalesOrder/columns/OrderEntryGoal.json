@@ -1,0 +1,8 @@
+{
+  "name": "OrderEntryGoal",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OrderEntryGoal",
+  "formatString": "#,0",
+  "isAvailableInMdx": false
+}

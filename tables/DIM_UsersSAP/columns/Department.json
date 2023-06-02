@@ -1,0 +1,8 @@
+{
+  "name": "Department",
+  "dataType": "string",
+  "description": "SAP Source: ADCP.DEPARTMENT",
+  "isHidden": true,
+  "sourceColumn": "Department",
+  "isAvailableInMdx": false
+}

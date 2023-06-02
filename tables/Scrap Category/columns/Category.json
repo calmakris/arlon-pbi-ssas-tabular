@@ -1,0 +1,11 @@
+{
+  "name": "Category",
+  "dataType": "string",
+  "sourceColumn": "Category",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

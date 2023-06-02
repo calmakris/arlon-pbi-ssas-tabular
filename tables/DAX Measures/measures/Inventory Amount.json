@@ -1,0 +1,16 @@
+{
+  "name": "Inventory Amount",
+  "description": "Total standard cost of materials on physical inventory",
+  "expression": [
+    "SUM( 'Inventory'[AmountUSD] )",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

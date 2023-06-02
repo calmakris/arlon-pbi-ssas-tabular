@@ -1,0 +1,29 @@
+{
+  "name": "Inventory FIFO Violation Snapshot Batch Count",
+  "description": "Latest snapshot of the number of batch on inventory with FIFO violations per company, plant, and department. If there is no date filter/context, then this value is yesterday's snapshot.",
+  "expression": [
+    "",
+    "VAR RefDate =",
+    "    CALCULATE(",
+    "        MAX('Inventory FIFO Violation Snapshot'[SnapshotDateKey]),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        SUM( 'Inventory FIFO Violation Snapshot'[BatchCount] ),",
+    "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

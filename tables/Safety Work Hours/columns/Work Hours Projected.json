@@ -1,0 +1,9 @@
+{
+  "name": "Work Hours Projected",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "WorkHoursProj",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none"
+}

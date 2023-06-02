@@ -1,0 +1,22 @@
+{
+  "name": "Process Order Actual/Target Cost Variance",
+  "description": "Variance between the actual and target cost of the process order",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Process Order Actual/Target Variance],",
+    "    FILTER(",
+    "        ALL( 'Process Order Cost'[Category] ),",
+    "        'Process Order Cost'[Category] = \"Cost\"",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

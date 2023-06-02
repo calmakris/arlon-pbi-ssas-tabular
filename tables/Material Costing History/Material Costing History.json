@@ -1,0 +1,36 @@
+{
+  "name": "Material Costing History",
+  "description": "SAP Source: KEKO, KEPH, CKHS. Costing postings without errors, not lower level, no link for currency type, and are main component cost split.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Material Costing History\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Material Costing History\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Material Costing History\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Unrestricted Stock Amount",
+  "description": "Total standard cost of materials on physical inventory that has no block category",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory'[AmountUSD] ),",
+    "    KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

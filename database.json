@@ -1,0 +1,30 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "en-US",
+    "discourageImplicitMeasures": true,
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      },
+      {
+        "name": "BestPracticeAnalyzer_IgnoreRules",
+        "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
+      },
+      {
+        "name": "TabularEditor_SerializeOptions",
+        "value": "{\"IgnoreInferredObjects\":true,\"IgnoreInferredProperties\":true,\"IgnoreTimestamps\":true,\"IgnoreIncrementalRefreshPartitions\":true,\"SplitMultilineStrings\":true,\"PrefixFilenames\":false,\"LocalTranslations\":true,\"LocalPerspectives\":true,\"LocalRelationships\":true,\"Levels\":[\"Data Sources\",\"Perspectives\",\"Relationships\",\"Roles\",\"Shared Expressions\",\"Tables\",\"Tables/CalculationItems\",\"Tables/Columns\",\"Tables/Hierarchies\",\"Tables/Measures\",\"Tables/Partitions\",\"Translations\"]}"
+      },
+      {
+        "name": "TabularEditor_Cultures",
+        "value": "[]"
+      },
+      {
+        "name": "TabularEditor_Perspectives",
+        "value": "[{\"Name\":\"BI Morning Dashboard\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"CS Dashboard\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Engineering\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Expenses\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Generic Sales\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Goods and Invoice Receipts\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Inventory\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Marketing\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Open Orders Report\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Operations\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Planning\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Product Management\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Purchase Orders\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"QA Dashboard\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Sales Orders\",\"Description\":\"\",\"Annotations\":{}},{\"Name\":\"Warehouse\",\"Description\":\"\",\"Annotations\":{}}]"
+      }
+    ]
+  }
+}

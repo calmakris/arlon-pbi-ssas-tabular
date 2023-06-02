@@ -1,0 +1,13 @@
+{
+  "name": "Sample Category",
+  "dataType": "string",
+  "description": "Calculated column: If the order type is 'KL', then 'Full Rolls'. Else if the order type is 'ZSMP' and order reason is 'Tradeshow Requests' then 'Tradeshow'. Else if order type is 'ZSMP' and material group is 'MARKETG', then 'Literature'. Else if order type is 'ZSMP' and not a tradeshow nor literature, then 'Samples'. Otherwise, 'Not Applicable'.",
+  "sourceColumn": "FOCCategory",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

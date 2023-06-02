@@ -1,0 +1,12 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": "Process/production order of the material in the notification.",
+  "sourceColumn": "OrderNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

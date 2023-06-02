@@ -1,0 +1,14 @@
+{
+  "name": "Valuation Class",
+  "dataType": "string",
+  "description": "Valuation class of the material in inventory. It determines if the material is raw material, semi-finished good, finished good, etc.",
+  "isHidden": true,
+  "sourceColumn": "ValuationClass",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

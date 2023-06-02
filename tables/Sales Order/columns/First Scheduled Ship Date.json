@@ -1,0 +1,18 @@
+{
+  "name": "First Scheduled Ship Date",
+  "dataType": "dateTime",
+  "description": "First schedule line date of the sales order item",
+  "sourceColumn": "FirstDeliveryDateKey",
+  "formatString": "Short Date",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Sub Category",
+  "dataType": "string",
+  "sourceColumn": "SubCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

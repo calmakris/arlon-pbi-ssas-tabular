@@ -1,0 +1,12 @@
+{
+  "name": "Unit of Measure",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.ERFME",
+  "sourceColumn": "UnitOfMeasure",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

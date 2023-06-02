@@ -1,0 +1,14 @@
+{
+  "name": "Ship To City",
+  "dataType": "string",
+  "description": "Ship to city destination where the material is shipped. Destination is based on the ship to account in the billing document.",
+  "sourceColumn": "ShipToCity",
+  "displayFolder": "Header",
+  "dataCategory": "City",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

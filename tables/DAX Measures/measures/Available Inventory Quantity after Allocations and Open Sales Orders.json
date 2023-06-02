@@ -1,0 +1,13 @@
+{
+  "name": "Available Inventory Quantity after Allocations and Open Sales Orders",
+  "description": "Difference between unrestricted stock and allocated and open quantities in sales orders",
+  "expression": " [Unrestricted Stock Quantity] - [Sales Order Allocated Quantity] - [Sales Order Open Internal Quantity]",
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

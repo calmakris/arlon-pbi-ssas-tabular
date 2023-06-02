@@ -1,0 +1,14 @@
+{
+  "name": "Quantity",
+  "dataType": "decimal",
+  "description": "SAP Source: LTAP.VSOLM",
+  "sourceColumn": "QtyVal",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

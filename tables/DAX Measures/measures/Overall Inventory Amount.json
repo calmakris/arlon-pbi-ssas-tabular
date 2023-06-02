@@ -1,0 +1,24 @@
+{
+  "name": "Overall Inventory Amount",
+  "description": "Total of standard costs of physical inventory, in transit purchase orders, and open WIP process orders. Use this measure by material master and plant only.",
+  "expression": [
+    "",
+    "-- valuated inventory",
+    "SUM( 'Inventory'[AmountUSD] ) +",
+    "-- open stock transfer purchase orders",
+    "CALCULATE(",
+    "    [Purchase Order In Transit Amount],",
+    "    KEEPFILTERS( 'FACT_PurchaseOrder'[Receiving Plant] <> \"1001\" )",
+    ") +",
+    "-- open WIP process orders",
+    "[Open WIP Amount]"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

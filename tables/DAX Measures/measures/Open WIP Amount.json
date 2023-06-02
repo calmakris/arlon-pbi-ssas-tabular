@@ -1,0 +1,7 @@
+{
+  "name": "Open WIP Amount",
+  "description": "Total standard cost of materials of WIP process orders that are not TECO'd, closed, nor deleted yet",
+  "expression": " SUM( 'Inventory Open WIP'[Net Cost Amount] )",
+  "formatString": "#,0",
+  "displayFolder": "Inventory"
+}

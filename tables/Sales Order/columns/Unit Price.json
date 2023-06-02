@@ -1,0 +1,15 @@
+{
+  "name": "Unit Price",
+  "dataType": "decimal",
+  "description": "Price per unit of the sales order item",
+  "sourceColumn": "UnitPrice",
+  "formatString": "#,0.00",
+  "displayFolder": "Item",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

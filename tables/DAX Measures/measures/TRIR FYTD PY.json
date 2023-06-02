@@ -1,0 +1,44 @@
+{
+  "name": "TRIR FYTD PY",
+  "description": "Last fiscal year's TRIR (see TRIR measure for the description)",
+  "expression": [
+    "",
+    "VAR incidents =",
+    "    CALCULATE(",
+    "        CALCULATE(",
+    "            [Safety Incident Count],",
+    "            FILTER(",
+    "                'Calendar',",
+    "                'Calendar'[Date] <= [End of Fiscal Year]",
+    "            )",
+    "        ),",
+    "        SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+    "    )",
+    "",
+    "VAR hours =",
+    "    CALCULATE(",
+    "        CALCULATE(",
+    "            SUM( 'Safety Work Hours'[Work Hours] ),",
+    "            FILTER(",
+    "                'Calendar',",
+    "                'Calendar'[Date] <= [End of Fiscal Year]",
+    "            )",
+    "        ),",
+    "        SAMEPERIODLASTYEAR( DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+    "    )",
+    "",
+    "RETURN",
+    "DIVIDE(",
+    "    incidents * 200000,",
+    "    hours",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

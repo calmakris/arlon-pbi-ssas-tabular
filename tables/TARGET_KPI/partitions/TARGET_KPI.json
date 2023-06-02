@@ -1,0 +1,14 @@
+{
+  "name": "TARGET_KPI",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_TARGET_KPI = Source{[Schema=\"dbo\",Item=\"TARGET_KPI\"]}[Data]",
+      "in",
+      "    dbo_TARGET_KPI"
+    ]
+  }
+}

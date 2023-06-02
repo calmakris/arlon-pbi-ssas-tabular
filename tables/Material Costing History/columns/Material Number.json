@@ -1,0 +1,14 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "SAP Source: KEKO.MATNR",
+  "isHidden": true,
+  "sourceColumn": "MaterialNo",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\"]"
+    }
+  ]
+}

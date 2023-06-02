@@ -1,0 +1,7 @@
+{
+  "name": "CalendarTimeKey",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "CalendarTimeKey",
+  "isAvailableInMdx": false
+}

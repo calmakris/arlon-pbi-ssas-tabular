@@ -1,0 +1,12 @@
+{
+  "name": "Task",
+  "dataType": "string",
+  "description": "Description of the task",
+  "sourceColumn": "Task",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

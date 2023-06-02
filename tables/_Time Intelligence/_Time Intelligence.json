@@ -1,0 +1,299 @@
+{
+  "name": "_Time Intelligence",
+  "description": "The \"Time Calculation\" field allows multiple versions of a measure under \"DAX Measures\" (i.e. MTD, YTD, CD, PD, etc). This is best use on measures in \"DAX Measures\" that are not under the \"Time Intelligence\" folder.",
+  "calculationGroup": {
+    "description": "Used for analyzing generic measures in multiple time intelligence modes such as MTD, YTD, FYTD, etc.",
+    "precedence": 1,
+    "calculationItems": [
+      {
+        "name": "Current",
+        "expression": "SELECTEDMEASURE()",
+        "ordinal": 1
+      },
+      {
+        "name": "MTD",
+        "expression": [
+          "CALCULATE( ",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        DATESMTD( 'Calendar'[Date] )",
+          "    ),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Report Date]",
+          "    )",
+          ")"
+        ],
+        "ordinal": 5
+      },
+      {
+        "name": "YTD",
+        "expression": [
+          "CALCULATE(",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        DATESYTD('Calendar'[Date])",
+          "    ),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Report Date]",
+          "    )",
+          ")"
+        ],
+        "ordinal": 12
+      },
+      {
+        "name": "PY",
+        "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+        "ordinal": 18
+      },
+      {
+        "name": "PY YTD",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+          "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
+          ")"
+        ],
+        "ordinal": 13
+      },
+      {
+        "name": "PY MTD",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+          "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
+          ")"
+        ],
+        "ordinal": 7
+      },
+      {
+        "name": "FYTD",
+        "expression": [
+          "CALCULATE(",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        DATESYTD('Calendar'[Date], \"09/30\")",
+          "    ),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Report Date]",
+          "    )",
+          ")"
+        ],
+        "ordinal": 15
+      },
+      {
+        "name": "PY FYTD",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    SAMEPERIODLASTYEAR( 'Calendar'[Date] ),",
+          "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
+          ")"
+        ],
+        "ordinal": 16
+      },
+      {
+        "name": "YOY",
+        "expression": [
+          "IF(",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+          "    ),",
+          "    SELECTEDMEASURE() - ",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PY\"",
+          "    ),",
+          "    BLANK()",
+          ")"
+        ],
+        "ordinal": 19
+      },
+      {
+        "name": "CD",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Report Date]",
+          "            && 'Calendar'[Date] = LASTDATE( ALLSELECTED('Calendar'[Date]) )",
+          "    )",
+          ")"
+        ],
+        "ordinal": 2
+      },
+      {
+        "name": "PD",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    PREVIOUSDAY( 'Calendar'[Date] )",
+          ")"
+        ],
+        "ordinal": 4
+      },
+      {
+        "name": "MTD PY Var",
+        "expression": [
+          "IF(",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+          "    ),",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
+          "    ) - ",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+          "    ),",
+          "    BLANK()",
+          ")"
+        ],
+        "ordinal": 8
+      },
+      {
+        "name": "YTD PY Var",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
+          ") - ",
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
+          ")"
+        ],
+        "ordinal": 14
+      },
+      {
+        "name": "FTYD PY Var",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    '_Time Intelligence'[Time Calculation] = \"FYTD\"",
+          ") - ",
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
+          ")"
+        ],
+        "ordinal": 16
+      },
+      {
+        "name": "CD Weekday",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Last Working Day]",
+          "            && 'Calendar'[Date] = LASTDATE( ALLSELECTED('Calendar'[Date]) )",
+          "    )",
+          ")"
+        ],
+        "ordinal": 3
+      },
+      {
+        "name": "MTD Weekday",
+        "expression": [
+          "CALCULATE( ",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        DATESMTD( 'Calendar'[Date] )",
+          "    ),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Last Working Day]",
+          "    )",
+          ")"
+        ],
+        "ordinal": 6
+      },
+      {
+        "name": "MTD PY Var%",
+        "expression": [
+          "DIVIDE(",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"MTD PY Var\"",
+          "    ),",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PY MTD\"",
+          "    )",
+          ") * 100"
+        ],
+        "ordinal": 9
+      },
+      {
+        "name": "PM MTD",
+        "expression": [
+          "CALCULATE( ",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+          "    ),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] <= [Report Date]",
+          "    )",
+          ")"
+        ],
+        "ordinal": 11
+      },
+      {
+        "name": "MTD PM Var",
+        "expression": [
+          "IF(",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PM MTD\"",
+          "    ),",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"MTD\"",
+          "    ) - ",
+          "    CALCULATE(",
+          "        SELECTEDMEASURE(),",
+          "        '_Time Intelligence'[Time Calculation] = \"PM MTD\"",
+          "    ),",
+          "    BLANK()",
+          ")"
+        ],
+        "ordinal": 12
+      },
+      {
+        "name": "CW",
+        "expression": [
+          "CALCULATE(",
+          "    SELECTEDMEASURE(),",
+          "    FILTER(",
+          "        'Calendar',",
+          "        'Calendar'[Date] >= [Sunday of Current Week]",
+          "            && 'Calendar'[Date] <= [Report Date]",
+          "    )",
+          ")"
+        ],
+        "ordinal": 20
+      }
+    ]
+  },
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

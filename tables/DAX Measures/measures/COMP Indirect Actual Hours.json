@@ -1,0 +1,19 @@
+{
+  "name": "COMP Indirect Actual Hours",
+  "description": "Total hours spent by operators to perform a task not directly related to production in Compounding",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [COMP Actual Hours],",
+    "    KEEPFILTERS( 'Compounding Log'[Indirect Flag] = \"Yes\" )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

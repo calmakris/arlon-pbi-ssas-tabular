@@ -1,0 +1,51 @@
+{
+  "name": "Sales Order WIP Linear Feet Shortage",
+  "description": "Cumulative total linear feet of coated WIP needed to fulfill the current and past sales order's open quantity using current unresticted stock. If this value is negative, it means the current stock has a shortage to fulfill the open sales orders.",
+  "expression": [
+    "  ",
+    "VAR _Stock =",
+    "    IF(",
+    "        ISFILTERED(Plant[Plant]) || ISFILTERED('Material Master'[Material Number]) || ISFILTERED('Sales Order'[Material Number]),",
+    "        CALCULATE(",
+    "            SUMX(",
+    "                VALUES('Sales Order'[Material Number]),",
+    "                AVERAGE('Sales Order'[UnrestrictStockBOMLinearFeet])",
+    "            ),",
+    "            ALL( 'Calendar' )",
+    "        ),",
+    "        BLANK()",
+    "    )",
+    "",
+    "VAR _MaxVisibleDate = MAX( 'Calendar'[Date] )",
+    "",
+    "VAR _Open = ",
+    "    CALCULATE(",
+    "        SUM( 'Sales Order'[CustomerOpenLinearFeet] ),",
+    "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] <= _MaxVisibleDate",
+    "        )",
+    "    )",
+    "",
+    "VAR _Needed =",
+    "    IF(",
+    "        [Sales Order Open Quantity] <> BLANK(),",
+    "        _Stock - _Open",
+    "    )",
+    "",
+    "RETURN",
+    "IF(",
+    "    [Sales Order Open Quantity] <> BLANK(),",
+    "    _Needed",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

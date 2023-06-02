@@ -1,0 +1,17 @@
+{
+  "name": "Sunday of Prior Week",
+  "expression": "([Sunday of Current Week] - 7) + TIME(0,0,0)",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

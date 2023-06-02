@@ -1,0 +1,16 @@
+{
+  "name": "OrderQuantity",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OrderQuantity",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Quantities",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

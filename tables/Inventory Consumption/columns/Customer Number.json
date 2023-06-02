@@ -1,0 +1,12 @@
+{
+  "name": "Customer Number",
+  "dataType": "string",
+  "description": "SAP Source: MSEG.KUNNR; Not related to 'Customer Master'",
+  "sourceColumn": "CustomerNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Warehouse\"]"
+    }
+  ]
+}

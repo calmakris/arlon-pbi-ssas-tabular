@@ -1,0 +1,20 @@
+{
+  "name": "Safety Work Hours PY",
+  "expression": [
+    "",
+    "VAR MinVisibleDate = MIN ( 'Calendar'[Date] )",
+    "VAR LastDateWithHours = CALCULATE( MAX( 'Safety Work Hours'[Date] ), REMOVEFILTERS() )",
+    "RETURN",
+    "    IF(",
+    "        MinVisibleDate > LastDateWithHours,",
+    "        CALCULATE(",
+    "            SUM( 'Safety Work Hours'[Work Hours] ),",
+    "            SAMEPERIODLASTYEAR( 'Calendar'[Date] )",
+    "        ),",
+    "        0",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "isHidden": true,
+  "displayFolder": "Safety"
+}

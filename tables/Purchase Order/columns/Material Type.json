@@ -1,0 +1,13 @@
+{
+  "name": "Material Type",
+  "dataType": "string",
+  "description": "Determines if the item is a raw material, WIP, finished good, etc. This category only applies to inventory materials.",
+  "sourceColumn": "MaterialType",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

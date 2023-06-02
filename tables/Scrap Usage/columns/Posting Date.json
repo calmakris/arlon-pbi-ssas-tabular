@@ -1,0 +1,17 @@
+{
+  "name": "Posting Date",
+  "dataType": "dateTime",
+  "description": "SAP Source: BSIS.BUDAT",
+  "sourceColumn": "PostingDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

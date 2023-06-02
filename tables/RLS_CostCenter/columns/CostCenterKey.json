@@ -1,0 +1,7 @@
+{
+  "name": "CostCenterKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CostCenterKey",
+  "isAvailableInMdx": false
+}

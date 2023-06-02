@@ -1,0 +1,13 @@
+{
+  "name": "Upstream Actual Footage",
+  "description": "Total footage recorded in the machine logs in Casting and Coating departments",
+  "expression": " SUM('Upstream Log Simplified'[Footage])",
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

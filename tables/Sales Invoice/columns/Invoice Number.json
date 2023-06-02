@@ -1,0 +1,13 @@
+{
+  "name": "Invoice Number",
+  "dataType": "string",
+  "description": "Document number of the invoice/billing document",
+  "sourceColumn": "SaleDocNoKey",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

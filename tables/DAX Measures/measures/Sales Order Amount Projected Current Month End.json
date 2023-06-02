@@ -1,0 +1,27 @@
+{
+  "name": "Sales Order Amount Projected Current Month End",
+  "description": [
+    "Average daily ordered amount multiplied by the total number of weekdays in the month.",
+    "",
+    "Use this measure if none of the fields in 'Calendar' table are used in the visual."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Sales Order Amount Daily Entry Rate MTD],",
+    "    FILTER(",
+    "        ALL( 'Calendar'[Date] ),",
+    "        'Calendar'[Date] >= [Beginning of Month]",
+    "            && 'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ") * [Weekdays Count Current Month End]"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

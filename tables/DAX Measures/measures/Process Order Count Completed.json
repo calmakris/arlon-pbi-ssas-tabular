@@ -1,0 +1,19 @@
+{
+  "name": "Process Order Count Completed",
+  "description": "Count of orders with the closed flag status",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Process Order Count],",
+    "    KEEPFILTERS( 'Process Order'[Close Flag] = \"Yes\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

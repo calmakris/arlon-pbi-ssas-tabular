@@ -1,0 +1,11 @@
+{
+  "name": "Tag Name",
+  "dataType": "string",
+  "sourceColumn": "TagName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

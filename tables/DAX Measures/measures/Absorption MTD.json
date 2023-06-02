@@ -1,0 +1,24 @@
+{
+  "name": "Absorption MTD",
+  "description": "Month-to-date total cost posted in earned labor, setup, and overhead cost elements",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Absorption],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

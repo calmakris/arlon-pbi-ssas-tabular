@@ -1,0 +1,13 @@
+{
+  "name": "GeoKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "GeoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

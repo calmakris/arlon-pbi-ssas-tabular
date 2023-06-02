@@ -1,0 +1,23 @@
+{
+  "name": "WH Expenses per Units Picked",
+  "description": "Total expenses amount posted in the cost centers for the Logistics department divided by amount of materials shipped",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    CALCULATE(",
+    "        [Expenses Amount],",
+    "        ALL( Plant[Plant] ),",
+    "        KEEPFILTERS( Department[Department] = \"DIST\" )",
+    "    ),",
+    "    [WH Picked Weight]",
+    ")"
+  ],
+  "formatString": "#,0.0000",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

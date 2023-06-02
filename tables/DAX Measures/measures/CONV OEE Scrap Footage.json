@@ -1,0 +1,13 @@
+{
+  "name": "CONV OEE Scrap Footage",
+  "description": "Total linear footage of goods issue or scrap transactions per process order from SAP that has a match in the Converting runtime log and Converting OEE AAS table.",
+  "expression": "SUM( 'Converting OEE'[ScrapFootage] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

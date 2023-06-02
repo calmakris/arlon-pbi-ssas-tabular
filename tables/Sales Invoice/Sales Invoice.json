@@ -1,0 +1,35 @@
+{
+  "name": "Sales Invoice",
+  "description": "This table is a transactional table containing the billing documents for the sales order posted in SAP in the last 5 fiscal years. Use this table to determine gross sales, gross margin, etc.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Sales Invoice\",",
+        "    \"fromColumn\": \"CustomerOrgKey\",",
+        "    \"toTable\": \"Customer Master\",",
+        "    \"toColumn\": \"CustomerOrgKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Sales Invoice\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Sales Invoice\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

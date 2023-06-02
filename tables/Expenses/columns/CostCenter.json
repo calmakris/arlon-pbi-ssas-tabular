@@ -1,0 +1,13 @@
+{
+  "name": "CostCenter",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CostCenterKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

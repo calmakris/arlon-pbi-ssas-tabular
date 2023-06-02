@@ -1,0 +1,14 @@
+{
+  "name": "Ship To Region",
+  "dataType": "string",
+  "description": "Region of the sales order's destination",
+  "sourceColumn": "ShipToRegion",
+  "displayFolder": "Header",
+  "dataCategory": "Region",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

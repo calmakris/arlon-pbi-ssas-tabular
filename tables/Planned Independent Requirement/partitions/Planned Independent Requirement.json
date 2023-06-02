@@ -1,0 +1,14 @@
+{
+  "name": "Planned Independent Requirement",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_SalesRequirement = Source{[Schema=\"dbo\",Item=\"FACT_SalesRequirement\"]}[Data]",
+      "in",
+      "    dbo_FACT_SalesRequirement"
+    ]
+  }
+}

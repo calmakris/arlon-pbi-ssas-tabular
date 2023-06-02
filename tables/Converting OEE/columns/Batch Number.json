@@ -1,0 +1,12 @@
+{
+  "name": "Batch Number",
+  "dataType": "string",
+  "description": "Batch number in the process order according to the Converting OEE table in AAS database",
+  "sourceColumn": "BatchNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

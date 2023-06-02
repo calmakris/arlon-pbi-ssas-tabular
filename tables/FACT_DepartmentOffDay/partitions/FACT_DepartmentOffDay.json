@@ -1,0 +1,14 @@
+{
+  "name": "FACT_DepartmentOffDay",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_DepartmentOffDay = Source{[Schema=\"dbo\",Item=\"FACT_DepartmentOffDay\"]}[Data]",
+      "in",
+      "    dbo_FACT_DepartmentOffDay"
+    ]
+  }
+}

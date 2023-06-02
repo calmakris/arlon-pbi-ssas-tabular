@@ -1,0 +1,14 @@
+{
+  "name": "Storage Bin",
+  "description": "Contains storage bins available in SAP",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"QA Dashboard\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

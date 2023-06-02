@@ -1,0 +1,25 @@
+{
+  "name": "Upstream Planned CU Count",
+  "description": "Number of planned clean up records. For casting, the clean ups from 'Upstream Logs - Simplified' table is counted where consecutively similar clean ups are combined into one clean up. For coating, it is the raw count of clean ups in 'Upstream Logs - Raw'.",
+  "expression": [
+    "",
+    "VAR CAST = CALCULATE( [CAST Clean Up Count], 'Upstream Log Simplified'[Causes] = \"Planned\" )",
+    "VAR COAT = CALCULATE( [COAT Clean Up Count], 'Upstream Log'[Causes] = \"Planned\" )",
+    "",
+    "RETURN",
+    "SWITCH(TRUE(),",
+    "    \"CAST\" IN ALLSELECTED(Machine[Department]), CAST,",
+    "    \"COAT\" IN ALLSELECTED(Machine[Department]), COAT,",
+    "    CAST + COAT",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

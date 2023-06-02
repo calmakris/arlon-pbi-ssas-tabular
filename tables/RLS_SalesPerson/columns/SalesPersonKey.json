@@ -1,0 +1,7 @@
+{
+  "name": "SalesPersonKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "SalesPersonKey",
+  "isAvailableInMdx": false
+}

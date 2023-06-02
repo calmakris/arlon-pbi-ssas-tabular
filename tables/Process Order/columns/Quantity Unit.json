@@ -1,0 +1,12 @@
+{
+  "name": "Quantity Unit",
+  "dataType": "string",
+  "description": "This is the base unit of measure in which the process order is managed. The system converts all the quantities entered in other units of measure (alternative units of measure) to the base unit of measure.",
+  "sourceColumn": "QtyUoM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

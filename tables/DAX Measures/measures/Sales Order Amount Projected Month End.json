@@ -1,0 +1,27 @@
+{
+  "name": "Sales Order Amount Projected Month End",
+  "description": "Average daily ordered amount multiplied by the total number of weekdays in the month",
+  "expression": [
+    "",
+    "VAR _MinVisibleDate = MIN('Calendar'[Date])",
+    "",
+    "RETURN",
+    "IF(",
+    "    _MinVisibleDate >= [Beginning of Month]",
+    "        && _MinVisibleDate <= [End of Month],",
+    "    [Sales Order Amount Daily Entry Rate MTD] * [Weekdays Count],",
+    "    IF(",
+    "        _MinVisibleDate > [End of Month],",
+    "        [Sales Order Amount Daily Entry Rate] * [Weekdays Count]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "CONV Square Feet per Man Hour",
+  "description": "Total number of square footage over total production hours in Converting",
+  "expression": "DIVIDE( [CONV Square Footage], [CONV Production Hours] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

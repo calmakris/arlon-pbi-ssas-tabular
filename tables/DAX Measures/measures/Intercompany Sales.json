@@ -1,0 +1,21 @@
+{
+  "name": "Intercompany Sales",
+  "description": "Total revenue amount of intercompany billing documents as determined by their invoice document type.",
+  "expression": [
+    "CALCULATE(",
+    "    [Gross Sales],",
+    "    FILTER(",
+    "        ALL('Sales Invoice'[Document Type]),",
+    "        'Sales Invoice'[Document Type] IN {\"IV\", \"IVA\", \"IVS\"}",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

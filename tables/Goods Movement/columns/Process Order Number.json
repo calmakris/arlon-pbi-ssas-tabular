@@ -1,0 +1,15 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": "Proess order assigned to the goods movement.",
+  "isHidden": true,
+  "sourceColumn": "ProcessOrderNoKey",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

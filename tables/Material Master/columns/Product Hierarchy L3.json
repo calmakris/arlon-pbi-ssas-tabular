@@ -1,0 +1,13 @@
+{
+  "name": "Product Hierarchy L3",
+  "dataType": "string",
+  "description": "Third level of product hierarchy assigned in the material master in SAP",
+  "sourceColumn": "ProductHierarchyDescriptionL3",
+  "displayFolder": "Product Hierarchy",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

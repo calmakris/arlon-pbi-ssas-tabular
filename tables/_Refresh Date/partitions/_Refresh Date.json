@@ -1,0 +1,14 @@
+{
+  "name": "_Refresh Date",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_RefreshDate = Source{[Schema=\"dbo\",Item=\"FACT_RefreshDate\"]}[Data]",
+      "in",
+      "    dbo_FACT_RefreshDate"
+    ]
+  }
+}

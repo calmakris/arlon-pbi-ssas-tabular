@@ -1,0 +1,15 @@
+{
+  "name": "Snapshot Date",
+  "dataType": "dateTime",
+  "description": "Date when the script is ran",
+  "isHidden": true,
+  "sourceColumn": "SnapshotDateKey",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

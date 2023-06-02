@@ -1,0 +1,41 @@
+{
+  "name": "Upstream Log",
+  "description": "Similar to machine log queries that includes job data and primary structure tables",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Upstream Log\",",
+        "    \"fromColumn\": \"Machine\",",
+        "    \"toTable\": \"Machine\",",
+        "    \"toColumn\": \"Machine\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log\",",
+        "    \"fromColumn\": \"Production Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log\",",
+        "    \"fromColumn\": \"Production Shift\",",
+        "    \"toTable\": \"Production Shift\",",
+        "    \"toColumn\": \"Production Shift\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

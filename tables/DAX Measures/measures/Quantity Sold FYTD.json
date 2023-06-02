@@ -1,0 +1,47 @@
+{
+  "name": "Quantity Sold FYTD",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": [
+    "",
+    "VAR _ReportDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Report Date] )",
+    "    )",
+    "    ",
+    "VAR _BegYear =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER( ALL('Calendar'), 'Calendar'[Date] <= [Beginning of Fiscal Year] )",
+    "    )",
+    "",
+    "VAR _DayofFiscal =",
+    "    DATEDIFF( _BegYear, _ReportDate, DAY ) + 1",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        CALCULATE(",
+    "            CALCULATE(",
+    "                [Quantity Sold],",
+    "                FILTER(",
+    "                    'Calendar',",
+    "                    'Calendar'[Day of Fiscal Year] <= _DayofFiscal",
+    "                )",
+    "            ),",
+    "            DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    "        ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

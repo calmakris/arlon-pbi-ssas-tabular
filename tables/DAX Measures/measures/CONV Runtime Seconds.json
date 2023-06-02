@@ -1,0 +1,13 @@
+{
+  "name": "CONV Runtime Seconds",
+  "description": "Total duration in the Converting runtime log.",
+  "expression": "SUM( 'Converting OEE'[DurationSecs] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

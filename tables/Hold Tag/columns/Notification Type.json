@@ -1,0 +1,12 @@
+{
+  "name": "Notification Type",
+  "dataType": "string",
+  "description": "F1 is customer-related, F2 is vendor-related, and F3 is material-related defect.",
+  "sourceColumn": "NotificationType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

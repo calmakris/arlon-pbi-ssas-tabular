@@ -1,0 +1,18 @@
+{
+  "name": "Audit 5S Comments",
+  "description": [
+    "Contains notes and comments entered per 5S+S audit.",
+    "",
+    "This table is related to the 'Audit 5S' table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

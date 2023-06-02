@@ -1,0 +1,12 @@
+{
+  "name": "Batch Number",
+  "dataType": "string",
+  "description": "SAP Source: LQUA.CHARG",
+  "sourceColumn": "BatchNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Sales Order Lines Manual",
+  "description": "Number of sales order line items entered by Customer Service",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Sales Order Line Count],",
+    "    KEEPFILTERS( 'DIM_UsersSAP'[Department] = \"CUSTOMER SERVICE\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

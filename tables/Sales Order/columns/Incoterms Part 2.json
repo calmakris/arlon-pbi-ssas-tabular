@@ -1,0 +1,13 @@
+{
+  "name": "Incoterms Part 2",
+  "dataType": "string",
+  "description": "Additional information for the primary incoterm.",
+  "sourceColumn": "IncoTerms2",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

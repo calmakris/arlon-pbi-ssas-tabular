@@ -1,0 +1,24 @@
+{
+  "name": "Official Overhead Cost",
+  "description": "This cost is the overhead cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
+  "expression": [
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Invoice'[CurrentOverheadCost] ),",
+    "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[CurrentOverheadCost] * 'Sales Invoice'[Exchange Rate] ),",
+    "        SUM( 'Sales Invoice'[CurrentOverheadCost] )",
+    "    ),",
+    "    SUM( 'Sales Invoice'[CurrentOverheadCost] ) ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Cost in Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

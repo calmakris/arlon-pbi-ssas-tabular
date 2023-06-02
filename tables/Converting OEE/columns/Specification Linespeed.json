@@ -1,0 +1,14 @@
+{
+  "name": "Specification Linespeed",
+  "dataType": "int64",
+  "description": "Specification linespeed of the material",
+  "sourceColumn": "SpecLS",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

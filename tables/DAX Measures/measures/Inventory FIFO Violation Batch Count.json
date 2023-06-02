@@ -1,0 +1,17 @@
+{
+  "name": "Inventory FIFO Violation Batch Count",
+  "description": [
+    "The number of batches that violated FIFO per batch in stock.",
+    "",
+    "A batch violated FIFO if it has been transacted with 261, 541, 601, and 641 movement types and it's expiration date is after the expiration date of a batch currently in stock. The currency stock only includes batches without stock category."
+  ],
+  "expression": "COUNTX( 'Inventory FIFO Violation', 'Inventory FIFO Violation'[Skip By Batch Number] )",
+  "formatString": "#,0",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

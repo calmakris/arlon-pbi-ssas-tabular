@@ -1,0 +1,12 @@
+{
+  "name": "Base Category",
+  "dataType": "string",
+  "description": "Category of the first pass failure based on the work center of the process order",
+  "sourceColumn": "BaseCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Cost Element",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_DIM_CostElement = Source{[Schema=\"dbo\",Item=\"DIM_CostElement\"]}[Data]",
+      "in",
+      "    dbo_DIM_CostElement"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Posting Date",
+  "dataType": "dateTime",
+  "description": [
+    "Posting date of the accounting document in the absorption G/L account.",
+    "",
+    "Use the 'Calendar' table for more breakdowns of the date like year, month, etc."
+  ],
+  "sourceColumn": "PostingDateKey",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Intercompany Sales MTD",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Intercompany Sales],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

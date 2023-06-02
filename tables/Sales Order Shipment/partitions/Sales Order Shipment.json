@@ -1,0 +1,14 @@
+{
+  "name": "Sales Order Shipment",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_SalesOrderShipment = Source{[Schema=\"dbo\",Item=\"FACT_SalesOrderShipment\"]}[Data]",
+      "in",
+      "    dbo_FACT_SalesOrderShipment"
+    ]
+  }
+}

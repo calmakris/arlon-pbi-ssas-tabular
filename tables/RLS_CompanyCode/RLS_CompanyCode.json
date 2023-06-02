@@ -1,0 +1,21 @@
+{
+  "name": "RLS_CompanyCode",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"RLS_CompanyCode\",",
+        "    \"fromColumn\": \"CompCodeKey\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\",",
+        "    \"securityFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

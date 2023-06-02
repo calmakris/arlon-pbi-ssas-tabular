@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Order Unit",
+  "dataType": "string",
+  "description": "Indicates the unit of measurement to which the purchase order price relates. This is usually the unit of measure the vendor uses.",
+  "sourceColumn": "POUnitOfMeasure",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

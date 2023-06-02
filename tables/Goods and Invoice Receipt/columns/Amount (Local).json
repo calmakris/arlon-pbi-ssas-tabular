@@ -1,0 +1,15 @@
+{
+  "name": "Amount (Local)",
+  "dataType": "decimal",
+  "description": "SAP Source: BSIS/BSAS.DMBTR",
+  "sourceColumn": "AmountInLocalCurrency",
+  "formatString": "#,0.00",
+  "displayFolder": "_Values",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

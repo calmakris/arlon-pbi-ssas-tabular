@@ -1,0 +1,13 @@
+{
+  "name": "Actual Linespeed",
+  "dataType": "int64",
+  "description": "Calculated based on the footage and when the run started and ended",
+  "sourceColumn": "ActualLinespeed",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

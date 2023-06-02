@@ -1,0 +1,20 @@
+{
+  "name": "Process Order Target Cost/Rate/Quantity",
+  "description": [
+    "This measure is similar to the target cost/quantity in the 'Cost Analysis' function in COR3 transaction code in SAP.",
+    "",
+    "Filter the 'Category' field in the 'Process Order Cost' table to distinguish between target cost and quantity."
+  ],
+  "expression": [
+    "",
+    "SUM( 'Process Order Cost'[Target] )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

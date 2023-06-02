@@ -1,0 +1,16 @@
+{
+  "name": "Start Date",
+  "dataType": "dateTime",
+  "sourceColumn": "StartDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

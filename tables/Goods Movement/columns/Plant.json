@@ -1,0 +1,15 @@
+{
+  "name": "Plant",
+  "dataType": "string",
+  "description": "SAP Source: MSEG.WERKS",
+  "isHidden": true,
+  "sourceColumn": "PlantNoKey",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

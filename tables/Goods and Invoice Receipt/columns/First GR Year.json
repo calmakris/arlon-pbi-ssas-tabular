@@ -1,0 +1,12 @@
+{
+  "name": "First GR Year",
+  "dataType": "string",
+  "description": "First year of posted goods receipt based on assignment number",
+  "sourceColumn": "FirstGRYear",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

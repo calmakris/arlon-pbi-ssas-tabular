@@ -1,0 +1,8 @@
+{
+  "name": "SalesOrganization",
+  "dataType": "string",
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "SalesOrganization",
+  "isAvailableInMdx": false
+}

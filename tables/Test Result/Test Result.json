@@ -1,0 +1,29 @@
+{
+  "name": "Test Result",
+  "description": "Contains online test results conducted by QA operators in the manufacturing departments and aged test results performed by the QA department.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Test Result\",",
+        "    \"fromColumn\": \"DateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Test Result\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

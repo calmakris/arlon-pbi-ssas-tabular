@@ -1,0 +1,12 @@
+{
+  "name": "Operator Name",
+  "dataType": "string",
+  "description": "Name of the operator according to the Converting OEE table in AAS database",
+  "sourceColumn": "OperatorName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Process Order Reservation",
+  "description": "Contains all the active order reservations per released process orders in SAP",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Process Order Reservation\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Process Order Reservation\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Process Order Reservation\",",
+        "    \"fromColumn\": \"MaterialPlantKey\",",
+        "    \"toTable\": \"Plant Data for Material\",",
+        "    \"toColumn\": \"MaterialPlantKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Process Order Reservation\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Process Order Reservation\",",
+        "    \"fromColumn\": \"Requirement Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

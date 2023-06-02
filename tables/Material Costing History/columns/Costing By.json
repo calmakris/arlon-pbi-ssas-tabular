@@ -1,0 +1,14 @@
+{
+  "name": "Costing By",
+  "dataType": "string",
+  "description": "SAP Source: KEKO.ERFNM",
+  "isHidden": true,
+  "sourceColumn": "CostingBy",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\"]"
+    }
+  ]
+}

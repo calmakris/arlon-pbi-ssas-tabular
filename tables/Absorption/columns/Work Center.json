@@ -1,0 +1,16 @@
+{
+  "name": "Work Center",
+  "dataType": "string",
+  "description": [
+    "Primary work center responsible to the process order number.",
+    "",
+    "This field is not related to the 'Work Center' and 'MFG Work Center' tables."
+  ],
+  "sourceColumn": "WorkCenter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

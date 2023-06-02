@@ -1,0 +1,18 @@
+{
+  "name": "Account Creation Date",
+  "dataType": "dateTime",
+  "description": "Date when the customer account is created in SAP",
+  "sourceColumn": "AcctCreateDate",
+  "formatString": "Short Date",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

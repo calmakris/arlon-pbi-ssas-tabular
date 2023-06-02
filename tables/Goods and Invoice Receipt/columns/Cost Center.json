@@ -1,0 +1,12 @@
+{
+  "name": "Cost Center",
+  "dataType": "string",
+  "description": "Cost center assigned to the accounting document",
+  "sourceColumn": "CostCenter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

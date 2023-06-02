@@ -1,0 +1,12 @@
+{
+  "name": "Delivery Note",
+  "dataType": "string",
+  "description": "SAP Source: LIPS.VBELN",
+  "sourceColumn": "DeliveryNoteNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

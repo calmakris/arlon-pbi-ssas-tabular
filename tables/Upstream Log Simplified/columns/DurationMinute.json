@@ -1,0 +1,15 @@
+{
+  "name": "DurationMinute",
+  "dataType": "decimal",
+  "description": "Duration in minutes between when the run started and ended",
+  "isHidden": true,
+  "sourceColumn": "DurationMinute",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

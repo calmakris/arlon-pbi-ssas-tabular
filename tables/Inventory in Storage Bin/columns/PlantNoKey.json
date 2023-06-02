@@ -1,0 +1,14 @@
+{
+  "name": "PlantNoKey",
+  "dataType": "string",
+  "description": "SAP Source: LQUA.WERKS",
+  "isHidden": true,
+  "sourceColumn": "PlantNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

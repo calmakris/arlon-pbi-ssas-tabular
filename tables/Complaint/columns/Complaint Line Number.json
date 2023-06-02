@@ -1,0 +1,12 @@
+{
+  "name": "Complaint Line Number",
+  "dataType": "string",
+  "description": "Line number of the item",
+  "sourceColumn": "ComplaintLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

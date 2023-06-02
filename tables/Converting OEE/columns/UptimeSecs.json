@@ -1,0 +1,14 @@
+{
+  "name": "UptimeSecs",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "UptimeSecs",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

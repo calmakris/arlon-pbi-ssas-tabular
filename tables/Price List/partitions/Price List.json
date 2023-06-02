@@ -1,0 +1,14 @@
+{
+  "name": "Price List",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_PriceList = Source{[Schema=\"dbo\",Item=\"FACT_PriceList\"]}[Data]",
+      "in",
+      "    dbo_FACT_PriceList"
+    ]
+  }
+}

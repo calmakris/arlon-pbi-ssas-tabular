@@ -1,0 +1,13 @@
+{
+  "name": "Close Flag",
+  "dataType": "string",
+  "description": "Calculated column; Value is 'Yes' if the order has TECO, CLSD, or DLFL status.",
+  "sourceColumn": "CloseFlag",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

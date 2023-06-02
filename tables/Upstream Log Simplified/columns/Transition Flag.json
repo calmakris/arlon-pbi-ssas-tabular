@@ -1,0 +1,12 @@
+{
+  "name": "Transition Flag",
+  "dataType": "string",
+  "description": "The value is 'Yes' if the changeover happened before or after an end of production or unplanned events",
+  "sourceColumn": "TransitionFlag",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

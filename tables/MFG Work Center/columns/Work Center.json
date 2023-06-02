@@ -1,0 +1,12 @@
+{
+  "name": "Work Center",
+  "dataType": "string",
+  "isKey": true,
+  "sourceColumn": "WorkCenter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

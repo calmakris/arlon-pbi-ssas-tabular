@@ -1,0 +1,13 @@
+{
+  "name": "Gross Sales MTD & Backorder Margin",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": " [Gross Margin MTD] + [Backorder Margin]",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

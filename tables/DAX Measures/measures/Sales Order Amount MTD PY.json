@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Amount MTD PY",
+  "description": "Total amount of sales order line items entered in the entire month at the same month on previous year",
+  "expression": " CALCULATE( [Sales Order Amount MTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Sales Orders\"]"
+    }
+  ]
+}

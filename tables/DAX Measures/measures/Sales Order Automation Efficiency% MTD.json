@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Automation Efficiency% MTD",
+  "description": "Month-to-date count of sales order line items entered automatically by BATCHUSER without any manual changes divided by the month-to-date count of sales order line items entered automatically by BATCHUSER (with/without changes)",
+  "expression": " CALCULATE( [Sales Order Automation Efficiency%], DATESMTD( 'Calendar'[Date] ) )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Fiscal Year",
+  "dataType": "string",
+  "description": "SAP Source: BSIS/BSAS.GJAHR",
+  "sourceColumn": "FiscalYear",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Document Line Number",
+  "dataType": "string",
+  "description": "SAP Source: BSIS.BUZEI",
+  "sourceColumn": "DocLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

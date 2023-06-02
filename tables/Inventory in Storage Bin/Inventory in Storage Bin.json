@@ -1,0 +1,35 @@
+{
+  "name": "Inventory in Storage Bin",
+  "description": "Current inventory per storage bin",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Inventory in Storage Bin\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory in Storage Bin\",",
+        "    \"fromColumn\": \"PlantNoKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory in Storage Bin\",",
+        "    \"fromColumn\": \"StorageKey\",",
+        "    \"toTable\": \"Storage Bin\",",
+        "    \"toColumn\": \"StorageKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

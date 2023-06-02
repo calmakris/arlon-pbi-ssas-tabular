@@ -1,0 +1,25 @@
+{
+  "name": "Earned Overhead MTD",
+  "description": "Month-to-date total cost posted in the earned overhead cost elements",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Earned Overhead],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Order Open Amount PD Var",
+  "description": "Difference between the current amount of open purchase orders and yesterday's snapshot amount of open purchase orders",
+  "expression": " [Purchase Order Open Amount] - [Purchase Order Backorder Amount PD]",
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\"]"
+    }
+  ]
+}

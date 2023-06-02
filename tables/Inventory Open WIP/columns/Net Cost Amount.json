@@ -1,0 +1,14 @@
+{
+  "name": "Net Cost Amount",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "NetCostVal",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

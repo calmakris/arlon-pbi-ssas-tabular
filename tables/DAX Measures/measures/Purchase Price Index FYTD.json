@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Price Index FYTD",
+  "description": "Current fiscal year's invoice receipt amount divided by the same amount but using prior fiscal year's last unit price",
+  "expression": " ROUND(DIVIDE( [Purchase Order Invoice Receipt Amount FYTD], [Purchase Order Invoice Receipt Amount in PY Price FYTD] ), 4)",
+  "formatString": "#,0.0000",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Result Value",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "ResultValue",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

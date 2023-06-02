@@ -1,0 +1,12 @@
+{
+  "name": "Quantity Unit",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.ERFME",
+  "sourceColumn": "QuantityUnit",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

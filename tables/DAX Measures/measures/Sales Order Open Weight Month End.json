@@ -1,0 +1,24 @@
+{
+  "name": "Sales Order Open Weight Month End",
+  "description": "Weight of materials not yet shipped and scheduled to ship at the end of the month as determined by the First Requested Ship Date of the sales order",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Sales Order'[CustomerOpenWeight] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] ),",
+    "    FILTER(",
+    "        ALL('Calendar'[Date]),",
+    "        'Calendar'[Date] >= [Beginning of Month]",
+    "            && 'Calendar'[Date] <= [End of Month]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

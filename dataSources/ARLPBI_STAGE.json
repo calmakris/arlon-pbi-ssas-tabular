@@ -1,0 +1,19 @@
+{
+  "type": "structured",
+  "name": "ARLPBI_STAGE",
+  "connectionDetails": {
+    "protocol": "tds",
+    "address": {
+      "server": "ARLPBIPRD",
+      "database": "ARLPBI_STAGE"
+    },
+    "authentication": null,
+    "query": null
+  },
+  "credential": {
+    "AuthenticationKind": "Windows",
+    "Username": "DOMAIN\\PBI-ETL",
+    "EncryptConnection": false,
+    "PrivacySetting": "Organizational"
+  }
+}

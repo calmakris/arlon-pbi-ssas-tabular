@@ -1,0 +1,13 @@
+{
+  "name": "WH Storage Bin Material Age in Days",
+  "description": "Average days between the material's goods receipt date and today",
+  "expression": "AVERAGE( 'Inventory in Storage Bin'[Age in Days] )",
+  "formatString": "#,0 \"days\"",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

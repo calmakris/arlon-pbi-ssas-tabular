@@ -1,0 +1,14 @@
+{
+  "name": "InactiveDate",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "InactiveDate",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

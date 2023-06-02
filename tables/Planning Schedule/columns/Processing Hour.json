@@ -1,0 +1,14 @@
+{
+  "name": "Processing Hour",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "ProcessingHour",
+  "formatString": "#,0.000",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Actual Production Start Timestamp",
+  "description": "Actual datetime the production per department started since the beginning of the month. This value is from machine data. If not available, the beginning of month datetime is used.",
+  "expression": [
+    "",
+    "VAR StartTime = ",
+    "    CALCULATE(",
+    "        MIN( 'Upstream Log Simplified'[Start Time] ),",
+    "        ALL( 'Calendar' ),",
+    "        FILTER(",
+    "            ALL( 'Upstream Log Simplified'[Start Time] ),",
+    "            'Upstream Log Simplified'[Start Time] >= [Beginning of Month]",
+    "        ),",
+    "        'Upstream Log Simplified'[Category] = \"Production\"",
+    "    )",
+    "",
+    "RETURN",
+    "IF( ISBLANK(StartTime) && [Absorption MTD] <> BLANK(), [Beginning of Month] + TIME(0, 0, 0), StartTime )"
+  ],
+  "formatString": "MM/dd/yyyy HH:mm:ss",
+  "displayFolder": "Absorption\\_Projection",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralLongDateTime\" FormatString=\"MM/dd/yyyy HH:mm:ss\" /></DateTimes></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

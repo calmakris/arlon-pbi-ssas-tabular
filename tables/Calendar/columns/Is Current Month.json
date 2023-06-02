@@ -1,0 +1,13 @@
+{
+  "name": "Is Current Month",
+  "dataType": "boolean",
+  "description": "This value is true if the date is the same month as yesterday. For example, if yesterday is June 10, the dates from June 1 to 10 are set to true.",
+  "sourceColumn": "Is_Current_Month",
+  "displayFolder": "Helper Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Planned Independent Requirement",
+  "description": "Contains different versions of planned independent requirement (or forecast) entered in SAP",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Planned Independent Requirement\",",
+        "    \"fromColumn\": \"Delivery Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Planned Independent Requirement\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Planned Independent Requirement\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

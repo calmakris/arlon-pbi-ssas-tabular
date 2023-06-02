@@ -1,0 +1,15 @@
+{
+  "name": "Day of Fiscal Year",
+  "dataType": "int64",
+  "description": "Day of fiscal year. For example, October 15 is the 15th day and December 31 is 92nd day.",
+  "sourceColumn": "Day_Of_Fiscal_Year",
+  "formatString": "0",
+  "displayFolder": "Individual Attributes",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

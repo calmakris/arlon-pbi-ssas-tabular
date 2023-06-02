@@ -1,0 +1,18 @@
+{
+  "name": "Q-Block Quantity",
+  "description": "Total quantity of inventory on Q block",
+  "expression": [
+    "CALCULATE(",
+    "    SUM( 'Inventory'[Quantity] ),",
+    "    KEEPFILTERS( 'Inventory'[Stock Category] = \"Q\" )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Blocked",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

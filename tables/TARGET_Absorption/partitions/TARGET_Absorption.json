@@ -1,0 +1,14 @@
+{
+  "name": "TARGET_Absorption",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_TARGET_Absorption = Source{[Schema=\"dbo\",Item=\"TARGET_Absorption\"]}[Data]",
+      "in",
+      "    dbo_TARGET_Absorption"
+    ]
+  }
+}

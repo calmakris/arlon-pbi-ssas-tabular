@@ -1,0 +1,35 @@
+{
+  "name": "CONV Square Feet per Man Hour Target",
+  "description": "These values are provided by Converting at the beginning of the fiscal year. If none provided, the default value used is 5,000.",
+  "expression": [
+    " ",
+    "VAR TargetVal = ",
+    "    CALCULATE(",
+    "        AVERAGE( TARGET_KPI[TargetValue] ),",
+    "        TARGET_KPI[KpiKey] = \"Sqftmh\",",
+    "        TREATAS(",
+    "            VALUES( 'Company Code'[Company Code] ),",
+    "            TARGET_KPI[LocationKey]",
+    "        ),",
+    "        TREATAS(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            TARGET_KPI[CalendarTimeKey]",
+    "        )",
+    "    )",
+    "RETURN",
+    "    IF(",
+    "        ISBLANK( TargetVal ),",
+    "        5000,",
+    "        TargetVal",
+    "    )",
+    " "
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

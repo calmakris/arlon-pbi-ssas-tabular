@@ -1,0 +1,29 @@
+{
+  "name": "Sales Order Amount Regional Budget MTD",
+  "description": [
+    "Planned order entry amount per month and sales region.",
+    "",
+    "Use this measure if none of the fields in 'Calendar' table are used in the visual."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Sales Order Amount Regional Budget],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

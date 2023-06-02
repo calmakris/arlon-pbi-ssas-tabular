@@ -1,0 +1,12 @@
+{
+  "name": "PRO Number",
+  "dataType": "string",
+  "description": "SAP Source: VTTK.TPBEZ",
+  "sourceColumn": "PRONo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

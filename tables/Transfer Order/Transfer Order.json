@@ -1,0 +1,53 @@
+{
+  "name": "Transfer Order",
+  "description": "List of transfer orders issued by shipping department involving finished good racks and 901 555",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Transfer Order\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Transfer Order\",",
+        "    \"fromColumn\": \"Confirm Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Transfer Order\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Transfer Order\",",
+        "    \"fromColumn\": \"PlantNoKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Transfer Order\",",
+        "    \"fromColumn\": \"SrcStorageKey\",",
+        "    \"toTable\": \"Storage Bin\",",
+        "    \"toColumn\": \"StorageKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Transfer Order\",",
+        "    \"fromColumn\": \"Transferred By\",",
+        "    \"toTable\": \"DIM_UsersSAP\",",
+        "    \"toColumn\": \"UsernameKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

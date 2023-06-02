@@ -1,0 +1,23 @@
+{
+  "name": "Flash Sales Forecast Quantity",
+  "description": [
+    "Total planned quantity of planned independent requirements with the latest change date by material, plant, and delivery date.",
+    "",
+    "This forecast value changes every month."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Planned Independent Requirement'[Planned Quantity] ),",
+    "    KEEPFILTERS( 'Planned Independent Requirement'[RankNewest] = 1 )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Forecast",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

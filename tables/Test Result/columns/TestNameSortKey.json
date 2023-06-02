@@ -1,0 +1,12 @@
+{
+  "name": "TestNameSortKey",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "TestNameSortKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Work Hours",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "WorkHours",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none"
+}

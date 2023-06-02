@@ -1,0 +1,14 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": "SAP Source: AFKO.AUFNR",
+  "isHidden": true,
+  "sourceColumn": "OrderNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

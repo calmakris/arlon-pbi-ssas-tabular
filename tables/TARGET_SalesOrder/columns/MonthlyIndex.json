@@ -1,0 +1,8 @@
+{
+  "name": "MonthlyIndex",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "MonthlyIndex",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false
+}

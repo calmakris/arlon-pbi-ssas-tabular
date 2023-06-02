@@ -1,0 +1,14 @@
+{
+  "name": "Work Center",
+  "dataType": "string",
+  "description": "SAP Source: CRHD.ARBPL or AFVC.KTSCH",
+  "isHidden": true,
+  "sourceColumn": "WorkCenterKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

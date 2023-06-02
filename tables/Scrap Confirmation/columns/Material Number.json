@@ -1,0 +1,12 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "SAP Source: AFKO.PLNBEZ",
+  "sourceColumn": "MaterialNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

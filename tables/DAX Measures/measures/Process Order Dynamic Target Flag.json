@@ -1,0 +1,15 @@
+{
+  "name": "Process Order Dynamic Target Flag",
+  "description": "Determines if the target cost/quantity in the process order is dynamically calculated (1 = Yes, 0 = No). The Power BI system calculates the target cost/quantity for process orders where their variance is not yet official calculated during month-end. Once Finance calculates the variances, this flag should turn to 0 (No).",
+  "expression": [
+    "",
+    "MAX( 'Process Order Cost'[Dynamic Target Flag] )"
+  ],
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

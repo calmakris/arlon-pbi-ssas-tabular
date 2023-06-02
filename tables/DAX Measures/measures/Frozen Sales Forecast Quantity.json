@@ -1,0 +1,45 @@
+{
+  "name": "Frozen Sales Forecast Quantity",
+  "description": [
+    "Total planned quantity of planned independent requirements with the change date (by material, plant, and delivery date) closest and before the material's [Commercialization Date] in the material master.",
+    "",
+    "If not available, the first one available after the [Commercialization Date] is used.",
+    "",
+    "This forecast is static."
+  ],
+  "expression": [
+    "",
+    "VAR _BeforeLaunch =",
+    "    SUMX(",
+    "        VALUES( 'Planned Independent Requirement'[MaterialPlantDateKey] ),",
+    "        CALCULATE(",
+    "            SUM( 'Planned Independent Requirement'[Planned Quantity] ),",
+    "            KEEPFILTERS( 'Planned Independent Requirement'[RankFrozen] = -1 )",
+    "        )",
+    "    )",
+    "",
+    "VAR _AfterLaunch =",
+    "    SUMX(",
+    "        VALUES( 'Planned Independent Requirement'[MaterialPlantDateKey] ),",
+    "        CALCULATE(",
+    "            SUM( 'Planned Independent Requirement'[Planned Quantity] ),",
+    "            KEEPFILTERS( 'Planned Independent Requirement'[RankFrozen] = 1 )",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "IF(",
+    "    ISBLANK( _BeforeLaunch ),",
+    "    _AfterLaunch,",
+    "    _BeforeLaunch",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Forecast",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

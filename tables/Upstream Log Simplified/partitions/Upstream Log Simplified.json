@@ -1,0 +1,14 @@
+{
+  "name": "Upstream Log Simplified",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_UpstreamLogSimplified = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamLogSimplified\"]}[Data]",
+      "in",
+      "    dbo_FACT_UpstreamLogSimplified"
+    ]
+  }
+}

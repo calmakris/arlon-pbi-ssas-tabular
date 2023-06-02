@@ -1,0 +1,14 @@
+{
+  "name": "Shift",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "Shift",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Upstream Actual Production Footage",
+  "description": "Total footage of production records (excl FEs) in the machine logs in Casting and Coating departments",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    [Upstream Actual Footage],",
+    "    FILTER(",
+    "        'Upstream Log Simplified',",
+    "        'Upstream Log Simplified'[Category] = \"Production\"",
+    "            && LEFT('Upstream Log Simplified'[Causes], 4) = \"Roll\"",
+    "            && NOT(CONTAINSSTRING('Upstream Log Simplified'[Causes], \"FE\"))",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\"]"
+    }
+  ]
+}

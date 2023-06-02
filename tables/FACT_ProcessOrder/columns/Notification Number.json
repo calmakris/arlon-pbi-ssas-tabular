@@ -1,0 +1,14 @@
+{
+  "name": "Notification Number",
+  "dataType": "string",
+  "description": "First matching notification number",
+  "isHidden": true,
+  "sourceColumn": "NotificationNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    }
+  ]
+}

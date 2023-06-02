@@ -1,0 +1,12 @@
+{
+  "name": "Complaint Type",
+  "dataType": "string",
+  "description": "Determines if the complaint is a return or credit memo.",
+  "sourceColumn": "ComplaintType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

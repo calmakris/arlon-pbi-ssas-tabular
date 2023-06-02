@@ -1,0 +1,14 @@
+{
+  "name": "Vessels",
+  "dataType": "decimal",
+  "description": "Quantity of vessels used",
+  "sourceColumn": "Vessels",
+  "formatString": "0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

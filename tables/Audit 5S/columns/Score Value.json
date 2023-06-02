@@ -1,0 +1,14 @@
+{
+  "name": "Score Value",
+  "dataType": "int64",
+  "description": "Points granted in the audit. The maximum value per category is 3.",
+  "sourceColumn": "ScoreValue",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

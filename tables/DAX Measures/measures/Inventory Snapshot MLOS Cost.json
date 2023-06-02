@@ -1,0 +1,19 @@
+{
+  "name": "Inventory Snapshot MLOS Cost",
+  "description": "Latest snapshot of the standard cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+  "expression": [
+    "",
+    "[Inventory Snapshot Material Cost]",
+    "    + [Inventory Snapshot Labor Cost]",
+    "    + [Inventory Snapshot Overhead Cost]",
+    "    + [Inventory Snapshot Setup Cost]"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Action Item",
+  "dataType": "string",
+  "description": "Action item done/planned to resolve the first pass issue",
+  "sourceColumn": "ActionItem",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

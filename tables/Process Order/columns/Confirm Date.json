@@ -1,0 +1,18 @@
+{
+  "name": "Confirm Date",
+  "dataType": "dateTime",
+  "description": "Date when the process order's cost is confirmed by the supervisor",
+  "sourceColumn": "ConfirmDate",
+  "formatString": "Short Date",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

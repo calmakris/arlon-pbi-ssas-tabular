@@ -1,0 +1,14 @@
+{
+  "name": "ID",
+  "dataType": "int64",
+  "description": "Unique identifier of the record in the Compounding log",
+  "sourceColumn": "CompID",
+  "formatString": "0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

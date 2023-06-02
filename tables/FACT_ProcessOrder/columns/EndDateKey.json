@@ -1,0 +1,19 @@
+{
+  "name": "EndDateKey",
+  "dataType": "dateTime",
+  "description": "Calculated column; If Actual End Date is available, use it. Otherwise, use the Basic End Date. Related to 'Calendar'[Date]",
+  "isHidden": true,
+  "sourceColumn": "EndDateKey",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

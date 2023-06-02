@@ -1,0 +1,71 @@
+{
+  "name": "All Data",
+  "description": "Reads all data without restriction",
+  "modelPermission": "read",
+  "members": [
+    {
+      "memberName": "DOMAIN\\amcneill",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7269"
+    },
+    {
+      "memberName": "DOMAIN\\bmoore",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21012"
+    },
+    {
+      "memberName": "DOMAIN\\dchamness",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21023"
+    },
+    {
+      "memberName": "DOMAIN\\jmcmanus",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
+    },
+    {
+      "memberName": "DOMAIN\\jmody",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
+    },
+    {
+      "memberName": "DOMAIN\\JSipkovich",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1457"
+    },
+    {
+      "memberName": "DOMAIN\\kbesse",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8862"
+    },
+    {
+      "memberName": "DOMAIN\\ktran",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8825"
+    },
+    {
+      "memberName": "DOMAIN\\LBabilo",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1731"
+    },
+    {
+      "memberName": "DOMAIN\\LTorres",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2683"
+    },
+    {
+      "memberName": "DOMAIN\\mebin",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8453"
+    },
+    {
+      "memberName": "DOMAIN\\mqadir",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
+    },
+    {
+      "memberName": "DOMAIN\\rfaust",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
+    },
+    {
+      "memberName": "DOMAIN\\rraymundo",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2857"
+    },
+    {
+      "memberName": "DOMAIN\\sdong",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8750"
+    },
+    {
+      "memberName": "DOMAIN\\fzhong",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21125"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Sales Order Line Count by First Ship Date On Time",
+  "description": "Count of sales order line items where the ordered quantity is fully shipped on or before the first scheduled ship date",
+  "expression": [
+    "",
+    "VAR OnTime =",
+    "    CALCULATE(",
+    "        [Sales Order Line Count by First Ship Date],",
+    "        KEEPFILTERS('Sales Order'[Late Flag] = \"No\"),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "-- Days with lines but no on time should show 0",
+    "IF(",
+    "    [Sales Order Line Count by First Ship Date] <> BLANK(),",
+    "    OnTime + 0,",
+    "    BLANK()",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

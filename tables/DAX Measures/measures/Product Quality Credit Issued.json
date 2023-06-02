@@ -1,0 +1,25 @@
+{
+  "name": "Product Quality Credit Issued",
+  "description": [
+    "Total credit issue amount of product quality complaints divided by the gross sales. For example , in Jan 2023, this value is the total credit amount issued in Jan 2023 divided by the gross sales in Jan 2023.",
+    "",
+    "Service quality are complaints entered with reason codes marked as 'S' (service).",
+    ""
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Complaint Credit Issued Amount],",
+    "    KEEPFILTERS( 'Complaint'[Department] = \"Q\" ),",
+    "    KEEPFILTERS( LEFT('Complaint'[Reason Code], 8) <> \"WARRANTY\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Complaints\\_Product Quality",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    }
+  ]
+}

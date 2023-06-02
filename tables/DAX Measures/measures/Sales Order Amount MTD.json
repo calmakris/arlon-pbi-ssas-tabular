@@ -1,0 +1,25 @@
+{
+  "name": "Sales Order Amount MTD",
+  "description": "Month-to-date total amount of sales order line items entered",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Sales Order Ordered Amount],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Sales Orders\"]"
+    }
+  ]
+}

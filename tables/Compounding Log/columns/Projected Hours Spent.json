@@ -1,0 +1,14 @@
+{
+  "name": "Projected Hours Spent",
+  "dataType": "decimal",
+  "description": "Total hours expected to finish a task based on the assigned amount of hours per vessel",
+  "sourceColumn": "ProjectHours",
+  "formatString": "0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Ideal Footage",
+  "dataType": "int64",
+  "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' and primarystruct.SpecLS",
+  "sourceColumn": "IdealFootage",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

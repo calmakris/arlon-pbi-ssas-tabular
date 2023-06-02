@@ -1,0 +1,14 @@
+{
+  "name": "Department Responsible",
+  "dataType": "string",
+  "description": "The department who is primarily responsible for managing or using the material",
+  "isHidden": true,
+  "sourceColumn": "DeptResponsible",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

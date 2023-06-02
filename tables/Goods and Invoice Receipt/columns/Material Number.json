@@ -1,0 +1,12 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "Material number of the line item",
+  "sourceColumn": "MaterialNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Planning Schedule Comparison",
+  "description": "Planning schedule compared with machine log data",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Planning Schedule Comparison\",",
+        "    \"fromColumn\": \"Machine\",",
+        "    \"toTable\": \"Machine\",",
+        "    \"toColumn\": \"Machine\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Planning Schedule Comparison\",",
+        "    \"fromColumn\": \"ProductionDate\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

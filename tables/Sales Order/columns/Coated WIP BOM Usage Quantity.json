@@ -1,0 +1,15 @@
+{
+  "name": "Coated WIP BOM Usage Quantity",
+  "dataType": "decimal",
+  "description": "Quantity needed to fulfill one unit of the ordered material based on the latest and unlocked product version of the BOM",
+  "sourceColumn": "BOMUsageQty",
+  "formatString": "#,##0.00",
+  "displayFolder": "Item",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

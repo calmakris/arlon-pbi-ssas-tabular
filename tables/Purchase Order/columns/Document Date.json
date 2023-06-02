@@ -1,0 +1,18 @@
+{
+  "name": "Document Date",
+  "dataType": "dateTime",
+  "description": "Date when the purchase order is created",
+  "sourceColumn": "DocumentDateKey",
+  "formatString": "Short Date",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

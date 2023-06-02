@@ -1,0 +1,14 @@
+{
+  "name": "Cost Center",
+  "dataType": "string",
+  "description": "Unique identifier in this table. It is mostly related to tables with Cost Center fields.",
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "CostCenter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

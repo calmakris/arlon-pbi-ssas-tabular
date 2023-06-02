@@ -1,0 +1,23 @@
+{
+  "name": "Inventory Consumption (Dynamic)",
+  "description": "Sum of 'Inventory Consumption'[Quantity].Can be toggled between quantity and amount values (default = quantity)",
+  "expression": [
+    "",
+    "VAR Qty = SUM( 'Inventory Consumption'[Quantity] )",
+    "VAR Amt = SUM( 'Inventory Consumption'[Amount (In Current Price)] )",
+    "RETURN",
+    "    IF(",
+    "        HASONEVALUE( '_Value to Use'[Value] ),",
+    "        SWITCH(",
+    "            VALUES( '_Value to Use'[Value] ),",
+    "            \"Quantity\", Qty,",
+    "            \"Amount\", Amt,",
+    "            Qty",
+    "        ),",
+    "        Qty",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "isHidden": true,
+  "displayFolder": "Inventory"
+}

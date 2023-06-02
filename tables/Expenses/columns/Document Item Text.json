@@ -1,0 +1,12 @@
+{
+  "name": "Document Item Text",
+  "dataType": "string",
+  "description": "Contains an explanatory text on the line item.",
+  "sourceColumn": "ItemText",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Amount",
+  "dataType": "decimal",
+  "description": "Expenses amount are in company currency while Open POs are already converted to USD",
+  "isHidden": true,
+  "sourceColumn": "Amount",
+  "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+  "isAvailableInMdx": false,
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

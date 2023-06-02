@@ -1,0 +1,13 @@
+{
+  "name": "Top Down Explosion Flag",
+  "dataType": "string",
+  "description": "This value is 'Yes' if the relationship between the [Material Number] and [Parent Material Number] field in this table is top-down in terms of levels in the BOM hierarchy",
+  "sourceColumn": "TopDownExplosion",
+  "displayFolder": "BOM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

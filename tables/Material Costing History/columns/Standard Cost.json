@@ -1,0 +1,14 @@
+{
+  "name": "Standard Cost",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "StandardCost",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\"]"
+    }
+  ]
+}

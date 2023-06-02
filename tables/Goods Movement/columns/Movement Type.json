@@ -1,0 +1,13 @@
+{
+  "name": "Movement Type",
+  "dataType": "string",
+  "description": "Specifies the type of goods movement.",
+  "sourceColumn": "MovementType",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

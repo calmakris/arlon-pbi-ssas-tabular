@@ -1,0 +1,12 @@
+{
+  "name": "MRP Controller",
+  "dataType": "string",
+  "description": "Specifies the number of the MRP controller or group of MRP controllers responsible for material planning for the material.",
+  "sourceColumn": "MRPController",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

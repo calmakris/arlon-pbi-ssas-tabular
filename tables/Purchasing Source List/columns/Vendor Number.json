@@ -1,0 +1,12 @@
+{
+  "name": "Vendor Number",
+  "dataType": "string",
+  "description": "SAP Source: EORD.LIFNR",
+  "sourceColumn": "VendorNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

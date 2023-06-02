@@ -1,0 +1,15 @@
+{
+  "name": "Plan Duration",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "PlanDuration",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

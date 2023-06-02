@@ -1,0 +1,18 @@
+{
+  "name": "Accounting Document Number",
+  "dataType": "string",
+  "description": [
+    "The document number is the key the system uses to access the accounting document.",
+    "",
+    "The document number is unique per company code and fiscal year. When entering an accounting document, you can specify the number manually or it can be determined by the system from a pre-defined area (number range).",
+    "",
+    "The relevant area of the document numbers (number range) is determined in each company code per document type."
+  ],
+  "sourceColumn": "DocumentNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

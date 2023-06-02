@@ -1,0 +1,25 @@
+{
+  "name": "Safety Incident Count MTD PM",
+  "description": "Previous month's total count of incidents recorded in the Safety Incidents Log",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Safety Incident Count],",
+    "        PREVIOUSMONTH( DATESMTD('Calendar'[Date]) )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

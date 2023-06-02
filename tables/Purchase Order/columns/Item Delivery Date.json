@@ -1,0 +1,18 @@
+{
+  "name": "Item Delivery Date",
+  "dataType": "dateTime",
+  "description": "Date when the item is scheduled to arrive at the destination. This date may change at a discretion of the PO's creator.",
+  "sourceColumn": "ItemDeliveryDate",
+  "formatString": "Short Date",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

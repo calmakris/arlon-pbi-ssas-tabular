@@ -1,0 +1,19 @@
+{
+  "name": "Production Date",
+  "dataType": "dateTime",
+  "description": "Production date starts at 6am and ends at 5:59am the next day",
+  "isHidden": true,
+  "sourceColumn": "ProductionDate",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

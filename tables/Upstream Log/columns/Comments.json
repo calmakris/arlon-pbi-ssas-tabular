@@ -1,0 +1,12 @@
+{
+  "name": "Comments",
+  "dataType": "string",
+  "description": "Source: primarystruct.Comments",
+  "sourceColumn": "Comments",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

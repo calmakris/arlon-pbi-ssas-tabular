@@ -1,0 +1,13 @@
+{
+  "name": "ValuationClassKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "ValuationClassKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\"]"
+    }
+  ]
+}

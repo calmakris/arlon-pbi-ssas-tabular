@@ -1,0 +1,7 @@
+{
+  "name": "SafetyStockQty",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "SafetyStockQty",
+  "isAvailableInMdx": false
+}

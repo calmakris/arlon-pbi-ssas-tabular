@@ -1,0 +1,7 @@
+{
+  "name": "COAT Clean Up Count",
+  "expression": "COUNTROWS(FILTER('Upstream Log', 'Upstream Log'[Category] = \"Clean Up\" && 'Upstream Log'[Causes] IN { \"Planned\", \"Unplanned\" })) + 0",
+  "formatString": "#,0",
+  "isHidden": true,
+  "displayFolder": "Upstream Log"
+}

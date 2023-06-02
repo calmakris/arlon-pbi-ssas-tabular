@@ -1,0 +1,13 @@
+{
+  "name": "Actual Linespeed",
+  "dataType": "int64",
+  "description": "Calculated column derived from the duration between 'Start Time' and 'Stop Time' in minutes and 'Footage'",
+  "sourceColumn": "ActualLinespeed",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

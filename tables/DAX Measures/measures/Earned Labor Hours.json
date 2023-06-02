@@ -1,0 +1,19 @@
+{
+  "name": "Earned Labor Hours",
+  "description": "Total hours posted in the earned labor and setup cost elements",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( Absorption[Quantity] ),",
+    "    KEEPFILTERS( 'Cost Element'[Category] = \"Earned Labor\" )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Operations",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

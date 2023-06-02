@@ -1,0 +1,8 @@
+{
+  "name": "Company Code",
+  "dataType": "string",
+  "description": "SAP Source: BSIS.BUKRS",
+  "isHidden": true,
+  "sourceColumn": "CompanyCode",
+  "isAvailableInMdx": false
+}

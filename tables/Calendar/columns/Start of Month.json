@@ -1,0 +1,19 @@
+{
+  "name": "Start of Month",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "Start_Of_Month",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "displayFolder": "Individual Attributes",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

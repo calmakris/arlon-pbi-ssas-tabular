@@ -1,0 +1,11 @@
+{
+  "name": "Purchase Order Unit",
+  "dataType": "string",
+  "sourceColumn": "POUnitOfMeasure",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

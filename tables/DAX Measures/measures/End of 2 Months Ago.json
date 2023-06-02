@@ -1,0 +1,17 @@
+{
+  "name": "End of 2 Months Ago",
+  "expression": "EOMONTH([Report Date], -2)",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Offset Account Name",
+  "dataType": "string",
+  "description": "Determines the offsetting account for the item, as long as the account is maintained in the corresponding account assignment.",
+  "sourceColumn": "OffsetAcctName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

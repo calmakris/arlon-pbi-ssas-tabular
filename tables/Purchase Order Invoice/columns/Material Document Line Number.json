@@ -1,0 +1,12 @@
+{
+  "name": "Material Document Line Number",
+  "dataType": "string",
+  "description": "SAP Source: EKBE.BUZEI",
+  "sourceColumn": "MaterialLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

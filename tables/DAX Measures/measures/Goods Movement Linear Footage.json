@@ -1,0 +1,13 @@
+{
+  "name": "Goods Movement Linear Footage",
+  "description": "Total linear footage of transactions in the 'Goods Movement' table. The footage is based on the conversion factor in the alternative unit of measure section in the material master in SAP.",
+  "expression": " SUM ('Goods Movement'[Linear Feet])",
+  "formatString": "#,0",
+  "displayFolder": "Goods Movement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

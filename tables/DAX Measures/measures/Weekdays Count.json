@@ -1,0 +1,22 @@
+{
+  "name": "Weekdays Count",
+  "description": "Number of weekdays",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    COUNTROWS( 'Calendar' ),",
+    "    FILTER(",
+    "        ALL( 'Calendar'[Is Weekday] ),",
+    "        'Calendar'[Is Weekday]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

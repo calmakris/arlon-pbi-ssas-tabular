@@ -1,0 +1,41 @@
+{
+  "name": "Inventory Open WIP",
+  "description": "Contains process orders with non-zero target/planned cost variance. In addition, process orders with TECO, DLV, CLSD, or DLFL status are excluded.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Inventory Open WIP\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Open WIP\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Open WIP\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory Open WIP\",",
+        "    \"fromColumn\": \"ValuationClassKey\",",
+        "    \"toTable\": \"Valuation Class\",",
+        "    \"toColumn\": \"Valuation Class\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

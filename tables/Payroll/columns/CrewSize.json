@@ -1,0 +1,14 @@
+{
+  "name": "CrewSize",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "CrewSize",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

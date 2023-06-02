@@ -1,0 +1,11 @@
+{
+  "name": "Movement Type",
+  "dataType": "string",
+  "sourceColumn": "MovementType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

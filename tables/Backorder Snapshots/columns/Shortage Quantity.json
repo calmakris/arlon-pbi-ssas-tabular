@@ -1,0 +1,15 @@
+{
+  "name": "Shortage Quantity",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "ShortageQty",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

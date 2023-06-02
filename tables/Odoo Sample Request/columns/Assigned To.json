@@ -1,0 +1,11 @@
+{
+  "name": "Assigned To",
+  "dataType": "string",
+  "sourceColumn": "AssignedTo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

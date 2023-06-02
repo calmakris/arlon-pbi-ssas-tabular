@@ -1,0 +1,13 @@
+{
+  "name": "Local Currency",
+  "dataType": "string",
+  "description": "SAP Source: BKPF.HWAER",
+  "sourceColumn": "LocalCurrency",
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

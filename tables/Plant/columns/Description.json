@@ -1,0 +1,12 @@
+{
+  "name": "Description",
+  "dataType": "string",
+  "description": "Description of the plant",
+  "sourceColumn": "PlantDescription",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "RLS_Region",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"RLS_Region\",",
+        "    \"fromColumn\": \"SalesRegionKey\",",
+        "    \"toTable\": \"BRIDGE_SalesRegion\",",
+        "    \"toColumn\": \"Sales Region\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\",",
+        "    \"securityFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Hold Tag",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_FACT_HoldTag = Source{[Schema=\"dbo\",Item=\"FACT_HoldTag\"]}[Data]",
+      "in",
+      "    dbo_FACT_HoldTag"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Goods Receipt Linear Footage",
+  "description": "Total footage of postings with movement types 101, 102, 531, and 532. The footage is based on the conversion factor in the alternative unit of measure section in the material master in SAP.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Goods Movement'[Linear Feet] ),",
+    "    KEEPFILTERS('Goods Movement'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"})",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Goods Movement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

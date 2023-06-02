@@ -1,0 +1,21 @@
+{
+  "name": "Planning Schedule Footage Variance",
+  "description": "Variance between the actual and scheduled footage between start of current production date and now.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Planning Schedule Comparison'[VarQuantity] ),",
+    "    KEEPFILTERS( 'Planning Schedule Comparison'[Plan Start Date] <> BLANK() ),",
+    "    KEEPFILTERS( 'Planning Schedule Comparison'[StatusFlag] = 1 ) -- 1 is orders with schedule and machine data",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Quantity Sold",
+  "description": "Total of quantity in the billing documents posted in SAP.",
+  "expression": "SUM( 'Sales Invoice'[Quantity] )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

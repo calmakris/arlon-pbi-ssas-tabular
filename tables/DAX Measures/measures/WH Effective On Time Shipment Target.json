@@ -1,0 +1,49 @@
+{
+  "name": "WH Effective On Time Shipment Target",
+  "description": "Monthly target values supplied by Logistics to the IT department annually. If there is no value available, the default values are 95% for OTS and 100% for T1 OTS.",
+  "expression": [
+    "",
+    "VAR KeyVal =",
+    "    IF(",
+    "        HASONEVALUE( 'Plant Data for Material'[Tier] )",
+    "            && SELECTEDVALUE( 'Plant Data for Material'[Tier] ) = \"A\",",
+    "        \"OTS_T1\",",
+    "        \"OTS\"",
+    "    )",
+    "",
+    "VAR Target =",
+    "    CALCULATE(",
+    "        AVERAGE( TARGET_KPI[TargetValue] ),",
+    "        TARGET_KPI[KpiKey] = KeyVal,",
+    "        TREATAS(",
+    "            VALUES( Plant[Plant] ),",
+    "            TARGET_KPI[LocationKey]",
+    "        ),",
+    "        TREATAS(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            TARGET_KPI[CalendarTimeKey]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "IF(",
+    "    ISBLANK( Target ),",
+    "    SWITCH(",
+    "        KeyVal,",
+    "        \"OTS\", 0.95,",
+    "        \"OTS_T1\", 1.00,",
+    "        0.95",
+    "    ),",
+    "    Target",
+    ")",
+    ""
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

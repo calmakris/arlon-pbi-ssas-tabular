@@ -1,0 +1,14 @@
+{
+  "name": "RLS_CostCenter",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_RLS_CostCenter = Source{[Schema=\"dbo\",Item=\"RLS_CostCenter\"]}[Data]",
+      "in",
+      "    dbo_RLS_CostCenter"
+    ]
+  }
+}

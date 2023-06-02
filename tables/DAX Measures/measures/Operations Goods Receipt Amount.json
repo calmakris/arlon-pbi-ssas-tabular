@@ -1,0 +1,20 @@
+{
+  "name": "Operations Goods Receipt Amount",
+  "description": "Total of transactions with 261 and 262 movement types with non-0000 reason codes in 'Goods Movement' table",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    ABS(SUM( 'Goods Movement'[Amount] )),",
+    "    KEEPFILTERS('Goods Movement'[Movement Type] IN {\"261\", \"262\"}),",
+    "    KEEPFILTERS('Goods Movement'[Reason Code for Movement] = \"0000\")",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Operations Scrap",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

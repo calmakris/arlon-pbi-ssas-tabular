@@ -1,0 +1,12 @@
+{
+  "name": "Comments",
+  "dataType": "string",
+  "description": "Comments or notes about the task performed",
+  "sourceColumn": "Comments",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

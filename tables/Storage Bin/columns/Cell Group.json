@@ -1,0 +1,13 @@
+{
+  "name": "Cell Group",
+  "dataType": "string",
+  "description": "First 3 characters of the storage bin (assuming it follows the FG rack name format)",
+  "sourceColumn": "CellGroup",
+  "sortByColumn": "CellGroupSort",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

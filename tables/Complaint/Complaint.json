@@ -1,0 +1,58 @@
+{
+  "name": "Complaint",
+  "description": [
+    "Contains complaints entered in SAP in the last few fiscal years.",
+    "",
+    "Use the 'Customer Master', 'Material Master', and 'Calendar' tables for further breakdowns of this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Complaint\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Complaint\",",
+        "    \"fromColumn\": \"CustomerOrgKey\",",
+        "    \"toTable\": \"Customer Master\",",
+        "    \"toColumn\": \"CustomerOrgKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Complaint\",",
+        "    \"fromColumn\": \"Enter Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Complaint\",",
+        "    \"fromColumn\": \"Last Credit Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Complaint\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Complaint\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

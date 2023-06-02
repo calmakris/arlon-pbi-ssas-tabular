@@ -1,0 +1,29 @@
+{
+  "name": "Website Referrer",
+  "description": "Top referrers to Arlon website in the last 7 days",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Website Referrer\",",
+        "    \"fromColumn\": \"DateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Website Referrer\",",
+        "    \"fromColumn\": \"GeoKey\",",
+        "    \"toTable\": \"Marketing Geo Network\",",
+        "    \"toColumn\": \"GeoKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

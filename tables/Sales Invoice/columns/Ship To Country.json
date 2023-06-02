@@ -1,0 +1,14 @@
+{
+  "name": "Ship To Country",
+  "dataType": "string",
+  "description": "Ship to country where the material is shipped. Destination is based on the ship to account in the billing document.",
+  "sourceColumn": "ShipToCountry",
+  "displayFolder": "Header",
+  "dataCategory": "Country",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

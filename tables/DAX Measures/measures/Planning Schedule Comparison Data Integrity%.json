@@ -1,0 +1,32 @@
+{
+  "name": "Planning Schedule Comparison Data Integrity%",
+  "description": "Percentage of which the production log has data (has start and stop datetimes) within a given timeframe. The closer to 100% the better but it is expected the number to be not exactly 100%. Anything above 100% indicates the log has overlapping records which means there is an error in the data logging. When the value is low, see the last datetime stamp recorded then ask operators for more details.",
+  "expression": [
+    "",
+    "VAR _Required = DIVIDE( DATEDIFF([Report Production Date], [Now Date], SECOND), 60 )",
+    "",
+    "VAR _Actual =",
+    "    CALCULATE(",
+    "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] >= [Report Date]",
+    "        ),",
+    "        FILTER(",
+    "            'Upstream Log Simplified',",
+    "            'Upstream Log Simplified'[Start Time] <= [Now Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    DIVIDE( _Actual, _Required )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

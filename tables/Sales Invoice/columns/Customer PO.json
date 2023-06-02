@@ -1,0 +1,13 @@
+{
+  "name": "Customer PO",
+  "dataType": "string",
+  "description": "Customer PO in the reference sales order of the invoice/billing document",
+  "sourceColumn": "ExtPurchaseOrderNo",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

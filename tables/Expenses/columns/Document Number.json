@@ -1,0 +1,12 @@
+{
+  "name": "Document Number",
+  "dataType": "string",
+  "description": "Key used to access a cost accounting document (such as a reposting of costs).",
+  "sourceColumn": "DocumentNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

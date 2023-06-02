@@ -1,0 +1,20 @@
+{
+  "name": "Inventory Amount Opening Prior Week Var",
+  "description": "Difference between the inventory snapshot amount on Sundays of current and prior week",
+  "expression": [
+    "",
+    "IF(",
+    "    OR( ISBLANK( [Inventory Amount Opening Current Week] ), ISBLANK( [Inventory Amount Opening Prior Week] ) ),",
+    "    BLANK(),",
+    "    [Inventory Amount Opening Current Week] - [Inventory Amount Opening Prior Week]",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

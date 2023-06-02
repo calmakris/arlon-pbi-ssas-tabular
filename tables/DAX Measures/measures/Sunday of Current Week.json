@@ -1,0 +1,27 @@
+{
+  "name": "Sunday of Current Week",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    MAX( 'Calendar'[Date] ),",
+    "    FILTER(",
+    "        ALL('Calendar'),",
+    "        'Calendar'[Date] <= [Report Date]",
+    "            && 'Calendar'[DayOfWeek] = 7",
+    "    )",
+    ")"
+  ],
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

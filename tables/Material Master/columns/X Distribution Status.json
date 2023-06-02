@@ -1,0 +1,13 @@
+{
+  "name": "X Distribution Status",
+  "dataType": "string",
+  "description": "The values \"AT\" and \"PR\" indicates the material is active in the market",
+  "sourceColumn": "XDistributionStatus",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Planning Schedule Gained Hours",
+  "description": "Difference of scheduled and actual start timestamps of the latest order at the time of data refresh. Then, subtract the total hours of skipped process orders in the schedule.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DIVIDE( SUM( 'Planning Schedule Comparison'[VarStartInMins] ), 60 ),",
+    "    KEEPFILTERS( 'Planning Schedule Comparison'[LatestFlag] = \"Yes\" ),",
+    "    FILTER(",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Date] >= [Report Date]",
+    "    )",
+    ") - [Skipped Planned Orders Duration]"
+  ],
+  "formatString": "#,0.0 \"hr\"",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

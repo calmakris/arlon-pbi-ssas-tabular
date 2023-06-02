@@ -1,0 +1,12 @@
+{
+  "name": "Notification Author",
+  "dataType": "string",
+  "sourceColumn": "NotificationAuthor",
+  "displayFolder": "_Related Hold Tag",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Material Status",
+  "dataType": "string",
+  "description": "The plant-specific material status restricts the usability (active/discountinued) of the material for the plant concerned",
+  "sourceColumn": "MaterialStatus",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

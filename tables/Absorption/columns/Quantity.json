@@ -1,0 +1,14 @@
+{
+  "name": "Quantity",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "QuantityValue",
+  "formatString": "0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

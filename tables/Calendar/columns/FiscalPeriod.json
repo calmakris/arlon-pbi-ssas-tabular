@@ -1,0 +1,14 @@
+{
+  "name": "FiscalPeriod",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "Fiscal_Month_Of_Year",
+  "displayFolder": "Individual Attributes",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "WH Effective On Time Shipment",
+  "description": [
+    "Daily average ratio of the number of on time lines plus exempted late lines divided by the number of lines.",
+    "",
+    "A sales order line item is on time if the entire ordered quantity is shipped on or before the first scheduled ship date. Otherwise, the line item is late. If Logistics specified in ZSDSHIP_LATE tcode in SAP that a line is not Arlon's fault, then the line item is exempted from being late."
+  ],
+  "expression": [
+    "",
+    "VAR OnTimeLines =",
+    "    CALCULATE(",
+    "        [Sales Order Line Count by First Ship Date On Time] + [Sales Order Line Count by First Ship Date Late Exempt],",
+    "        'Sales Order'[Late Exclude Flag] <> \"Yes\"",
+    "    )",
+    "",
+    "VAR AllLines =",
+    "    CALCULATE(",
+    "        [Sales Order Line Count by First Ship Date],",
+    "        'Sales Order'[Late Exclude Flag] <> \"Yes\"",
+    "    )",
+    "",
+    "VAR OTS = DIVIDE(OnTimeLines, AllLines)",
+    "",
+    "RETURN -- Weighted average by line count",
+    "    CALCULATE(",
+    "        DIVIDE(",
+    "            SUMX(",
+    "                VALUES( 'Calendar'[Date] ),",
+    "                [Sales Order Line Count by First Ship Date] * OTS",
+    "            ),",
+    "            [Sales Order Line Count by First Ship Date]",
+    "        ),",
+    "        'Sales Order'[Late Exclude Flag] <> \"Yes\"",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

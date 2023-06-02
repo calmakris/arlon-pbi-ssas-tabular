@@ -1,0 +1,14 @@
+{
+  "name": "Storage Bin Utilization Snapshots",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_zDAILY_STRBIN_UTIL = Source{[Schema=\"dbo\",Item=\"zDAILY_STRBIN_UTIL\"]}[Data]",
+      "in",
+      "    dbo_zDAILY_STRBIN_UTIL"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Was New Product Flag",
+  "dataType": "string",
+  "description": "Determines if the material was a new product at the time the invoice is posted. A material is a new product if the invoice is posted within the next 36 months after its Commercialization Date according to the material master.",
+  "sourceColumn": "WasNewProductFlag",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

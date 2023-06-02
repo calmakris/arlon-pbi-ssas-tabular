@@ -1,0 +1,15 @@
+{
+  "name": "Exchange Rate",
+  "dataType": "decimal",
+  "description": "Exchange rate to convert the document amounts to USD. This is the transactional rate (in other words, the rate at the pricing date of the document).",
+  "sourceColumn": "ExchangeRate",
+  "formatString": "0.0000",
+  "displayFolder": "Header",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

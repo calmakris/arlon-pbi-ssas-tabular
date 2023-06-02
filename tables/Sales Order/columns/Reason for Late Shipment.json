@@ -1,0 +1,16 @@
+{
+  "name": "Reason for Late Shipment",
+  "dataType": "string",
+  "description": [
+    "Reason code assigned by Planning/Shipping department per sales order item if the item is late. See 'Late Flag' field for the definition of late and SAP tcode ZSDSHIP_LATE to assign reason codes per late item.",
+    ""
+  ],
+  "sourceColumn": "LateReasonText",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

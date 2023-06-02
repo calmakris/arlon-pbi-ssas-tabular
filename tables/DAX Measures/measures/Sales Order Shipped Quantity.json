@@ -1,0 +1,19 @@
+{
+  "name": "Sales Order Shipped Quantity",
+  "description": "Total quantity shipped (or, delivery notes with actual PGI date set) in the sales order line item.",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( 'Sales Order'[ShippedQuantity] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

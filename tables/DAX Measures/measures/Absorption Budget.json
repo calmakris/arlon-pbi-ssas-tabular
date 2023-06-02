@@ -1,0 +1,13 @@
+{
+  "name": "Absorption Budget",
+  "description": "Total of the monthly earned labor and overhead budget entered in the ZBUDGET table in SAP.",
+  "expression": " [Earned Labor Budget] + [Earned Overhead Budget]",
+  "formatString": "#,0",
+  "displayFolder": "Absorption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

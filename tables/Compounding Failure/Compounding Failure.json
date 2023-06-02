@@ -1,0 +1,39 @@
+{
+  "name": "Compounding Failure",
+  "description": [
+    "Contains all the process orders that failed in Compounding. These records are logged by the operators or the supervisor.",
+    "",
+    "Use the 'Calendar' and 'Work Center' tables for further breakdowns of this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Compounding Failure\",",
+        "    \"fromColumn\": \"Fail Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Compounding Failure\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Compounding Failure\",",
+        "    \"fromColumn\": \"Work Center\",",
+        "    \"toTable\": \"Work Center\",",
+        "    \"toColumn\": \"Work Center\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

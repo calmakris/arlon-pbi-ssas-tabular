@@ -1,0 +1,14 @@
+{
+  "name": "Safety Incident Log",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_SafetyIncidentLog = Source{[Schema=\"dbo\",Item=\"FACT_SafetyIncidentLog\"]}[Data]",
+      "in",
+      "    dbo_FACT_SafetyIncidentLog"
+    ]
+  }
+}

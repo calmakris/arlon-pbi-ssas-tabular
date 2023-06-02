@@ -1,0 +1,18 @@
+{
+  "name": "PlanFinishDateAltKey",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "PlanFinishDateAltKey",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

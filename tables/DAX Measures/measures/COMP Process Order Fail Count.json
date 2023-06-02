@@ -1,0 +1,13 @@
+{
+  "name": "COMP Process Order Fail Count",
+  "description": "Count of process orders that failed according to the First Pass Failures database in Compounding",
+  "expression": "DISTINCTCOUNT( 'Compounding Failure'[Process Order Number] )",
+  "formatString": "0",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

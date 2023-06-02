@@ -1,0 +1,14 @@
+{
+  "name": "VarDuration",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "VarDuration",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

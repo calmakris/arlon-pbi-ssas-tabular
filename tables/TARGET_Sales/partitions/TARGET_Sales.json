@@ -1,0 +1,14 @@
+{
+  "name": "TARGET_Sales",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_TARGET_Sales = Source{[Schema=\"dbo\",Item=\"TARGET_Sales\"]}[Data]",
+      "in",
+      "    dbo_TARGET_Sales"
+    ]
+  }
+}

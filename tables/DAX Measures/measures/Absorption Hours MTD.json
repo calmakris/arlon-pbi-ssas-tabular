@@ -1,0 +1,25 @@
+{
+  "name": "Absorption Hours MTD",
+  "description": "Month-to-date quantity (in hours) posted in earned labor, setup, and overhead cost elements",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Absorption Hours],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

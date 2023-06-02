@@ -1,0 +1,14 @@
+{
+  "name": "Dynamic Target Flag",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "DynamicTargetFlag",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

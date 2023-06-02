@@ -1,0 +1,23 @@
+{
+  "name": "Weekdays in Month",
+  "description": "Number of weekdays in the whole month",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    COUNTROWS( 'Calendar' ),",
+    "    FILTER(",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Is Weekday]",
+    "    ),",
+    "    VALUES( 'Calendar'[Year_Month_Sort_Key] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Level",
+  "dataType": "int64",
+  "description": "Postive increments refer to top-down levels of the BOM hierarchy while decrementing negative values is bottom-up.",
+  "sourceColumn": "LevelNo",
+  "formatString": "0",
+  "displayFolder": "BOM",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

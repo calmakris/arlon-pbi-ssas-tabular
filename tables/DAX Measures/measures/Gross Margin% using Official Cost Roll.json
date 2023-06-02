@@ -1,0 +1,23 @@
+{
+  "name": "Gross Margin% using Official Cost Roll",
+  "description": "Margin between latest seliing price and standard cost from latest/official cost roll. This measure is best used if analyzed by 'Material Master' and/or 'Plant'.",
+  "expression": [
+    "IF(",
+    "    ISBLANK([Standard Cost])",
+    "        || ISBLANK([Selling Price]),",
+    "    BLANK(),",
+    "    DIVIDE(",
+    "        [Selling Price] - [Standard Cost],",
+    "        [Selling Price]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Material Cost and Price",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Product Management\"]"
+    }
+  ]
+}

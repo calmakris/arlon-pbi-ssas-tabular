@@ -1,0 +1,7 @@
+{
+  "name": "StorageKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "StorageKey",
+  "isAvailableInMdx": false
+}

@@ -4,6 +4,7 @@
   "description": "Department of the primary work center of the process order",
   "isHidden": true,
   "sourceColumn": "Department",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

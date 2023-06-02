@@ -2739,7 +2739,9 @@
               "        [COMP Process Order Success Count],",
               "        [COMP Process Order Count]",
               "    ),",
-              "    KEEPFILTERS( 'Process Order'[Count in COMP First Pass Flag] = \"Yes\" )",
+              "    KEEPFILTERS( 'Process Order'[Count in COMP First Pass Flag] = \"Yes\" ),",
+              "    KEEPFILTERS( 'Process Order'[Order Type] IN {\"PI01\", \"PI02\", \"PI04\"} ),",
+              "    KEEPFILTERS( 'Material Master'[Material Group] <> \"ADHPREMIX\" )",
               ")"
             ],
             "formatString": "#,0.0%;-#,0.0%;#,0.0%",
@@ -18184,6 +18186,12 @@
             "dataType": "string",
             "description": "This is the base unit of measure in which the process order is managed. The system converts all the quantities entered in other units of measure (alternative units of measure) to the base unit of measure.",
             "sourceColumn": "QtyUoM"
+          },
+          {
+            "name": "Order Type",
+            "dataType": "string",
+            "description": "Determines if the order is production, FE, ME, etc.",
+            "sourceColumn": "OrderType"
           }
         ],
         "partitions": [
@@ -22296,7 +22304,6 @@
       },
       {
         "name": "391e3baa-53ca-4b33-af40-2a53723c04f6",
-        "toCardinality": "many",
         "fromTable": "Converting OEE",
         "fromColumn": "ShiftNo",
         "toTable": "Production Shift",
@@ -22535,13 +22542,6 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "ace15164-0ecb-4ff1-86f2-7069085a3c5d",
-        "fromTable": "Material Trace",
-        "fromColumn": "PlantNo",
-        "toTable": "Plant",
-        "toColumn": "Plant"
-      },
-      {
         "name": "b178877e-f50b-4941-9fec-08c38c85030f",
         "toCardinality": "many",
         "fromTable": "Inventory",
@@ -22626,13 +22626,6 @@
         "fromColumn": "Department",
         "toTable": "Department",
         "toColumn": "Department"
-      },
-      {
-        "name": "83a0da32-a36f-43d1-91e2-23c2fe2dc549",
-        "fromTable": "Compounding Log",
-        "fromColumn": "Process Order Number",
-        "toTable": "Process Order",
-        "toColumn": "Process Order Number"
       },
       {
         "name": "5690ca45-425f-4a14-bec1-2a2c63fa6cec",
@@ -32889,6 +32882,74 @@
                 "name": "Stock Category"
               }
             ]
+          },
+          {
+            "name": "Purchase Order",
+            "columns": [
+              {
+                "name": "PurchaseOrderLineKey"
+              },
+              {
+                "name": "Currency"
+              },
+              {
+                "name": "Purchase Order Number"
+              },
+              {
+                "name": "Purchase Line Number"
+              },
+              {
+                "name": "Document Type"
+              },
+              {
+                "name": "Complete Delivery Flag"
+              },
+              {
+                "name": "Goods Receipt Required Flag"
+              },
+              {
+                "name": "Document Date"
+              },
+              {
+                "name": "First Delivery Date"
+              },
+              {
+                "name": "Item Delivery Date"
+              },
+              {
+                "name": "Issuing Plant"
+              },
+              {
+                "name": "Receiving Plant"
+              },
+              {
+                "name": "Material Group"
+              },
+              {
+                "name": "Material Type"
+              },
+              {
+                "name": "Material Number"
+              },
+              {
+                "name": "Material Description"
+              },
+              {
+                "name": "Req Track Number"
+              },
+              {
+                "name": "Requisitioner Name"
+              },
+              {
+                "name": "Unit Price"
+              },
+              {
+                "name": "Quantity Unit"
+              },
+              {
+                "name": "Purchase Order Unit"
+              }
+            ]
           }
         ]
       },
@@ -39377,5 +39438,6 @@
         "value": "{\"RuleIDs\":[\"DATE/CALENDAR_TABLES_SHOULD_BE_MARKED_AS_A_DATE_TABLE\"]}"
       }
     ]
-  }
+  },
+  "id": "SemanticModel"
 }

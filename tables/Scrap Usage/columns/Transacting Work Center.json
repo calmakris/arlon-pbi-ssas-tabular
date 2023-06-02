@@ -1,0 +1,12 @@
+{
+  "name": "Transacting Work Center",
+  "dataType": "string",
+  "description": "CRHD.ARBPL; Work center of the process order of the transaction",
+  "sourceColumn": "WorkCenter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

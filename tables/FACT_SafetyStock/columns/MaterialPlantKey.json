@@ -1,0 +1,7 @@
+{
+  "name": "MaterialPlantKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialPlantKey",
+  "isAvailableInMdx": false
+}

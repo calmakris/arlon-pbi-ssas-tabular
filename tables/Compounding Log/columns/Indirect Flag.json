@@ -1,0 +1,14 @@
+{
+  "name": "Indirect Flag",
+  "dataType": "string",
+  "description": "Determines if the task is not related to production",
+  "sourceColumn": "IsIndirect",
+  "formatString": "#,0",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

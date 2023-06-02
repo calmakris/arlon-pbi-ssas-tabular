@@ -1,0 +1,12 @@
+{
+  "name": "Rework",
+  "dataType": "string",
+  "description": "Determines if the process order is going to be remake, scrap, etc.",
+  "sourceColumn": "Rework",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

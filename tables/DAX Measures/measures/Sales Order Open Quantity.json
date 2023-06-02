@@ -1,0 +1,20 @@
+{
+  "name": "Sales Order Open Quantity",
+  "description": "Total quantity in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
+  "expression": [
+    "  ",
+    "CALCULATE(",
+    "    SUM( 'Sales Order'[CustomerOpenQuantity] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

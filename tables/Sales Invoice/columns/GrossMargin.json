@@ -1,0 +1,20 @@
+{
+  "name": "GrossMargin",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "GrossMarginValueUSD",
+  "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Currency\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

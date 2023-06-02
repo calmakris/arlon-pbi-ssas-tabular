@@ -1,0 +1,13 @@
+{
+  "name": "Actual",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "Actual",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

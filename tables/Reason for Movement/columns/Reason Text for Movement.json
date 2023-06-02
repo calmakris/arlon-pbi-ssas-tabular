@@ -1,0 +1,11 @@
+{
+  "name": "Reason Text for Movement",
+  "dataType": "string",
+  "sourceColumn": "ReasonTextForMovement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

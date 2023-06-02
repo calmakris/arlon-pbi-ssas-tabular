@@ -1,0 +1,13 @@
+{
+  "name": "Goods Receipt Required Flag",
+  "dataType": "string",
+  "description": "Determines if there is a physical item coming to the destination",
+  "sourceColumn": "GoodsReceiptIndicator",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

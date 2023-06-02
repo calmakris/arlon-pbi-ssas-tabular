@@ -1,0 +1,16 @@
+{
+  "name": "Publish Date",
+  "dataType": "dateTime",
+  "sourceColumn": "PublishDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

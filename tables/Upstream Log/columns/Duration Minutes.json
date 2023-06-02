@@ -1,0 +1,14 @@
+{
+  "name": "Duration Minutes",
+  "dataType": "decimal",
+  "description": "Duration between [Start Time] and [Stop Time] in minutes",
+  "sourceColumn": "DurationMinutes",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

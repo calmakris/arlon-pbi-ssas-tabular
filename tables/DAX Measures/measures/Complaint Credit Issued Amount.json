@@ -1,0 +1,13 @@
+{
+  "name": "Complaint Credit Issued Amount",
+  "description": "Total amount credited to the customer in the complaint",
+  "expression": " SUM('Complaint'[CreditIssueValueUSD])",
+  "formatString": "#,0",
+  "displayFolder": "Complaints",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Further Detail",
+  "dataType": "string",
+  "sourceColumn": "FurtherDetail",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "CONV Availability",
+  "description": [
+    "Uptime divided by the difference between runtime and non production seconds.",
+    "",
+    "Uptime is when Converting is running production. Runtime is the total duration of the entire day. Non-production is the total duration of break time, lunch, and other activities marked as non-production in the Converting runtime log using the downtime integer field."
+  ],
+  "expression": [
+    " ",
+    "DIVIDE(",
+    "    [CONV Uptime Seconds],",
+    "    [CONV Runtime Seconds] - [CONV Non Production Seconds]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Gross Sales Budget FYTD",
+  "description": "Assigned gross margin budget at the specified period of the fiscal year. Budget numbers are submitted by Commercial Leadership Team (CLT) to IT.",
+  "expression": [
+    " ",
+    "VAR WeightVal = ",
+    "    DIVIDE( ",
+    "        [Gross Sales FYTD PY], ",
+    "        CALCULATE( [Gross Sales FYTD PY], ALL('Material Master') ) ",
+    "    )",
+    "",
+    "RETURN",
+    "    SWITCH(TRUE(),",
+    "        ISFILTERED( 'Material Master' ), CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) ) * WeightVal,",
+    "        ISFILTERED( 'Customer Master' ), CALCULATE( [Gross Sales Budget], DATESYTD( 'Calendar'[Date], \"09/30\" ) ),",
+    "        BLANK()",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

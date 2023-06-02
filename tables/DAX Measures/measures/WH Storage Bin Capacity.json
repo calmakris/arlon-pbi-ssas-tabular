@@ -1,0 +1,19 @@
+{
+  "name": "WH Storage Bin Capacity",
+  "description": "Capacity per storage bin maintained in the storage bin master data in SAP",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM('Storage Bin'[Capacity] ),",
+    "    VALUES( 'Storage Bin'[StorageKey] )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

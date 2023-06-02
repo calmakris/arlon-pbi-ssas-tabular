@@ -1,0 +1,22 @@
+{
+  "name": "Backorder Snapshot Amount PD",
+  "description": "Snapshot of the amount of open sales order line items yesterday",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM('Backorder Snapshots'[Outgoing Amount]),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] = [Report Date] - 1",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\"]"
+    }
+  ]
+}

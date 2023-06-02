@@ -1,0 +1,14 @@
+{
+  "name": "Company Code",
+  "dataType": "string",
+  "description": "SAP Source: BSIS/BSAS.BUKRS",
+  "isHidden": true,
+  "sourceColumn": "CompanyCode",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

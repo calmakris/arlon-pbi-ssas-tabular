@@ -1,0 +1,16 @@
+{
+  "name": "DeliveredQuantity",
+  "dataType": "decimal",
+  "description": "SAP Source: AFPO.WEMNG",
+  "isHidden": true,
+  "sourceColumn": "DeliverQty",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

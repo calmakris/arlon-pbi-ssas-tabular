@@ -1,0 +1,16 @@
+{
+  "name": "OrderAmount",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OrderAmount",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Local Values",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

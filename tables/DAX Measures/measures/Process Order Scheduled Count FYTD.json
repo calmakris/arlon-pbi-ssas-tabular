@@ -1,0 +1,13 @@
+{
+  "name": "Process Order Scheduled Count FYTD",
+  "description": "Fiscal year-to-date count of process orders by scheduled start date",
+  "expression": "CALCULATE( [Process Order Scheduled Count], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+  "formatString": "#,0",
+  "displayFolder": "Process Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

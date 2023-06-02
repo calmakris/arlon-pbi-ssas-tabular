@@ -1,0 +1,10 @@
+{
+  "type": "calculatedTableColumn",
+  "name": "Date",
+  "dataType": "int64",
+  "isNameInferred": false,
+  "isDataTypeInferred": true,
+  "isHidden": true,
+  "sourceColumn": "[Value]",
+  "isAvailableInMdx": false
+}

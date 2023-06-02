@@ -1,0 +1,11 @@
+{
+  "name": "Mode",
+  "dataType": "string",
+  "sourceColumn": "Name",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Sales Group",
+  "dataType": "string",
+  "description": "Sales group assigned to the customer in the customer master account in SAP. Finance and Accounting department maintains this assignment in SAP. All changes are requested by the Commercial Leadership Team (CLT) at least once every fiscal year.",
+  "sourceColumn": "SalesGroup",
+  "displayFolder": "Sales Related",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

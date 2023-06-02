@@ -1,0 +1,14 @@
+{
+  "name": "Calendar Week Number",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "Week_Of_Year",
+  "isAvailableInMdx": false,
+  "displayFolder": "Individual Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

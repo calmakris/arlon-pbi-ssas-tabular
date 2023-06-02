@@ -1,0 +1,26 @@
+{
+  "name": "Planning Schedule Processing Hour MTD",
+  "description": "Total processing hour in the latest planning schedule",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        SUM( 'Planning Schedule'[Processing Hour] ),",
+    "        DATESMTD( 'Calendar'[Date] ),",
+    "        'Planning Schedule'[Ranking Desc] = 1",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "MaterialNo",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialNo",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

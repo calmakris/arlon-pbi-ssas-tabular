@@ -1,0 +1,15 @@
+{
+  "name": "Footage",
+  "dataType": "int64",
+  "description": "Total footage of the run",
+  "isHidden": true,
+  "sourceColumn": "Footage",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

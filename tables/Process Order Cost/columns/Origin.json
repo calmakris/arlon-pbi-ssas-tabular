@@ -1,0 +1,11 @@
+{
+  "name": "Origin",
+  "dataType": "string",
+  "sourceColumn": "Origin",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

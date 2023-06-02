@@ -1,0 +1,19 @@
+{
+  "name": "Purchase Order Invoice Receipt Quantity FYTD PY Last",
+  "description": "Last positive invoice receipt quantity from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    AVERAGE( 'Purchase Order Invoice'[Last PY Quantity] ),",
+    "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

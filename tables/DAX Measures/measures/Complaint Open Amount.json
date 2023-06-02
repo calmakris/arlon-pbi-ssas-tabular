@@ -1,0 +1,13 @@
+{
+  "name": "Complaint Open Amount",
+  "description": "Difference between the complaint amount and credit issued in the complaint",
+  "expression": " SUM('Complaint'[OpenValueUSD])",
+  "formatString": "#,0",
+  "displayFolder": "Complaints",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

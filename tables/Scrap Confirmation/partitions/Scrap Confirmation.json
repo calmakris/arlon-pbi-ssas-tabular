@@ -1,0 +1,14 @@
+{
+  "name": "Scrap Confirmation",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_ScrapConfirmation = Source{[Schema=\"dbo\",Item=\"FACT_ScrapConfirmation\"]}[Data]",
+      "in",
+      "    dbo_FACT_ScrapConfirmation"
+    ]
+  }
+}

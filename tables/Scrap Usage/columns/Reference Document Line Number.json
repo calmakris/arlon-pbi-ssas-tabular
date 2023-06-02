@@ -1,0 +1,12 @@
+{
+  "name": "Reference Document Line Number",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.AWREF",
+  "sourceColumn": "RefDocLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

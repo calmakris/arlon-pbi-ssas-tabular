@@ -1,0 +1,13 @@
+{
+  "name": "Planning Schedule Scheduled Hours",
+  "description": "Total scheduled duration (in hours) of scheduled process orders",
+  "expression": "SUM( 'Planning Schedule Comparison'[Plan Duration] )",
+  "formatString": "#,0.0",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

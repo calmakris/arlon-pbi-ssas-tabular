@@ -1,0 +1,14 @@
+{
+  "name": "Calendar Month",
+  "dataType": "string",
+  "description": "Month name but sorted by calendar month",
+  "sourceColumn": "Month_Name_Abbrev_Calendar",
+  "sortByColumn": "MonthOfYear",
+  "displayFolder": "Individual Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

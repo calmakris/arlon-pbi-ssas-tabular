@@ -1,0 +1,19 @@
+{
+  "name": "Planning Schedule Target Quantity",
+  "description": "Total target quantity in the daily schedule files created by Planning",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Planning Schedule'[Target Quantity] ),",
+    "    'Planning Schedule'[Ranking Desc] = 1",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Planning Schedule",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

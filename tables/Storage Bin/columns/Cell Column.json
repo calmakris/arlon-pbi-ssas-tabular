@@ -1,0 +1,13 @@
+{
+  "name": "Cell Column",
+  "dataType": "int64",
+  "description": "A custom value assigned to order cell groups in order from left to right (X18 to X00)",
+  "sourceColumn": "CellColumn",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

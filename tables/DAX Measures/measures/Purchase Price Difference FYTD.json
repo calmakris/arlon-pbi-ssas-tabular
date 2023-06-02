@@ -1,0 +1,19 @@
+{
+  "name": "Purchase Price Difference FYTD",
+  "description": "Difference between current fiscal year's actual invoice receipt amount and the current fiscal year's invoice receipt amount using prior fiscal year's last unit price",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( 'Purchase Order Invoice'[Price Difference] ),",
+    "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

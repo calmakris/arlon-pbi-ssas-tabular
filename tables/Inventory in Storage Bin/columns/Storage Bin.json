@@ -1,0 +1,12 @@
+{
+  "name": "Storage Bin",
+  "dataType": "string",
+  "description": "SAP Source: LAGP.LGPLA",
+  "sourceColumn": "StorageBin",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Inventory Amount Closing Prior Month",
+  "description": "Inventory snapshot amount at the end of month last month",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory Snapshots'[Amount] ),",
+    "    FILTER( ",
+    "        'Calendar',",
+    "        'Calendar'[Date] = [End of Prior Month]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

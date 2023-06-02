@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Line Count Automated and Manual",
+  "description": "Total count of sales order line items entered by Customer Service and BATCHUSER",
+  "expression": " [Sales Order Lines Manual] + [Sales Order Lines Automated]",
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

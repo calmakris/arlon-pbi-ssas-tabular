@@ -1,0 +1,23 @@
+{
+  "name": "Was New Product Gross Sales",
+  "description": [
+    "Total revenue amount of new products at the time of the invoice posting date. A material is a new product if the invoice is posted within the next 36 months after its Commercialization Date according to the material master.",
+    "",
+    "This value is toggleable to local currency using the \"_Currency To Use\" table."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Gross Sales],",
+    "    KEEPFILTERS( 'Sales Invoice'[Was New Product Flag] = \"Yes\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

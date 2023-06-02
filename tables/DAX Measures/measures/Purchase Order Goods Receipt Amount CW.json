@@ -1,0 +1,30 @@
+{
+  "name": "Purchase Order Goods Receipt Amount CW",
+  "description": "Total amount of materials in purchase orders for incoming inventory received this week",
+  "expression": [
+    " ",
+    "VAR BegDate = ([Report Date] + 1) - WEEKDAY( [Report Date] + 1 )",
+    "VAR EndDate = BegDate + 7",
+    "RETURN",
+    "CALCULATE(",
+    "    ABS([GRIR Amount in Local Currency2]),",
+    "    FILTER(",
+    "        'Goods and Invoice Receipt',",
+    "        'Goods and Invoice Receipt'[Document Type] IN {\"WE\", \"WL\"}",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] >= BegDate",
+    "            && 'Calendar'[Date] <= EndDate",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

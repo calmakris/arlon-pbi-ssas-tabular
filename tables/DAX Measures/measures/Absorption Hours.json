@@ -1,0 +1,13 @@
+{
+  "name": "Absorption Hours",
+  "description": "Total quantity (in hours) posted in the earned labor, setup, and overhead cost elements",
+  "expression": "SUM( Absorption[Quantity] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Absorption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

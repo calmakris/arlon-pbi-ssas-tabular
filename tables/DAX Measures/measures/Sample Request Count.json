@@ -1,0 +1,23 @@
+{
+  "name": "Sample Request Count",
+  "description": "Total count of free-of-charge or sample sales orders and open requests in Odoo",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'Sales Order'[Order Number] ),",
+    "    FILTER(",
+    "        'Sales Order',",
+    "        'Sales Order'[Sample Category] <> \"Not Applicable\"",
+    "    )",
+    ") +",
+    "DISTINCTCOUNT( 'Odoo Sample Request'[Ticket Number] )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sample Requests",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

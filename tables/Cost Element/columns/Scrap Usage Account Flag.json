@@ -1,0 +1,12 @@
+{
+  "name": "Scrap Usage Account Flag",
+  "dataType": "string",
+  "sourceColumn": "IsScrapUsageAcct",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "CycleTime",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "CycleTime",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Expenses Amount",
+  "description": "Total amount posted in the expenses related cost elements per cost center",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM(Expenses[Amount]) + 0,",
+    "    ALL( Plant[Plant] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Expenses",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Warehouse\"]"
+    }
+  ]
+}

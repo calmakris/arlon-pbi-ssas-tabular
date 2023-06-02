@@ -1,0 +1,13 @@
+{
+  "name": "Same Day Flag",
+  "dataType": "string",
+  "description": "Calculated column. Value is 'Yes' if the order comment contains 'SAMEDAY' or 'SAME-DAY'.",
+  "sourceColumn": "SameDayFlag",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

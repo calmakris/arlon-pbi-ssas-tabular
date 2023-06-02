@@ -1,0 +1,8 @@
+{
+  "name": "Off Hours",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OffHours",
+  "formatString": "0.00",
+  "isAvailableInMdx": false
+}

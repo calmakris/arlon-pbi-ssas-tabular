@@ -1,0 +1,23 @@
+{
+  "name": "Upstream Downtime Hours",
+  "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of unplanned clean up and unplanned downtime records",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DIVIDE( SUM( 'Upstream Log Simplified'[DurationMinute] ), 60 ) + 0,",
+    "    FILTER(",
+    "        'Upstream Log Simplified',",
+    "        'Upstream Log Simplified'[Category] IN { \"Clean Up\", \"Downtime\" }",
+    "            && LEFT('Upstream Log Simplified'[Causes], 9) = \"Unplanned\"",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00 \"hr\";-#,0.00 \"hr\";0 \"hr\"",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

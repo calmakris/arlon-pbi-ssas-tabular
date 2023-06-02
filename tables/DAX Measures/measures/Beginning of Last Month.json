@@ -1,0 +1,13 @@
+{
+  "name": "Beginning of Last Month",
+  "expression": "EDATE([Beginning of Month], -1)",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

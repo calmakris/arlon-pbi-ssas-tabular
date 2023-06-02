@@ -1,0 +1,15 @@
+{
+  "name": "Department",
+  "dataType": "string",
+  "description": "Unique identifier of this table. It may be related to other tables with Department fields.",
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "DepartmentKey",
+  "sortByColumn": "SortKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Expenses\",\"Inventory\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

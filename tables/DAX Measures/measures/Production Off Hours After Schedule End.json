@@ -1,0 +1,31 @@
+{
+  "name": "Production Off Hours After Schedule End",
+  "expression": [
+    "",
+    "VAR BegDate = ",
+    "    DATE(",
+    "        YEAR( [Scheduled Production End Timestamp] ),",
+    "        MONTH( [Scheduled Production End Timestamp] ),",
+    "        DAY( [Scheduled Production End Timestamp])",
+    "    )",
+    "",
+    "RETURN",
+    "CALCULATE(",
+    "    SUM( 'FACT_DepartmentOffDay'[Off Hours] ),",
+    "    ALL( 'Calendar'[Date] ),",
+    "    FILTER(",
+    "        ALL( 'FACT_DepartmentOffDay'[Date] ),",
+    "        'FACT_DepartmentOffDay'[Date] > BegDate",
+    "            && 'FACT_DepartmentOffDay'[Date] <= [End of Month]",
+    "    )",
+    ")"
+  ],
+  "formatString": "0.00",
+  "displayFolder": "Absorption\\_Projection",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

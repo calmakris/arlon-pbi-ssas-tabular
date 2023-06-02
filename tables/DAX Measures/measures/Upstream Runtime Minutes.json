@@ -1,0 +1,44 @@
+{
+  "name": "Upstream Runtime Minutes",
+  "description": "Sum of duration between 'Start Time' and 'Stop Time' in minutes of all records except end of production, EOS, and FEs",
+  "expression": [
+    "",
+    "VAR CAST = ",
+    "    CALCULATE(",
+    "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
+    "        FILTER(",
+    "            'Upstream Log Simplified',",
+    "            'Upstream Log Simplified'[Category] <> \"End of Production\"",
+    "                && 'Upstream Log Simplified'[Further Detail] <> \"EOS\"",
+    "                && NOT(CONTAINSSTRING('Upstream Log Simplified'[Causes], \"FE\"))",
+    "        )",
+    "    )",
+    "",
+    "VAR COAT = ",
+    "    CALCULATE(",
+    "        SUM( 'Upstream Log Simplified'[DurationMinute] ),",
+    "        FILTER(",
+    "            'Upstream Log Simplified',",
+    "            'Upstream Log Simplified'[Category] <> \"End of Production\"",
+    "                && 'Upstream Log Simplified'[Further Detail] <> \"EOS\"",
+    "                && 'Upstream Log Simplified'[Non Uptime Reason] <> \"PLANNED DT\"",
+    "                && NOT(CONTAINSSTRING('Upstream Log Simplified'[Causes], \"FE\"))",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "SWITCH(TRUE(),",
+    "    \"CAST\" IN ALLSELECTED(Machine[Department]), CAST,",
+    "    \"COAT\" IN ALLSELECTED(Machine[Department]), COAT,",
+    "    CAST",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

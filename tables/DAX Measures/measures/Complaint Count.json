@@ -1,0 +1,16 @@
+{
+  "name": "Complaint Count",
+  "description": "Distinct count of complaints entered (by complaint number, not by line)",
+  "expression": [
+    " DISTINCTCOUNT( 'Complaint'[Complaint Number] )",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Complaints",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

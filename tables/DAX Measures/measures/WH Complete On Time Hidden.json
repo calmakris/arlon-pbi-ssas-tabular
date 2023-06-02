@@ -1,0 +1,30 @@
+{
+  "name": "WH Complete On Time Hidden",
+  "expression": [
+    "",
+    "AVERAGEX(",
+    "    VALUES( 'Customer Master'[Customer Name] ),",
+    "    IF(",
+    "        CALCULATE(",
+    "            [Sales Order Line Count by First Ship Date],",
+    "            'Sales Order'[Late Exclude Flag] <> \"Yes\"",
+    "        ) = BLANK(),",
+    "        BLANK(),",
+    "        IF(",
+    "            CALCULATE(",
+    "                [Sales Order Line Count by First Ship Date],",
+    "                'Sales Order'[Late Exclude Flag] <> \"Yes\"",
+    "            ) = CALCULATE(",
+    "                [Sales Order Line Count by First Ship Date On Time] + [Sales Order Line Count by First Ship Date Late Exempt],",
+    "                'Sales Order'[Late Exclude Flag] <> \"Yes\"",
+    "            ),",
+    "            1,",
+    "            0",
+    "        )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "isHidden": true,
+  "displayFolder": "Warehouse"
+}

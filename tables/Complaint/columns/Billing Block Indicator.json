@@ -1,0 +1,12 @@
+{
+  "name": "Billing Block Indicator",
+  "dataType": "string",
+  "description": "Billing block status of the complaint. If empty, there is no billing block in the complaint.",
+  "sourceColumn": "BillingBlockIndicator",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

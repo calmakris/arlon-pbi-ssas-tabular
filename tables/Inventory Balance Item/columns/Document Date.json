@@ -1,0 +1,17 @@
+{
+  "name": "Document Date",
+  "dataType": "dateTime",
+  "description": "SAP Source: BSIS/BSAS.BLDAT",
+  "sourceColumn": "DocumentDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

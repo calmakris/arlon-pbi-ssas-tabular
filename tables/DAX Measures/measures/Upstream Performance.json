@@ -1,0 +1,27 @@
+{
+  "name": "Upstream Performance",
+  "description": "Upstream actual production footage divided by ideal production footage",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    DIVIDE( [Upstream Actual Production Footage], [Upstream Ideal Production Footage] ),",
+    "    ALLSELECTED(",
+    "        'Upstream Log Simplified'[Category],",
+    "        'Upstream Log Simplified'[Causes],",
+    "        'Upstream Log Simplified'[Further Detail],",
+    "        'Upstream Log Simplified'[Comments],",
+    "        'Upstream Log Simplified'[Non Uptime Reason],",
+    "        'Upstream Log Simplified'[Specification Number],",
+    "        'Upstream Log Simplified'[Efficiency Hitter]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Inspection Lot Number",
+  "dataType": "string",
+  "sourceColumn": "InspectionLotNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

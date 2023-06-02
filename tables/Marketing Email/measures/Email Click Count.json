@@ -1,0 +1,12 @@
+{
+  "name": "Email Click Count",
+  "description": "The number of unique recipients who clicked on any link in your email, excluding the Unsubscribe and Subscription Preferences links.",
+  "expression": "SUM( 'Marketing Email'[Click] )",
+  "formatString": "#,0",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

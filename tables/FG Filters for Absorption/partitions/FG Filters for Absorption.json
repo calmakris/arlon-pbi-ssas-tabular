@@ -1,0 +1,15 @@
+{
+  "name": "FG Filters for Absorption",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_BillOfMaterial_Backtrace = Source{[Schema=\"dbo\",Item=\"DIM_BillOfMaterial_Backtrace\"]}[Data],",
+      "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_DIM_BillOfMaterial_Backtrace,{\"MaterialNo\", \"HighestBomKey\", \"MaterialType\", \"MaterialGroup\", \"ProductSeries\", \"FilmType\", \"ProductHierarchyDescriptionL1\", \"ProductHierarchyDescriptionL2\", \"ProductHierarchyDescriptionL3\"})",
+      "in",
+      "    #\"Removed Other Columns\""
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Order Amount",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OrderAmountUSD",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

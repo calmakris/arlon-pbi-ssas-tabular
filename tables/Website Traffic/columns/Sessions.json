@@ -1,0 +1,15 @@
+{
+  "name": "Sessions",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "Sessions",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

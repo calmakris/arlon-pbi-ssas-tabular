@@ -1,0 +1,13 @@
+{
+  "name": "Testing Specification Upper Limit",
+  "description": "Maximum specification lower limit at the time the tests are conducted",
+  "expression": "MAX( 'Test Result'[Specification Upper Limit] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

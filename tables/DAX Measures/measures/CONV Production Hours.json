@@ -1,0 +1,13 @@
+{
+  "name": "CONV Production Hours",
+  "description": "The number of hours across all converting employees when they are producing material",
+  "expression": " SUM( 'Converting Man Hours'[Production Hours] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

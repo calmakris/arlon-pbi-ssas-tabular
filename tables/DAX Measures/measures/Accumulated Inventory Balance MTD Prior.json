@@ -1,0 +1,19 @@
+{
+  "name": "Accumulated Inventory Balance MTD Prior",
+  "description": "Closing balance in inventory related G/L accounts at the end of previous month",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Accumulated Inventory Balance MTD],",
+    "    DATEADD( 'Calendar'[Date], -1, MONTH )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory Balance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

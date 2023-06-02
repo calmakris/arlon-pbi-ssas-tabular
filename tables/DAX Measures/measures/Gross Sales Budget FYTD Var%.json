@@ -1,0 +1,21 @@
+{
+  "name": "Gross Sales Budget FYTD Var%",
+  "expression": [
+    "",
+    "VAR VarVal = IF( OR( ISBLANK([Gross Sales FYTD]), ISBLANK([Gross Sales Budget FYTD]) ), BLANK(), [Gross Sales FYTD] - [Gross Sales Budget FYTD] )",
+    "",
+    "RETURN",
+    "    DIVIDE(",
+    "        VarVal,",
+    "        [Gross Sales Budget FYTD]",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\"]"
+    }
+  ]
+}

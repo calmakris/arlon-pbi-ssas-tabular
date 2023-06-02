@@ -1,0 +1,28 @@
+{
+  "name": "Expired Amount",
+  "description": [
+    "Total standard cost of batch managed inventory with expiration/SLED date on or before yesterday.",
+    "",
+    "A material is batch managed if it is indicated so in the material master in SAP."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory'[AmountUSD] ),",
+    "    KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
+    "    FILTER(",
+    "        ALL( 'Inventory'[Expiration Date] ),",
+    "        'Inventory'[Expiration Date] <= [Report Date]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Blocked\\_Expired",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

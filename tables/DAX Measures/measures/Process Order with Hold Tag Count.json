@@ -1,0 +1,19 @@
+{
+  "name": "Process Order with Hold Tag Count",
+  "description": "Count of process orders with hold tags. A process order has a hold tag if there is an process order entered in the hold tag.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Process Order Count],",
+    "    'FACT_ProcessOrder'[Notification Number] <> BLANK()",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

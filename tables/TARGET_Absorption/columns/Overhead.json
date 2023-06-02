@@ -1,0 +1,8 @@
+{
+  "name": "Overhead",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "Overhead",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false
+}

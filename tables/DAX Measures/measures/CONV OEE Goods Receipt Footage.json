@@ -1,0 +1,13 @@
+{
+  "name": "CONV OEE Goods Receipt Footage",
+  "description": "Total goods receipt linear footage per process order from SAP that has a match in the Converting runtime log and Converting OEE AAS table.",
+  "expression": "SUM( 'Converting OEE'[GoodsFootage] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Official Standard Cost",
+  "description": "This cost is the material, labor, overhead, setup, and additive cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
+  "expression": [
+    "[Official Material Cost]",
+    "    + [Official Labor Cost]",
+    "    + [Official Overhead Cost]",
+    "    + [Official Setup Cost]",
+    "    + [Official Additive Cost]"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Cost in Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Goods Issue Linear Footage",
+  "description": "Total footage of postings with movement types 261, 262, 551, and 552.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    ABS( SUM( 'Goods Movement'[Linear Feet] ) ),",
+    "    KEEPFILTERS('Goods Movement'[Movement Type] IN {\"261\", \"551\", \"262\", \"552\"}),",
+    "    KEEPFILTERS('Goods Movement'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"88\", \"182\", \"782\"}),",
+    "    KEEPFILTERS('Goods Movement'[Reason Code for Movement] <> \"0000\")",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Goods Movement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

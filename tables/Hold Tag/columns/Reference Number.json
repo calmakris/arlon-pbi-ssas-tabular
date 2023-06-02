@@ -1,0 +1,12 @@
+{
+  "name": "Reference Number",
+  "dataType": "string",
+  "description": "Usually contains the location of the material in the plant.",
+  "sourceColumn": "ReferenceNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Cost Element & Name",
+  "dataType": "string",
+  "description": "Cost element and its description combined together",
+  "sourceColumn": "CostElementNoName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

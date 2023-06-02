@@ -1,0 +1,13 @@
+{
+  "name": "Testing Standard Deviation Result",
+  "description": "Population standard deviation of testing results from online tests in Manufacturing and/or aged testing in QA",
+  "expression": "STDEV.P( 'Test Result'[Result Value] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

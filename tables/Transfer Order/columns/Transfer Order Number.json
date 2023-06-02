@@ -1,0 +1,12 @@
+{
+  "name": "Transfer Order Number",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.TANUM",
+  "sourceColumn": "TransferOrderNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

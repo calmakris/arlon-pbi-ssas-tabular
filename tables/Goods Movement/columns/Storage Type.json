@@ -1,0 +1,13 @@
+{
+  "name": "Storage Type",
+  "dataType": "string",
+  "description": "Determines the type of storage in the warehouse.",
+  "sourceColumn": "StorageType",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

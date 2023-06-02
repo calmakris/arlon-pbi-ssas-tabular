@@ -1,0 +1,13 @@
+{
+  "name": "GRIR Quantity",
+  "description": "Total quantity in the cleared and open accounting documents posted under the 0022877000 G/L account",
+  "expression": " SUM( 'Goods and Invoice Receipt'[Quantity] )",
+  "formatString": "#,0.00",
+  "displayFolder": "GRIR",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

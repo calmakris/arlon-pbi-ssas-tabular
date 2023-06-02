@@ -1,0 +1,13 @@
+{
+  "name": "Order Line Number",
+  "dataType": "string",
+  "description": "Line number of the sales order item",
+  "sourceColumn": "OrderLineNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Lines Automated",
+  "description": "Number of sales order line items entered by BATCHUSER",
+  "expression": " COUNTROWS( FILTER( 'Sales Order', 'Sales Order'[Entered By] = \"BATCHUSER\" ) )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

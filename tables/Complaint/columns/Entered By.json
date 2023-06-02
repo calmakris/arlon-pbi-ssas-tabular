@@ -1,0 +1,12 @@
+{
+  "name": "Entered By",
+  "dataType": "string",
+  "description": "Name of person who entered the complaint.",
+  "sourceColumn": "EnteredBy",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

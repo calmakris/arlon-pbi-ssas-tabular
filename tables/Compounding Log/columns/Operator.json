@@ -1,0 +1,12 @@
+{
+  "name": "Operator",
+  "dataType": "string",
+  "description": "Name of the person who performed the task",
+  "sourceColumn": "Operator",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

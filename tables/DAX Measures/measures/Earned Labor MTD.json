@@ -1,0 +1,25 @@
+{
+  "name": "Earned Labor MTD",
+  "description": "Month-to-date total cost posted in the earned labor and setup cost elements",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Earned Labor],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Frozen Standard Cost",
+  "description": "This cost is based on the cost at the time the billing/invoice document is posted. It is the quantity sold multiplied by the total of latest material, labor, overhead, and setup cost of the material.",
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Invoice'[StdCost] ),",
+    "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[StdCost] * 'Sales Invoice'[Exchange Rate] ),",
+    "        SUM('Sales Invoice'[StdCost] )",
+    "    ),",
+    "    SUM('Sales Invoice'[StdCost] )    ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Cost in Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

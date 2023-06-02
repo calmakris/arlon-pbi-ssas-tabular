@@ -1,0 +1,13 @@
+{
+  "name": "Size Code",
+  "dataType": "string",
+  "description": "Size code assigned in the classification tab in the material master in SAP",
+  "sourceColumn": "SizeCode",
+  "displayFolder": "Classification",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Actual Goods Movement Date",
+  "dataType": "dateTime",
+  "description": "SAP Source: LIKP.WADAT_IST",
+  "sourceColumn": "ActualGoodsMvmtDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

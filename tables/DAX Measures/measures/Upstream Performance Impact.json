@@ -1,0 +1,33 @@
+{
+  "name": "Upstream Performance Impact",
+  "description": "Impact on the overall performance of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Upstream Ideal Production Footage] - [Upstream Actual Production Footage],",
+    "    CALCULATE(",
+    "        [Upstream Ideal Production Footage],",
+    "        ALL( Machine[Machine] ),",
+    "        ALL( 'Production Shift' ),",
+    "        ALL(",
+    "            'Upstream Log Simplified'[Machine],",
+    "            'Upstream Log Simplified'[Production Shift],",
+    "            'Upstream Log Simplified'[Non Uptime Reason],",
+    "            'Upstream Log Simplified'[Efficiency Hitter],",
+    "            'Upstream Log Simplified'[Category],",
+    "            'Upstream Log Simplified'[Causes],",
+    "            'Upstream Log Simplified'[Further Detail],",
+    "            'Upstream Log Simplified'[Comments]",
+    "        )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

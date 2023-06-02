@@ -1,0 +1,12 @@
+{
+  "name": "Manufacturing Work Center",
+  "dataType": "string",
+  "description": "Work center of the production order of the batch number",
+  "sourceColumn": "WorkCenterMfg",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

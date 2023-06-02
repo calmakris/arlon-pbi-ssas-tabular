@@ -1,0 +1,45 @@
+{
+  "name": "Payroll",
+  "description": [
+    "This table contains the daily regular, overtime, and doubletime hours per cost center.",
+    "",
+    "Use the related tables such as 'Company Code', 'Cost Center', 'Department', and 'Calendar' for further details."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Payroll\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Payroll\",",
+        "    \"fromColumn\": \"CostCenter\",",
+        "    \"toTable\": \"Cost Center\",",
+        "    \"toColumn\": \"Cost Center\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Payroll\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Payroll\",",
+        "    \"fromColumn\": \"WorkDate\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

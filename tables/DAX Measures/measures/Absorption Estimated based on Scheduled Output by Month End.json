@@ -1,0 +1,17 @@
+{
+  "name": "Absorption Estimated based on Scheduled Output by Month End",
+  "description": "[MTD Absorption] plus the product of [S/O Future Scheduled Output by Month End (Upstream)] and the average absorption per output in the last 3 calendar months ([Absorption per Output (Last 3 Months)])",
+  "expression": [
+    "",
+    "SUMX( VALUES('Department'[Department]), [Absorption MTD] + ([Process Order Scheduled Output by Month End] * [Absorption per Output Last 3 Months]) )",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Projection",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

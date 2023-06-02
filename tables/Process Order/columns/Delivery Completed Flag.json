@@ -1,0 +1,13 @@
+{
+  "name": "Delivery Completed Flag",
+  "dataType": "string",
+  "description": "Indicates that the item is to be regarded as closed.",
+  "sourceColumn": "FinalDeliverFlag",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

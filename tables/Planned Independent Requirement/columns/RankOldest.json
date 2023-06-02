@@ -1,0 +1,13 @@
+{
+  "name": "RankOldest",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "RankOldest",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

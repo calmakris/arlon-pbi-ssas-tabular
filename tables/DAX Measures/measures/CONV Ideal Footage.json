@@ -1,0 +1,13 @@
+{
+  "name": "CONV Ideal Footage",
+  "description": "Total footage based on the duration of the production run and spec linespeed of the material assigned in the linespeed table in the Converting's Access database.",
+  "expression": "SUM( 'Converting OEE'[IdealFootage] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Test Category",
+  "dataType": "string",
+  "sourceColumn": "TestCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

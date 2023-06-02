@@ -1,0 +1,17 @@
+{
+  "name": "Last Credit Date",
+  "dataType": "dateTime",
+  "description": "Latest posting date of credit issued in the line item of the complaint.",
+  "sourceColumn": "LastCreditDateKey",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

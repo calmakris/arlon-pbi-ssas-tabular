@@ -1,0 +1,12 @@
+{
+  "name": "Causes",
+  "dataType": "string",
+  "description": "Source: primarystruct.Causes",
+  "sourceColumn": "Causes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

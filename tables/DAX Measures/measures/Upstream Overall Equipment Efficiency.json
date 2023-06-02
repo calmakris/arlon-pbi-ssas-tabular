@@ -1,0 +1,13 @@
+{
+  "name": "Upstream Overall Equipment Efficiency",
+  "description": "Product of upstream availability, performance, and quality",
+  "expression": "[Upstream Availability] * [Upstream Performance] * [Upstream Quality]",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Day of Calendar Year",
+  "dataType": "int64",
+  "description": "Day of calendar year. For example, January 31 is 31st day and February 28 is the 59th day.",
+  "sourceColumn": "Day_Of_Calendar_Year",
+  "formatString": "0",
+  "displayFolder": "Individual Attributes",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

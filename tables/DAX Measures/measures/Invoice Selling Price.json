@@ -1,0 +1,21 @@
+{
+  "name": "Invoice Selling Price",
+  "description": "Gross sales divided by quantity sold of billing documents posted in SAP. This measure is essentially the average selling price of billing documents.",
+  "expression": [
+    "",
+    "ABS(",
+    "    DIVIDE(",
+    "        [Gross Sales],",
+    "        [Quantity Sold]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

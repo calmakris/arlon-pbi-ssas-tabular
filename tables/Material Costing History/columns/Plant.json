@@ -1,0 +1,14 @@
+{
+  "name": "Plant",
+  "dataType": "string",
+  "description": "SAP Source: KEKO.WERKS",
+  "isHidden": true,
+  "sourceColumn": "PlantNo",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\"]"
+    }
+  ]
+}

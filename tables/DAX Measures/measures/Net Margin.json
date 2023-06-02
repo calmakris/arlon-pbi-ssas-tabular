@@ -1,0 +1,13 @@
+{
+  "name": "Net Margin",
+  "description": "Difference between net sales and standard cost in the billing document. This value is toggleable to local currency using the \"_Currency To Use\" table.",
+  "expression": " [Net Sales] - [Frozen Standard Cost]",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

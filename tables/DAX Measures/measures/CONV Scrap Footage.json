@@ -1,0 +1,21 @@
+{
+  "name": "CONV Scrap Footage",
+  "description": "Total linear footage of goods issue and scrap transactions with movement types 261/262 and 551/552 from the Converting machines posted in Converting storage bins.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Goods Issue Linear Footage],",
+    "    KEEPFILTERS('Goods Movement'[Machine] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+    "    KEEPFILTERS('Goods Movement'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Movement'[Production Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

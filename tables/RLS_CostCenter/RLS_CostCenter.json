@@ -1,0 +1,21 @@
+{
+  "name": "RLS_CostCenter",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"RLS_CostCenter\",",
+        "    \"fromColumn\": \"CostCenterKey\",",
+        "    \"toTable\": \"Cost Center\",",
+        "    \"toColumn\": \"Cost Center\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\",",
+        "    \"securityFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

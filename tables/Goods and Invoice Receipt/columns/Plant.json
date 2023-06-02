@@ -1,0 +1,12 @@
+{
+  "name": "Plant",
+  "dataType": "string",
+  "description": "Plant assigned in the line item.",
+  "sourceColumn": "PlantNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Customer Accommodation Complaint Amount",
+  "description": [
+    "Total credit issue amount for customer accommodation complaints.",
+    "",
+    "Customer accommodation are complaints entered with reason codes marked as 'S1' (accommodation)."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Complaint Credit Issued Amount],",
+    "    KEEPFILTERS( 'Complaint'[Billing Block Indicator] = \"\" ),",
+    "    KEEPFILTERS( 'Complaint'[Department] = \"S1\" ),",
+    "    USERELATIONSHIP('Calendar'[Date], 'Complaint'[Last Credit Date])",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Complaints\\_Customer Accommodation",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

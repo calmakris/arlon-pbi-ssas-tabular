@@ -1,0 +1,30 @@
+{
+  "name": "Selling Price",
+  "description": [
+    "Latest selling price by material and customer based on sales quote or price list. It is the selling price per one unit of measure.",
+    "",
+    "This value is in local currency by default but is toggleable to USD by filtering the '_Currency to Use' table. The sales quote and price list are maintained by regional Customer Service and Sales departments."
+  ],
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", AVERAGE( 'Price List'[UnitPriceUSD] ),",
+    "        \"Local\", AVERAGE( 'Price List'[UnitPrice] ),",
+    "        AVERAGE( 'Price List'[UnitPrice] )",
+    "    ),",
+    "    AVERAGE( 'Price List'[UnitPrice] )    ",
+    ")",
+    ""
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Material Cost and Price",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Generic Sales\",\"Product Management\",\"Sales Orders\"]"
+    }
+  ]
+}

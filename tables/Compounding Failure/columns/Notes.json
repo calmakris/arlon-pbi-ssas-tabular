@@ -1,0 +1,12 @@
+{
+  "name": "Notes",
+  "dataType": "string",
+  "description": "Notes entered about the first pass failure",
+  "sourceColumn": "Notes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

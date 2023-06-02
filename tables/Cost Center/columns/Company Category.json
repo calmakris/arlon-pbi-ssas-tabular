@@ -1,0 +1,12 @@
+{
+  "name": "Company Category",
+  "dataType": "string",
+  "description": "Category of the cost center as they are known in the company. This data is not in SAP. Instead, it is maintained manually in the Power BI data warehouse.",
+  "sourceColumn": "CompanyCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

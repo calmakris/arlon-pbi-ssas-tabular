@@ -1,0 +1,17 @@
+{
+  "name": "Plant",
+  "dataType": "string",
+  "description": [
+    "Plant assigned in the accounting document item.",
+    "",
+    "This field is not related to the 'Plant' table."
+  ],
+  "sourceColumn": "PlantNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

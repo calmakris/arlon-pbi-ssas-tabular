@@ -1,0 +1,12 @@
+{
+  "name": "Cost Center Name",
+  "dataType": "string",
+  "description": "General description of the cost center",
+  "sourceColumn": "CostCenterName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

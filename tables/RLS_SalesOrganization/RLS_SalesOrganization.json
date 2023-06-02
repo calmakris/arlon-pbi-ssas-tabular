@@ -1,0 +1,21 @@
+{
+  "name": "RLS_SalesOrganization",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"RLS_SalesOrganization\",",
+        "    \"fromColumn\": \"SalesOrgKey\",",
+        "    \"toTable\": \"BRIDGE_SalesOrganization\",",
+        "    \"toColumn\": \"SalesOrganization\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\",",
+        "    \"securityFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

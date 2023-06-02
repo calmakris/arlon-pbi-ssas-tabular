@@ -1,0 +1,23 @@
+{
+  "name": "Sales Order Amount Daily Entry Rate MTD",
+  "description": [
+    "MTD ordered value of sales orders divided by MTD number of weekdays.",
+    "",
+    "Use this measure if none of the fields in 'Calendar' table are used in the visual."
+  ],
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Sales Order Amount MTD],",
+    "    [Weekdays Count MTD]",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

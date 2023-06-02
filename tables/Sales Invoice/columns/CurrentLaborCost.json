@@ -1,0 +1,20 @@
+{
+  "name": "CurrentLaborCost",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "LaborCurrCostUSD",
+  "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

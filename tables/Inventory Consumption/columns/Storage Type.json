@@ -1,0 +1,11 @@
+{
+  "name": "Storage Type",
+  "dataType": "string",
+  "sourceColumn": "StorageType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Warehouse\"]"
+    }
+  ]
+}

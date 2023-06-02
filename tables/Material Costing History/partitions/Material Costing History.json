@@ -1,0 +1,15 @@
+{
+  "name": "Material Costing History",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_MaterialCostingHistory = Source{[Schema=\"dbo\",Item=\"FACT_MaterialCostingHistory\"]}[Data],",
+      "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_FACT_MaterialCostingHistory,{\"MaterialNo\", \"CompanyCode\", \"PlantNo\", \"CostingStartDate\", \"CostingEndDate\", \"CostingBy\", \"Currency\", \"StandardCost\", \"MaterialCost\", \"LaborCost\", \"OverheadCost\", \"SetupCost\", \"AdditiveCost\", \"LatestRank\"})",
+      "in",
+      "    #\"Removed Other Columns\""
+    ]
+  }
+}

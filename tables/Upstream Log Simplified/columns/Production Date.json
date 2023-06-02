@@ -1,0 +1,17 @@
+{
+  "name": "Production Date",
+  "dataType": "dateTime",
+  "description": "Production date of the 'Start Time'; A production day is between 6:00AM and 5:59:59AM the next day",
+  "sourceColumn": "ProductionDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

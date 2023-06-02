@@ -1,0 +1,19 @@
+{
+  "name": "Inventory Balance MTD",
+  "description": "Month-to-date total of accounting documents posted in the inventory balance G/L accounts in SAP",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Inventory Balance],",
+    "    DATESMTD( 'Calendar'[Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory Balance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Production Date",
+  "dataType": "dateTime",
+  "description": "Calculated from posting date and time. Production dates starts at 6AM and ends at 5:59AM the next day.",
+  "sourceColumn": "ProductionDate",
+  "formatString": "Short Date",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

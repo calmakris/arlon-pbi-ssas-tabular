@@ -1,0 +1,16 @@
+{
+  "name": "Process Order Actual/Target Variance",
+  "description": "Variance between the actual and target cost/quantity of the process order",
+  "expression": [
+    "",
+    "[Process Order Actual Cost/Rate/Quantity] - [Process Order Target Cost/Rate/Quantity]"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "StorageKey",
+  "dataType": "string",
+  "description": "SAP Source: LAGP.LGTYP and LAGP.LGPLA",
+  "isHidden": true,
+  "sourceColumn": "StorageKey",
+  "isAvailableInMdx": false
+}

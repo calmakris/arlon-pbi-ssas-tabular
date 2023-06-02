@@ -1,0 +1,15 @@
+{
+  "type": "calculated",
+  "name": "Age in Days",
+  "dataType": "int64",
+  "isDataTypeInferred": true,
+  "description": "Calculated column between [Goods Receipt Date] and today",
+  "expression": "DATEDIFF( 'Inventory in Storage Bin'[Goods Receipt Date], [Report Date], DAY )",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Invoice Line Number",
+  "dataType": "string",
+  "description": "Line/item number in the invoice/billing document",
+  "sourceColumn": "SaleLineNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

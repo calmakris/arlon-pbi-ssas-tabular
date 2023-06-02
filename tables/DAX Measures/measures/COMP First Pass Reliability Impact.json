@@ -1,0 +1,19 @@
+{
+  "name": "COMP First Pass Reliability Impact",
+  "description": "Count of failed process orders divided by the count of process orders finished/scheduled in Compounding",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [COMP Process Order Fail Count],",
+    "    [COMP Process Order Count]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

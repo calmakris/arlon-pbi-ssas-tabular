@@ -1,0 +1,53 @@
+{
+  "name": "Upstream Overall Equipment Efficiency Impact",
+  "description": "Impact on the overall equipment efficiency of the department. Best used if analyzed by Further Detail, Comments, Non Uptime Reason, or Efficiency Hitter in 'Upstream Logs - Simplified'.",
+  "expression": [
+    "",
+    "VAR _avail = ",
+    "    CALCULATE(",
+    "        [Upstream Availability],",
+    "        ALL( Machine[Machine] ),",
+    "        ALL( 'Production Shift' ),",
+    "        ALL(",
+    "            'Upstream Log Simplified'[Machine],",
+    "            'Upstream Log Simplified'[Production Shift],",
+    "            'Upstream Log Simplified'[Non Uptime Reason],",
+    "            'Upstream Log Simplified'[Efficiency Hitter],",
+    "            'Upstream Log Simplified'[Category],",
+    "            'Upstream Log Simplified'[Causes],",
+    "            'Upstream Log Simplified'[Further Detail],",
+    "            'Upstream Log Simplified'[Comments]",
+    "        )",
+    "    )",
+    "",
+    "VAR _perf = ",
+    "    CALCULATE(",
+    "        [Upstream Performance],",
+    "        ALL( Machine[Machine] ),",
+    "        ALL( 'Production Shift' ),",
+    "        ALL(",
+    "            'Upstream Log Simplified'[Machine],",
+    "            'Upstream Log Simplified'[Production Shift],",
+    "            'Upstream Log Simplified'[Non Uptime Reason],",
+    "            'Upstream Log Simplified'[Efficiency Hitter],",
+    "            'Upstream Log Simplified'[Category],",
+    "            'Upstream Log Simplified'[Causes],",
+    "            'Upstream Log Simplified'[Further Detail],",
+    "            'Upstream Log Simplified'[Comments]",
+    "        )",
+    "    )",
+    "",
+    "VAR _oee = _avail * _perf * [Upstream Quality]",
+    "",
+    "RETURN",
+    "(( _avail + [Upstream Availability Impact] ) * ( _perf + [Upstream Performance Impact] ) * [Upstream Quality] ) - _oee"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

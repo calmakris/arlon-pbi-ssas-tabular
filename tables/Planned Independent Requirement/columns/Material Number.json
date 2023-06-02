@@ -1,0 +1,11 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "sourceColumn": "MaterialNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

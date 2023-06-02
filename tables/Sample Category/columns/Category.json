@@ -1,0 +1,12 @@
+{
+  "name": "Category",
+  "dataType": "string",
+  "isKey": true,
+  "sourceColumn": "Category",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

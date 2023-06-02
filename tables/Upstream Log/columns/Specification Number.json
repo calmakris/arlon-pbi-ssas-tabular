@@ -1,0 +1,12 @@
+{
+  "name": "Specification Number",
+  "dataType": "string",
+  "description": "Source: primarystruct.Spec",
+  "sourceColumn": "SpecNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

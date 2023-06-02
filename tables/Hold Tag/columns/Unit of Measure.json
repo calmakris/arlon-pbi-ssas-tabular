@@ -1,0 +1,12 @@
+{
+  "name": "Unit of Measure",
+  "dataType": "string",
+  "description": "Unit of measure in which the defective stocks of the material are dealt with in the quality notification.",
+  "sourceColumn": "QuantityUoM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

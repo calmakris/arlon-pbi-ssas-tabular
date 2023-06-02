@@ -1,0 +1,31 @@
+{
+  "name": "Cumulative Expired Amount",
+  "description": [
+    "Cumulative stock amount by expiration date of batch managed materials. For example, if 'Calendar' table is filtered to Jan 2023, this value is the expired amount of materials with expiration/SLED date on or before Jan 31, 2023.",
+    "",
+    "This measure is best used with fields in the 'Calendar' table.",
+    "",
+    "A material is batch managed if it is indicated so in the material master in SAP."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory'[AmountUSD] ),",
+    "    KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Inventory'[Expiration Date] ),",
+    "    FILTER(",
+    "        ALL( 'Calendar'[Date] ),",
+    "        'Calendar'[Date] <= MAX( 'Calendar'[Date] )",
+    "            && 'Calendar'[Date] <> BLANK()",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Blocked\\_Expired",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

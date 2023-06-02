@@ -1,0 +1,14 @@
+{
+  "name": "Storage Bin",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_StorageBin = Source{[Schema=\"dbo\",Item=\"DIM_StorageBin\"]}[Data]",
+      "in",
+      "    dbo_DIM_StorageBin"
+    ]
+  }
+}

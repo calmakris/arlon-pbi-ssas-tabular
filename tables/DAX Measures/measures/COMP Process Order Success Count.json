@@ -1,0 +1,13 @@
+{
+  "name": "COMP Process Order Success Count",
+  "description": "Difference between the count of process orders finished/scheduled in Compounding and count of failed process orders",
+  "expression": "[COMP Process Order Count] - [COMP Process Order Fail Count]",
+  "formatString": "0",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

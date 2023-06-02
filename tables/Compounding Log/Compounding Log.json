@@ -1,0 +1,39 @@
+{
+  "name": "Compounding Log",
+  "description": [
+    "Contains the tasks performed by operators in Compounding.",
+    "",
+    "Use the 'Department', 'Production Shift', and 'Calendar' tables for further breakdowns of this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Compounding Log\",",
+        "    \"fromColumn\": \"Compounding Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Compounding Log\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Compounding Log\",",
+        "    \"fromColumn\": \"Production Shift\",",
+        "    \"toTable\": \"Production Shift\",",
+        "    \"toColumn\": \"Production Shift\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Testing Maximum Result",
+  "description": "Maximum of all testing results in online testing in Manufacturing and/or aged testing in QA",
+  "expression": "MAX( 'Test Result'[Result Value] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Comments",
+  "dataType": "string",
+  "sourceColumn": "Comments",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

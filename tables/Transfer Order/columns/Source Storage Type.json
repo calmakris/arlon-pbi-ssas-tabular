@@ -1,0 +1,12 @@
+{
+  "name": "Source Storage Type",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.VLTYP",
+  "sourceColumn": "SrcStrType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

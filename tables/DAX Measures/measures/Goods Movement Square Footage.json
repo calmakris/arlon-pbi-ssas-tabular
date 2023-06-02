@@ -1,0 +1,13 @@
+{
+  "name": "Goods Movement Square Footage",
+  "description": "Total square footage of transactions in the 'Goods Movement' table. The dimensions for square footage are based on the width in the material master and the length conversion factor in the alternative unit of measure in the material master in SAP.",
+  "expression": " SUM ('Goods Movement'[Square Feet])",
+  "formatString": "#,0",
+  "displayFolder": "Goods Movement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

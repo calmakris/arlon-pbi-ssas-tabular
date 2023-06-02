@@ -1,0 +1,13 @@
+{
+  "name": "Receiving Plant",
+  "dataType": "string",
+  "description": "Plant/warehouse of the destination of the item",
+  "sourceColumn": "ReceivingPlantNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

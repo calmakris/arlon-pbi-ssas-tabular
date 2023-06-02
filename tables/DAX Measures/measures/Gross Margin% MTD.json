@@ -1,0 +1,21 @@
+{
+  "name": "Gross Margin% MTD",
+  "description": "Month-to-date total of gross margin divided by the month-to-date total of gross sales",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE( [Gross Margin%], DATESMTD( 'Calendar'[Date] ) ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

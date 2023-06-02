@@ -1,0 +1,13 @@
+{
+  "name": "COMP Actual Hours",
+  "description": "Total hours spent by operators to perform a task in Compounding",
+  "expression": "SUM( 'Compounding Log'[Actual Hours Spent] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

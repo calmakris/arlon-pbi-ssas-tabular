@@ -1,0 +1,13 @@
+{
+  "name": "ScrapFootage",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "ScrapFootage",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

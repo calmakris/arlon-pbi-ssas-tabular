@@ -1,0 +1,12 @@
+{
+  "name": "Valuation Class",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.BKLAS",
+  "sourceColumn": "ValuationClass",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

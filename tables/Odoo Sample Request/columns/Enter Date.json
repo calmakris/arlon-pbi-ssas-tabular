@@ -1,0 +1,16 @@
+{
+  "name": "Enter Date",
+  "dataType": "dateTime",
+  "sourceColumn": "EnterDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

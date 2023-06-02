@@ -1,0 +1,12 @@
+{
+  "name": "Vendor Name",
+  "dataType": "string",
+  "description": "SAP Source: LFA1.NAME1",
+  "sourceColumn": "VendorName",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

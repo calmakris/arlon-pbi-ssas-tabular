@@ -1,0 +1,25 @@
+{
+  "name": "Invoice Selling Price MTD",
+  "description": "MTD gross sales divided by quantity sold as of yesterday or whatever is the last date filtered in 'Calendar'[Date]",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Invoice Selling Price],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Product Management\"]"
+    }
+  ]
+}

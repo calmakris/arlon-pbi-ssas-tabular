@@ -1,0 +1,13 @@
+{
+  "name": "SrcStorageKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "SrcStrKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

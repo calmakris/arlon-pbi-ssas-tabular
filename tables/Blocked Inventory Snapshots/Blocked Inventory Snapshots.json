@@ -1,0 +1,36 @@
+{
+  "name": "Blocked Inventory Snapshots",
+  "description": "Daily midnight snapshot of S-block, Q-block, and expired inventory values in USD. Inventory of non-USD warehouses are converted to USD using the exchange rate at the time of the snapshot.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Blocked Inventory Snapshots\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Blocked Inventory Snapshots\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Blocked Inventory Snapshots\",",
+        "    \"fromColumn\": \"Snapshot Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

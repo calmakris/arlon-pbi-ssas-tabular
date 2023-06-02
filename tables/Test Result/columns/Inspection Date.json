@@ -1,0 +1,16 @@
+{
+  "name": "Inspection Date",
+  "dataType": "dateTime",
+  "sourceColumn": "InspectionDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

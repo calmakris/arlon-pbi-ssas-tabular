@@ -1,0 +1,10 @@
+{
+  "name": "BRIDGE_SalesPerson",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

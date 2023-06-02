@@ -1,0 +1,16 @@
+{
+  "name": "Actual Start Time",
+  "dataType": "dateTime",
+  "sourceColumn": "ActualStartTime",
+  "formatString": "HH:mm",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortTime\" FormatString=\"HH:mm\" /></DateTimes></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

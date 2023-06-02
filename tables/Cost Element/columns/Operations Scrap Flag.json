@@ -1,0 +1,12 @@
+{
+  "name": "Operations Scrap Flag",
+  "dataType": "string",
+  "sourceColumn": "IsOperationsScrap",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

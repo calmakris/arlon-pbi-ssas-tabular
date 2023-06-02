@@ -1,0 +1,46 @@
+{
+  "name": "Inventory FIFO Violation Snapshot",
+  "description": [
+    "This table contains fields to filter the daily snapshots of batches on inventory with FIFO violations. The snapshot occurs daily at 11:55 PM PST.",
+    "",
+    "Use the fields in the related tables such as 'Company Code', 'Plant', 'Department', and 'Calendar' for further details on this table.",
+    ""
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Inventory FIFO Violation Snapshot\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory FIFO Violation Snapshot\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory FIFO Violation Snapshot\",",
+        "    \"fromColumn\": \"PlantNoKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Inventory FIFO Violation Snapshot\",",
+        "    \"fromColumn\": \"SnapshotDateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Sales Order Amount MTD PY Var",
+  "description": "The amount of increase/decrease of sales order amount entered between current month and the same month on previous year",
+  "expression": [
+    " ",
+    "IF( ",
+    "    AND( ",
+    "        NOT(ISBLANK([Sales Order Amount MTD])), ",
+    "        NOT(ISBLANK([Sales Order Amount MTD PY])) ",
+    "    ), ",
+    "    [Sales Order Amount MTD] - [Sales Order Amount MTD PY], ",
+    "    BLANK() ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Sales Orders\"]"
+    }
+  ]
+}

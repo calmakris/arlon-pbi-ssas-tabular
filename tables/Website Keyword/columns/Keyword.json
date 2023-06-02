@@ -1,0 +1,11 @@
+{
+  "name": "Keyword",
+  "dataType": "string",
+  "sourceColumn": "Keyword",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    }
+  ]
+}

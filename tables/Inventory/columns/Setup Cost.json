@@ -1,0 +1,17 @@
+{
+  "name": "Setup Cost",
+  "dataType": "decimal",
+  "description": "SAP Source: KEPH.KST007",
+  "isHidden": true,
+  "sourceColumn": "SetupCost",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Standard Prices\\Local",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

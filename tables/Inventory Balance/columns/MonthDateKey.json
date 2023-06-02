@@ -1,0 +1,13 @@
+{
+  "name": "MonthDateKey",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "MonthDateKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

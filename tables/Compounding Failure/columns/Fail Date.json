@@ -1,0 +1,21 @@
+{
+  "name": "Fail Date",
+  "dataType": "dateTime",
+  "description": [
+    "Date on which the process order failed.",
+    "",
+    "Use the 'Calendar' table for further breakdowns of this field."
+  ],
+  "sourceColumn": "FailDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

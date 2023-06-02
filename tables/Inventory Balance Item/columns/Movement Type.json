@@ -1,0 +1,12 @@
+{
+  "name": "Movement Type",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.BWART",
+  "sourceColumn": "MovementType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

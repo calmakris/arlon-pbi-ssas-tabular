@@ -1,0 +1,13 @@
+{
+  "name": "Batch Number",
+  "dataType": "string",
+  "description": "Batch number of the material",
+  "sourceColumn": "BatchNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Storage Bin Type",
+  "dataType": "string",
+  "description": "SAP Source: LAGP.LPTYP",
+  "sourceColumn": "StorageBinType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

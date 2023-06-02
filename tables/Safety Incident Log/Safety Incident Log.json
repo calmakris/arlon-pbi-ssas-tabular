@@ -1,0 +1,33 @@
+{
+  "name": "Safety Incident Log",
+  "description": [
+    "Contains recorded incidents in the last few fiscal years.",
+    "",
+    "Employees generate this data using the 'Safety Incidents' form in Microsoft Forms. Each submission is recorded in the safety incidents file in the 'Safety' SharePoint group. RNICHOLSON or a safety consultant maintains the additional information per incident."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Safety Incident Log\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Safety Incident Log\",",
+        "    \"fromColumn\": \"Incident Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

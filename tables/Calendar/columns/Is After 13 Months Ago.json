@@ -1,0 +1,13 @@
+{
+  "name": "Is After 13 Months Ago",
+  "dataType": "boolean",
+  "description": "This value is true if the date is between yesterday and the end of month 13 months forward from yesterday. For example, if yesterday is June 10, then the dates from June 10 to July 31 are set to true.",
+  "sourceColumn": "Is_After_13MonthsAgo",
+  "displayFolder": "Helper Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

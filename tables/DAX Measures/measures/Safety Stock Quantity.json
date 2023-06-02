@@ -1,0 +1,19 @@
+{
+  "name": "Safety Stock Quantity",
+  "description": "Average safety stock quantity by material and plant. If this measure is grouped by material only and not plant, this value is the average safety stock across all the plants.",
+  "expression": [
+    "",
+    "SUMX(",
+    "    VALUES( 'FACT_SafetyStock'[MaterialPlantKey] ),",
+    "    AVERAGE( 'FACT_SafetyStock'[SafetyStockQty] )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

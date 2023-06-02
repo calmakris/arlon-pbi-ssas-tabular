@@ -1,0 +1,13 @@
+{
+  "name": "Cost Amount",
+  "dataType": "decimal",
+  "sourceColumn": "CostAmount",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

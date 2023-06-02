@@ -1,0 +1,16 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": [
+    "Idenfier of the item entered in the accounting document.",
+    "",
+    "This field is not related to the 'Material Master' table."
+  ],
+  "sourceColumn": "MaterialNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

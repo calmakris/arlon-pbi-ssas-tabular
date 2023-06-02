@@ -1,0 +1,11 @@
+{
+  "name": "Tag Rename",
+  "dataType": "string",
+  "sourceColumn": "TagRename",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

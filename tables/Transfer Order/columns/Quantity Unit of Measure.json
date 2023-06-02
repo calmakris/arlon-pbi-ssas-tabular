@@ -1,0 +1,12 @@
+{
+  "name": "Quantity Unit of Measure",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.MEINS",
+  "sourceColumn": "QtyUoM",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

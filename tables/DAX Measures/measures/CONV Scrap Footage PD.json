@@ -1,0 +1,24 @@
+{
+  "name": "CONV Scrap Footage PD",
+  "description": [
+    "Linear footage of goods issue and scrap transactions posted by Converting yesterday.",
+    "",
+    "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active.",
+    ""
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [CONV Scrap Footage],",
+    "    PREVIOUSDAY( 'Calendar'[Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

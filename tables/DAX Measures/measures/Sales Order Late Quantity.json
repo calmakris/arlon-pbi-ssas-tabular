@@ -1,0 +1,23 @@
+{
+  "name": "Sales Order Late Quantity",
+  "description": "Count of sales order line items where the ordered quantity is not fully delivered on or before its first scheduled ship date in the schedule line",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Sales Order'[LateQuantity] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

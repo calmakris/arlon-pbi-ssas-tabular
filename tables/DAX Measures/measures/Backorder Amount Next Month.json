@@ -1,0 +1,28 @@
+{
+  "name": "Backorder Amount Next Month",
+  "description": "Total open order amount of sales order line items with first scheduled ship date next month",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Sales Order Open Amount],",
+    "    FILTER(",
+    "        ALL( 'Calendar'[Date] ),",
+    "        'Calendar'[Date] > [End of Month]",
+    "    ),",
+    "    FILTER(",
+    "        ALL( 'Sales Order'[First Scheduled Ship Date] ),",
+    "        'Sales Order'[First Scheduled Ship Date] > [End of Month]",
+    "            && 'Sales Order'[First Scheduled Ship Date] <= [End of Next Month]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Sales Orders\"]"
+    }
+  ]
+}

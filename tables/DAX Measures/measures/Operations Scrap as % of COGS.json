@@ -1,0 +1,13 @@
+{
+  "name": "Operations Scrap as % of COGS",
+  "description": "Total scrap amount divided by cost of goods sold",
+  "expression": "DIVIDE( [Operations Scrap Amount], [Cost of Goods Sold] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Operations Scrap",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

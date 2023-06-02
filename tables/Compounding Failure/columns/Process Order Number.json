@@ -1,0 +1,12 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": "Order number of the material that failed the first pass",
+  "sourceColumn": "ProcessOrderNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

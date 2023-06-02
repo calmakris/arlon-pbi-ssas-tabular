@@ -1,0 +1,60 @@
+{
+  "name": "FACT_PurchaseOrder",
+  "description": "Contains purchase orders entered in SAP in the last few fiscal years. Items with deletion flag are excluded.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"First Delivery Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"PurchaseOrderLineKey\",",
+        "    \"toTable\": \"Purchase Order\",",
+        "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"Receiving Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"ValuationClassKey\",",
+        "    \"toTable\": \"Valuation Class\",",
+        "    \"toColumn\": \"Valuation Class\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_PurchaseOrder\",",
+        "    \"fromColumn\": \"VendorNoKey\",",
+        "    \"toTable\": \"Vendor Master\",",
+        "    \"toColumn\": \"Vendor Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

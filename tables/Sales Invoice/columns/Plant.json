@@ -1,0 +1,15 @@
+{
+  "name": "Plant",
+  "dataType": "string",
+  "description": "Plant assigned in the line item in the invoice/billing document",
+  "isHidden": true,
+  "sourceColumn": "PlantNo",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

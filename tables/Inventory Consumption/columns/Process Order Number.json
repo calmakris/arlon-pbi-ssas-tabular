@@ -1,0 +1,11 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "sourceColumn": "ProcessOrderNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Warehouse\"]"
+    }
+  ]
+}

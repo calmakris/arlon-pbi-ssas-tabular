@@ -1,0 +1,12 @@
+{
+  "name": "Efficiency Hitter",
+  "dataType": "string",
+  "description": "Calculated column derived from 'Further Detail', 'Comments', and 'Specification Number'; Used for grouping big hitters of overall equipment efficiency",
+  "sourceColumn": "EfficiencyHitter",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

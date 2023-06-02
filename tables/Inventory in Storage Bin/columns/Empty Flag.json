@@ -1,0 +1,14 @@
+{
+  "name": "Empty Flag",
+  "dataType": "string",
+  "description": "SAP Source: LAGP.KZLER",
+  "sourceColumn": "EmptyIndicator",
+  "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

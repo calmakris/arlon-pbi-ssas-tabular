@@ -1,0 +1,22 @@
+{
+  "name": "Compounding Date",
+  "dataType": "dateTime",
+  "description": [
+    "Date when the task is performed.",
+    "",
+    "Use the 'Calendar' table for further details on this field."
+  ],
+  "sourceColumn": "CompDate",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

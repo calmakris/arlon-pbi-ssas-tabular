@@ -1,0 +1,19 @@
+{
+  "name": "Sales Order Amount Projected Regional Budget Var%",
+  "description": "Variance in percentage between current month end's sales order entry projection and budget",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Sales Order Amount Projected Regional Budget Var],",
+    "    [Sales Order Amount Regional Budget MTD]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

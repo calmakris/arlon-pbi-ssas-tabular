@@ -1,0 +1,14 @@
+{
+  "name": "Price Difference",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "PriceDifference",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

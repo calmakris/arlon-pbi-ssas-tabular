@@ -1,0 +1,12 @@
+{
+  "name": "Operations Category",
+  "dataType": "string",
+  "description": "Category of the cost center within Operations",
+  "sourceColumn": "OperationsCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

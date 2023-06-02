@@ -1,0 +1,31 @@
+{
+  "name": "Sales Order Shipped Amount",
+  "description": [
+    "Total amount of items shipped (or, delivery notes with actual PGI date set) in the sales order line item.",
+    "",
+    "This value is toggleable to local currency using the '_Currency to Use' table."
+  ],
+  "expression": [
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", SUM( 'Sales Order'[ShippedAmountUSD] ),",
+    "            \"Local\", SUM( 'Sales Order'[ShippedAmount] ),",
+    "            SUM( 'Sales Order'[ShippedAmountUSD] )",
+    "        ),",
+    "        SUM( 'Sales Order'[ShippedAmountUSD] )   ",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

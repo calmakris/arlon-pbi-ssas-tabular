@@ -1,0 +1,13 @@
+{
+  "name": "CONV Non Production Seconds",
+  "description": "Total duration of break time, lunch, and other activities marked as non-production in the Converting runtime log using the downtime integer field.",
+  "expression": "SUM( 'Converting OEE'[NonProdSecs] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

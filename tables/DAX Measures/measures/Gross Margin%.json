@@ -1,0 +1,13 @@
+{
+  "name": "Gross Margin%",
+  "description": "Gross margin divided by gross sales. Gross margin is the difference between gross sales and standard cost in the billing document.",
+  "expression": " DIVIDE([Gross Margin], [Gross Sales])",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

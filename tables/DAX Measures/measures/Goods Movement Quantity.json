@@ -1,0 +1,13 @@
+{
+  "name": "Goods Movement Quantity",
+  "description": "Total quantity of transactions in the 'Goods Movement' table",
+  "expression": " SUM( 'Goods Movement'[Quantity])",
+  "formatString": "#,0.00",
+  "displayFolder": "Goods Movement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

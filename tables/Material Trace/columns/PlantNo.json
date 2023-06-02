@@ -1,0 +1,14 @@
+{
+  "name": "PlantNo",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "PlantNo",
+  "isAvailableInMdx": false,
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

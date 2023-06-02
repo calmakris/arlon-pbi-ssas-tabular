@@ -1,0 +1,13 @@
+{
+  "name": "COMP Labor Efficiency Target Var",
+  "description": "Difference between the labor efficiency and the corresponding monthly target. The target is the same as the Compounding Efficiency target.",
+  "expression": "[COMP Labor Efficiency] - [COMP Efficiency Target]",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

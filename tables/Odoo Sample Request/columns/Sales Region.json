@@ -1,0 +1,11 @@
+{
+  "name": "Sales Region",
+  "dataType": "string",
+  "sourceColumn": "SalesRegion",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

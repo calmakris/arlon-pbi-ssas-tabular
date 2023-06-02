@@ -1,0 +1,12 @@
+{
+  "name": "Theory",
+  "dataType": "string",
+  "description": "Theory as to why the failure happened",
+  "sourceColumn": "Theory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

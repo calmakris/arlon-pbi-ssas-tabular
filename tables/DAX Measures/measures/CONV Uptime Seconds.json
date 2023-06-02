@@ -1,0 +1,13 @@
+{
+  "name": "CONV Uptime Seconds",
+  "description": "Total duration of production runs in seconds based on the Converting runtime log.",
+  "expression": "SUM( 'Converting OEE'[UptimeSecs] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

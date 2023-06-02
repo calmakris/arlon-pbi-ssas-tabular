@@ -1,0 +1,15 @@
+{
+  "name": "Amount (Local Currency)",
+  "dataType": "decimal",
+  "description": "SAP Source: BSIS/BSAS.DMBTR (negated if BSIS/BSAS.SHKZG = 'H')",
+  "sourceColumn": "AmountInLocalCurrency",
+  "formatString": "#,0.00",
+  "displayFolder": "_Values",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

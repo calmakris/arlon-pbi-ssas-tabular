@@ -1,0 +1,36 @@
+{
+  "name": "Backorder Snapshot Shortage Amount",
+  "description": [
+    "Snapshot of the shortage amount of open sales order line items.",
+    "",
+    "Shortage is the open amount in sales orders minus the amount of unrestricted stock based on material number and plant minus the amount of in transit (STO) purchase orders."
+  ],
+  "expression": [
+    "",
+    "VAR RefDate =",
+    "    CALCULATE(",
+    "        MAX('Calendar'[Date]),",
+    "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date])",
+    "    )",
+    "",
+    "VAR LastShortage = ",
+    "    CALCULATE(",
+    "        SUM( 'Backorder Snapshots'[Shortage Amount] ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] = RefDate",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    DIVIDE( LastShortage, [Inventory Snapshot Amount] )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

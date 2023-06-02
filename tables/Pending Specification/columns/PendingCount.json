@@ -1,0 +1,15 @@
+{
+  "name": "PendingCount",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "PendingCount",
+  "formatString": "0",
+  "isAvailableInMdx": false,
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "End of Fiscal Year",
+  "expression": "DATE( YEAR([Report Date]) + IF(MONTH([Report Date])>=10, 1, 0) , 9, 30 )",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

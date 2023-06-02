@@ -1,0 +1,13 @@
+{
+  "name": "Is Next 3 Months",
+  "dataType": "boolean",
+  "description": "This value is true if the date is between the beginning of next month from yesterday to end of month date that is three months forwards from yesterday. For example, if yesterday is June 10, 2022, then the dates between July 1  and Septermber 30, 2022 are set to true",
+  "sourceColumn": "Is_Next3_Months",
+  "displayFolder": "Helper Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

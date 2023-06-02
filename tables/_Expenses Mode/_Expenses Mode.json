@@ -1,0 +1,57 @@
+{
+  "name": "_Expenses Mode",
+  "calculationGroup": {
+    "precedence": 2,
+    "calculationItems": [
+      {
+        "name": "Actual",
+        "expression": "[Expenses Amount]",
+        "ordinal": 0
+      },
+      {
+        "name": "PY",
+        "expression": "CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+        "ordinal": 1
+      },
+      {
+        "name": "PY Var",
+        "expression": [
+          "VAR PreviousPeriod = CALCULATE( [Expenses Amount], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
+          "RETURN",
+          "    IF (",
+          "        NOT ISBLANK( [Expenses Amount] )",
+          "            && NOT ISBLANK( PreviousPeriod ),",
+          "        [Expenses Amount] - PreviousPeriod",
+          "    )"
+        ],
+        "ordinal": 2
+      },
+      {
+        "name": "AOP",
+        "expression": "[Expenses Plan]",
+        "ordinal": 3
+      },
+      {
+        "name": "AOP Var",
+        "expression": [
+          "IF (",
+          "    NOT ISBLANK( [Expenses Amount] )",
+          "        && NOT ISBLANK( [Expenses Plan] ),",
+          "    [Expenses Amount] - [Expenses Plan]",
+          ")"
+        ],
+        "ordinal": 4
+      }
+    ]
+  },
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

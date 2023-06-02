@@ -1,0 +1,22 @@
+{
+  "name": "Inventory Amount Closing Prior Year",
+  "description": "Inventory snapshot amount at the end of previous calendar year (Dec 31st)",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory Snapshots'[Amount] ),",
+    "    FILTER( ",
+    "        'Calendar',",
+    "        'Calendar'[Date] = [End of Prior Year]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

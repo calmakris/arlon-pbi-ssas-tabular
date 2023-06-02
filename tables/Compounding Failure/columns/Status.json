@@ -1,0 +1,12 @@
+{
+  "name": "Status",
+  "dataType": "string",
+  "description": "Current status of the process order",
+  "sourceColumn": "Status",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

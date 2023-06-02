@@ -1,0 +1,41 @@
+{
+  "name": "Price List",
+  "description": "Contains the latest selling price per customer and material. If there is a sales quote for the customer, that overwrites the existing price list.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Generic Sales\",\"Product Management\",\"Sales Orders\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Price List\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Price List\",",
+        "    \"fromColumn\": \"CustomerOrg\",",
+        "    \"toTable\": \"Customer Master\",",
+        "    \"toColumn\": \"CustomerOrgKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Price List\",",
+        "    \"fromColumn\": \"MaterialNo\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Price List\",",
+        "    \"fromColumn\": \"PlantNo\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

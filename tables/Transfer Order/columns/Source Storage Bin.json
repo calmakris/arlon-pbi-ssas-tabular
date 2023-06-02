@@ -1,0 +1,12 @@
+{
+  "name": "Source Storage Bin",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.VLPLA",
+  "sourceColumn": "SrcStrBin",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

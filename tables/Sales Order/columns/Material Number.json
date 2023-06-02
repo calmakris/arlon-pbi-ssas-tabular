@@ -1,0 +1,13 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "Material number in the sales order item",
+  "sourceColumn": "MaterialNoKey",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

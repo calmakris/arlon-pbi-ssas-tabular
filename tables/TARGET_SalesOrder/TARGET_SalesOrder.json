@@ -1,0 +1,10 @@
+{
+  "name": "TARGET_SalesOrder",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

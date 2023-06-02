@@ -1,0 +1,14 @@
+{
+  "name": "RLS_SalesOrganization",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_RLS_SalesOrganization = Source{[Schema=\"dbo\",Item=\"RLS_SalesOrganization\"]}[Data]",
+      "in",
+      "    dbo_RLS_SalesOrganization"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "MFG Work Center",
+  "description": "Work center of the transaction item that manufactured the material based on the batch number recorded.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

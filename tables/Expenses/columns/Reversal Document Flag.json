@@ -1,0 +1,12 @@
+{
+  "name": "Reversal Document Flag",
+  "dataType": "string",
+  "description": "Determines if this document is the reversal document of another document",
+  "sourceColumn": "IsRvrslDoc",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

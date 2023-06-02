@@ -1,0 +1,26 @@
+{
+  "name": "Operations Scrap as % of GR",
+  "description": "Total scrap amount divided by the goods receipt amount",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Operations Scrap Amount],",
+    "    CALCULATE(",
+    "        [Operations Goods Receipt Amount],",
+    "        ALL( 'Scrap Category' ),",
+    "        ALL( 'Reason for Movement' ),",
+    "        ALL( 'Material Master' ),",
+    "        ALL( 'Work Center' ),",
+    "        ALL( 'MFG Work Center' )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Operations Scrap",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

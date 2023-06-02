@@ -1,0 +1,19 @@
+{
+  "name": "Purchase Order Invoice Receipt Unit Price FYTD Last",
+  "description": "Amount divided quantity of the last invoice receipt in purchase order history on current fiscal year",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Purchase Order Invoice Receipt Amount FYTD Last],",
+    "    [Purchase Order Invoice Receipt Quantity FYTD Last]",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

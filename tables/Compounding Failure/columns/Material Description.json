@@ -1,0 +1,12 @@
+{
+  "name": "Material Description",
+  "dataType": "string",
+  "description": "Description of the material",
+  "sourceColumn": "MaterialDescription",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

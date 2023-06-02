@@ -1,0 +1,93 @@
+{
+  "name": "Company and Sales Person",
+  "description": "Restricts data based on assigned company code, sales organization, and sales person assignment",
+  "modelPermission": "read",
+  "members": [
+    {
+      "memberName": "DOMAIN\\acourtois",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8499"
+    },
+    {
+      "memberName": "DOMAIN\\aedrei",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-4956"
+    },
+    {
+      "memberName": "DOMAIN\\aflores",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7300"
+    },
+    {
+      "memberName": "DOMAIN\\ajoki",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7308"
+    },
+    {
+      "memberName": "DOMAIN\\arodriguez",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8655"
+    },
+    {
+      "memberName": "DOMAIN\\cdicillo",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8571"
+    },
+    {
+      "memberName": "DOMAIN\\DOrtega",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1408"
+    },
+    {
+      "memberName": "DOMAIN\\GDebes",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1711"
+    },
+    {
+      "memberName": "DOMAIN\\gwiant",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8443"
+    },
+    {
+      "memberName": "DOMAIN\\jkozlowski",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7200"
+    },
+    {
+      "memberName": "DOMAIN\\jnagel",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7261"
+    },
+    {
+      "memberName": "DOMAIN\\jrossi",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20480"
+    },
+    {
+      "memberName": "DOMAIN\\jventola",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8549"
+    },
+    {
+      "memberName": "DOMAIN\\LBurke",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-3178"
+    },
+    {
+      "memberName": "DOMAIN\\pvangelder",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8484"
+    },
+    {
+      "memberName": "DOMAIN\\redwards",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-19929"
+    },
+    {
+      "memberName": "DOMAIN\\rplenzich",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7305"
+    },
+    {
+      "memberName": "DOMAIN\\tswartout",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8664"
+    }
+  ],
+  "tablePermissions": [
+    {
+      "name": "RLS_CompanyCode",
+      "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+    },
+    {
+      "name": "RLS_SalesOrganization",
+      "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
+    },
+    {
+      "name": "RLS_SalesPerson",
+      "filterExpression": "RLS_SalesPerson[DomainName]=USERNAME() && RLS_SalesPerson[InactiveDate] < TODAY()"
+    }
+  ]
+}

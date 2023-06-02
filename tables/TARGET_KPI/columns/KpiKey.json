@@ -1,0 +1,7 @@
+{
+  "name": "KpiKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "KpiKey",
+  "isAvailableInMdx": false
+}

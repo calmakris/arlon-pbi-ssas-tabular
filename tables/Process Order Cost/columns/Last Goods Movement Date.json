@@ -1,0 +1,17 @@
+{
+  "name": "Last Goods Movement Date",
+  "dataType": "dateTime",
+  "description": "The posting date of the last goods receipt (101/102) or goods issue (261/262) related to the process order",
+  "sourceColumn": "LastGoodsMvmtDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

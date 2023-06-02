@@ -1,0 +1,13 @@
+{
+  "name": "Document Type",
+  "dataType": "string",
+  "description": "Two-letter code that determines if the purchase order is a regular purchase order, purchase requisition, stock transfer order, etc.",
+  "sourceColumn": "PurchaseDocType",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

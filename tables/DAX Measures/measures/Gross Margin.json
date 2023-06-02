@@ -1,0 +1,13 @@
+{
+  "name": "Gross Margin",
+  "description": "Difference between gross sales and standard cost in the billing document. This value is toggleable to local currency using the \"_Currency To Use\" table.",
+  "expression": "SUM( 'Sales Invoice'[GrossMargin] )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

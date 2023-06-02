@@ -1,0 +1,13 @@
+{
+  "name": "Actual Labor Hours per Crew",
+  "description": "Total regular, overtime, and doubletime hours from Paylocity divided by the crew size defined for the department. Filter the 'Pay Category' field in the 'Payroll' table to include regular, overtime, or doubletime hours only.",
+  "expression": "SUM( 'Payroll'[HoursWorkedPerCrew] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Operations",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

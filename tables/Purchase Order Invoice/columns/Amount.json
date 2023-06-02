@@ -1,0 +1,15 @@
+{
+  "name": "Amount",
+  "dataType": "decimal",
+  "description": "SAP Source: EKBE.REEWR",
+  "isHidden": true,
+  "sourceColumn": "InvoiceValue",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

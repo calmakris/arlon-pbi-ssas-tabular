@@ -1,0 +1,19 @@
+{
+  "name": "Purchase Order Invoice Receipt Amount FYTD Last",
+  "description": "Last positive invoice receipt amount from purchase order history based on material number, posting fiscal year, and purchase order unit ordered by posting date, material document number, and material document line number.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Purchase Order Invoice Receipt Amount FYTD],",
+    "    KEEPFILTERS( 'Purchase Order Invoice'[PostingRank] = 1 )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

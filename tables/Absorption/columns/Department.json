@@ -1,0 +1,13 @@
+{
+  "name": "Department",
+  "dataType": "string",
+  "description": "Department of the primary work center of the process order",
+  "isHidden": true,
+  "sourceColumn": "Department",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

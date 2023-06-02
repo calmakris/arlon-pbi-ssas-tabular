@@ -1,0 +1,13 @@
+{
+  "name": "Processing Status",
+  "dataType": "string",
+  "description": "Overall processing status of the sales order item",
+  "sourceColumn": "ProcessingBlock",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

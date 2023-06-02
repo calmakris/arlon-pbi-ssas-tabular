@@ -1,0 +1,23 @@
+{
+  "name": "Last Working Day",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    MAX( 'Calendar'[Date] ),",
+    "    FILTER(",
+    "        ALLSELECTED( 'Calendar' ),",
+    "        'Calendar'[Date] <= [Report Date]",
+    "            && 'Calendar'[Is Weekday]",
+    "    )",
+    ")"
+  ],
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

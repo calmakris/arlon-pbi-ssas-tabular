@@ -1,0 +1,12 @@
+{
+  "name": "Further Detail",
+  "dataType": "string",
+  "description": "Source: primarystruct.FurtherDetail",
+  "sourceColumn": "FurtherDetail",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

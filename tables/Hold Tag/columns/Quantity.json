@@ -1,0 +1,16 @@
+{
+  "name": "Quantity",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "HoldQuantityValue",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

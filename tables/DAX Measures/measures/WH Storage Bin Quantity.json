@@ -1,0 +1,13 @@
+{
+  "name": "WH Storage Bin Quantity",
+  "description": "Total quantity in a storage bin",
+  "expression": "SUM( 'Inventory in Storage Bin'[Quantity] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

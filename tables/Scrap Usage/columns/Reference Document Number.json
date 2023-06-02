@@ -1,0 +1,12 @@
+{
+  "name": "Reference Document Number",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.ZEILE",
+  "sourceColumn": "RefDocNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

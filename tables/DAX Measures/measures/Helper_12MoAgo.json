@@ -1,0 +1,6 @@
+{
+  "name": "Helper_12MoAgo",
+  "expression": "YEAR([Date 12 Months Ago]) * 100 + MONTH([Date 12 Months Ago])",
+  "isHidden": true,
+  "displayFolder": "_Helpers"
+}

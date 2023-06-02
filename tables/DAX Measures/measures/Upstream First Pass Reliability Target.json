@@ -1,0 +1,20 @@
+{
+  "name": "Upstream First Pass Reliability Target",
+  "description": "Monthly target data supplied by Engineering once every fiscal year",
+  "expression": [
+    "",
+    "SWITCH(TRUE(),",
+    "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST First Pass Reliability (Target)],",
+    "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT First Pass Reliability (Target)],",
+    "    DIVIDE( ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]), 2 )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

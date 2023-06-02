@@ -1,0 +1,14 @@
+{
+  "name": "Goods Movement",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_GoodsMovement = Source{[Schema=\"dbo\",Item=\"FACT_GoodsMovement\"]}[Data]",
+      "in",
+      "    dbo_FACT_GoodsMovement"
+    ]
+  }
+}

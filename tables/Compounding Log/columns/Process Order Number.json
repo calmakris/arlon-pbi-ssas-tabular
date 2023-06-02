@@ -1,0 +1,16 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": [
+    "Process order of the task.",
+    "",
+    "This field is not related to the 'Process Order' table."
+  ],
+  "sourceColumn": "ProcessOrderNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

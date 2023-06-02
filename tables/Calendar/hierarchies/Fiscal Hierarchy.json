@@ -1,0 +1,31 @@
+{
+  "name": "Fiscal Hierarchy",
+  "levels": [
+    {
+      "name": "Fiscal Quarter",
+      "ordinal": 1,
+      "column": "Fiscal Quarter"
+    },
+    {
+      "name": "Fiscal Year",
+      "ordinal": 0,
+      "column": "Fiscal Year"
+    },
+    {
+      "name": "Month",
+      "ordinal": 2,
+      "column": "Fiscal Month"
+    },
+    {
+      "name": "Date",
+      "ordinal": 3,
+      "column": "Date"
+    }
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Upstream Changeover Time",
+  "description": "Average duration of clean up records in 'Upstream Logs - Simplified'",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    AVERAGE( 'Upstream Log Simplified'[DurationMinute] ),",
+    "    FILTER(",
+    "        'Upstream Log Simplified',",
+    "        'Upstream Log Simplified'[Category] = \"Clean Up\"",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0 \"min\"",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

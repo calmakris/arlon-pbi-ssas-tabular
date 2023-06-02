@@ -1,0 +1,28 @@
+{
+  "name": "Material Trace",
+  "description": [
+    "This table filters the 'Material Master' table using related materials that are above or below the hierarchy in the bill of materials. Discontinued materials are excluded. For example, if the 'Material Number' field in this table is filtered to 745250, it filters the 'Material Master' table to any material that uses 745250 adhesive.",
+    "",
+    "Note the fields in this table are solely for filtering so add them in the filters pane or as a slicer visual in Power BI."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Material Trace\",",
+        "    \"fromColumn\": \"MaterialNo\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

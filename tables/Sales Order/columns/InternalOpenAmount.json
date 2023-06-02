@@ -1,0 +1,17 @@
+{
+  "name": "InternalOpenAmount",
+  "dataType": "decimal",
+  "description": "Total value of internal open quantity",
+  "isHidden": true,
+  "sourceColumn": "InternalOpenAmount",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Local Values",
+  "summarizeBy": "sum",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

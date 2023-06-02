@@ -1,0 +1,13 @@
+{
+  "name": "Unit of Measure",
+  "dataType": "string",
+  "description": "Specifies the unit of measure in which the goods movement or inventory count is entered.",
+  "sourceColumn": "UnitOfMeasure",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

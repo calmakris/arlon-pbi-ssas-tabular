@@ -1,0 +1,35 @@
+{
+  "name": "Customer Master",
+  "description": "This table contains information about Sold/Bill To customers in SAP. Refer to other fact/transactional tables for the Ship To information.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Customer Master\",",
+        "    \"fromColumn\": \"Sales Organization\",",
+        "    \"toTable\": \"BRIDGE_SalesOrganization\",",
+        "    \"toColumn\": \"SalesOrganization\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Customer Master\",",
+        "    \"fromColumn\": \"Sales Person Code\",",
+        "    \"toTable\": \"BRIDGE_SalesPerson\",",
+        "    \"toColumn\": \"SalesPersonKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Customer Master\",",
+        "    \"fromColumn\": \"Sales Region Alternative\",",
+        "    \"toTable\": \"BRIDGE_SalesRegion\",",
+        "    \"toColumn\": \"Sales Region\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

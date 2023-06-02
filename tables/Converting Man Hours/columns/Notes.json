@@ -1,0 +1,12 @@
+{
+  "name": "Notes",
+  "dataType": "string",
+  "description": "Notes entered by the Converting lead when they enter the man hours per shift using the form in http://arlpbiprd/conv_form/",
+  "sourceColumn": "Notes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

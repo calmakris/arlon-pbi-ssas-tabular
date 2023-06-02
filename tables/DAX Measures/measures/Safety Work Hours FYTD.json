@@ -1,0 +1,19 @@
+{
+  "name": "Safety Work Hours FYTD",
+  "description": "Total work hours since October. This data is supplied by HR and entered by Robert Nicholson in the Safety Incident Log spreadsheet.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Safety Work Hours'[Work Hours] ),",
+    "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

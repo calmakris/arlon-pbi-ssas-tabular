@@ -1,0 +1,21 @@
+{
+  "name": "Gross Sales Budget MTD Var%",
+  "expression": [
+    "",
+    "VAR VarVal = IF( OR( ISBLANK([Gross Sales MTD]), ISBLANK([Gross Sales Budget MTD]) ), BLANK(), [Gross Sales MTD] - [Gross Sales Budget MTD] )",
+    "",
+    "RETURN",
+    "    DIVIDE(",
+    "        VarVal,",
+    "        [Gross Sales Budget MTD]",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\"]"
+    }
+  ]
+}

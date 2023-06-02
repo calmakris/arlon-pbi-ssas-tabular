@@ -1,0 +1,16 @@
+{
+  "name": "Non Production Hours",
+  "dataType": "decimal",
+  "description": "The total number of hours across all converting employees when they are doing trainings, FEs, and other non-production activities",
+  "isHidden": true,
+  "sourceColumn": "NonProductionHours",
+  "formatString": "0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

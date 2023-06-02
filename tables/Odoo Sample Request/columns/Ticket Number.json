@@ -1,0 +1,12 @@
+{
+  "name": "Ticket Number",
+  "dataType": "int64",
+  "sourceColumn": "TicketNo",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

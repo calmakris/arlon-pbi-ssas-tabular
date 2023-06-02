@@ -1,0 +1,14 @@
+{
+  "name": "Company Code",
+  "dataType": "string",
+  "description": "SAP Source: COBK.KOKRS",
+  "isHidden": true,
+  "sourceColumn": "CompCode",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

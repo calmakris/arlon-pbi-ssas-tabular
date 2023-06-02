@@ -1,0 +1,13 @@
+{
+  "name": "Material Group",
+  "dataType": "string",
+  "description": "Material group of the related material",
+  "sourceColumn": "MaterialGroup",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

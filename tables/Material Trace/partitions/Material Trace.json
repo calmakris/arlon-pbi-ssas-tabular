@@ -1,0 +1,14 @@
+{
+  "name": "Material Trace",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_MaterialTrace = Source{[Schema=\"dbo\",Item=\"DIM_MaterialTrace\"]}[Data]",
+      "in",
+      "    dbo_DIM_MaterialTrace"
+    ]
+  }
+}

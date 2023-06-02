@@ -1,0 +1,13 @@
+{
+  "name": "Gross Sales YTD PY Var",
+  "description": "Date grouping: 'Sales Invoice Documents'[Posting Date]",
+  "expression": " IF( NOT( OR(ISBLANK([Gross Sales YTD]), ISBLANK([Gross Sales YTD PY]) ) ), [Gross Sales YTD] - [Gross Sales YTD PY], BLANK() )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

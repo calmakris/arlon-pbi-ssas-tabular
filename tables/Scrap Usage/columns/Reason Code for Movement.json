@@ -1,0 +1,12 @@
+{
+  "name": "Reason Code for Movement",
+  "dataType": "string",
+  "description": "SAP Source: MSEG.GRUND",
+  "sourceColumn": "MvmtReasonCode",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

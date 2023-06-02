@@ -1,0 +1,19 @@
+{
+  "name": "Earned Overhead",
+  "description": "Total cost posted in the earned overhead cost elements",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( Absorption[Amount] ),",
+    "    KEEPFILTERS( 'Cost Element'[Sub Category] = \"Overhead\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

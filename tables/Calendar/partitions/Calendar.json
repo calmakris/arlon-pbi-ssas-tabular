@@ -1,0 +1,16 @@
+{
+  "name": "Calendar",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_DIM_Calendar = Source{[Schema=\"dbo\",Item=\"DIM_Calendar\"]}[Data],",
+      "    #\"Removed Other Columns\" = Table.SelectColumns(dbo_DIM_Calendar,{\"PK_Date\", \"Year_Name\", \"Month_Of_Year\", \"Quarter_Of_Year_Name\", \"Fiscal_Year_Name\", \"Fiscal_Month_Of_Year\", \"Fiscal_Quarter_Of_Year_Name\", \"Day_Of_Month\", \"Fiscal_Year_Month_Name\", \"Month_Name_Abbrev\", \"Month_Name_Abbrev_Calendar\", \"Week_Of_Year\", \"Year_Month_Sort_Key\", \"Weekday_Name\", \"Day_Of_Week\", \"Day_Of_Calendar_Year\", \"Day_Of_Fiscal_Year\", \"Is_Weekday\", \"Is_Current_Month\", \"Is_Current_Fiscal_Year\", \"Is_Mtd\", \"Is_Calendar_Ytd\", \"Is_Fiscal_Ytd\", \"Is_Last2_Fiscal_Years\", \"Is_Last2_Calendar_Years\", \"Is_Last3_Fiscal_Years\", \"Is_Last3_Calendar_Years\", \"Is_Last13_Months\", \"Is_After_13MonthsAgo\", \"Is_Next3_Months\", \"Is_Recent_Weeks\", \"Year_Week_Sort_Key\", \"Group_Week\", \"Start_Of_Month\", \"Start_Of_Week\"}),",
+      "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Removed Other Columns\",{{\"PK_Date\", type date}, {\"Start_Of_Month\", type date}, {\"Start_Of_Week\", type date}})",
+      "in",
+      "    #\"Changed Type\""
+    ]
+  }
+}

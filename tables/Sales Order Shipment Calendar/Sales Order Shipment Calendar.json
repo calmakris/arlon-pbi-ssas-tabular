@@ -1,0 +1,30 @@
+{
+  "name": "Sales Order Shipment Calendar",
+  "description": "A specialized tabled used to visualize Shipping department's shipment schedule of sales orders. [First Scheduled Ship Date] is used as columns and [Shipment Rank] as rows while values are concatenated strings of customer name, and order number/type.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Sales Order Shipment Calendar\",",
+        "    \"fromColumn\": \"First Scheduled Ship Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Sales Order Shipment Calendar\",",
+        "    \"fromColumn\": \"Plant\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Sales Order Line Count by First Ship Date Late Exempt",
+  "description": "Count of sales order line items where the ordered quantity is not fully delivered on or before the first scheduled ship date but marked as 'No' under 'IsArlonFault' column in the ZSDSHIP_LATE tcode in SAP",
+  "expression": [
+    "",
+    "VAR Exempt =",
+    "    CALCULATE(",
+    "        [Sales Order Line Count by First Ship Date],",
+    "        KEEPFILTERS('Sales Order'[Late Flag] = \"Yes\"),",
+    "        KEEPFILTERS('Sales Order'[Reason Type for Late Shipment] = \"3rd Party\"),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "IF(",
+    "    [Sales Order Line Count by First Ship Date] <> BLANK(),",
+    "    Exempt + 0,",
+    "    BLANK()",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Inventory Snapshot Labor Cost",
+  "description": "Latest snapshot of the labor cost of inventory depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+  "expression": [
+    "",
+    "VAR RefDate =",
+    "    CALCULATE(",
+    "        MAX('Calendar'[Date]),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        SUM( 'Inventory Snapshots'[Labor Cost] ),",
+    "        KEEPFILTERS( 'Calendar'[Date] = RefDate )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

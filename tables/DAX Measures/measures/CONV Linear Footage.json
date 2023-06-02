@@ -1,0 +1,21 @@
+{
+  "name": "CONV Linear Footage",
+  "description": "Total linear footage of goods movement transaction with movement types 101/102 and 531/532 from the Converting machines posted in Converting storage bins.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Goods Receipt Linear Footage],",
+    "    KEEPFILTERS('Goods Movement'[Machine] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+    "    KEEPFILTERS('Goods Movement'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Movement'[Production Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

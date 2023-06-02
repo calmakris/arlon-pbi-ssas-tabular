@@ -1,0 +1,25 @@
+{
+  "name": "Process Order Scheduled Output by Month End",
+  "description": "Total target quantity of scheduled shop orders after today until end of month (relative to [Report Date]). Scheduled data is the from the latest schedule published by Planning.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Planning Schedule Target Quantity],",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Planning Schedule'[PlanFinishDateAltKey] ),",
+    "    ALL( 'Calendar'[Date] ),",
+    "    FILTER(",
+    "        ALL( 'Planning Schedule'[PlanFinishDateAltKey] ),",
+    "        'Planning Schedule'[PlanFinishDateAltKey] > [Report Date]",
+    "            && 'Planning Schedule'[PlanFinishDateAltKey] <= [End of Month]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Absorption\\_Projection",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

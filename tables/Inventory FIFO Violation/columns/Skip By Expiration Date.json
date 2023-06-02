@@ -1,0 +1,17 @@
+{
+  "name": "Skip By Expiration Date",
+  "dataType": "dateTime",
+  "description": "The expiration/SLED date of the material that violated FIFO",
+  "sourceColumn": "SkipExpireDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

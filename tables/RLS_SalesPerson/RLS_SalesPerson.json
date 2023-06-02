@@ -1,0 +1,21 @@
+{
+  "name": "RLS_SalesPerson",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"RLS_SalesPerson\",",
+        "    \"fromColumn\": \"SalesPersonKey\",",
+        "    \"toTable\": \"BRIDGE_SalesPerson\",",
+        "    \"toColumn\": \"SalesPersonKey\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\",",
+        "    \"securityFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

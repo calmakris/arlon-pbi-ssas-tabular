@@ -1,0 +1,13 @@
+{
+  "name": "Material Document Line Number",
+  "dataType": "string",
+  "description": "Specifies the number that uniquely identifies an item in of a material document.",
+  "sourceColumn": "MaterialDocItemNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

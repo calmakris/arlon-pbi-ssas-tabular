@@ -1,0 +1,8 @@
+{
+  "name": "GrossMarginMTD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "GrossMarginMTD",
+  "formatString": "0.00%;-0.00%;0.00%",
+  "isAvailableInMdx": false
+}

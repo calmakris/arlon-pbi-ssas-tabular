@@ -1,0 +1,29 @@
+{
+  "name": "Website Traffic",
+  "description": "Daily website traffic statistics in the last 90 days",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Website Traffic\",",
+        "    \"fromColumn\": \"Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Website Traffic\",",
+        "    \"fromColumn\": \"GeoKey\",",
+        "    \"toTable\": \"Marketing Geo Network\",",
+        "    \"toColumn\": \"GeoKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

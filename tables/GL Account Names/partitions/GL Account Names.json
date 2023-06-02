@@ -1,0 +1,14 @@
+{
+  "name": "GL Account Names",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_GLAccount = Source{[Schema=\"dbo\",Item=\"DIM_GLAccount\"]}[Data]",
+      "in",
+      "    dbo_DIM_GLAccount"
+    ]
+  }
+}

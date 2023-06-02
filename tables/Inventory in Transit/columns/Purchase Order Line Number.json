@@ -1,0 +1,12 @@
+{
+  "name": "Purchase Order Line Number",
+  "dataType": "string",
+  "description": "SAP Source: EKPO.EBELP",
+  "sourceColumn": "PurchaseOrderLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\"]"
+    }
+  ]
+}

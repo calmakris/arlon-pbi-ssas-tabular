@@ -1,0 +1,22 @@
+{
+  "name": "Inventory Amount Opening Current Week",
+  "description": "Inventory snapshot amount on the Sunday of current week",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory Snapshots'[Amount] ),",
+    "    FILTER( ",
+    "        'Calendar',",
+    "        'Calendar'[Date] = [Sunday of Current Week]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

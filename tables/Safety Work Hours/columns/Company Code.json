@@ -1,0 +1,7 @@
+{
+  "name": "Company Code",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CompanyCode",
+  "isAvailableInMdx": false
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Website Traffic",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_WebsiteTraffic = Source{[Schema=\"dbo\",Item=\"FACT_WebsiteTraffic\"]}[Data]",
+      "in",
+      "    dbo_FACT_WebsiteTraffic"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "GRIR Open Amount",
+  "description": [
+    "Total amount of open accounting documents posted under the 0022877000 G/L account.",
+    "",
+    "This value is in USD by default but it is toggleable to local currency using the '_Currency to Use' table."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", [GRIR Amount in Local Currency2],",
+    "            \"Local\", [GRIR Amount in Local Currency],",
+    "            [GRIR Amount in Local Currency2]",
+    "        ),",
+    "        [GRIR Amount in Local Currency2]",
+    "    ),",
+    "    FILTER(",
+    "        'Goods and Invoice Receipt',",
+    "        'Goods and Invoice Receipt'[Clearing Date] > MAX( 'Calendar'[Date] )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "GRIR",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

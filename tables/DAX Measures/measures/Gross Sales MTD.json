@@ -1,0 +1,21 @@
+{
+  "name": "Gross Sales MTD",
+  "description": "MTD gross sales as of yesterday or whatever is the last date filtered in 'Calendar'[Date] field.",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE( [Gross Sales], DATESMTD( 'Calendar'[Date] ) ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

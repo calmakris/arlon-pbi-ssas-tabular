@@ -1,0 +1,18 @@
+{
+  "name": "Official Standard Cost per Unit",
+  "description": "Official standard cost divided by quantity sold",
+  "expression": [
+    "DIVIDE(",
+    "    [Official Standard Cost],",
+    "    [Quantity Sold]",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Cost in Sales Invoice\\_Per Unit",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

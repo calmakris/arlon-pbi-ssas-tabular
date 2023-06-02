@@ -1,0 +1,13 @@
+{
+  "name": "Material Group",
+  "dataType": "string",
+  "description": "Material group of the material in the sales order item",
+  "sourceColumn": "MaterialGroup",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

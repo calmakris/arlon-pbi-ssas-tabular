@@ -1,0 +1,22 @@
+{
+  "name": "Labor Efficiency",
+  "description": "Total earned labor hours from SAP divided by total actual hours from Paylocity. This metric only applies to direct labor cost centers.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DIVIDE(",
+    "        [Earned Labor Hours],",
+    "        [Actual Labor Hours per Crew]",
+    "    ),",
+    "    KEEPFILTERS( 'Cost Center'[Operations Category] = \"Direct\" )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Operations",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

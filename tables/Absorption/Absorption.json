@@ -1,0 +1,65 @@
+{
+  "name": "Absorption",
+  "description": [
+    "Contains fields related to accounting documents posted in absorption G/L accounts in the last few fiscal years. Only confirmed process orders are included in this table.",
+    "",
+    "Use the 'Company Code', 'Cost Center', 'Cost Element', and 'Calendar' tables for further breakdowns of this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Cost Center\",",
+        "    \"toTable\": \"Cost Center\",",
+        "    \"toColumn\": \"Cost Center\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Cost Element\",",
+        "    \"toTable\": \"Cost Element\",",
+        "    \"toColumn\": \"Cost Element\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"HighestBomKey\",",
+        "    \"toTable\": \"FG Filters for Absorption\",",
+        "    \"toColumn\": \"HighestBomKey\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

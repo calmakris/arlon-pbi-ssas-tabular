@@ -1,0 +1,14 @@
+{
+  "name": "MachineTagNameKey",
+  "dataType": "string",
+  "isHidden": true,
+  "isKey": true,
+  "sourceColumn": "MachineTagNameKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

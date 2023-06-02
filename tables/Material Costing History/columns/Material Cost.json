@@ -1,0 +1,16 @@
+{
+  "name": "Material Cost",
+  "dataType": "decimal",
+  "description": "SAP Source: KEPH.KST001",
+  "isHidden": true,
+  "sourceColumn": "MaterialCost",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Inventory\"]"
+    }
+  ]
+}

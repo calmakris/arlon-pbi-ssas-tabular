@@ -1,0 +1,13 @@
+{
+  "name": "Reason Code for Movement",
+  "dataType": "string",
+  "description": "Specifies the description of the reason for a goods movement.",
+  "sourceColumn": "ReasonCode",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

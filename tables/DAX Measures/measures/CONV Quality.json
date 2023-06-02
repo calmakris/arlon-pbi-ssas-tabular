@@ -1,0 +1,23 @@
+{
+  "name": "CONV Quality",
+  "description": [
+    "Net of goods receipt and scrap footage form goods movement transactions divided by the goods receipt footage.",
+    "",
+    "Footage is the quantity converted to linear footage using the length and width data from the material master."
+  ],
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [CONV OEE Goods Receipt Footage] - [CONV OEE Scrap Footage],",
+    "    [CONV OEE Goods Receipt Footage]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

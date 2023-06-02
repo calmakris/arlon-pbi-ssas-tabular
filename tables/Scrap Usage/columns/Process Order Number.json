@@ -1,0 +1,14 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": "SAP Source: ACCTIT.AUFNR",
+  "isHidden": true,
+  "sourceColumn": "ProcessOrderNo",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

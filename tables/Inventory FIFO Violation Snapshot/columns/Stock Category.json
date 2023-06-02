@@ -1,0 +1,12 @@
+{
+  "name": "Stock Category",
+  "dataType": "string",
+  "description": "Determines if the material with FIFO violation is blocked or not. Blank stock category means it is unrestricted while the other categories are blocked for specific reasons like quality defects, etc.",
+  "sourceColumn": "StockCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

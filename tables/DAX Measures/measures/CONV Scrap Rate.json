@@ -1,0 +1,20 @@
+{
+  "name": "CONV Scrap Rate",
+  "description": "Linear footage of goods issue and scrap transactions divided by the linear footage of goods receipt transactions from Converting machines posted in Converting storage bins.",
+  "expression": [
+    "CALCULATE(",
+    "    [Goods Issue Scrap Rate],",
+    "    KEEPFILTERS('Goods Movement'[Machine] IN {\"014\", \"088\", \"182\", \"733\", \"734\", \"735\", \"736\", \"737\", \"762\", \"MANUAL\"}),",
+    "    KEEPFILTERS('Goods Movement'[Storage Bin] IN {\"600\", \"700\", \"733\", \"734\", \"735\", \"736\", \"737\", \"88\", \"182\", \"782\", \"555\"}),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Goods Movement'[Production Date] )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

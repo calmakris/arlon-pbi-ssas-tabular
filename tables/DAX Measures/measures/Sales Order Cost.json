@@ -1,0 +1,29 @@
+{
+  "name": "Sales Order Cost",
+  "description": [
+    "Total standard cost of material in the sales order.",
+    "",
+    "This value is toggleable to local currency using the '_Currency To Use' table."
+  ],
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Order'[CostAmountUSD] ),",
+    "        \"Local\", SUM( 'Sales Order'[CostAmount] ),",
+    "        SUM( 'Sales Order'[CostAmountUSD] )",
+    "    ),",
+    "    SUM( 'Sales Order'[CostAmountUSD] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Generic Sales\",\"Product Management\",\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "CONV Efficiency",
+  "description": "Product of availability, performance, and quality",
+  "expression": "[CONV Availability] * [CONV Performance] * [CONV Quality]",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

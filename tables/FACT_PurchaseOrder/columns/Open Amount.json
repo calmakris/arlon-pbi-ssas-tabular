@@ -1,0 +1,17 @@
+{
+  "name": "Open Amount",
+  "dataType": "decimal",
+  "description": "Open quantity converted to amount based on unit price from ordered amount and quantity. SAP Source: EKPO.MENGE, EKET.WEMNG, and EKPO.NETWR",
+  "isHidden": true,
+  "sourceColumn": "OpenAmount",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\",\"Warehouse\"]"
+    }
+  ]
+}

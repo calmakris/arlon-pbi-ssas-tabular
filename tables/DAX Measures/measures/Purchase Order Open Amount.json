@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Order Open Amount",
+  "description": "Difference between the ordered and received amount of materials against a purchase order",
+  "expression": "SUM( 'FACT_PurchaseOrder'[Open Amount] )",
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Purchase Orders\"]"
+    }
+  ]
+}

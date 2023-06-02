@@ -1,0 +1,19 @@
+{
+  "name": "Goods Receipt Square Footage",
+  "description": "Total square footage of postings with movement types 101, 102, 531, and 532. The dimensions for square footage are based on the width in the material master and the length conversion factor in the alternative unit of measure in the material master in SAP.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Goods Movement'[Square Feet] ),",
+    "    KEEPFILTERS('Goods Movement'[Movement Type] IN {\"101\", \"531\", \"102\", \"532\"})",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Goods Movement",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

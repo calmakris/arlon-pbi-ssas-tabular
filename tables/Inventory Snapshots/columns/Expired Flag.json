@@ -1,0 +1,12 @@
+{
+  "name": "Expired Flag",
+  "dataType": "string",
+  "description": "Filters expired or non-expired materials only in the inventory snapshot",
+  "sourceColumn": "ExpiredFlag",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

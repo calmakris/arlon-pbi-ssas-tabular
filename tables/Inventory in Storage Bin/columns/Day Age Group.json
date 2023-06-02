@@ -1,0 +1,24 @@
+{
+  "type": "calculated",
+  "name": "Day Age Group",
+  "dataType": "variant",
+  "isDataTypeInferred": true,
+  "description": "Calculated column based on [Age in Days]",
+  "expression": [
+    "",
+    "SWITCH(",
+    "    TRUE(),",
+    "    'Inventory in Storage Bin'[Age in Days] = BLANK(), BLANK(),",
+    "    'Inventory in Storage Bin'[Age in Days] <= 30, \"0 - 30\",",
+    "    'Inventory in Storage Bin'[Age in Days] <= 60, \"31 - 60\",",
+    "    'Inventory in Storage Bin'[Age in Days] <= 90, \"61 - 90\",",
+    "    \"Above 90\"",
+    ")"
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Discontinued Flag",
+  "dataType": "string",
+  "description": [
+    "Determines if the traced material is discontinued or not. A material is discontinued if it meets any of the following criteria:",
+    "1. The material description starts with a carat (^) or contains \"DO NOT USE\"",
+    "2. For finished good and buyouts, the cross-distribution status is not blank, active (AT), pre-launch (PR), and halted (H)",
+    "3. For non-finished good and non-buyouts, the cross-plant material status is not blank"
+  ],
+  "sourceColumn": "DiscontinuedFlag",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

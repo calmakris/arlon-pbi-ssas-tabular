@@ -1,0 +1,14 @@
+{
+  "name": "Scrap Category",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_ScrapCategory = Source{[Schema=\"dbo\",Item=\"DIM_ScrapCategory\"]}[Data]",
+      "in",
+      "    dbo_DIM_ScrapCategory"
+    ]
+  }
+}

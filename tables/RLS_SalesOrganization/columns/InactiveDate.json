@@ -1,0 +1,7 @@
+{
+  "name": "InactiveDate",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "InactiveDate",
+  "isAvailableInMdx": false
+}

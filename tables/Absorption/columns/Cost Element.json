@@ -1,0 +1,13 @@
+{
+  "name": "Cost Element",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CostElementKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

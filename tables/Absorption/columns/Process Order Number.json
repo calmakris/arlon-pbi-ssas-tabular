@@ -1,0 +1,16 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": [
+    "Process order responsible for the absorption cost.",
+    "",
+    "This field is not related to the 'Process Order' table."
+  ],
+  "sourceColumn": "ProcessOrderNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

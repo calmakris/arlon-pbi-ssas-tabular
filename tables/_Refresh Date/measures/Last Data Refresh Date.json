@@ -1,0 +1,11 @@
+{
+  "name": "Last Data Refresh Date",
+  "expression": "MAX( '_Refresh Date'[Refresh Date] )",
+  "formatString": "MM/dd/yyyy HH:mm",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"GeneralShortDateTime\" FormatString=\"MM/dd/yyyy HH:mm\" /></DateTimes></Format>"
+    }
+  ]
+}

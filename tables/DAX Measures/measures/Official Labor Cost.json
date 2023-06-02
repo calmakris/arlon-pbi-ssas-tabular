@@ -1,0 +1,25 @@
+{
+  "name": "Official Labor Cost",
+  "description": "This cost is the labor cost in the latest cost roll. It is multipled by the quantity sold in the billing document.",
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Invoice'[CurrentLaborCost] ),",
+    "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[CurrentLaborCost] * 'Sales Invoice'[Exchange Rate] ),",
+    "        SUM( 'Sales Invoice'[CurrentLaborCost] )",
+    "    ),",
+    "    SUM( 'Sales Invoice'[CurrentLaborCost] ) ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Cost in Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

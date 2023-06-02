@@ -1,0 +1,19 @@
+{
+  "name": "COMP Efficiency",
+  "description": "Projected direct hours divided by the difference between actual hours and indirect actual hours",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [COMP Projected Direct Hours],",
+    "    [COMP Actual Hours] - [COMP Indirect Actual Hours]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

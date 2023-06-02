@@ -1,0 +1,11 @@
+{
+  "name": "Version",
+  "dataType": "string",
+  "sourceColumn": "VersionNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

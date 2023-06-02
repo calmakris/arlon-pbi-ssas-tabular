@@ -1,0 +1,27 @@
+{
+  "name": "Converting Man Hours",
+  "description": [
+    "Contains the man hours logged by Converting Leads per day and shift.",
+    "",
+    "Use the 'Calendar' and 'Production Shift' tables to analyze by date and shift."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Converting Man Hours\",",
+        "    \"fromColumn\": \"Production Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

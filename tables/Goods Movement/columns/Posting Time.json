@@ -1,0 +1,18 @@
+{
+  "name": "Posting Time",
+  "dataType": "dateTime",
+  "description": "Time on which the goods movement was posted.",
+  "sourceColumn": "PostingTime",
+  "formatString": "HH:mm:ss",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"LongTime\" FormatString=\"HH:mm:ss\" /></DateTimes></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

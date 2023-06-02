@@ -1,0 +1,12 @@
+{
+  "name": "Changed By",
+  "dataType": "string",
+  "description": "SAP Source: CDHDR.USERNAME",
+  "sourceColumn": "ChangedBy",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

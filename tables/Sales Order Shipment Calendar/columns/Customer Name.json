@@ -1,0 +1,13 @@
+{
+  "name": "Customer Name",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CustomerName",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

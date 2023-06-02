@@ -1,0 +1,13 @@
+{
+  "name": "Sales Person Code",
+  "dataType": "string",
+  "description": "Determines the assignment of sales person per customer. Sales organization 1000 and 2000 uses sales territory/office while organization 1500 uses sales group.",
+  "sourceColumn": "SalesPersonKey",
+  "displayFolder": "Sales Related",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

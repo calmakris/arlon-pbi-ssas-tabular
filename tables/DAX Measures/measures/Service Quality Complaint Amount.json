@@ -1,0 +1,25 @@
+{
+  "name": "Service Quality Complaint Amount",
+  "description": [
+    "Total credit issue amount for service quality complaints.",
+    "",
+    "Service quality are complaints entered with reason codes marked as 'S' (service)."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Complaint Credit Issued Amount],",
+    "    KEEPFILTERS( 'Complaint'[Billing Block Indicator] = \"\" ),",
+    "    KEEPFILTERS( 'Complaint'[Department] = \"S\" ),",
+    "    USERELATIONSHIP('Calendar'[Date], 'Complaint'[Last Credit Date])",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Complaints\\_Service Quality",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

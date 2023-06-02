@@ -1,0 +1,29 @@
+{
+  "name": "Sales Order Shipment",
+  "description": [
+    "Contains delivery note and shipment information per sales order line item.",
+    "",
+    "This table is related to the 'Sales Order' table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Sales Order Shipment\",",
+        "    \"fromColumn\": \"OrderNoLineKey\",",
+        "    \"toTable\": \"Sales Order\",",
+        "    \"toColumn\": \"OrderNoLineKey\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

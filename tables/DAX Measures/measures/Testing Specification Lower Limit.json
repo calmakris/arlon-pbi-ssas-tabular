@@ -1,0 +1,13 @@
+{
+  "name": "Testing Specification Lower Limit",
+  "description": "Minimum specification lower limit at the time the tests are conducted",
+  "expression": "MIN( 'Test Result'[Specification Lower Limit] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

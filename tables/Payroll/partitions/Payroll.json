@@ -1,0 +1,14 @@
+{
+  "name": "Payroll",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_Payroll = Source{[Schema=\"dbo\",Item=\"FACT_Payroll\"]}[Data]",
+      "in",
+      "    dbo_FACT_Payroll"
+    ]
+  }
+}

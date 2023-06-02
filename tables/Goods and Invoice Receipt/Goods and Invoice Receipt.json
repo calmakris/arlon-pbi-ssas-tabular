@@ -1,0 +1,47 @@
+{
+  "name": "Goods and Invoice Receipt",
+  "description": "Contains accounting documents related to goods and invoice receipts.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Goods and Invoice Receipt\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Goods and Invoice Receipt\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Goods and Invoice Receipt\",",
+        "    \"fromColumn\": \"Process Order Number\",",
+        "    \"toTable\": \"Process Order\",",
+        "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Goods and Invoice Receipt\",",
+        "    \"fromColumn\": \"PurchaseOrderLineKey\",",
+        "    \"toTable\": \"Purchase Order\",",
+        "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Goods and Invoice Receipt\",",
+        "    \"fromColumn\": \"VendorNoKey\",",
+        "    \"toTable\": \"Vendor Master\",",
+        "    \"toColumn\": \"Vendor Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

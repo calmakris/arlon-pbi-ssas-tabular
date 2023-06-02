@@ -1,0 +1,13 @@
+{
+  "name": "Specification Number",
+  "dataType": "string",
+  "description": "Specification number of the related material",
+  "sourceColumn": "SpecNo",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

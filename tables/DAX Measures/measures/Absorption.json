@@ -1,0 +1,13 @@
+{
+  "name": "Absorption",
+  "description": "Total cost posted in the earned labor, setup, and overhead cost elements",
+  "expression": " [Earned Labor] + [Earned Overhead]",
+  "formatString": "#,0",
+  "displayFolder": "Absorption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

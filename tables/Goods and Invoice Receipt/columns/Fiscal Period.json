@@ -1,0 +1,12 @@
+{
+  "name": "Fiscal Period",
+  "dataType": "string",
+  "description": "Fiscal period of the posting date. Fiscal year starts in October and ends in September of next calendar year.",
+  "sourceColumn": "FiscalPeriod",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

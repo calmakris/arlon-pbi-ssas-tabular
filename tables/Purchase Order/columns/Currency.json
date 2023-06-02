@@ -1,0 +1,13 @@
+{
+  "name": "Currency",
+  "dataType": "string",
+  "description": "Currency of items in the purchase order document",
+  "sourceColumn": "Currency",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

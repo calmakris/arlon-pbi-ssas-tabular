@@ -1,0 +1,17 @@
+{
+  "name": "Work Center",
+  "description": [
+    "Contains work centers in SAP with custom assigned departments and machine names. This table is usually related to other SAP tables' transacting work center.",
+    ""
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

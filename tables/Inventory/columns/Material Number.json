@@ -1,0 +1,14 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "Material number of the material in inventory",
+  "isHidden": true,
+  "sourceColumn": "MaterialNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

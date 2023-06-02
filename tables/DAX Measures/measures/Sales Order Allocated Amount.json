@@ -1,0 +1,28 @@
+{
+  "name": "Sales Order Allocated Amount",
+  "description": "Total amount of items allocated in the sales order (or, items with delivery notes without a set actual PGI date)",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", SUM( 'Sales Order'[AllocatedAmountUSD] ),",
+    "            \"Local\", SUM( 'Sales Order'[AllocatedAmount] ),",
+    "            SUM( 'Sales Order'[AllocatedAmountUSD] )",
+    "        ),",
+    "        SUM( 'Sales Order'[AllocatedAmountUSD] )   ",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Process Order Ordered Quantity",
+  "description": "Total ordered quantity in the process order by actual/scheduled finish date",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'FACT_ProcessOrder'[OrderQuantity] ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_ProcessOrder'[EndDateKey] )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Process Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Planning\"]"
+    }
+  ]
+}

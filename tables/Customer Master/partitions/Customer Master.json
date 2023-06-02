@@ -1,0 +1,14 @@
+{
+  "name": "Customer Master",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    dbo_DIM_CustomerMaster = Source{[Schema=\"dbo\",Item=\"DIM_CustomerMaster\"]}[Data]",
+      "in",
+      "    dbo_DIM_CustomerMaster"
+    ]
+  }
+}

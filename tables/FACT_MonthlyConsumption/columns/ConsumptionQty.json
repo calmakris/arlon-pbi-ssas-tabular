@@ -1,0 +1,8 @@
+{
+  "name": "ConsumptionQty",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "ConsumptionQty",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false
+}

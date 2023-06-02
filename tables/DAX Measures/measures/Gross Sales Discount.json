@@ -1,0 +1,30 @@
+{
+  "name": "Gross Sales Discount",
+  "description": "Total discount applied to the gross sales revenue. This number is different from cash discount or the discount applied to the selling price based on price book or sales quote.",
+  "expression": [
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", SUM( 'Sales Invoice'[SalesDiscount] ),",
+    "            \"Local\", SUMX( 'Sales Invoice',  'Sales Invoice'[SalesDiscount] * 'Sales Invoice'[Exchange Rate] ),",
+    "            SUM('Sales Invoice'[SalesDiscount] )",
+    "        ),",
+    "        SUM('Sales Invoice'[SalesDiscount] )    ",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

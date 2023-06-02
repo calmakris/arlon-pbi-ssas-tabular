@@ -1,0 +1,13 @@
+{
+  "name": "Route Type",
+  "dataType": "string",
+  "description": "Route by which the delivery item is to be delivered to the customer",
+  "sourceColumn": "RouteType",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

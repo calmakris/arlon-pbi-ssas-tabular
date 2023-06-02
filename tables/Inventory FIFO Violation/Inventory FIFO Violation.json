@@ -1,0 +1,20 @@
+{
+  "name": "Inventory FIFO Violation",
+  "description": [
+    "This table complements the 'Inventory' table only. It contains batch numbers of transactions that violated FIFO based on the current inventory.",
+    "",
+    "A transaction violates FIFO if the material has an expiration date after the expiration date of the same material in stock.",
+    "",
+    "Only transactions with movement types 261, 601, 641, and 541 are considered in this table. Meanwhile, current inventory refers to inventory without stock category."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

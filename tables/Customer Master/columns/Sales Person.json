@@ -1,0 +1,13 @@
+{
+  "name": "Sales Person",
+  "dataType": "string",
+  "description": "Custom assigned values based on sales territory. These values are not in SAP. It is a custom table maintained by IT. Any sales person reassignment are initiated by the Commercial Leadership Team (CLT).",
+  "sourceColumn": "SalesPerson",
+  "displayFolder": "Sales Related",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

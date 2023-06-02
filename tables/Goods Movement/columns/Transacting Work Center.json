@@ -1,0 +1,14 @@
+{
+  "name": "Transacting Work Center",
+  "dataType": "string",
+  "description": "Work center assigned to the process order in the goods movement.",
+  "sourceColumn": "WorkCenter",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

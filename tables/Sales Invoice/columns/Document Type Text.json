@@ -1,0 +1,13 @@
+{
+  "name": "Document Type Text",
+  "dataType": "string",
+  "description": "Determines if the billing document is an invoice, cancellation of invoice, return, credit memo, etc.",
+  "sourceColumn": "DocTypeText",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

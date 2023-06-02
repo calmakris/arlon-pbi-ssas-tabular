@@ -1,0 +1,13 @@
+{
+  "name": "End of Next 3 Months",
+  "expression": " EOMONTH( [Report Date], 3 )",
+  "formatString": "Short Date",
+  "isHidden": true,
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

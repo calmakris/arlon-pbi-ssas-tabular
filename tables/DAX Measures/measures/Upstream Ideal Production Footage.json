@@ -1,0 +1,24 @@
+{
+  "name": "Upstream Ideal Production Footage",
+  "description": "Sum of ideal footage of production records excluding FEs. Ideal footage is based on the duration of the run (in minutes) multplied by the specification linespeed.",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    [Upstream Ideal Footage],",
+    "    FILTER(",
+    "        'Upstream Log Simplified',",
+    "        'Upstream Log Simplified'[Category] = \"Production\"",
+    "            && LEFT('Upstream Log Simplified'[Causes], 4) = \"Roll\"",
+    "            && NOT(CONTAINSSTRING('Upstream Log Simplified'[Causes], \"FE\"))",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

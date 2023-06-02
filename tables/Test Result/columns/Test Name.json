@@ -1,0 +1,12 @@
+{
+  "name": "Test Name",
+  "dataType": "string",
+  "sourceColumn": "TestName",
+  "sortByColumn": "TestNameSortKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

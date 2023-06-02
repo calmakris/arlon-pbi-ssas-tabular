@@ -1,0 +1,19 @@
+{
+  "name": "Inventory Time Supply",
+  "description": "[Current Unrestricted Stock Quantity] divided by [Average Monthly Consumption (Last 12 Months)]. Can be toggled between quantity and amount values (default = quantity).",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Unrestricted Stock Quantity],",
+    "    [Avg Monthly Inventory Consumption Last 12 Months]",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

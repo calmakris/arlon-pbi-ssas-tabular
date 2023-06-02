@@ -1,0 +1,13 @@
+{
+  "name": "CustomerOrg",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CustomerOrg",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Generic Sales\",\"Product Management\",\"Sales Orders\"]"
+    }
+  ]
+}

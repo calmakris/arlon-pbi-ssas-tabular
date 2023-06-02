@@ -1,0 +1,28 @@
+{
+  "name": "CAST First Pass Reliability (Target)",
+  "expression": [
+    "",
+    "VAR TargetVal = ",
+    "    CALCULATE(",
+    "        AVERAGE( TARGET_KPI[TargetValue] ),",
+    "        TARGET_KPI[KpiKey] = \"FPass_CAST\",",
+    "        TREATAS(",
+    "            VALUES( 'Company Code'[Company Code] ),",
+    "            TARGET_KPI[LocationKey]",
+    "        ),",
+    "        TREATAS(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            TARGET_KPI[CalendarTimeKey]",
+    "        )",
+    "    )    ",
+    "RETURN",
+    "    IF(",
+    "        ISBLANK(TargetVal),",
+    "        0.95,",
+    "        TargetVal",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "isHidden": true,
+  "displayFolder": "Upstream Log"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Testing Passing Rate",
+  "description": "Count of specimens that passed the test results divided by the count of speciments",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Testing Passed Specimen Count],",
+    "    [Testing Passed Specimen Count] + [Testing Failed Specimen Count]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

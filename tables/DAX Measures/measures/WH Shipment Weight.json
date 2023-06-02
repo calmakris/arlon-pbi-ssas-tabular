@@ -1,0 +1,24 @@
+{
+  "name": "WH Shipment Weight",
+  "description": "Total weight of material transactions with 601, 641, 643, and Z43 movement types. Weight is given in the material master data.",
+  "expression": [
+    "",
+    "ABS(",
+    "    CALCULATE(",
+    "        SUM( 'Inventory Consumption'[Gross Weight] ),",
+    "        FILTER(",
+    "            'Inventory Consumption',",
+    "            'Inventory Consumption'[Movement Type] IN { \"601\", \"641\", \"643\", \"Z43\" }",
+    "        )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

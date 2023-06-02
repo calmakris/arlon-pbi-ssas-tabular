@@ -1,0 +1,13 @@
+{
+  "name": "Skip By Batch Number",
+  "dataType": "string",
+  "description": "Batch number that violated FIFO",
+  "sourceColumn": "SkipBatch",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Linear Feet",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "LinearFeet",
+  "formatString": "#,0",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

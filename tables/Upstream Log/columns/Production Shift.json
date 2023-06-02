@@ -1,0 +1,13 @@
+{
+  "name": "Production Shift",
+  "dataType": "int64",
+  "description": "Production shift of 'Start Time' where 1st shift is 6AM-2PM, 2nd shift is 2PM-10PM, and 3rd shift is 10PM-6AM next day",
+  "sourceColumn": "ShiftNum",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

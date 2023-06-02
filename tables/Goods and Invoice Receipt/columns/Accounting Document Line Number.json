@@ -1,0 +1,12 @@
+{
+  "name": "Accounting Document Line Number",
+  "dataType": "string",
+  "description": "Number of line item within the accounting document",
+  "sourceColumn": "DocumentLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

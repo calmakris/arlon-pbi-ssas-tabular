@@ -1,0 +1,81 @@
+{
+  "name": "Company and Region",
+  "description": "Restricts data based on assigned company code, sales organization, and sales region",
+  "modelPermission": "read",
+  "members": [
+    {
+      "memberName": "DOMAIN\\bgraiff",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7297"
+    },
+    {
+      "memberName": "DOMAIN\\cjames",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8752"
+    },
+    {
+      "memberName": "DOMAIN\\DCastro",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1777"
+    },
+    {
+      "memberName": "DOMAIN\\DDuncan",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1424"
+    },
+    {
+      "memberName": "DOMAIN\\dpiechocki",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8767"
+    },
+    {
+      "memberName": "DOMAIN\\lcalma",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-6987"
+    },
+    {
+      "memberName": "DOMAIN\\mbraswell",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8601"
+    },
+    {
+      "memberName": "DOMAIN\\mjaffre",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8526"
+    },
+    {
+      "memberName": "DOMAIN\\mpopovich",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7298"
+    },
+    {
+      "memberName": "DOMAIN\\ngomez",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8600"
+    },
+    {
+      "memberName": "DOMAIN\\pcinski",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7213"
+    },
+    {
+      "memberName": "DOMAIN\\pplessis",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-2848"
+    },
+    {
+      "memberName": "DOMAIN\\RDaize",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-1678"
+    },
+    {
+      "memberName": "DOMAIN\\sterenzi",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8498"
+    },
+    {
+      "memberName": "DOMAIN\\maybinder",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-7141"
+    }
+  ],
+  "tablePermissions": [
+    {
+      "name": "RLS_Region",
+      "filterExpression": "RLS_Region[DomainName]=USERNAME() && RLS_Region[InactiveDate] < TODAY()"
+    },
+    {
+      "name": "RLS_CompanyCode",
+      "filterExpression": "RLS_CompanyCode[DomainName]=USERNAME() && RLS_CompanyCode[InactiveDate] < TODAY()"
+    },
+    {
+      "name": "RLS_SalesOrganization",
+      "filterExpression": "RLS_SalesOrganization[DomainName]=USERNAME() && RLS_SalesOrganization[InactiveDate] < TODAY()"
+    }
+  ]
+}

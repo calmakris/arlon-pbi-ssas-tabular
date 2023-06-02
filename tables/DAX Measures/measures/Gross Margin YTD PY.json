@@ -1,0 +1,13 @@
+{
+  "name": "Gross Margin YTD PY",
+  "description": "Calendar year-to-date total of gross margin of previous calendar year up to the same current period to the day",
+  "expression": " CALCULATE( [Gross Margin YTD], SAMEPERIODLASTYEAR( 'Calendar'[Date] ) )",
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\"]"
+    }
+  ]
+}

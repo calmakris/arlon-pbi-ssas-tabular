@@ -1,0 +1,31 @@
+{
+  "name": "WH Days of Perfect On Time Shipment",
+  "description": "Number of days when on time shipment is 100%",
+  "expression": [
+    "",
+    "VAR CountPerfectDays =",
+    "    COUNTROWS(",
+    "        FILTER(",
+    "            VALUES('Calendar'[Date]),",
+    "            [WH Effective On Time Shipment] >= 1",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "CALCULATE(",
+    "    CountPerfectDays + 0,",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Last Working Day]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

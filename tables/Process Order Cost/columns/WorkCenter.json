@@ -1,0 +1,13 @@
+{
+  "name": "WorkCenter",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "WorkCenter",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

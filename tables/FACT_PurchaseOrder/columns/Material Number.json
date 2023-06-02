@@ -1,0 +1,15 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "description": "SAP Source: EKPO.MATNR",
+  "isHidden": true,
+  "sourceColumn": "MaterialNoKey",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\",\"Warehouse\"]"
+    }
+  ]
+}

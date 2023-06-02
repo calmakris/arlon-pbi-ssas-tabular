@@ -1,0 +1,12 @@
+{
+  "name": "Destination Storage Bin",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.NLPLA",
+  "sourceColumn": "DestStrBin",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

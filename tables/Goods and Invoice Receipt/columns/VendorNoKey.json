@@ -1,0 +1,14 @@
+{
+  "name": "VendorNoKey",
+  "dataType": "string",
+  "description": "SAP Source: EKKO.LIFNR",
+  "isHidden": true,
+  "sourceColumn": "VendorNoKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

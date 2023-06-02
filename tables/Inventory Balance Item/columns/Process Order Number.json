@@ -1,0 +1,12 @@
+{
+  "name": "Process Order Number",
+  "dataType": "string",
+  "description": "SAP Source: BSIS/BSAS.AUFNR",
+  "sourceColumn": "ProcessOrderNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

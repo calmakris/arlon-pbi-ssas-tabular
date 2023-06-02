@@ -1,0 +1,12 @@
+{
+  "name": "Currency",
+  "dataType": "string",
+  "description": "SAP Source: EKBE.WAERS",
+  "sourceColumn": "InvoiceCurrency",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

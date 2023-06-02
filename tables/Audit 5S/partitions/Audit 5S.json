@@ -1,0 +1,15 @@
+{
+  "name": "Audit 5S",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_VW_5S = Source{[Schema=\"dbo\",Item=\"FACT_5SScore\"]}[Data],",
+      "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_VW_5S,{{\"DateKey\", type date}, {\"ReportDate\", type date}})",
+      "in",
+      "    #\"Changed Type\""
+    ]
+  }
+}

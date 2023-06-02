@@ -1,0 +1,42 @@
+{
+  "name": "Operations Scrap Quantity",
+  "description": "Sum of quantities of non process order scrap from accounting documents, scrap confirmation from process orders, process order scrap from goods issue material document transactions, and inventory reserve from material document transactions.",
+  "expression": [
+    "",
+    "VAR PO_Scrap =",
+    "    CALCULATE(",
+    "        SUM( 'Goods Movement'[Quantity] ) * -1,",
+    "        KEEPFILTERS('Scrap Category'[Category] = \"Process Order Scrap\")",
+    "    )",
+    "",
+    "-- Use G/L account items instead because it has correct debit/credit indicators",
+    "VAR NonPO_Scrap =",
+    "    CALCULATE(",
+    "        SUM( 'Scrap Usage'[Quantity] ),",
+    "        kEEPFILTERS('Cost Element'[Category] = \"Scrap\"),",
+    "        KEEPFILTERS('Cost Element'[Sub Category] = \"Non-PO Scrap\"),",
+    "        KEEPFILTERS('Cost Element'[Operations Scrap Flag] = \"Yes\")",
+    "    )",
+    "",
+    "-- ZSCRAP tcode only has confirmations on CAST orders",
+    "VAR Scrap_Conf = SUM( 'Scrap Confirmation'[Quantity] )",
+    "",
+    "VAR Inv_Reserve =",
+    "    CALCULATE(",
+    "        SUM( 'Goods Movement'[Quantity] ) * -1,",
+    "        KEEPFILTERS('Cost Element'[Category] = \"Inventory Reserve\"),",
+    "        KEEPFILTERS('Cost Element'[Operations Scrap Flag] = \"Yes\")",
+    "    )",
+    "",
+    "RETURN",
+    "PO_Scrap + NonPO_Scrap + Scrap_Conf + Inv_Reserve"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Operations Scrap",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

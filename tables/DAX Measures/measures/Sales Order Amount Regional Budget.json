@@ -1,0 +1,26 @@
+{
+  "name": "Sales Order Amount Regional Budget",
+  "description": "Planned order entry amount per month and sales region",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( TARGET_SalesOrder[OrderEntryGoal] ),",
+    "    TREATAS(",
+    "        VALUES( 'Customer Master'[Sales Region] ),",
+    "        TARGET_SalesOrder[SalesRegionKey]",
+    "    ),",
+    "    TREATAS(",
+    "        VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "        TARGET_SalesOrder[CalendarTimeKey]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

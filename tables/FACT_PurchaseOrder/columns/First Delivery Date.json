@@ -1,0 +1,20 @@
+{
+  "name": "First Delivery Date",
+  "dataType": "dateTime",
+  "description": "SAP Source: EKET.SLFDT",
+  "isHidden": true,
+  "sourceColumn": "FirstDeliveryDateKey",
+  "formatString": "MM/dd/yyyy",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"1033\" Group=\"ShortDate\" FormatString=\"MM/dd/yyyy\" /></DateTimes></Format>"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\",\"Warehouse\"]"
+    }
+  ]
+}

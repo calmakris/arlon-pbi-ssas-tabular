@@ -1,0 +1,24 @@
+{
+  "name": "COMP First Pass Reliability",
+  "description": "Count of successful process orders divided by the number of process orders finished/scheduled in Compounding. This measure excludes process orders for FEs and adhesive premix materials.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DIVIDE(",
+    "        [COMP Process Order Success Count],",
+    "        [COMP Process Order Count]",
+    "    ),",
+    "    KEEPFILTERS( 'Process Order'[Count in COMP First Pass Flag] = \"Yes\" ),",
+    "    KEEPFILTERS( 'Process Order'[Order Type] IN {\"PI01\", \"PI02\", \"PI04\"} ),",
+    "    KEEPFILTERS( 'Material Master'[Material Group] <> \"ADHPREMIX\" )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

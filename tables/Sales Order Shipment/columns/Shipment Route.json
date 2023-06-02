@@ -1,0 +1,12 @@
+{
+  "name": "Shipment Route",
+  "dataType": "string",
+  "description": "SAP Source: VTTK.ROUTE",
+  "sourceColumn": "ShipmentRoute",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Process Order Count Completed FYTD",
+  "description": "Fiscal year-to-date count of orders with the closed flag status",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Process Order Count Completed],",
+    "    DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Process Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Complaint Number",
+  "dataType": "string",
+  "description": "Identifier of the complaint.",
+  "sourceColumn": "ComplaintNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "CostElement",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CostElement",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

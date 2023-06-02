@@ -1,0 +1,19 @@
+{
+  "name": "Upstream Changeover Time Target",
+  "description": "Average duration of clean up records YTD last fiscal year in 'Upstream Logs - Simplified' table",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [Upstream Changeover Time],",
+    "    SAMEPERIODLASTYEAR(DATESYTD( 'Calendar'[Date], \"09/30\"))",
+    ")"
+  ],
+  "formatString": "#,0 \"min\"",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

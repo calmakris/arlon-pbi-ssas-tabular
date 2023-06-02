@@ -1,0 +1,14 @@
+{
+  "name": "Gross Weight",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "GrossWeight",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Warehouse\"]"
+    }
+  ]
+}

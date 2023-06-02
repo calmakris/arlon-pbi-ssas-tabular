@@ -1,0 +1,23 @@
+{
+  "name": "CONV Scrap Rate PD",
+  "description": [
+    "Linear footage of goods issue and scrap transactions divided by the linear footage of goods receipt transactions from Converting machines posted in Converting storage bins yesterday.",
+    "",
+    "If this is used without the date field, this measure requires a 'Time Intelligence[Time Calculation]' filter to be active."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    [CONV Scrap Rate],",
+    "    PREVIOUSDAY( 'Calendar'[Date] )",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Converting\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

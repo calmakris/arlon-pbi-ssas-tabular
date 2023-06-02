@@ -1,0 +1,12 @@
+{
+  "name": "Non Uptime Reason",
+  "dataType": "string",
+  "description": "Calculated column derived from 'Further Detail' and 'Comments' of non-production records; Used for grouping big hitters of availability",
+  "sourceColumn": "NonUptimeReason",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

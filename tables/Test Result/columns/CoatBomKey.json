@@ -1,0 +1,13 @@
+{
+  "name": "CoatBomKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CoatBomKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

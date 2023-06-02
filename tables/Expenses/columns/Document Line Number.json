@@ -1,0 +1,12 @@
+{
+  "name": "Document Line Number",
+  "dataType": "string",
+  "description": "All items within a document receive a number, by which they can by uniquely identified. The system issues the numbers consecutively when you create new documents.",
+  "sourceColumn": "DocumentLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    }
+  ]
+}

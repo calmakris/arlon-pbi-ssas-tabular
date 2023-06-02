@@ -1,0 +1,12 @@
+{
+  "name": "Specimen Number",
+  "dataType": "int64",
+  "sourceColumn": "SpecimenNo",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Notification Text",
+  "dataType": "string",
+  "description": "Short description of the contents of a notification.",
+  "sourceColumn": "NotificationText",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

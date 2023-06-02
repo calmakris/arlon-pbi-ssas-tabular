@@ -1,0 +1,12 @@
+{
+  "name": "Category",
+  "dataType": "string",
+  "description": "Category of the reason code.",
+  "sourceColumn": "ReasonCategory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"QA Dashboard\"]"
+    }
+  ]
+}

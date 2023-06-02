@@ -1,0 +1,12 @@
+{
+  "name": "Comment",
+  "dataType": "string",
+  "description": "Comment entered by the Planner in the process order",
+  "sourceColumn": "OrderComment",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

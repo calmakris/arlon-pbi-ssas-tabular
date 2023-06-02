@@ -1,0 +1,19 @@
+{
+  "name": "Testing Failed Specimen Count",
+  "description": "Count of specimens with test results not within acceptable range of the specification",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    COUNTA( 'Test Result'[Pass Flag] ),",
+    "    'Test Result'[Pass Flag] = \"No\"",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

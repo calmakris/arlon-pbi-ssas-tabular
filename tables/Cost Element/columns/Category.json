@@ -1,0 +1,12 @@
+{
+  "name": "Category",
+  "dataType": "string",
+  "description": "Category assigned to the cost element. This data is not in SAP. It is manually maintained in the Power BI data warehouse.",
+  "sourceColumn": "Category",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

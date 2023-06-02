@@ -1,0 +1,12 @@
+{
+  "name": "Result Key",
+  "dataType": "string",
+  "sourceColumn": "ResultKey",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

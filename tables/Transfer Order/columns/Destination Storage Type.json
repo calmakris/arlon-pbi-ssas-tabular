@@ -1,0 +1,12 @@
+{
+  "name": "Destination Storage Type",
+  "dataType": "string",
+  "description": "SAP Source: LTAP.NLTYP",
+  "sourceColumn": "DestStrType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

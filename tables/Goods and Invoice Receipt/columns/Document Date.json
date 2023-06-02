@@ -1,0 +1,17 @@
+{
+  "name": "Document Date",
+  "dataType": "dateTime",
+  "description": "Date on which the accounting document was issued.",
+  "sourceColumn": "DocumentDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

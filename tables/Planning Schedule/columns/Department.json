@@ -1,0 +1,11 @@
+{
+  "name": "Department",
+  "dataType": "string",
+  "sourceColumn": "Department",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

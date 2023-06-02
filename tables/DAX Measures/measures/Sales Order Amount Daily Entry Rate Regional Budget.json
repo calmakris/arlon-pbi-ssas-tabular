@@ -1,0 +1,22 @@
+{
+  "name": "Sales Order Amount Daily Entry Rate Regional Budget",
+  "description": "Monthly budgeted order entry amount divided by the total number of weekdays of the corresponding month",
+  "expression": [
+    "",
+    "AVERAGEX(",
+    "    VALUES('Calendar'[Date]),",
+    "    DIVIDE(",
+    "        [Sales Order Amount Regional Budget],",
+    "        [Weekdays in Month]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

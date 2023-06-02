@@ -1,0 +1,26 @@
+{
+  "name": "WH Picked Weight",
+  "description": [
+    "Total weight of materials picked from finished good racks (starting with X) and 901 555.",
+    "",
+    "Data is based on the weight in transfer orders done by users in ORDER ASSEMBLY and WAREHOUSE OPERATIONS departments. Departments are assigned in the user data in SAP."
+  ],
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Transfer Order'[Weight] ),",
+    "    FILTER(",
+    "        'DIM_UsersSAP',",
+    "        'DIM_UsersSAP'[Department] IN { \"ORDER ASSEMBLY\", \"WAREHOUSE OPERATIONS\" }",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

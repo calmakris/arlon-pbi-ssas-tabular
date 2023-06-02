@@ -1,0 +1,8 @@
+{
+  "type": "calculated",
+  "name": "Absorption Measures",
+  "dataType": "int64",
+  "isDataTypeInferred": true,
+  "isHidden": true,
+  "isAvailableInMdx": false
+}

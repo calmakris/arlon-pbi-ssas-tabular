@@ -1,0 +1,24 @@
+{
+  "name": "Upstream Quality",
+  "description": "A fixed number defined by Engineering",
+  "expression": [
+    "",
+    "VAR CAST = 0.95",
+    "VAR COAT = 0.98",
+    "",
+    "RETURN",
+    "SWITCH(TRUE(),",
+    "    \"CAST\" IN ALLSELECTED(Machine[Department]), CAST,",
+    "    \"COAT\" IN ALLSELECTED(Machine[Department]), COAT,",
+    "    0.95",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Lines Automated Entry% FYTD",
+  "description": "Fiscal year-to-date count of sales order line items entered by BATCHUSER divided by the fiscal year-to-date count of sales order line items entered by Customer Service and BATCHUSER",
+  "expression": " CALCULATE( [Sales Order Lines Automated Entry%], DATESYTD( 'Calendar'[Date], \"09/30\" ) )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\"]"
+    }
+  ]
+}

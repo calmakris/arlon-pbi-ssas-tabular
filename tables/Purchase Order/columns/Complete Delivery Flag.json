@@ -1,0 +1,13 @@
+{
+  "name": "Complete Delivery Flag",
+  "dataType": "string",
+  "description": "Determines if the item has been closed or completely delivered to its destination",
+  "sourceColumn": "CompleteDeliverIndicator",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Referenced Document Number",
+  "dataType": "string",
+  "description": "Can contain the document number of the customer/vendor. However, it may contain a different value. It is used as a search criterion when displaying or changing documents. In correspondence, the reference document number is sometimes printed in place of the document number.",
+  "sourceColumn": "RefDocNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

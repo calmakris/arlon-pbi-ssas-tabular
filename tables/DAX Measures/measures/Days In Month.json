@@ -1,0 +1,6 @@
+{
+  "name": "Days In Month",
+  "expression": " CALCULATE( COUNTROWS( 'Calendar' ), ALL( 'Calendar' ), VALUES( 'Calendar'[Year_Month_Sort_Key] ))",
+  "isHidden": true,
+  "displayFolder": "_Dates"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Website Keyword",
+  "description": "Top keywords to find the Arlon website in the last 7 days",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Website Keyword\",",
+        "    \"fromColumn\": \"DateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Website Keyword\",",
+        "    \"fromColumn\": \"GeoKey\",",
+        "    \"toTable\": \"Marketing Geo Network\",",
+        "    \"toColumn\": \"GeoKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

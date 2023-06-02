@@ -1,0 +1,13 @@
+{
+  "name": "VarStartInMins",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "VarStartInMins",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

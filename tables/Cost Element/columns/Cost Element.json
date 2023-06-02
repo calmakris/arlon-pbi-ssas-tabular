@@ -1,0 +1,14 @@
+{
+  "name": "Cost Element",
+  "dataType": "string",
+  "description": "Unique identifier of this table. It may be related to other tables with Cost Element fields.",
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "CostElementKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

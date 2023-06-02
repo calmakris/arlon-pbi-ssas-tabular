@@ -1,0 +1,41 @@
+{
+  "name": "Upstream Days Since Last Unplanned Clean Up",
+  "description": "Number of days between yesterday and the last unplanned clean up before yesterday",
+  "expression": [
+    "",
+    "VAR Last_Date = ",
+    "    SWITCH( TRUE(),",
+    "        \"CAST\" IN ALLSELECTED(Machine[Department]),",
+    "        CALCULATE(",
+    "            MAX( 'Upstream Log Simplified'[Production Date] ),",
+    "            FILTER(",
+    "                'Upstream Log Simplified',",
+    "                'Upstream Log Simplified'[Production Date] <= [Report Date]",
+    "                    && 'Upstream Log Simplified'[Category] = \"Clean Up\"",
+    "                    && 'Upstream Log Simplified'[Causes] = \"Unplanned - Casting\"",
+    "            )    ",
+    "        ),",
+    "        \"COAT\" IN ALLSELECTED(Machine[Department]),",
+    "        CALCULATE(",
+    "            MAX( 'Upstream Log'[Production Date] ),",
+    "            FILTER(",
+    "                'Upstream Log',",
+    "                'Upstream Log'[Production Date] <= [Report Date]",
+    "                    && 'Upstream Log'[Category] = \"Clean Up\"",
+    "                    && 'Upstream Log'[Causes] = \"Unplanned\"",
+    "            )    ",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "DATEDIFF(Last_Date, [Yesterday], DAY)"
+  ],
+  "formatString": "#,0 \"days\"",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

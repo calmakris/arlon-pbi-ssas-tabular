@@ -1,0 +1,13 @@
+{
+  "name": "Sub Category",
+  "dataType": "string",
+  "description": "Sub category assigned to the cost element. This data is not in SAP. It is manually maintained in the Power BI data warehouse.",
+  "sourceColumn": "SubCategory",
+  "sortByColumn": "SubCategorySortKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

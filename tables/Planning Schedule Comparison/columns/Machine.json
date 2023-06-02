@@ -1,0 +1,13 @@
+{
+  "name": "Machine",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "Machine",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\"]"
+    }
+  ]
+}

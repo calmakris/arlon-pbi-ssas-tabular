@@ -1,0 +1,14 @@
+{
+  "name": "Valuation Class",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_DIM_ValuationClass = Source{[Schema=\"dbo\",Item=\"DIM_ValuationClass\"]}[Data]",
+      "in",
+      "    dbo_DIM_ValuationClass"
+    ]
+  }
+}

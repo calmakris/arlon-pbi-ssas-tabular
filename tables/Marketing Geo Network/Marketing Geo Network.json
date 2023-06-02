@@ -1,0 +1,14 @@
+{
+  "name": "Marketing Geo Network",
+  "description": "Contains geographical information of the users in the website",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Marketing\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

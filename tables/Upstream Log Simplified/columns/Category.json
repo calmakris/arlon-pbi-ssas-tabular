@@ -1,0 +1,12 @@
+{
+  "name": "Category",
+  "dataType": "string",
+  "description": "Category assigned to the record",
+  "sourceColumn": "Category",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

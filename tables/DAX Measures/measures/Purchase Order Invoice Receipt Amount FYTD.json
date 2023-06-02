@@ -1,0 +1,13 @@
+{
+  "name": "Purchase Order Invoice Receipt Amount FYTD",
+  "description": "Fiscal year-to-date total amount of invoice receipts for purchase orders according to the purchase order history",
+  "expression": " CALCULATE( [Purchase Order Invoice Receipt Amount], DATESYTD( 'Calendar'[Date] , \"09/30\" ) )",
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

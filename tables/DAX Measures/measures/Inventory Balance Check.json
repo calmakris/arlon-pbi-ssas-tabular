@@ -1,0 +1,36 @@
+{
+  "name": "Inventory Balance Check",
+  "description": "Checks if the month-to-date accumulated inventory aggregate balance is equal to the month-to-date total of accounting documents posted under inventory related G/L accounts. If the values are equals, this value is 1. Otherwise, it is 0.",
+  "expression": [
+    "",
+    "VAR breakdown = ",
+    "    [Inventory Balance MTD Purchases]",
+    "    + [Inventory Balance MTD Produced]",
+    "    + [Inventory Balance MTD Transfers]",
+    "    + [Inventory Balance MTD Sales]",
+    "    + [Inventory Balance MTD Scrap]",
+    "    + [Inventory Balance MTD Write-offs]",
+    "    + [Inventory Balance MTD Accruals]",
+    "    + [Inventory Balance MTD Reversals]",
+    "    + [Inventory Balance MTD PPV]",
+    "",
+    "RETURN",
+    "    IF(",
+    "        ISBLANK( [Accumulated Inventory Balance MTD Prior] ),",
+    "        BLANK(),",
+    "        IF(",
+    "            ROUND([Accumulated Inventory Balance MTD Prior] + [Inventory Balance MTD], 2) = ROUND([Accumulated Inventory Balance MTD], 2),",
+    "            1,",
+    "            0",
+    "        )",
+    "    )"
+  ],
+  "formatString": "0",
+  "displayFolder": "Inventory Balance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

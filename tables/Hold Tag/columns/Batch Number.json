@@ -1,0 +1,12 @@
+{
+  "name": "Batch Number",
+  "dataType": "string",
+  "description": "Batch number entered in the hold tag",
+  "sourceColumn": "BatchNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

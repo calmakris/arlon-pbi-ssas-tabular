@@ -1,0 +1,13 @@
+{
+  "name": "CONV Actual Footage",
+  "description": "Total footage recorded in the Converting runtime log for the OEE calculation.",
+  "expression": "SUM( 'Converting OEE'[ActualFootage] )",
+  "formatString": "#,0",
+  "displayFolder": "Converting\\_OEE",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

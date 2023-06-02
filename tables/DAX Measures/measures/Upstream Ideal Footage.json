@@ -1,0 +1,13 @@
+{
+  "name": "Upstream Ideal Footage",
+  "description": "Sum of ideal footage. Ideal footage is derived from the specification linespeed and duration between 'Start Time' and 'Stop Time' in minutes",
+  "expression": "SUM('Upstream Log Simplified'[IdealFootage])",
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

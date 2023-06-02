@@ -1,0 +1,19 @@
+{
+  "name": "Sales Order Open Internal Quantity",
+  "description": "Total quantity in the sales order that is not yet shipped nor allocated to the customer. Unlike the sales order open quantity, this measure considers allocations and doesn't count them as open.",
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    SUM( 'Sales Order'[InternalOpenQuantity] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

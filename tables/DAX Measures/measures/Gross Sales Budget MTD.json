@@ -1,0 +1,27 @@
+{
+  "name": "Gross Sales Budget MTD",
+  "description": "Monthly gross margin budget submitted by Commercial Leadership Team (CLT) to IT",
+  "expression": [
+    " ",
+    "VAR WeightVal = ",
+    "    DIVIDE( ",
+    "        [Gross Sales MTD PY], ",
+    "        CALCULATE( [Gross Sales MTD PY], ALL('Material Master') ) ",
+    "    )",
+    "",
+    "RETURN",
+    "    SWITCH(TRUE(),",
+    "        ISFILTERED( 'Material Master' ), CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) ) * WeightVal,",
+    "        ISFILTERED( 'Customer Master' ), CALCULATE( [Gross Sales Budget], DATESMTD( 'Calendar'[Date] ) ),",
+    "        BLANK()",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Requirement Quantity",
+  "dataType": "decimal",
+  "description": "SAP Source: RESB.BDMNG, RESB.SHKZG",
+  "sourceColumn": "RequirementQty",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

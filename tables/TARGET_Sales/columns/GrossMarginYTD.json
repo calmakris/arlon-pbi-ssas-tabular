@@ -1,0 +1,8 @@
+{
+  "name": "GrossMarginYTD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "GrossMarginYTD",
+  "formatString": "0.00%;-0.00%;0.00%",
+  "isAvailableInMdx": false
+}

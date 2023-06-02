@@ -1,0 +1,9 @@
+{
+  "name": "Utilized",
+  "dataType": "decimal",
+  "description": "SAP Source: LAGP.LKAPV and LAGP.RKAPV; Calculated by taking the difference between capacity and remaining capacity",
+  "isHidden": true,
+  "sourceColumn": "Utilized",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false
+}

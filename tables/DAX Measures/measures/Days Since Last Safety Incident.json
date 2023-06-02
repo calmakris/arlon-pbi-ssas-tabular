@@ -1,0 +1,13 @@
+{
+  "name": "Days Since Last Safety Incident",
+  "description": "Number of days between between last safety incident and yesterday (or whatever is the latest date in the 'Calendar'[Date] filter)",
+  "expression": "DATEDIFF(DATEVALUE([Last Safety Incident Date]), [Report Date], DAY)",
+  "formatString": "#,0 \"days\"",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

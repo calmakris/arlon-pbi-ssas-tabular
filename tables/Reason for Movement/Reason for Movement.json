@@ -1,0 +1,14 @@
+{
+  "name": "Reason for Movement",
+  "description": "Contains the reason code per movement type and their descriptions. This table is used to provide more information about the movement type field.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

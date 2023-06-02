@@ -1,0 +1,13 @@
+{
+  "name": "Material Type",
+  "dataType": "string",
+  "description": "Determines if the material is raw material, WIP, finished good, buyout, etc. This value is assigned in the material master in SAP",
+  "sourceColumn": "MaterialType",
+  "displayFolder": "Master",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

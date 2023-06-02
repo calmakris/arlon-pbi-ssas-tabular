@@ -1,0 +1,14 @@
+{
+  "name": "Converting Man Hours",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_ConvertingHours = Source{[Schema=\"dbo\",Item=\"FACT_ConvertingHours\"]}[Data]",
+      "in",
+      "    dbo_FACT_ConvertingHours"
+    ]
+  }
+}

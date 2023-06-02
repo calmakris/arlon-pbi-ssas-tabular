@@ -1,0 +1,9 @@
+{
+  "name": "Capacity",
+  "dataType": "decimal",
+  "description": "SAP Source: LAGP.LKAPV",
+  "isHidden": true,
+  "sourceColumn": "Capacity",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false
+}

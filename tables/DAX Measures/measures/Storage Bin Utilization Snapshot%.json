@@ -1,0 +1,36 @@
+{
+  "name": "Storage Bin Utilization Snapshot%",
+  "description": [
+    "Latest snapshot of the storage bin utilization depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+    "",
+    "Storage bin utilization is the average of the quants in the storage bin divided by the capacity of the storage bin."
+  ],
+  "expression": [
+    "",
+    "VAR RefDate =",
+    "    CALCULATE(",
+    "        MAX('Calendar'[Date]),",
+    "        FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date])",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        DIVIDE(",
+    "            SUM( 'Storage Bin Utilization Snapshots'[Utilized] ),",
+    "            SUM( 'Storage Bin Utilization Snapshots'[Capacity] )",
+    "        ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] = RefDate",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

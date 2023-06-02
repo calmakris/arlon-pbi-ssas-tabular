@@ -1,0 +1,13 @@
+{
+  "name": "PurchaseOrderLineKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "PurchaseOrderLineKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Cost of Goods Sold",
+  "description": "Sum of amount of line items posted under 0057020000 G/L account",
+  "expression": "SUM( 'Cost of Goods Sold'[Amount] )",
+  "formatString": "#,0",
+  "displayFolder": "General",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

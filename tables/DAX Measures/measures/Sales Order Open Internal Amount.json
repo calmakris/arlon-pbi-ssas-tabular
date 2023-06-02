@@ -1,0 +1,32 @@
+{
+  "name": "Sales Order Open Internal Amount",
+  "description": [
+    "Total amount in the sales order that is not yet shipped nor allocated to the customer. Unlike the sales order open amount, this measure considers allocations and doesn't count them as open.",
+    "",
+    "This value is toggleable to local currency using the '_Currency To Use' table."
+  ],
+  "expression": [
+    " ",
+    "CALCULATE(",
+    "    IF(",
+    "        HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "        SWITCH(",
+    "            VALUES( '_Currency to Use'[Currency] ),",
+    "            \"USD\", SUM( 'Sales Order'[InternalOpenAmountUSD] ),",
+    "            \"Local\", SUM( 'Sales Order'[InternalOpenAmount] ),",
+    "            SUM( 'Sales Order'[InternalOpenAmountUSD] )",
+    "        ),",
+    "        SUM( 'Sales Order'[InternalOpenAmountUSD] )   ",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

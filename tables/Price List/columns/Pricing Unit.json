@@ -1,0 +1,15 @@
+{
+  "name": "Pricing Unit",
+  "dataType": "decimal",
+  "description": "The quantity on which the amount or percentage is based. For example, a material is sold by $500 per 1,000 FT where 1,000 FT is the pricing unit.",
+  "sourceColumn": "PriceUnit",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Generic Sales\",\"Product Management\",\"Sales Orders\"]"
+    }
+  ]
+}

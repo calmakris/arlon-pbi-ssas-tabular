@@ -1,0 +1,13 @@
+{
+  "name": "Testing Sample Count",
+  "description": "Count of samples used in testing. Usually, samples is by batch number. If there are multiple specimens for a batch number, they all count as one sample.",
+  "expression": "DISTINCTCOUNT( 'Test Result'[Result Key] )",
+  "formatString": "#,0",
+  "displayFolder": "Testing",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Posting Date",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "PostingDate",
+  "formatString": "Short Date",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "Format",
+      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    }
+  ]
+}

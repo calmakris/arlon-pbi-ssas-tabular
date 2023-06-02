@@ -1,0 +1,37 @@
+{
+  "name": "TRIR Target",
+  "description": "This monthly target data is supplied by Robert Nicholson and uploaded by IT",
+  "expression": [
+    "",
+    "VAR TargetVal = ",
+    "    CALCULATE(",
+    "        AVERAGE( TARGET_KPI[TargetValue] ),",
+    "        TARGET_KPI[KpiKey] = \"TRIR\",",
+    "        TREATAS(",
+    "            VALUES( 'Company Code'[Company Code] ),",
+    "            TARGET_KPI[LocationKey]",
+    "        ),",
+    "        TREATAS(",
+    "            VALUES( 'Calendar'[Year_Month_Sort_Key] ),",
+    "            TARGET_KPI[CalendarTimeKey]",
+    "        )",
+    "    )    ",
+    "RETURN",
+    "    IF(",
+    "        ISBLANK(TargetVal),",
+    "        0.00,",
+    "        CALCULATE(",
+    "            CALCULATE( TargetVal, DATESYTD( 'Calendar'[Date], \"09/30\" ) ),",
+    "            FILTER( 'Calendar', 'Calendar'[Date] <= [Report Date] )",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "BRIDGE_SalesPerson",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_BRIDGE_SalesPerson = Source{[Schema=\"dbo\",Item=\"BRIDGE_SalesPerson\"]}[Data]",
+      "in",
+      "    dbo_BRIDGE_SalesPerson"
+    ]
+  }
+}

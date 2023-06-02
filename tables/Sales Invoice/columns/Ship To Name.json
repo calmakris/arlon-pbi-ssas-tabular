@@ -1,0 +1,13 @@
+{
+  "name": "Ship To Name",
+  "dataType": "string",
+  "description": "Ship to account name in the invoice/billing document",
+  "sourceColumn": "ShipToName",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

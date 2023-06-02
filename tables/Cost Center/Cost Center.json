@@ -1,0 +1,14 @@
+{
+  "name": "Cost Center",
+  "description": "List of cost centers in SAP with custom categories manually in a Sharepoint List",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Expenses\",\"Operations\",\"Planning\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

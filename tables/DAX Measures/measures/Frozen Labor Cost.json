@@ -1,0 +1,25 @@
+{
+  "name": "Frozen Labor Cost",
+  "description": "Total labor cost of billing documents. Cost is based on the cost roll at the pricing date of the billing document.",
+  "expression": [
+    "",
+    "IF(",
+    "    HASONEVALUE( '_Currency to Use'[Currency] ),",
+    "    SWITCH(",
+    "        VALUES( '_Currency to Use'[Currency] ),",
+    "        \"USD\", SUM( 'Sales Invoice'[LaborCost] ),",
+    "        \"Local\", SUMX( 'Sales Invoice', 'Sales Invoice'[LaborCost] * 'Sales Invoice'[Exchange Rate] ),",
+    "        SUM( 'Sales Invoice'[LaborCost] )",
+    "    ),",
+    "    SUM( 'Sales Invoice'[LaborCost] ) ",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Cost in Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

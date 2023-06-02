@@ -1,0 +1,14 @@
+{
+  "name": "FACT_MonthlyConsumption",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_MonthlyConsumption = Source{[Schema=\"dbo\",Item=\"FACT_MonthlyConsumption\"]}[Data]",
+      "in",
+      "    dbo_FACT_MonthlyConsumption"
+    ]
+  }
+}

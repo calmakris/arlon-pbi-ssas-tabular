@@ -1,0 +1,39 @@
+{
+  "name": "Unrestricted Stock Quantity",
+  "description": "Total quantity of materials on physical inventory that has no block category",
+  "expression": [
+    "",
+    "VAR Qty = ",
+    "    CALCULATE(",
+    "        SUM( 'Inventory'[Quantity] ),",
+    "        KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+    "    )",
+    "",
+    "VAR Amt =",
+    "    CALCULATE(",
+    "        SUM( 'Inventory'[AmountUSD] ),",
+    "        KEEPFILTERS( 'Inventory'[Stock Category] = \"\" )",
+    "    )",
+    "",
+    "RETURN",
+    "    IF(",
+    "        HASONEVALUE( '_Value to Use'[Value] ),",
+    "        SWITCH(",
+    "            VALUES( '_Value to Use'[Value] ),",
+    "            \"Quantity\", Qty,",
+    "            \"Amount\", Amt,",
+    "            Qty",
+    "        ),",
+    "        Qty",
+    "    )",
+    ""
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

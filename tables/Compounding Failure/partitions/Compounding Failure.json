@@ -1,0 +1,14 @@
+{
+  "name": "Compounding Failure",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_UpstreamCompoundingFailures = Source{[Schema=\"dbo\",Item=\"FACT_UpstreamCompoundingFailures\"]}[Data]",
+      "in",
+      "    dbo_FACT_UpstreamCompoundingFailures"
+    ]
+  }
+}

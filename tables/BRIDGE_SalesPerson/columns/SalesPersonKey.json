@@ -1,0 +1,8 @@
+{
+  "name": "SalesPersonKey",
+  "dataType": "string",
+  "isUnique": true,
+  "isKey": true,
+  "sourceColumn": "SalesPersonKey",
+  "isAvailableInMdx": false
+}

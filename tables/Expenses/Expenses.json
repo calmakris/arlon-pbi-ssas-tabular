@@ -1,0 +1,57 @@
+{
+  "name": "Expenses",
+  "description": [
+    "Controlling document line items posted in expenses related G/L accounts in the current and last fiscal year.",
+    "",
+    "Use the 'Calendar', 'Cost Element', 'Cost Center', and 'Company Code' tables for additional details on this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Expenses\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Expenses\",",
+        "    \"fromColumn\": \"CostCenter\",",
+        "    \"toTable\": \"Cost Center\",",
+        "    \"toColumn\": \"Cost Center\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Expenses\",",
+        "    \"fromColumn\": \"CostElement\",",
+        "    \"toTable\": \"Cost Element\",",
+        "    \"toColumn\": \"Cost Element\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Expenses\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Expenses\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Expenses\",",
+        "    \"fromColumn\": \"PurchaseOrderLineKey\",",
+        "    \"toTable\": \"Purchase Order\",",
+        "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

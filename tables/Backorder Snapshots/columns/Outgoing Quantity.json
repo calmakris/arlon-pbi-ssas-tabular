@@ -1,0 +1,15 @@
+{
+  "name": "Outgoing Quantity",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "OutgoingQty",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Planning\",\"Warehouse\"]"
+    }
+  ]
+}

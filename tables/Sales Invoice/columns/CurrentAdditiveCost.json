@@ -1,0 +1,15 @@
+{
+  "name": "CurrentAdditiveCost",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "AdditiveCurrCostUSD",
+  "formatString": "#,0.00",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

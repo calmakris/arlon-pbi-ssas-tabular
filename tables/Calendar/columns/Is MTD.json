@@ -1,0 +1,13 @@
+{
+  "name": "Is MTD",
+  "dataType": "boolean",
+  "description": "The value is true if the date is the same MTD range as of yesterday. For example, if yesterday is June 10, the other dates with days between 1 and 10 (inclusive) are set to true.",
+  "sourceColumn": "Is_Mtd",
+  "displayFolder": "Helper Attributes",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

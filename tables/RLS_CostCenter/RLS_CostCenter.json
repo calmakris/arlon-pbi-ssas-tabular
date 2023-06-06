@@ -7,10 +7,11 @@
       "value": [
         "[",
         "  {",
+        "    \"toCardinality\": \"many\",",
         "    \"fromTable\": \"RLS_CostCenter\",",
         "    \"fromColumn\": \"CostCenterKey\",",
-        "    \"toTable\": \"Cost Center\",",
-        "    \"toColumn\": \"Cost Center\",",
+        "    \"toTable\": \"Expenses\",",
+        "    \"toColumn\": \"CostCenter\",",
         "    \"crossFilteringBehavior\": \"bothDirections\",",
         "    \"securityFilteringBehavior\": \"bothDirections\"",
         "  }",

@@ -398,6 +398,10 @@
     {
       "memberName": "DOMAIN\\aYanez",
       "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20521"
+    },
+    {
+      "memberName": "DOMAIN\\lhuber",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21139"
     }
   ],
   "tablePermissions": [

@@ -1,0 +1,13 @@
+{
+  "name": "TECO Flag",
+  "dataType": "string",
+  "description": "Determines if the process order has been technically completed or not",
+  "sourceColumn": "TecoFlag",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

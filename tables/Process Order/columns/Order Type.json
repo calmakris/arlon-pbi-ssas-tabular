@@ -2,5 +2,11 @@
   "name": "Order Type",
   "dataType": "string",
   "description": "Determines if the order is production, FE, ME, etc.",
-  "sourceColumn": "OrderType"
+  "sourceColumn": "OrderType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
 }

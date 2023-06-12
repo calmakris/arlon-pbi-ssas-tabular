@@ -1,6 +1,6 @@
 {
   "name": "Backorder Amount Beyond Next Month",
-  "description": "Total open order amount of sales order line items with first scheduled ship date after the end of next calendar month",
+  "description": "The total sum of outstanding sales orders that are planned to be shipped for the first time after the next month.",
   "expression": [
     "",
     "CALCULATE(",
@@ -8,13 +8,8 @@
     "    FILTER(",
     "        ALL( 'Calendar'[Date] ),",
     "        'Calendar'[Date] > [End of Next Month]",
-    "    ),",
-    "    FILTER(",
-    "        ALL( 'Sales Order'[First Scheduled Ship Date] ),",
-    "        'Sales Order'[First Scheduled Ship Date] > [End of Next Month]",
     "    )",
-    ")",
-    ""
+    ")"
   ],
   "formatString": "#,0",
   "displayFolder": "Sales Order\\_Time-Based",

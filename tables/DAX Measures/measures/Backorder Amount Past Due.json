@@ -1,14 +1,13 @@
 {
   "name": "Backorder Amount Past Due",
-  "description": "Total open order amount of sales order line items with first scheduled ship date before the beginning of current month",
+  "description": "The total value of all pending orders that were originally planned to be shipped before the start of this current month.",
   "expression": [
     "",
     "CALCULATE(",
     "    [Sales Order Open Amount],",
-    "    ALL( 'Calendar'[Date] ),",
     "    FILTER(",
-    "        ALL( 'Sales Order'[First Scheduled Ship Date] ),",
-    "        'Sales Order'[First Scheduled Ship Date] < [Beginning of Month]",
+    "        ALL( 'Calendar'[Date] ),",
+    "        'Calendar'[Date] <= [Beginning of Month]",
     "    )",
     ")"
   ],

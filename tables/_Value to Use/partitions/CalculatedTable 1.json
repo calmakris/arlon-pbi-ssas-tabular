@@ -1,7 +1,0 @@
-{
-  "name": "CalculatedTable 1",
-  "source": {
-    "type": "calculated",
-    "expression": "{\"Amount\", \"Quantity\"}"
-  }
-}

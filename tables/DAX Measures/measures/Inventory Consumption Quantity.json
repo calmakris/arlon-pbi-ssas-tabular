@@ -1,0 +1,11 @@
+{
+  "name": "Inventory Consumption Quantity",
+  "description": "Sum of 'Inventory Consumption'[Quantity].Can be toggled between quantity and amount values (default = quantity)",
+  "expression": [
+    "",
+    "SUM( 'Inventory Consumption'[Quantity] )"
+  ],
+  "formatString": "#,0.00",
+  "isHidden": true,
+  "displayFolder": "Inventory"
+}

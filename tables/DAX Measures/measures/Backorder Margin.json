@@ -1,18 +1,13 @@
 {
   "name": "Backorder Margin",
-  "description": [
-    "Total gross margin of open sales order items scheduled to ship in the past and current month.",
-    "",
-    "Scheduled ship date is the first date in the schedule line."
-  ],
+  "description": "The total margin of unfulfilled sales orders that were set to be shipped either this month or in previous months.",
   "expression": [
     "",
     "CALCULATE(",
     "    [Sales Order Open Margin],",
-    "    ALL( 'Calendar'[Date] ),",
     "    FILTER(",
-    "        ALL( 'Sales Order'[First Scheduled Ship Date] ),",
-    "        'Sales Order'[First Scheduled Ship Date] <= [End of Month]",
+    "        ALL( 'Calendar'[Date] ),",
+    "        'Calendar'[Date] <= [End of Month]",
     "    )",
     ")"
   ],

@@ -1,12 +1,12 @@
 {
-  "name": "Annual Inventory Consumption Next 12 Months",
+  "name": "Annual Inventory Consumption Quantity Next 12 Months",
   "description": "If time supply < 12, then [Current Unrestricted Stock Quantity], else, [Average Monthly Consumption (Last 12 Months)] * 12. Can be toggled between quantity and amount values (default = quantity).",
   "expression": [
     "",
     "IF(",
     "    [Inventory Time Supply] < 12,",
-    "    [Unrestricted Stock Quantity],",
-    "    [Avg Monthly Inventory Consumption Last 12 Months] * 12",
+    "    [Inventory Snapshot Quantity],",
+    "    [Avg Monthly Inventory Consumption Quantity Last 12 Months] * 12",
     ")"
   ],
   "formatString": "#,0.00",

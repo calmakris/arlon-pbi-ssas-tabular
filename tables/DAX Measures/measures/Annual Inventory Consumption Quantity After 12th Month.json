@@ -1,14 +1,14 @@
 {
-  "name": "Annual Inventory Consumption After 12th Month",
+  "name": "Annual Inventory Consumption Quantity After 12th Month",
   "description": "If unrestricted stock is equal to consumption in the next 12 months, then 0. Else if consumption in the last 12 months is the same as the difference of current stock and consumption in the next 12 months, then value is the consumption in the next 12 months. Otherwise, value is the difference between current stock and consumption in the next 12 months. Can be toggled between quantity and amount values (default = quantity).",
   "expression": [
     "",
-    "VAR Usage = [Avg Monthly Inventory Consumption Last 12 Months] * 12",
-    "VAR Net = [Unrestricted Stock Quantity] - [Annual Inventory Consumption Next 12 Months]",
+    "VAR Usage = [Avg Monthly Inventory Consumption Quantity Last 12 Months] * 12",
+    "VAR Net = [Inventory Snapshot Quantity] - [Annual Inventory Consumption Quantity Next 12 Months]",
     "RETURN",
     "    SWITCH(",
     "        TRUE(),",
-    "        [Unrestricted Stock Quantity] = [Annual Inventory Consumption Next 12 Months], BLANK(),",
+    "        [Inventory Snapshot Quantity] = [Annual Inventory Consumption Quantity Next 12 Months], BLANK(),",
     "        Usage < Net, Usage,",
     "        Net",
     "    )"

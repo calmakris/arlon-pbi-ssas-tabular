@@ -8,7 +8,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Warehouse\"]"
+      "value": "[\"Operations\",\"Warehouse\"]"
     }
   ]
 }

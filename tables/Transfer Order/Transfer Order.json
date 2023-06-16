@@ -1,10 +1,13 @@
 {
   "name": "Transfer Order",
   "description": "List of transfer orders issued by shipping department involving finished good racks and 901 555",
+  "defaultDetailRowsDefinition": {
+    "expression": "'Transfer Order'"
+  },
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Warehouse\"]"
+      "value": "[\"Operations\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",

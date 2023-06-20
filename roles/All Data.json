@@ -16,10 +16,6 @@
       "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21023"
     },
     {
-      "memberName": "DOMAIN\\jmcmanus",
-      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8437"
-    },
-    {
       "memberName": "DOMAIN\\jmody",
       "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8514"
     },
@@ -46,14 +42,6 @@
     {
       "memberName": "DOMAIN\\mebin",
       "memberId": "S-1-5-21-1427733451-1004295795-1863928812-8453"
-    },
-    {
-      "memberName": "DOMAIN\\mqadir",
-      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-20430"
-    },
-    {
-      "memberName": "DOMAIN\\rfaust",
-      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21470"
     },
     {
       "memberName": "DOMAIN\\rraymundo",

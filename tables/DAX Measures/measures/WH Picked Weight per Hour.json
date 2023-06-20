@@ -1,0 +1,21 @@
+{
+  "name": "WH Picked Weight per Hour",
+  "description": "Calculated by dividing the total weight of goods from transfer orders processed by the Shipping and Receiving departments (only those linked to SHIPPING storage bins and starting with \"X\") in our SAP system, by the total actual work hours as recorded in Paylocity.",
+  "expression": [
+    "DIVIDE(",
+    "    [WH Picked Weight],",
+    "    CALCULATE(",
+    "        [Actual Labor Hours],",
+    "        KEEPFILTERS( Department[Department] = \"DIST\" )",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

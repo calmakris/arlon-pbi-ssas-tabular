@@ -54,6 +54,10 @@
     {
       "memberName": "DOMAIN\\fzhong",
       "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21125"
+    },
+    {
+      "memberName": "DOMAIN\\abarrera",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21133"
     }
   ]
 }

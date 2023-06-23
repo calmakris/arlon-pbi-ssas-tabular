@@ -1,10 +1,9 @@
 {
-  "name": "Earned Labor Hours",
-  "description": "This is the total number of hours that have been recorded in the earned labor and setup G/L accounts.",
+  "name": "Earned Labor Hours Crew-Scaled",
+  "description": "Total hours posted in the earned labor and setup cost elements multiplied by the defined crew size per work center",
   "expression": [
-    " ",
     "CALCULATE(",
-    "    SUM( Absorption[Quantity] ),",
+    "    SUM( Absorption[ScaledQuantityValue] ),",
     "    KEEPFILTERS( 'Cost Element'[Category] = \"Earned Labor\" )",
     ")"
   ],

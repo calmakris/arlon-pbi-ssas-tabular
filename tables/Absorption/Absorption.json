@@ -57,6 +57,12 @@
         "    \"fromColumn\": \"Process Order Number\",",
         "    \"toTable\": \"Process Order\",",
         "    \"toColumn\": \"Process Order Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Absorption\",",
+        "    \"fromColumn\": \"Work Center\",",
+        "    \"toTable\": \"Work Center\",",
+        "    \"toColumn\": \"Work Center\"",
         "  }",
         "]"
       ]

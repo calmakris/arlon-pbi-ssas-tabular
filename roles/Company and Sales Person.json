@@ -66,6 +66,10 @@
     {
       "memberName": "DOMAIN\\rorak",
       "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21143"
+    },
+    {
+      "memberName": "DOMAIN\\aharman",
+      "memberId": "S-1-5-21-1427733451-1004295795-1863928812-21136"
     }
   ],
   "tablePermissions": [

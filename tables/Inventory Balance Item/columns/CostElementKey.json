@@ -1,8 +1,8 @@
 {
-  "name": "G/L Account Number",
+  "name": "CostElementKey",
   "dataType": "string",
-  "description": "SAP Source: BSIS/BSAS.HKONT",
-  "sourceColumn": "GLAccountNoKey",
+  "isHidden": true,
+  "sourceColumn": "CostElementKey",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

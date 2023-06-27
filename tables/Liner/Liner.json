@@ -3,16 +3,16 @@
   "description": "This table provides information on the liner utilized for a material, covering both primary and alternate bill of materials configurations.",
   "annotations": [
     {
-      "name": "TabularEditor_Relationships",
-      "value": "[]"
-    },
-    {
       "name": "TabularEditor_TableGroup",
       "value": "Bill of Material"
     },
     {
       "name": "TabularEditor_InPerspective",
       "value": "[\"QA Dashboard\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
     }
   ]
 }

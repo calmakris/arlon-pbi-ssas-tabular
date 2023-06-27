@@ -1,7 +1,9 @@
 {
-  "name": "Process Order Number",
+  "name": "WorkCenter",
   "dataType": "string",
-  "sourceColumn": "ProcessOrderNoKey",
+  "isHidden": true,
+  "sourceColumn": "WorkCenter",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

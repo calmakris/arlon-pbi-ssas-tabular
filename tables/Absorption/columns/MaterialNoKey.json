@@ -1,13 +1,13 @@
 {
-  "name": "CostElementKey",
+  "name": "MaterialNoKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "CostElementKey",
+  "sourceColumn": "MaterialNoKey",
   "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Inventory\"]"
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\"]"
     }
   ]
 }

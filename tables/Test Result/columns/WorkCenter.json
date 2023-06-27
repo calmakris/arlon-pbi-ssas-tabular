@@ -1,7 +1,8 @@
 {
-  "name": "Material Number",
+  "name": "WorkCenter",
   "dataType": "string",
-  "sourceColumn": "MaterialNoKey",
+  "isHidden": true,
+  "sourceColumn": "WorkCenter",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

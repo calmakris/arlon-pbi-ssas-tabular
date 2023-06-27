@@ -1,0 +1,12 @@
+{
+  "name": "MaterialNo",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    }
+  ]
+}

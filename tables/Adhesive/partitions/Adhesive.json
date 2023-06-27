@@ -1,0 +1,14 @@
+{
+  "name": "Adhesive",
+  "mode": "import",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    Data = Source{[Schema=\"dbo\",Item=\"DIM_BillOfMaterial_Adhesive\"]}[Data]",
+      "in",
+      "    Data"
+    ]
+  }
+}

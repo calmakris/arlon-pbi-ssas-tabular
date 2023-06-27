@@ -1,13 +1,13 @@
 {
-  "name": "HighestBomKey",
+  "name": "MaterialNoKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "HighestBomKey",
+  "sourceColumn": "MaterialNoKey",
   "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Engineering\",\"QA Dashboard\"]"
     }
   ]
 }

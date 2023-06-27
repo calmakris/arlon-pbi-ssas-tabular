@@ -1,11 +1,11 @@
 {
-  "name": "Product Series",
+  "name": "Material Number",
   "dataType": "string",
-  "sourceColumn": "ProductSeries",
+  "sourceColumn": "TraceMaterialNo",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"QA Dashboard\"]"
     }
   ]
 }

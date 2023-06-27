@@ -1,11 +1,12 @@
 {
   "name": "Material Number",
   "dataType": "string",
-  "sourceColumn": "MaterialNo",
+  "description": "Material number of the facestock used",
+  "sourceColumn": "TraceMaterialNo",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"QA Dashboard\"]"
     }
   ]
 }

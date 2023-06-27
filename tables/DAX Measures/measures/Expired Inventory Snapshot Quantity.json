@@ -14,7 +14,7 @@
     "",
     "RETURN",
     "    CALCULATE(",
-    "        SUM( 'Inventory Snapshots'[Amount] ),",
+    "        SUM( 'Inventory Snapshots'[Quantity] ),",
     "        KEEPFILTERS( 'Calendar'[Date] = RefDate ),",
     "        KEEPFILTERS( 'Inventory Snapshots'[Expired Flag] = \"Yes\" )",
     "    )"

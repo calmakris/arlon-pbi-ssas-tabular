@@ -17,6 +17,10 @@
         "  }",
         "]"
       ]
+    },
+    {
+      "name": "TabularEditor_TableGroup",
+      "value": "Row Level Security"
     }
   ]
 }

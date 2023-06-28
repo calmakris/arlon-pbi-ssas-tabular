@@ -17,7 +17,7 @@
     ")"
   ],
   "formatString": "#,0.00",
-  "displayFolder": "Inventory\\_Blocked\\_Expired",
+  "displayFolder": "Inventory\\_Blocked",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

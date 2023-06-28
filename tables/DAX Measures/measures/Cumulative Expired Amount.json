@@ -21,11 +21,11 @@
     ")"
   ],
   "formatString": "#,0",
-  "displayFolder": "Inventory\\_Blocked\\_Expired",
+  "displayFolder": "Inventory\\_Blocked",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\",\"Product Management\"]"
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
     }
   ]
 }

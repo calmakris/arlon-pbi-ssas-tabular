@@ -1,0 +1,6 @@
+{
+  "name": "CostElementKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CostElementKey"
+}

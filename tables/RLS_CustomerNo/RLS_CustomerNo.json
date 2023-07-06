@@ -1,0 +1,14 @@
+{
+  "name": "RLS_CustomerNo",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_TableGroup",
+      "value": "Row Level Security"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

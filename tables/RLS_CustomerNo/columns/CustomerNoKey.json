@@ -1,5 +1,6 @@
 {
   "name": "CustomerNoKey",
   "dataType": "string",
+  "isHidden": true,
   "sourceColumn": "CustomerNoKey"
 }

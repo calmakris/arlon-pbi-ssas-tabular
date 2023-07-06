@@ -1,5 +1,6 @@
 {
   "name": "DomainName",
   "dataType": "string",
+  "isHidden": true,
   "sourceColumn": "DomainName"
 }

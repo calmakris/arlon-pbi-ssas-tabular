@@ -1,0 +1,24 @@
+{
+  "name": "Disposed Inventory Amount FYTD",
+  "description": "This is a calculation of the cumulative value of line items listed under the General Ledger (G/L) accounts associated with Physical Inventory (0012100000), Obsolete Inventory (0012100001), and Cycle-count Adjustments (0012100002) starting from the beginning of the fiscal year.",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Disposed Inventory Amount],",
+    "        DATESYTD( 'Calendar'[Date], \"09/30\" )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

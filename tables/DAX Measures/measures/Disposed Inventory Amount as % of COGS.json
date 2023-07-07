@@ -1,0 +1,18 @@
+{
+  "name": "Disposed Inventory Amount as % of COGS",
+  "description": "This is a calculation of the combined value of line items listed under the General Ledger (G/L) accounts associated with Physical Inventory (0012100000), Obsolete Inventory (0012100001), and Cycle-count Adjustments (0012100002) divided by the cost of goods sold.",
+  "expression": [
+    "DIVIDE(",
+    "    [Disposed Inventory Amount],",
+    "    [Cost of Goods Sold]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

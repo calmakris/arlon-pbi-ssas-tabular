@@ -3,11 +3,33 @@
   "description": "Inventory snapshot amount on the Sunday of current week",
   "expression": [
     "",
+    "-- Get date of last snapshot",
+    "VAR _LastDate =",
+    "    CALCULATE(",
+    "        MAX('Inventory Snapshots'[Snapshot Date]),",
+    "        FILTER(",
+    "            'Inventory Snapshots',",
+    "            'Inventory Snapshots'[Snapshot Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "-- Get Sunday on or before the date of last snapshot",
+    "VAR _DateRef =",
+    "    CALCULATE(",
+    "        MAX('Inventory Snapshots'[Snapshot Date]),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Weekday] = \"Sun\"",
+    "                && 'Calendar'[Date] <= _LastDate",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
     "CALCULATE(",
-    "    SUM( 'Inventory Snapshots'[Amount] ),",
-    "    FILTER( ",
-    "        'Calendar',",
-    "        'Calendar'[Date] = [Sunday of Current Week]",
+    "    [Inventory Snapshot Amount],",
+    "    FILTER(",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Date] = _DateRef",
     "    )",
     ")"
   ],
@@ -16,7 +38,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Inventory\",\"Planning\"]"
     }
   ]
 }

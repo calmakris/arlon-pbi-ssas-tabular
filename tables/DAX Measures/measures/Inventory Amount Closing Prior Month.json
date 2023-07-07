@@ -1,13 +1,35 @@
 {
   "name": "Inventory Amount Closing Prior Month",
-  "description": "Inventory snapshot amount at the end of month last month",
+  "description": "Total value of the inventory at the conclusion of the previous month.",
   "expression": [
     "",
+    "-- Get last date with snapshot",
+    "VAR _LastDateWithData =",
+    "    CALCULATE(",
+    "        MAX('Inventory Snapshots'[Snapshot Date]),",
+    "        FILTER(",
+    "            'Inventory Snapshots',",
+    "            'Inventory Snapshots'[Snapshot Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "-- Get last date with snapshot last month",
+    "VAR _DateRef = ",
+    "    CALCULATE(",
+    "        MAX('Inventory Snapshots'[Snapshot Date]),",
+    "        FILTER(",
+    "            ALL( 'Inventory Snapshots' ),",
+    "            'Inventory Snapshots'[Snapshot Date] <= EOMONTH(_LastDateWithData, -1)",
+    "                && 'Inventory Snapshots'[Snapshot Date] > EOMONTH(_LastDateWithData, -2)",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
     "CALCULATE(",
-    "    SUM( 'Inventory Snapshots'[Amount] ),",
-    "    FILTER( ",
-    "        'Calendar',",
-    "        'Calendar'[Date] = [End of Prior Month]",
+    "    [Inventory Snapshot Amount],",
+    "    FILTER(",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Date] = _DateRef",
     "    )",
     ")"
   ],
@@ -16,7 +38,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Inventory\",\"Planning\"]"
     }
   ]
 }

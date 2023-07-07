@@ -11,6 +11,13 @@
       "value": [
         "[",
         "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Customer Master\",",
+        "    \"fromColumn\": \"Customer Number\",",
+        "    \"toTable\": \"RLS_CustomerNo\",",
+        "    \"toColumn\": \"CustomerNoKey\"",
+        "  },",
+        "  {",
         "    \"fromTable\": \"Customer Master\",",
         "    \"fromColumn\": \"Sales Organization\",",
         "    \"toTable\": \"BRIDGE_SalesOrganization\",",

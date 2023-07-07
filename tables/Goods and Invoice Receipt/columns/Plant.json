@@ -2,6 +2,7 @@
   "name": "Plant",
   "dataType": "string",
   "description": "Plant assigned in the line item.",
+  "isHidden": true,
   "sourceColumn": "PlantNo",
   "annotations": [
     {

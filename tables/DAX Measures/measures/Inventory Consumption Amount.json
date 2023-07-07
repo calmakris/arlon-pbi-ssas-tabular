@@ -3,7 +3,7 @@
   "description": "Total material value of goods issues for orders and deliveries and stock transfers orders between warehouses ",
   "expression": [
     "",
-    "SUM( 'Inventory Consumption'[Amount] ) * -1"
+    "ABS( SUM( 'Inventory Consumption'[Amount] ) )"
   ],
   "formatString": "#,0",
   "displayFolder": "Inventory\\_Consumption",

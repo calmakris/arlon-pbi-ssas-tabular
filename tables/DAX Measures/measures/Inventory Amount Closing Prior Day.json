@@ -3,11 +3,22 @@
   "description": "Inventory snapshot amount yesterday",
   "expression": [
     "",
+    "-- Get last date with snapshot",
+    "VAR _LastDateWithData =",
+    "    CALCULATE(",
+    "        MAX('Inventory Snapshots'[Snapshot Date]),",
+    "        FILTER(",
+    "            'Inventory Snapshots',",
+    "            'Inventory Snapshots'[Snapshot Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
     "CALCULATE(",
-    "    SUM( 'Inventory Snapshots'[Amount] ),",
-    "    FILTER( ",
-    "        'Calendar',",
-    "        'Calendar'[Date] = [Prior Report Date]",
+    "    [Inventory Snapshot Amount],",
+    "    FILTER(",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Date] = _LastDateWithData - 1",
     "    )",
     ")"
   ],
@@ -16,7 +27,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Inventory\",\"Planning\"]"
     }
   ]
 }

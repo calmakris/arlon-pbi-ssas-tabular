@@ -3,7 +3,7 @@
   "description": "Fixed target at $33K. This is defined by the Product Management department.",
   "expression": "33000",
   "formatString": "#,0",
-  "displayFolder": "Inventory\\_Blocked\\_Expired",
+  "displayFolder": "Inventory\\_Blocked",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

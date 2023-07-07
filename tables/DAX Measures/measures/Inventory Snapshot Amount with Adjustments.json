@@ -1,0 +1,17 @@
+{
+  "name": "Inventory Snapshot Amount with Adjustments",
+  "description": "This is the most recent value of your stock, which includes physical inventory, materials currently being transferred between warehouses, process orders that are not yet finished, and adjustments done by Finance. This measure is influenced by the date you select in the report. If no specific date is selected, it provides the inventory value from the previous day.",
+  "expression": [
+    "",
+    "[Inventory Snapshot Amount] +",
+    "    [Inventory Adjustments Amount]"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

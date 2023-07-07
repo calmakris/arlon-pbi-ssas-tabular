@@ -1,0 +1,19 @@
+{
+  "name": "Inventory Amount Closing Last 2 Month Avg",
+  "description": "Average of the last inventory snapshot value on the current and previous months.",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Inventory Amount Closing Prior Month] + [Inventory Snapshot Amount],",
+    "    2",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\"]"
+    }
+  ]
+}

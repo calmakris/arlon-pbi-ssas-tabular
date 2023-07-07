@@ -1,0 +1,19 @@
+{
+  "name": "Inventory Annual Turns",
+  "description": "This measure shows how often inventory is used or replaced in a year. It's calculated by dividing 52 (the number of weeks in a year) by the 'Inventory Consumption Coverage' measure. Higher values indicate that inventory is used and replaced more frequently, while lower values could suggest overstocking or underuse. This measure can help to identify potential improvements in inventory management.",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    52,",
+    "    [Inventory Weeks Coverage Estimate]",
+    ")"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

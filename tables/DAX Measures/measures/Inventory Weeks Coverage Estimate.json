@@ -1,0 +1,24 @@
+{
+  "name": "Inventory Weeks Coverage Estimate",
+  "description": [
+    "This measure calculates the expected duration (in weeks) for which the current inventory stock will last, given the average inventory levels and consumption for the month.",
+    "",
+    "The coverage duration is estimated in weeks, and it is based on the number of weeks within the current month. This measure offers insights into inventory adequacy, aids in evaluating the efficiency of inventory management, and provides a month's worth of inventory coverage expressed in weeks."
+  ],
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Inventory Amount Closing Last 2 Month Avg],",
+    "    [Inventory Consumption Amount MTD],",
+    "    0",
+    ") * [Week in Month Count]"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

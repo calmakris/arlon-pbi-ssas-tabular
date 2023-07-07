@@ -6,6 +6,7 @@
     "",
     "This field is not related to the 'Plant' table."
   ],
+  "isHidden": true,
   "sourceColumn": "PlantNoKey",
   "isAvailableInMdx": false,
   "annotations": [

@@ -1,7 +1,9 @@
 {
-  "name": "Material Number",
+  "name": "ProcessOrderNoKey",
   "dataType": "string",
-  "sourceColumn": "MaterialNoKey",
+  "isHidden": true,
+  "sourceColumn": "ProcessOrderNoKey",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

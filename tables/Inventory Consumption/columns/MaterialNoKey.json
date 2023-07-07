@@ -1,7 +1,9 @@
 {
-  "name": "Process Order Number",
+  "name": "MaterialNoKey",
   "dataType": "string",
-  "sourceColumn": "ProcessOrderNoKey",
+  "isHidden": true,
+  "sourceColumn": "MaterialNoKey",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

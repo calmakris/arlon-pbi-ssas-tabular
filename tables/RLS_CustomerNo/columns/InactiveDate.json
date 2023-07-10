@@ -2,5 +2,6 @@
   "name": "InactiveDate",
   "dataType": "dateTime",
   "isHidden": true,
-  "sourceColumn": "InactiveDate"
+  "sourceColumn": "InactiveDate",
+  "isAvailableInMdx": false
 }

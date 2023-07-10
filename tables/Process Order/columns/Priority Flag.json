@@ -1,0 +1,7 @@
+{
+  "name": "Priority Flag",
+  "dataType": "string",
+  "description": "Planning assigns custom flags on specific orders for certain purposes. For example in FY 2023 Q3, Planning assigned '1' on process orders related to inventory build in Arlon Innovations.",
+  "sourceColumn": "PriorityFlag",
+  "displayFolder": "_Flags"
+}

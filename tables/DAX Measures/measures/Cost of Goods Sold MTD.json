@@ -1,0 +1,21 @@
+{
+  "name": "Cost of Goods Sold MTD",
+  "description": "This measure represents the total value of the Cost of Goods Sold accumulated from the start of the month up until the present day, based on the date filter or context that has been applied. It's calculated based on the line items recorded under the General Ledger (G/L) account 0057020000 within this time frame.",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE( [Cost of Goods Sold], DATESMTD( 'Calendar'[Date] ) ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "General\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

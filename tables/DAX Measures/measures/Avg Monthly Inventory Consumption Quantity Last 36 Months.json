@@ -1,0 +1,39 @@
+{
+  "name": "Avg Monthly Inventory Consumption Quantity Last 36 Months",
+  "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 36 calendar months. Can be toggled between quantity and amount values (default = quantity).",
+  "expression": [
+    "",
+    "VAR _NumOfMonths = 36",
+    "VAR _MaxDate =",
+    "    CALCULATE(",
+    "        MAX(Calendar[Start of Month]),",
+    "        FILTER(",
+    "            ALL( Calendar ),",
+    "            Calendar[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "VAR _MinDate = EDATE(_MaxDate, -_NumOfMonths)",
+    "",
+    "RETURN",
+    "    IF(",
+    "        ISFILTERED(Calendar)",
+    "            && [Inventory Snapshot Quantity],",
+    "        CALCULATE(",
+    "            DIVIDE( ABS( SUM( 'Inventory Consumption'[Quantity] ) + 0 ), _NumOfMonths ),",
+    "            FILTER(",
+    "                ALL( Calendar[Date] ),",
+    "                Calendar[Date] >= _MinDate",
+    "                    && Calendar[Date] < _MaxDate",
+    "            )",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "Expired Inventory Snapshot Amount",
-  "description": "Latest snapshot of the expired inventory amount depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+  "description": "The most recent representation of the value of expired inventory, contingent on the applied date filter/context. In the absence of any date filter/context, this figure corresponds to the snapshot taken on the preceding day.",
   "expression": [
     "",
     "VAR RefDate =",

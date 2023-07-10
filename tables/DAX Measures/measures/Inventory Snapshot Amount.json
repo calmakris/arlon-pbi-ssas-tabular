@@ -1,6 +1,6 @@
 {
   "name": "Inventory Snapshot Amount",
-  "description": "Latest snapshot of the inventory amount depending on the date filter/context. If there is no date filter/context, then this value is yesterday's snapshot.",
+  "description": "This is the most recent value of your stock, which includes physical inventory, materials currently being transferred between warehouses and process orders that are not yet finished. This measure is influenced by the date you select in the report. If no specific date is selected, it provides the inventory value from the previous day.",
   "expression": [
     "",
     "VAR RefDate =",

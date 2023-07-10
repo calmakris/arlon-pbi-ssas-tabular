@@ -11,9 +11,7 @@
     "query": null
   },
   "credential": {
-    "AuthenticationKind": "Windows",
-    "Username": "DOMAIN\\PBI-ETL",
-    "EncryptConnection": false,
-    "PrivacySetting": "Organizational"
+    "AuthenticationKind": "ServiceAccount",
+    "EncryptConnection": false
   }
 }

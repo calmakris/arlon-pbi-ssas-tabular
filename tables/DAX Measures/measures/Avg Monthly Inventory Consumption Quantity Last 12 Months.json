@@ -1,0 +1,40 @@
+{
+  "name": "Avg Monthly Inventory Consumption Quantity Last 12 Months",
+  "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 12 calendar months. Can be toggled between quantity and amount values (default = quantity).",
+  "expression": [
+    "",
+    "VAR NumOfMonths = 12",
+    "VAR LastVisibleDate =",
+    "    CALCULATE(",
+    "        MAX(Calendar[Date]),",
+    "        FILTER(",
+    "            ALL( Calendar ),",
+    "            Calendar[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "VAR AMU = ",
+    "    CALCULATE(",
+    "        DIVIDE( SUM( 'Inventory Snapshots'[Last12MoConsumeQty] ), NumOfMonths ),",
+    "        FILTER(",
+    "            ALL( Calendar ),",
+    "            Calendar[Date] = LastVisibleDate",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    IF(",
+    "        AMU = 0,",
+    "        BLANK(),",
+    "        AMU",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

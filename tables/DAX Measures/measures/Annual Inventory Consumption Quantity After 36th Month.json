@@ -1,0 +1,24 @@
+{
+  "name": "Annual Inventory Consumption Quantity After 36th Month",
+  "description": "If unrestricted stock is equal to consumption in the next 36 months, then 0. Else if consumption in the last 12 months is the same as the difference of current stock and consumption in the next 36 months, then value is the consumption in the next 36 months. Otherwise, value is the difference between current stock and consumption in the next 36 months. Can be toggled between quantity and amount values (default = quantity).",
+  "expression": [
+    "",
+    "VAR Usage = [Avg Monthly Inventory Consumption Quantity Last 12 Months] * 12",
+    "VAR Net = [Inventory Snapshot Quantity] - [Annual Inventory Consumption Quantity Next 12 Months] - [Annual Inventory Consumption Quantity After 12th Month] - [Annual Inventory Consumption Quantity After 24th Month]",
+    "RETURN",
+    "    SWITCH(",
+    "        TRUE(),",
+    "        [Inventory Snapshot Quantity] = ([Annual Inventory Consumption Quantity Next 12 Months] + [Annual Inventory Consumption Quantity After 12th Month] + [Annual Inventory Consumption Quantity After 24th Month]), BLANK(),",
+    "        Usage < Net, Usage,",
+    "        Net",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

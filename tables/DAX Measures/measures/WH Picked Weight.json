@@ -9,10 +9,7 @@
     "",
     "CALCULATE(",
     "    SUM( 'Transfer Order'[Weight] ),",
-    "    FILTER(",
-    "        'DIM_UsersSAP',",
-    "        'DIM_UsersSAP'[Department] IN { \"ORDER ASSEMBLY\", \"WAREHOUSE OPERATIONS\" }",
-    "    )",
+    "    KEEPFILTERS('DIM_UsersSAP'[Department] IN { \"ORDER ASSEMBLY\", \"WAREHOUSE OPERATIONS\" })",
     ")"
   ],
   "formatString": "#,0.00",
@@ -20,7 +17,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Warehouse\"]"
+      "value": "[\"Operations\",\"Warehouse\"]"
     }
   ]
 }

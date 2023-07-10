@@ -1,6 +1,6 @@
 {
   "name": "Earned Labor Hours",
-  "description": "Total hours posted in the earned labor and setup cost elements",
+  "description": "This is the total number of hours that have been recorded in the earned labor and setup G/L accounts.",
   "expression": [
     " ",
     "CALCULATE(",

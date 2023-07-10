@@ -1,0 +1,13 @@
+{
+  "name": "Work Center Average Crew Count",
+  "description": "This is the average number of people in each work center. We use this number to adjust the earned hours to match the actual work hours.",
+  "expression": "AVERAGE( Absorption[CrewSize] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Operations",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Operations\"]"
+    }
+  ]
+}

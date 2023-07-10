@@ -6,7 +6,9 @@
     "",
     "This field is not related to the 'Process Order' table."
   ],
+  "isHidden": true,
   "sourceColumn": "ProcessOrderNoKey",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

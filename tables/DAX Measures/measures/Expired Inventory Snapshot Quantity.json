@@ -1,0 +1,30 @@
+{
+  "name": "Expired Inventory Snapshot Quantity",
+  "description": "The most recent representation of the quantity of expired inventory, contingent on the applied date filter/context. In the absence of any date filter/context, this figure corresponds to the snapshot taken on the preceding day.",
+  "expression": [
+    "",
+    "VAR RefDate =",
+    "    CALCULATE(",
+    "        MAX('Calendar'[Date]),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        SUM( 'Inventory Snapshots'[Quantity] ),",
+    "        KEEPFILTERS( 'Calendar'[Date] = RefDate ),",
+    "        KEEPFILTERS( 'Inventory Snapshots'[Expired Flag] = \"Yes\" )",
+    "    )"
+  ],
+  "formatString": "#,0.00",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

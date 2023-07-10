@@ -3,14 +3,19 @@
   "isHidden": true,
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Row Level Security"
+    },
+    {
       "name": "TabularEditor_Relationships",
       "value": [
         "[",
         "  {",
+        "    \"toCardinality\": \"many\",",
         "    \"fromTable\": \"RLS_CostCenter\",",
         "    \"fromColumn\": \"CostCenterKey\",",
-        "    \"toTable\": \"Cost Center\",",
-        "    \"toColumn\": \"Cost Center\",",
+        "    \"toTable\": \"Expenses\",",
+        "    \"toColumn\": \"CostCenter\",",
         "    \"crossFilteringBehavior\": \"bothDirections\",",
         "    \"securityFilteringBehavior\": \"bothDirections\"",
         "  }",

@@ -3,11 +3,12 @@
   "description": "Combination of customer, sales order number, and sales order type sorted by the ordered amount",
   "expression": [
     "",
-    "CONCATENATEX( ",
-    "    'Sales Order Shipment Calendar', ",
-    "    LEFT([Customer Name], 15) & UNICHAR(10) & \"#\" & VALUE([Order Number]) & \" (\" & [Order Type] & \")\",",
-    "    UNICHAR(10),",
-    "    [Order Amount], DESC",
+    "CONCATENATEX (",
+    "    'Sales Order Shipment Calendar',",
+    "    LEFT ( 'Sales Order Shipment Calendar'[Customer Name], 15 ) & UNICHAR ( 10 ) & \"#\"",
+    "        & VALUE ( 'Sales Order Shipment Calendar'[Order Number] ) & \" (\" & 'Sales Order Shipment Calendar'[Order Type] & \")\",",
+    "    UNICHAR ( 10 ),",
+    "    'Sales Order Shipment Calendar'[Order Amount], DESC",
     ")"
   ],
   "displayFolder": "Warehouse",

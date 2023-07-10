@@ -1,0 +1,25 @@
+{
+  "name": "Inventory Consumption Amount MTD",
+  "description": "Total material value of goods issues for orders and deliveries and stock transfers orders between warehouses  in a month.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Inventory Consumption Amount],",
+    "        DATESMTD( Calendar[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        Calendar,",
+    "        Calendar[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

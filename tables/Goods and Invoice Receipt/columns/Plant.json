@@ -2,7 +2,9 @@
   "name": "Plant",
   "dataType": "string",
   "description": "Plant assigned in the line item.",
+  "isHidden": true,
   "sourceColumn": "PlantNo",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

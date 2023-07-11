@@ -1,0 +1,29 @@
+{
+  "name": "Week in Month Count",
+  "description": "Number of Wednesdays in a month",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        COUNTROWS( 'Calendar' ),",
+    "        FILTER(",
+    "            ALL( Calendar[Weekday] ),",
+    "            Calendar[Weekday] = \"Wed\"",
+    "        ),",
+    "        DATESMTD( Calendar[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        Calendar,",
+    "        Calendar[Date] <= [End of Month]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

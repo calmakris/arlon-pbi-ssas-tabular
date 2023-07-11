@@ -1,6 +1,6 @@
 {
   "name": "Cost of Goods Sold",
-  "description": "Sum of amount of line items posted under 0057020000 G/L account",
+  "description": "This measure represents the total value of line items recorded under the General Ledger (G/L) account 0057020000.",
   "expression": "SUM( 'Cost of Goods Sold'[Amount] )",
   "formatString": "#,0",
   "displayFolder": "General",

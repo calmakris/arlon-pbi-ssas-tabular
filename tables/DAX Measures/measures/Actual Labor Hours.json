@@ -1,6 +1,6 @@
 {
   "name": "Actual Labor Hours",
-  "description": "Total regular, overtime, and doubletime hours from Paylocity. Filter the 'Pay Category' field in the 'Payroll' table to include regular, overtime, or doubletime hours only.",
+  "description": "This is the total of all regular, overtime, and doubletime work hours that we get from Paylocity.",
   "expression": "SUM( 'Payroll'[HoursWorked] )",
   "formatString": "#,0.00",
   "displayFolder": "Operations",

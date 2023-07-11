@@ -2,6 +2,7 @@
   "name": "Plant",
   "dataType": "string",
   "description": "SAP Source: BSIS/BSAS.WERKS",
+  "isHidden": true,
   "sourceColumn": "PlantNoKey",
   "isAvailableInMdx": false,
   "annotations": [

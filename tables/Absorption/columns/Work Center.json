@@ -6,7 +6,9 @@
     "",
     "This field is not related to the 'Work Center' and 'MFG Work Center' tables."
   ],
+  "isHidden": true,
   "sourceColumn": "WorkCenter",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

@@ -1,0 +1,27 @@
+{
+  "name": "Disposed Inventory Amount",
+  "description": "This is a calculation of the value of line items listed under the General Ledger (G/L) accounts associated with Physical Inventory (0012100000), Obsolete Inventory (0012100001), and Cycle-count Adjustments (0012100002).",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] ),",
+    "    KEEPFILTERS( 'Inventory Balance Item'[Document Type] <> \"ZA\" ),",
+    "    FILTER(",
+    "        ALL('Cost Element'[Category] ),",
+    "        'Cost Element'[Category] = \"Inventory Reserve\"",
+    "    ),",
+    "    FILTER(",
+    "        ALL( 'Cost Element'[Sub Category] ),",
+    "        'Cost Element'[Sub Category] = \"Obsolete\"",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

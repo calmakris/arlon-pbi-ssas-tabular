@@ -1,0 +1,26 @@
+{
+  "name": "Inventory Adjustments Amount",
+  "description": "This measure represents the total value of line items recorded under the General Ledger (G/L) account related to inventory adjustments.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        SUM( 'Inventory Balance Item'[Amount (Local Currency 2)] ),",
+    "        KEEPFILTERS( 'Cost Element'[Category] = \"Inventory Adjustment\" ),",
+    "        DATESMTD( Calendar[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        Calendar,",
+    "        Calendar[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "type": "calculated",
   "name": "Day Age Group",
-  "dataType": "string",
+  "dataType": "variant",
   "isDataTypeInferred": true,
   "description": "Calculated column based on [Age in Days]",
   "expression": [

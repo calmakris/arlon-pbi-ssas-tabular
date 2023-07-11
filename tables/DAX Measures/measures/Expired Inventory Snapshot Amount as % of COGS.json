@@ -1,0 +1,19 @@
+{
+  "name": "Expired Inventory Snapshot Amount as % of COGS",
+  "description": "This measure provides the most recent valuation of expired inventory as a percentage of the month-to-date cost of goods sold, based on the date filter or context that has been applied. If no date filter or context is selected, the measure will display the data from the previous day's snapshot.",
+  "expression": [
+    "",
+    "DIVIDE(",
+    "    [Expired Inventory Snapshot Amount],",
+    "    [Cost of Goods Sold MTD]",
+    ")"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Inventory\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Planning\",\"Product Management\"]"
+    }
+  ]
+}

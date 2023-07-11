@@ -42,8 +42,7 @@
         "    \"fromTable\": \"Converting OEE\",",
         "    \"fromColumn\": \"ShiftNo\",",
         "    \"toTable\": \"Production Shift\",",
-        "    \"toColumn\": \"Production Shift\",",
-        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "    \"toColumn\": \"ProductionShift\"",
         "  }",
         "]"
       ]

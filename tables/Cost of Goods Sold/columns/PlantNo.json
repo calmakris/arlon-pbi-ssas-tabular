@@ -1,0 +1,6 @@
+{
+  "name": "PlantNo",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "PlantNo"
+}

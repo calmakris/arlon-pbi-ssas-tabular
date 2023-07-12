@@ -2,5 +2,6 @@
   "name": "PlantNo",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "PlantNo"
+  "sourceColumn": "PlantNo",
+  "isAvailableInMdx": false
 }

@@ -2,5 +2,6 @@
   "name": "MaterialNo",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "MaterialNo"
+  "sourceColumn": "MaterialNo",
+  "isAvailableInMdx": false
 }

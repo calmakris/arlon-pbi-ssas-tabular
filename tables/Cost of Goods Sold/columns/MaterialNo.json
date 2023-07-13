@@ -1,7 +1,7 @@
 {
-  "name": "PlantNo",
+  "name": "MaterialNo",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "PlantNo",
+  "sourceColumn": "MaterialNo",
   "isAvailableInMdx": false
 }

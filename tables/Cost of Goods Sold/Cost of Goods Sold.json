@@ -1,6 +1,6 @@
 {
   "name": "Cost of Goods Sold",
-  "description": "Cost of goods sold aggregated by posting date. Only 0057020000 G/L account is filtered.",
+  "description": "This data is derived from the 'BSIS' table and contains daily aggregate values of items related to the Cost of Goods Sold (COGS) G/L accounts such as 0057020000, 0051000000, 0051000100, 0051000110, 0051000210, and 0051000310. ",
   "isHidden": true,
   "annotations": [
     {
@@ -12,6 +12,12 @@
         "    \"fromColumn\": \"Company Code\",",
         "    \"toTable\": \"Company Code\",",
         "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Cost of Goods Sold\",",
+        "    \"fromColumn\": \"MaterialNo\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
         "  },",
         "  {",
         "    \"fromTable\": \"Cost of Goods Sold\",",

@@ -1,0 +1,16 @@
+{
+  "name": "SquareFeetSold",
+  "dataType": "decimal",
+  "description": "quantity x square feet",
+  "isHidden": true,
+  "sourceColumn": "SquareFeetSold",
+  "formatString": "#,##0",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "LinearFeetSold",
+  "dataType": "decimal",
+  "description": "quantity x linear feet",
+  "isHidden": true,
+  "sourceColumn": "LinearFeetSold",
+  "formatString": "#,##0",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

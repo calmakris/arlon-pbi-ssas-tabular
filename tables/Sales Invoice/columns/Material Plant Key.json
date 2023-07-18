@@ -1,0 +1,14 @@
+{
+  "name": "Material Plant Key",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialPlantKey",
+  "isAvailableInMdx": false,
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

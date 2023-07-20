@@ -4,8 +4,8 @@
   "expression": [
     "",
     "SWITCH(TRUE(),",
-    "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST Overall Equipment Efficiency (Target)],",
-    "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT Overall Equipment Efficiency (Target)],",
+    "    \"CAST\" IN ALLSELECTED('Department'[Department]), [CAST Overall Equipment Efficiency (Target)],",
+    "    \"COAT\" IN ALLSELECTED(Department[Department]), [COAT Overall Equipment Efficiency (Target)],",
     "    DIVIDE( ([CAST Overall Equipment Efficiency (Target)] + [COAT Overall Equipment Efficiency (Target)]), 2 )",
     ")"
   ],

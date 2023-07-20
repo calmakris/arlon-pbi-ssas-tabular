@@ -8,16 +8,7 @@
     },
     {
       "name": "TabularEditor_Relationships",
-      "value": [
-        "[",
-        "  {",
-        "    \"fromTable\": \"Machine\",",
-        "    \"fromColumn\": \"Department\",",
-        "    \"toTable\": \"Department\",",
-        "    \"toColumn\": \"Department\"",
-        "  }",
-        "]"
-      ]
+      "value": "[]"
     }
   ]
 }

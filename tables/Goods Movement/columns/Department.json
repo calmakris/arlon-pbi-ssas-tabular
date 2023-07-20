@@ -4,10 +4,5 @@
   "isHidden": true,
   "sourceColumn": "Department",
   "isAvailableInMdx": false,
-  "annotations": [
-    {
-      "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
-    }
-  ]
+  "displayFolder": "Header"
 }

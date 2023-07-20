@@ -2,7 +2,7 @@
   "name": "Nature of Injury",
   "dataType": "string",
   "description": "Determines the type of injury of the incident",
-  "sourceColumn": "Nature of Injury",
+  "sourceColumn": "NatureOfInjury",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

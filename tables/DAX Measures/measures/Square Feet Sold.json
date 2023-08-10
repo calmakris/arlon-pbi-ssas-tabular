@@ -1,0 +1,7 @@
+{
+  "name": "Square Feet Sold",
+  "description": "Total square feet of the material in the billing document based on the length and width data in SAP’s material master",
+  "expression": "SUM('Sales Invoice'[SquareFeetSold])",
+  "formatString": "#,##0",
+  "displayFolder": "Sales Invoice"
+}

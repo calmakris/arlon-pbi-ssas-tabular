@@ -10,8 +10,7 @@
     "",
     "CALCULATE(",
     "    [Complaint Open Amount],",
-    "    KEEPFILTERS( 'Complaint'[Department] = \"Q\" ),",
-    "    KEEPFILTERS( LEFT('Complaint'[Reason Code], 8) <> \"WARRANTY\")",
+    "    KEEPFILTERS( 'Complaint'[Department] IN { \"Q\", \"OQ\" } ) -- Product quality and obsolete product quality",
     ")"
   ],
   "formatString": "#,0",

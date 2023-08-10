@@ -1,0 +1,12 @@
+{
+  "name": "Vendor Batch Number",
+  "dataType": "string",
+  "description": "Vendor batch number assigned at the time the material is received",
+  "sourceColumn": "VendorBatchNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\"]"
+    }
+  ]
+}

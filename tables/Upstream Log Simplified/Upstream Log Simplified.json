@@ -12,6 +12,12 @@
         "[",
         "  {",
         "    \"fromTable\": \"Upstream Log Simplified\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Upstream Log Simplified\",",
         "    \"fromColumn\": \"Machine\",",
         "    \"toTable\": \"Machine\",",
         "    \"toColumn\": \"Machine\"",
@@ -32,7 +38,7 @@
         "    \"fromTable\": \"Upstream Log Simplified\",",
         "    \"fromColumn\": \"Production Shift\",",
         "    \"toTable\": \"Production Shift\",",
-        "    \"toColumn\": \"Production Shift\"",
+        "    \"toColumn\": \"ProductionShift\"",
         "  }",
         "]"
       ]

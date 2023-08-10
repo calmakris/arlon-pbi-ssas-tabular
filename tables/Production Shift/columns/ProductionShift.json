@@ -1,10 +1,9 @@
 {
-  "name": "Shift",
+  "name": "ProductionShift",
   "dataType": "int64",
   "isHidden": true,
-  "sourceColumn": "Shift",
+  "sourceColumn": "ProductionShift",
   "isAvailableInMdx": false,
-  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

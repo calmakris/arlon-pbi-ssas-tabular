@@ -30,7 +30,7 @@
         "    \"fromTable\": \"Compounding Log\",",
         "    \"fromColumn\": \"Production Shift\",",
         "    \"toTable\": \"Production Shift\",",
-        "    \"toColumn\": \"Production Shift\"",
+        "    \"toColumn\": \"ProductionShift\"",
         "  }",
         "]"
       ]

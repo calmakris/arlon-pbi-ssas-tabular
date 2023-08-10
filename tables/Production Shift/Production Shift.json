@@ -1,5 +1,6 @@
 {
   "name": "Production Shift",
+  "description": "Contains shift that conforms with production schedule that starts at 6 AM",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

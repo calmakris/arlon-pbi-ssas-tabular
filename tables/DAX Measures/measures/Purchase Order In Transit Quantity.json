@@ -1,7 +1,7 @@
 {
   "name": "Purchase Order In Transit Quantity",
   "description": "Total quantity of materials that shipped but not received yet in stock transfer purchase orders",
-  "expression": " SUM( 'Inventory in Transit'[In Transit Quantity] )",
+  "expression": " SUM( 'FACT_PurchaseOrder'[In Transit Quantity] )",
   "formatString": "#,0.00",
   "displayFolder": "Purchase Order",
   "annotations": [

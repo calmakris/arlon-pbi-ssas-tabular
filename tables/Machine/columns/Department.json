@@ -1,11 +1,12 @@
 {
   "name": "Department",
   "dataType": "string",
+  "description": "The department assigned to the machine",
   "sourceColumn": "Department",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Engineering\",\"Planning\"]"
+      "value": "[\"Planning\"]"
     }
   ]
 }

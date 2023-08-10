@@ -5,7 +5,7 @@
     "",
     "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality)."
   ],
-  "expression": " DIVIDE( [Product Quality Credit Issued] + 0, [Gross Sales] )",
+  "expression": " DIVIDE( [Product Quality Credit Issued], [Gross Sales], 0 )",
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "displayFolder": "Complaints\\_Product Quality",
   "annotations": [

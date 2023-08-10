@@ -10,7 +10,7 @@
     "CALCULATE(",
     "    [Complaint Credit Issued Amount],",
     "    KEEPFILTERS( 'Complaint'[Billing Block Indicator] = \"\" ),",
-    "    KEEPFILTERS( 'Complaint'[Department] = \"S1\" ),",
+    "    KEEPFILTERS( 'Complaint'[Department] IN { \"S1\", \"OS1\" } ),          -- Accom and Obsolete Accom",
     "    USERELATIONSHIP('Calendar'[Date], 'Complaint'[Last Credit Date])",
     ")"
   ],

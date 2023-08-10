@@ -8,7 +8,34 @@
     },
     {
       "name": "TabularEditor_Relationships",
-      "value": "[]"
+      "value": [
+        "[",
+        "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Material Master\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Adhesive\",",
+        "    \"toColumn\": \"MaterialNo\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  },",
+        "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Material Master\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Facestock\",",
+        "    \"toColumn\": \"MaterialNo\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  },",
+        "  {",
+        "    \"toCardinality\": \"many\",",
+        "    \"fromTable\": \"Material Master\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Liner\",",
+        "    \"toColumn\": \"MaterialNo\",",
+        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "  }",
+        "]"
+      ]
     }
   ]
 }

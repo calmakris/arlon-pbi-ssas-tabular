@@ -1,6 +1,6 @@
 {
   "name": "Material Lead Time",
-  "dataType": "double",
+  "dataType": "decimal",
   "description": "This column retrieves the lead time by material and plant, primarily using the \"Total Replenishment Lead Time\" from the 'MRP 3' tab of the material master. In cases where the replenishment lead time is not available, it uses the \"Planned Delivery Time\" from the 'MRP 2' tab as an alternative value.",
   "isHidden": true,
   "sourceColumn": "MaterialLeadTime",

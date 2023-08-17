@@ -13,7 +13,7 @@
         "[",
         "  {",
         "    \"fromTable\": \"FACT_PlantDataForMaterial\",",
-        "    \"fromColumn\": \"Material Number\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
         "    \"toTable\": \"Material Master\",",
         "    \"toColumn\": \"Material Number\"",
         "  },",

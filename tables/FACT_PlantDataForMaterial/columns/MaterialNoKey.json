@@ -1,9 +1,8 @@
 {
-  "name": "Material Number",
+  "name": "MaterialNoKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "Material Number",
-  "isAvailableInMdx": false,
+  "sourceColumn": "MaterialNoKey",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

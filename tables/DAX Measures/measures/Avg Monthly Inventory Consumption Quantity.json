@@ -14,7 +14,7 @@
     "        MAX('Inventory Consumption'[Posting Date]),",
     "        ALL('Plant'),",
     "        ALL('Material Master')",
-    "    )",
+    "    ) + 1 -- is needed because datediff month counts 1 as full months",
     "",
     "Var Diff =",
     "    DATEDIFF(",
@@ -22,7 +22,7 @@
     "        MONTH",
     "    )",
     "",
-    "Var AvgInvConQty = DIVIDE([inventory consumption quantity],Diff)",
+    "Var AvgInvConQty = DIVIDE( [Inventory Consumption Quantity], Diff )",
     "",
     "Return AvgInvConQty"
   ],

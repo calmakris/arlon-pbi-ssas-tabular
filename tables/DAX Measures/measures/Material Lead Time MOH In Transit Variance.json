@@ -1,0 +1,7 @@
+{
+  "name": "Material Lead Time MOH In Transit Variance",
+  "description": "Difference between inventory and in transit months coverage estimate and material lead time",
+  "expression": "[Inventory and In Transit Months Coverage Estimate] - [Material Lead Time]",
+  "formatString": "#,##0.00",
+  "displayFolder": "MRP"
+}

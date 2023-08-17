@@ -1,0 +1,12 @@
+{
+  "name": "MaterialNoKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Avg Monthly Inventory Consumption Quantity",
+  "description": "This measure is the monthly average quantity of inventory consumption. For example, if the user wants the last 12-month usage, this measure is the average of all the months in that period.",
+  "expression": [
+    " Var StartDate =",
+    "    CALCULATE(",
+    "        MIN('Inventory Consumption'[Posting Date]),",
+    "        ALL('Plant'),",
+    "        ALL('Material Master')",
+    "    )",
+    "",
+    "Var EndDate =",
+    "    CALCULATE(",
+    "        MAX('Inventory Consumption'[Posting Date]),",
+    "        ALL('Plant'),",
+    "        ALL('Material Master')",
+    "    ) + 1 -- is needed because datediff month counts 1 as full months",
+    "",
+    "Var Diff =",
+    "    DATEDIFF(",
+    "        StartDate, EndDate,",
+    "        MONTH",
+    "    )",
+    "",
+    "Var AvgInvConQty = DIVIDE( [Inventory Consumption Quantity], Diff )",
+    "",
+    "Return AvgInvConQty"
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

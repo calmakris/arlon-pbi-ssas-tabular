@@ -1,6 +1,7 @@
 {
-  "name": "Fact_PlantDataForMaterial",
+  "name": "FACT_PlantDataForMaterial",
   "description": "Plant-specific data per material",
+  "isHidden": true,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
@@ -11,19 +12,19 @@
       "value": [
         "[",
         "  {",
-        "    \"fromTable\": \"Fact_PlantDataForMaterial\",",
+        "    \"fromTable\": \"FACT_PlantDataForMaterial\",",
         "    \"fromColumn\": \"Material Number\",",
         "    \"toTable\": \"Material Master\",",
         "    \"toColumn\": \"Material Number\"",
         "  },",
         "  {",
-        "    \"fromTable\": \"Fact_PlantDataForMaterial\",",
+        "    \"fromTable\": \"FACT_PlantDataForMaterial\",",
         "    \"fromColumn\": \"MaterialPlantKey\",",
         "    \"toTable\": \"Plant Data for Material\",",
         "    \"toColumn\": \"MaterialPlantKey\"",
         "  },",
         "  {",
-        "    \"fromTable\": \"Fact_PlantDataForMaterial\",",
+        "    \"fromTable\": \"FACT_PlantDataForMaterial\",",
         "    \"fromColumn\": \"PlantKey\",",
         "    \"toTable\": \"Plant\",",
         "    \"toColumn\": \"Plant\"",

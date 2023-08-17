@@ -1,7 +1,7 @@
 {
   "name": "Inventory Months Coverage Estimate",
-  "description": "This calculation is simply the net inventory after demand divided by the monthly average consumption. It determines the expected duration (in months) for which the available stock will last, given the average of historical consumption.",
-  "expression": "DIVIDE( [Inventory Demand-Based Available Quantity], [Avg Monthly Inventory Consumption Quantity],0 )",
+  "description": "Also known as Months On Hand, this calculation is simply the net inventory after demand divided by the monthly average consumption. It determines the expected duration (in months) for which the available stock will last, given the average of historical consumption.",
+  "expression": "DIVIDE( [Inventory Demand-Based Available Quantity], [Avg Monthly Inventory Consumption Quantity] )",
   "formatString": "#,##0.0",
   "displayFolder": "Inventory\\_Consumption",
   "annotations": [

@@ -1,0 +1,13 @@
+{
+  "name": "Material Lead Time",
+  "description": "This measure retrieves the lead time by material and plant, primarily using the \"Total Replenishment Lead Time\" from the 'MRP 3' tab of the material master. In cases where the replenishment lead time is not available, it uses the \"Planned Delivery Time\" from the 'MRP 2' tab as an alternative value.",
+  "expression": "AVERAGE(Fact_PlantDataForMaterial[Material Lead Time])",
+  "formatString": "#,##0.0",
+  "displayFolder": "MRP",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

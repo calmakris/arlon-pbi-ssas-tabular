@@ -1,0 +1,17 @@
+{
+  "name": "Inventory Demand-Based Available Quantity",
+  "description": "This measure represents the deficit or surplus of stock in the warehouses, considering the demand for products. It is calculated as the difference between the \"Inventory Quantity\" measure, which represents the total stock available in the warehouses, and the \"Inventory Demand Quantity\" measure, which accounts for the total of order reservations or sales orders considering allocations. A positive value may indicate that there is room to optimize inventory levels, while a negative value may signal the need for replenishment or inventory adjustments to meet customer demands effectively.",
+  "expression": [
+    "( [Inventory Quantity] - [Inventory Demand Quantity]",
+    "    ",
+    ")"
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

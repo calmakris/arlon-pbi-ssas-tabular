@@ -1,0 +1,6 @@
+{
+  "name": "Material Lead Time - MOH In Transit Variance",
+  "expression": "[Material Lead Time] - [Inventory and In Transit Months Coverage Estimate]",
+  "formatString": "#,##0.00",
+  "displayFolder": "MRP"
+}

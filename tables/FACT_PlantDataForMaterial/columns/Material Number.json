@@ -1,0 +1,13 @@
+{
+  "name": "Material Number",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "Material Number",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

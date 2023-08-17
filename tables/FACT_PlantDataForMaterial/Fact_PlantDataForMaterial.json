@@ -1,0 +1,35 @@
+{
+  "name": "Fact_PlantDataForMaterial",
+  "description": "Plant-specific data per material",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Fact_PlantDataForMaterial\",",
+        "    \"fromColumn\": \"Material Number\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Fact_PlantDataForMaterial\",",
+        "    \"fromColumn\": \"MaterialPlantKey\",",
+        "    \"toTable\": \"Plant Data for Material\",",
+        "    \"toColumn\": \"MaterialPlantKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Fact_PlantDataForMaterial\",",
+        "    \"fromColumn\": \"PlantKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

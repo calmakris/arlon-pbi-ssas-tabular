@@ -4,6 +4,7 @@
   "isHidden": true,
   "sourceColumn": "InTransitAmount",
   "formatString": "#,0.00",
+  "isAvailableInMdx": false,
   "displayFolder": "_Values",
   "annotations": [
     {

@@ -2,5 +2,11 @@
   "name": "Helper_12MoAgo",
   "expression": "YEAR([Date 12 Months Ago]) * 100 + MONTH([Date 12 Months Ago])",
   "isHidden": true,
-  "displayFolder": "_Helpers"
+  "displayFolder": "_Helpers",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

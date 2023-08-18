@@ -3,5 +3,11 @@
   "expression": "COUNTROWS(FILTER('Upstream Log Simplified', 'Upstream Log Simplified'[Category] = \"Clean Up\" && 'Upstream Log Simplified'[Causes] IN { \"Planned\", \"Unplanned - Casting\" })) + 0",
   "formatString": "#,0",
   "isHidden": true,
-  "displayFolder": "Upstream Log"
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

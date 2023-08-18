@@ -6,5 +6,11 @@
     ""
   ],
   "formatString": "#,0",
-  "displayFolder": "Purchase Order"
+  "displayFolder": "Purchase Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

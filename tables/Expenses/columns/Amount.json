@@ -14,7 +14,7 @@
     },
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Expenses\"]"
+      "value": "[\"Expenses\",\"Finance\"]"
     }
   ]
 }

@@ -16,7 +16,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"BI Morning Dashboard\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+      "value": "[\"BI Morning Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
     }
   ]
 }

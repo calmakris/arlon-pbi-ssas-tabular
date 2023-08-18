@@ -24,5 +24,11 @@
   ],
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "isHidden": true,
-  "displayFolder": "Upstream Log"
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

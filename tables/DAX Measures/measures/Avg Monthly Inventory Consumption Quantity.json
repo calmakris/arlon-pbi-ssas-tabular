@@ -22,7 +22,7 @@
     "        MONTH",
     "    )",
     "",
-    "Var AvgInvConQty = DIVIDE( [Inventory Consumption Quantity], Diff )",
+    "Var AvgInvConQty = ROUND( DIVIDE( [Inventory Consumption Quantity], Diff ), 2 )",
     "",
     "Return AvgInvConQty"
   ],

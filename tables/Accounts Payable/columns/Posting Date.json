@@ -1,0 +1,14 @@
+{
+  "name": "Posting Date",
+  "dataType": "dateTime",
+  "description": "Date which is used when entering the document in Financial Accounting or Controlling.",
+  "sourceColumn": "PostingDate",
+  "formatString": "Short Date",
+  "displayFolder": "Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

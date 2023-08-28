@@ -1,0 +1,23 @@
+{
+  "name": "Journal Entry",
+  "description": "Journal entries refer to accounting documents manually posted in SAP. These documents are identified with document type of 'ZA'. One document number counts as one journal entry.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Journal Entry\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

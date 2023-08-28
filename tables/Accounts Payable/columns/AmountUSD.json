@@ -1,0 +1,14 @@
+{
+  "name": "AmountUSD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "AmountUSD",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

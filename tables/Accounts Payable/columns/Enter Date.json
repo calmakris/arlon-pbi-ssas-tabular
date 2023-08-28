@@ -1,0 +1,14 @@
+{
+  "name": "Enter Date",
+  "dataType": "dateTime",
+  "description": "Date on which the account document was entered in the system",
+  "sourceColumn": "EnterDate",
+  "formatString": "Short Date",
+  "displayFolder": "Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

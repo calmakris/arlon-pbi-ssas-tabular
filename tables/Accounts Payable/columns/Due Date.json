@@ -1,0 +1,14 @@
+{
+  "name": "Due Date",
+  "dataType": "dateTime",
+  "description": "Also known as Net Due Date, this field is the 'Document Date' plus the number of days in terms 2. If there is days defined in terms 2, the days in terms 1 is used.",
+  "sourceColumn": "DueDate",
+  "formatString": "Short Date",
+  "displayFolder": "Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

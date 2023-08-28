@@ -1,0 +1,13 @@
+{
+  "name": "Clearing Document Number",
+  "dataType": "string",
+  "description": "Number of the document with which the line item was cleared.",
+  "sourceColumn": "ClearingDocNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

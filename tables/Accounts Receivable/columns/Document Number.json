@@ -1,0 +1,13 @@
+{
+  "name": "Document Number",
+  "dataType": "string",
+  "description": "The document number is the key that SAP uses to access the accounting document. Use the SAP transaction code FB03 to view the contents of the document.",
+  "sourceColumn": "DocumentNo",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

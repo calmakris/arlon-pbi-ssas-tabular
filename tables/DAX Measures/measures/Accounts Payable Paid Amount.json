@@ -1,0 +1,33 @@
+{
+  "name": "Accounts Payable Paid Amount",
+  "description": "This measure calculates the sum of money the company has paid through accounts payable documents (types \"KZ\" and \"ZP\") with a clearing date on or before yesterday. Filter the [Date] field in the 'Calendar' table to change this key date.",
+  "expression": [
+    "",
+    "VAR _MaxDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "RETURN",
+    "    CALCULATE(",
+    "        [Accounts Payable Amount],",
+    "        KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KZ\", \"ZP\" } ),",
+    "        FILTER(",
+    "            'Accounts Payable',",
+    "            'Accounts Payable'[Cleared Date] <= _MaxDate    -- cleared by set report date",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Payable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

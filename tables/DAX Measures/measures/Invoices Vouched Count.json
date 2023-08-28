@@ -1,0 +1,19 @@
+{
+  "name": "Invoices Vouched Count",
+  "description": "This measure quantifies the quantity of invoices recorded in SAP through either automated input by Medius or manual entry by the Finance department. It only includes documents labeled as \"KR,\" \"RE,\" \"KZ,\" and \"KG.\"",
+  "expression": [
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'Accounts Payable'[Document Number] ),",
+    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KR\", \"RE\", \"KZ\", \"KG\" } ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Accounts Payable'[Enter Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

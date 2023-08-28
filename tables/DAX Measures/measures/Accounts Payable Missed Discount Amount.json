@@ -1,0 +1,24 @@
+{
+  "name": "Accounts Payable Missed Discount Amount",
+  "description": "This measure calculates the amount of discounts that the company didn't take advantage of when paying certain accounts payable documents (marked as \"KZ\" and \"ZP\") within the cash discount period.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    SUM( 'Accounts Payable'[DiscAmountUSD] ),",
+    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KZ\", \"ZP\" } ),      -- payments only",
+    "    KEEPFILTERS( 'Accounts Payable'[DiscPaidUSD] = 0 ),                      -- actual discount paid is 0",
+    "    FILTER(",
+    "        'Accounts Payable',",
+    "        'Accounts Payable'[Cleared Date] <= [Report Date]                    -- cleared by set report date",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Payable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Accounts Receivable Open Amount Due This Month",
+  "description": "This measure computes the total outstanding money from customers for invoices due within the current month. Refer to the \"Accounts Receivable Open Amount\" measure for an understanding of \"outstanding money.\"",
+  "expression": [
+    "",
+    "VAR _MaxDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "VAR _BegMonth = EOMONTH( _MaxDate, -1 ) + 1",
+    "VAR _EndMonth = EOMONTH( _MaxDate, 0 )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        [Accounts Receivable Open Amount],",
+    "        FILTER(",
+    "            'Accounts Receivable',",
+    "            'Accounts Receivable'[Due Date] >= _BegMonth",
+    "                && 'Accounts Receivable'[Due Date] <= _EndMonth",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\zTime-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

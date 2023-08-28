@@ -1,0 +1,13 @@
+{
+  "name": "Accounts Payable Amount",
+  "description": "This measure adds together all the amounts that the company is owed to its vendors and suppliers.",
+  "expression": "SUM( 'Accounts Payable'[AmountUSD] )",
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Payable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

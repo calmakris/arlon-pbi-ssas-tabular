@@ -1,0 +1,32 @@
+{
+  "name": "Accounts Receivable Open Amount Overdue",
+  "description": "This measure determines the total amount in unpaid customer invoices with due dates preceding a chosen date. An accounts receivable document is considered as \"unpaid\" if it is not been cleared yet before the key date set. By default, it examines overdue invoices with due dates before yesterday.",
+  "expression": [
+    "",
+    "VAR _MaxDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        [Accounts Receivable Open Amount],",
+    "        FILTER(",
+    "            'Accounts Receivable',",
+    "            'Accounts Receivable'[Due Date] < _MaxDate",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\zTime-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

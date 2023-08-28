@@ -1,0 +1,13 @@
+{
+  "name": "Net Cash Flow",
+  "description": "This calculation reflects the financial difference between the total amount received from customers (\"Accounts Receivable Payment Amount\") and the total amount paid to suppliers (\"Accounts Payable Paid Amount\").",
+  "expression": "[Accounts Receivable Payment Amount] - [Accounts Payable Paid Amount]",
+  "formatString": "#,0",
+  "displayFolder": "Finance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

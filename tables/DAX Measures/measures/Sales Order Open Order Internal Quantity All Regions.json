@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Open Order Internal Quantity All Regions",
+  "description": "Total quantity in the sales order that is not yet shipped nor allocated to the customer. Unlike the sales order open quantity, this measure considers allocations and doesn't count them as open. It also ignores the data restriction rules at the sales person level, therefore, it is the internal open order quantities of all sales regions.",
+  "expression": "SUM(FACT_SalesOrderOpenAll[IntenalOpenQuantity])",
+  "formatString": "#,##0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

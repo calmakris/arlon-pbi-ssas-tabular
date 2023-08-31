@@ -1,0 +1,14 @@
+{
+  "name": "FACT_SalesOrderOpenAll",
+  "dataView": "full",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = ARLPBI_STAGE,",
+      "    dbo_FACT_SalesOrderOpenAll = Source{[Schema=\"dbo\",Item=\"FACT_SalesOrderOpenAll\"]}[Data]",
+      "in",
+      "    dbo_FACT_SalesOrderOpenAll"
+    ]
+  }
+}

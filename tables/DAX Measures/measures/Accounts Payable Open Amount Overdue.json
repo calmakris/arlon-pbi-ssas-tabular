@@ -1,0 +1,32 @@
+{
+  "name": "Accounts Payable Open Amount Overdue",
+  "description": "This measure establishes the complete sum within unpaid vendor invoices having due dates before a selected date. An accounts payable document is categorized as \"unpaid\" if it has not yet been cleared before the designated key date. By default, this calculation focuses on invoices past their due dates before yesterday. Filter the [Date] field in the 'Calendar' table to change this key date.",
+  "expression": [
+    "",
+    "VAR _MaxDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "RETURN",
+    "CALCULATE(",
+    "    [Accounts Payable Open Amount],",
+    "    FILTER(",
+    "        'Accounts Payable',",
+    "        'Accounts Payable'[Due Date] < _MaxDate",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\zTime-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

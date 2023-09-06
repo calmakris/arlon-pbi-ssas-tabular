@@ -26,5 +26,11 @@
   ],
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "isHidden": true,
-  "displayFolder": "Warehouse"
+  "displayFolder": "Warehouse",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

@@ -1,0 +1,49 @@
+{
+  "name": "Accounts Payable",
+  "description": "This table stores all data concerning outgoing payments for received goods and services. Use the SAP transaction code FBL1N to look up this information.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Accounts Payable\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Payable\",",
+        "    \"fromColumn\": \"Due Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Payable\",",
+        "    \"fromColumn\": \"Enter Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Payable\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Payable\",",
+        "    \"fromColumn\": \"VendorNoKey\",",
+        "    \"toTable\": \"Vendor Master\",",
+        "    \"toColumn\": \"Vendor Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

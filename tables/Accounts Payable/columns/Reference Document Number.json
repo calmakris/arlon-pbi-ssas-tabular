@@ -1,0 +1,13 @@
+{
+  "name": "Reference Document Number",
+  "dataType": "string",
+  "description": "The reference document number can contain the document number of the customer/vendor.",
+  "sourceColumn": "ReferenceDocNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

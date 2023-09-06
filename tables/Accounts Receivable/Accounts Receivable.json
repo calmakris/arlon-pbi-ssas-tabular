@@ -1,0 +1,42 @@
+{
+  "name": "Accounts Receivable",
+  "description": "This table stores all information related to customer payments for goods and services rendered. Use the SAP transaction code FBL5N to look up this information.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Accounts Receivable\",",
+        "    \"fromColumn\": \"CompanyCode\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Receivable\",",
+        "    \"fromColumn\": \"CustomerOrgKey\",",
+        "    \"toTable\": \"Customer Master\",",
+        "    \"toColumn\": \"CustomerOrgKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Receivable\",",
+        "    \"fromColumn\": \"Due Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Accounts Receivable\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

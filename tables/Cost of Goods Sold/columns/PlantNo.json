@@ -3,5 +3,11 @@
   "dataType": "string",
   "isHidden": true,
   "sourceColumn": "PlantNo",
-  "isAvailableInMdx": false
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

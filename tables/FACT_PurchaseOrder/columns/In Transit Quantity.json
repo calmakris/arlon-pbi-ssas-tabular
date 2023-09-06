@@ -4,6 +4,7 @@
   "isHidden": true,
   "sourceColumn": "InTransitQuantity",
   "formatString": "#,0.00",
+  "isAvailableInMdx": false,
   "displayFolder": "_Quantities",
   "annotations": [
     {

@@ -8,6 +8,10 @@
     {
       "name": "Format",
       "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
     }
   ]
 }

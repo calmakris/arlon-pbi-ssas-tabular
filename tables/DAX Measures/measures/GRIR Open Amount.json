@@ -29,7 +29,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Goods and Invoice Receipts\"]"
+      "value": "[\"Finance\",\"Goods and Invoice Receipts\"]"
     }
   ]
 }

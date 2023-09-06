@@ -2,5 +2,11 @@
   "name": "Days In Month",
   "expression": " CALCULATE( COUNTROWS( 'Calendar' ), ALL( 'Calendar' ), VALUES( 'Calendar'[Year_Month_Sort_Key] ))",
   "isHidden": true,
-  "displayFolder": "_Dates"
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

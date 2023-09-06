@@ -13,5 +13,11 @@
     ")"
   ],
   "formatString": "#,0",
-  "displayFolder": "Sales Order\\_Order Entry Analysis"
+  "displayFolder": "Sales Order\\_Order Entry Analysis",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

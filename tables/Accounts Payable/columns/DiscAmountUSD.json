@@ -1,0 +1,14 @@
+{
+  "name": "DiscAmountUSD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "DiscAmountUSD",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

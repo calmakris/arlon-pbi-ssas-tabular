@@ -3,5 +3,11 @@
   "description": "Total amount of materials received for the purchase order line item",
   "expression": " SUM('FACT_PurchaseOrder'[Goods Receipt Amount])",
   "formatString": "#,0",
-  "displayFolder": "Purchase Order"
+  "displayFolder": "Purchase Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

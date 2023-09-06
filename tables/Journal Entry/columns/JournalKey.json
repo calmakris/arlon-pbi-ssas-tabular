@@ -1,0 +1,13 @@
+{
+  "name": "JournalKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "JournalKey",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

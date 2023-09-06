@@ -3,5 +3,11 @@
   "description": "Net margin divided by net sales. Net margin is the difference between net sales and standard cost in the billing document.",
   "expression": " DIVIDE( [Net Margin], [Net Sales] )",
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
-  "displayFolder": "Sales Invoice"
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

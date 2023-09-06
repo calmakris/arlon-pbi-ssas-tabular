@@ -1,0 +1,14 @@
+{
+  "name": "Accounts Payable",
+  "mode": "import",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    Data = Source{[Schema=\"dbo\",Item=\"FACT_AccountsPayable\"]}[Data]",
+      "in",
+      "    Data"
+    ]
+  }
+}

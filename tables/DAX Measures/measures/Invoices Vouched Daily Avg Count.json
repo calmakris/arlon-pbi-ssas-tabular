@@ -1,0 +1,13 @@
+{
+  "name": "Invoices Vouched Daily Avg Count",
+  "description": "This measure calculates the average number of invoices that have been recorded either automatically by Medius or manually by the Finance department personnel per day. It achieves this by summing up the \"Invoices Vouched Count\" measure for each day in the calendar period and then dividing that sum by the total number of days within that period.",
+  "expression": "AVERAGEX( VALUES( 'Calendar'[Date] ), [Invoices Vouched Count] )",
+  "formatString": "#,0",
+  "displayFolder": "Finance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

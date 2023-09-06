@@ -23,7 +23,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Inventory\",\"Product Management\"]"
+      "value": "[\"Finance\",\"Inventory\",\"Product Management\"]"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "Document Type",
+  "dataType": "string",
+  "description": "The document type classifies the accounting documents. It is stored in the document header. The usage of the document type may vary from the SAP standard because it is defined by the Finance department.",
+  "sourceColumn": "DocumentType",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

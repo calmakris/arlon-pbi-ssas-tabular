@@ -1,0 +1,13 @@
+{
+  "name": "Referenced Document Entered By",
+  "dataType": "string",
+  "description": "Name of the person who created the referenced document in the complaint. The referenced document is most likely a sales order. Refer to the document flow of the complaint in SAP using the VA03 transaction code.",
+  "sourceColumn": "RefDocEnteredBy",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\"]"
+    }
+  ]
+}

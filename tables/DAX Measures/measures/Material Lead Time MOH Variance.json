@@ -1,0 +1,13 @@
+{
+  "name": "Material Lead Time MOH Variance",
+  "description": "Difference between inventory months coverage estimate and material lead time",
+  "expression": "[Inventory Months Coverage Estimate] - [Material Lead Time]",
+  "formatString": "#,##0.00",
+  "displayFolder": "MRP",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

@@ -8,8 +8,8 @@
     "",
     "RETURN",
     "SWITCH(TRUE(),",
-    "    \"CAST\" IN ALLSELECTED(Machine[Department]), CAST,",
-    "    \"COAT\" IN ALLSELECTED(Machine[Department]), COAT,",
+    "    \"CAST\" IN ALLSELECTED(Department[Department]), CAST,",
+    "    \"COAT\" IN ALLSELECTED(Department[Department]), COAT,",
     "    CAST + COAT",
     ")",
     ""

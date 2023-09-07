@@ -4,8 +4,8 @@
   "expression": [
     "",
     "SWITCH(TRUE(),",
-    "    \"CAST\" IN ALLSELECTED('Machine'[Department]), [CAST First Pass Reliability (Target)],",
-    "    \"COAT\" IN ALLSELECTED(Machine[Department]), [COAT First Pass Reliability (Target)],",
+    "    \"CAST\" IN ALLSELECTED('Department'[Department]), [CAST First Pass Reliability (Target)],",
+    "    \"COAT\" IN ALLSELECTED(Department[Department]), [COAT First Pass Reliability (Target)],",
     "    DIVIDE( ([CAST First Pass Reliability (Target)] + [COAT First Pass Reliability (Target)]), 2 )",
     ")"
   ],

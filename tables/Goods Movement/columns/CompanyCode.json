@@ -4,6 +4,7 @@
   "isHidden": true,
   "sourceColumn": "CompanyCode",
   "isAvailableInMdx": false,
+  "displayFolder": "Header",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

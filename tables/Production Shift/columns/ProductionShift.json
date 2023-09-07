@@ -1,0 +1,13 @@
+{
+  "name": "ProductionShift",
+  "dataType": "int64",
+  "isHidden": true,
+  "sourceColumn": "ProductionShift",
+  "isAvailableInMdx": false,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

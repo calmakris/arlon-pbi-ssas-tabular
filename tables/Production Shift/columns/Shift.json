@@ -1,10 +1,8 @@
 {
-  "type": "calculatedTableColumn",
   "name": "Shift",
   "dataType": "string",
-  "isNameInferred": false,
-  "isDataTypeInferred": true,
-  "sourceColumn": "[Value2]",
+  "description": "Ordinal number of the production shift",
+  "sourceColumn": "ShiftName",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

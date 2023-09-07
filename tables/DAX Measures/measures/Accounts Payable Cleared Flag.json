@@ -1,0 +1,32 @@
+{
+  "name": "Accounts Payable Cleared Flag",
+  "description": "This measure indicates whether a payment for an accounts payable document has been cleared based on a selected date. If used in a summarized table, it may appear as blank, therefore, use it at a document level only.",
+  "expression": [
+    "",
+    "-- This measure indicates if the document is cleared or not at document level only",
+    "-- If the measure is used above document level, this value is blank",
+    "VAR _CheckRecord = DISTINCTCOUNT( 'Accounts Payable'[Document Number] )",
+    "VAR _DueDate = MAX( 'Accounts Payable'[Due Date] )",
+    "VAR _ClearDate = MAX( 'Accounts Payable'[Cleared Date] )",
+    "VAR _Cleared = 1",
+    "VAR _Open = 0",
+    "",
+    "RETURN",
+    "IF(",
+    "    _CheckRecord = 1,",
+    "    IF(",
+    "        _ClearDate <= [Report Date],",
+    "        _Cleared,",
+    "        _Open",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Payable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

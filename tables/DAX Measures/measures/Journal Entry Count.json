@@ -1,0 +1,13 @@
+{
+  "name": "Journal Entry Count",
+  "description": "This metric denotes the tally of accounting/controlling documents logged in SAP and identified with the label \"ZA.\" The count is based on unique document numbers.",
+  "expression": "DISTINCTCOUNT( 'Journal Entry'[JournalKey] )",
+  "formatString": "#,0",
+  "displayFolder": "Finance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

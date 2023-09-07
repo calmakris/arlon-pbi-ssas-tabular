@@ -1,0 +1,13 @@
+{
+  "name": "Accounts Receivable Amount",
+  "description": "This measure adds together all the amounts that the company is owed by its customers. It is the sum of the amounts in the 'Accounts Receivable' table.",
+  "expression": "SUM( 'Accounts Receivable'[AmountUSD] )",
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Receivable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

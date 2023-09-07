@@ -1,0 +1,13 @@
+{
+  "name": "Document Line Number",
+  "dataType": "string",
+  "description": "All line items within an accounting document receive a number with which they can be identified. The numbers are assigned consecutively by the system when entering the document.",
+  "sourceColumn": "DocumentLineNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

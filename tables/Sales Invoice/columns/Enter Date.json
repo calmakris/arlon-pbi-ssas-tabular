@@ -1,0 +1,14 @@
+{
+  "name": "Enter Date",
+  "dataType": "dateTime",
+  "description": "Date in which the sales invoice was created",
+  "sourceColumn": "EnterDate",
+  "formatString": "Short Date",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Finance\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

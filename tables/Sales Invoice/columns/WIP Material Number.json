@@ -1,0 +1,13 @@
+{
+  "name": "WIP Material Number",
+  "dataType": "string",
+  "description": "The WIP part number of the sold material based on the latest and unlocked product version of the BOM.",
+  "sourceColumn": "WIPMaterialNo",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Finance\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
     "",
     "Product quality complaints are complaints entered with reason codes marked as 'Q' (quality). Open amount is the difference between the complaint and credit issued amount."
   ],
-  "expression": " DIVIDE( [Product Quality Open Amount] + 0, [Gross Sales] )",
+  "expression": " DIVIDE( [Product Quality Open Amount], [Gross Sales], 0 )",
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "displayFolder": "Complaints\\_Product Quality",
   "annotations": [

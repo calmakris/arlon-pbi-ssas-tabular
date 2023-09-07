@@ -12,7 +12,7 @@
     },
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Expenses\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+      "value": "[\"Expenses\",\"Finance\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
     }
   ]
 }

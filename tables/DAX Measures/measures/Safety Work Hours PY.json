@@ -16,5 +16,11 @@
   ],
   "formatString": "#,0",
   "isHidden": true,
-  "displayFolder": "Safety"
+  "displayFolder": "Safety",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

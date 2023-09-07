@@ -6,7 +6,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Operations\",\"Planning\",\"Warehouse\"]"
+      "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Finance\",\"Operations\",\"Planning\",\"Warehouse\"]"
     }
   ]
 }

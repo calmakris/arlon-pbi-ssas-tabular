@@ -1,0 +1,25 @@
+{
+  "name": "Sales Invoice Gross Sales Average",
+  "description": "This measure computes the average total revenue of sales invoices at the header level, considering the date on which they were entered into the system.",
+  "expression": [
+    "CALCULATE(",
+    "    AVERAGEX(",
+    "        SUMMARIZE(",
+    "            'Sales Invoice',",
+    "            'Sales Invoice'[Invoice Number],",
+    "            \"GrossSales\", [Gross Sales]",
+    "        ),",
+    "        [GrossSales]",
+    "    ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Invoice'[Enter Date] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Finance\",\"Generic Sales\",\"Product Management\"]"
+    }
+  ]
+}

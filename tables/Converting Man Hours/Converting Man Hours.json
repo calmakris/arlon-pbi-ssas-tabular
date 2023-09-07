@@ -19,6 +19,12 @@
         "    \"fromColumn\": \"Production Date\",",
         "    \"toTable\": \"Calendar\",",
         "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Converting Man Hours\",",
+        "    \"fromColumn\": \"Shift\",",
+        "    \"toTable\": \"Production Shift\",",
+        "    \"toColumn\": \"ProductionShift\"",
         "  }",
         "]"
       ]

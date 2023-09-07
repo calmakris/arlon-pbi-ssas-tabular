@@ -1,0 +1,13 @@
+{
+  "name": "Available Inventory Quantity All Regions",
+  "description": "Difference between unrestricted stock and allocated and open quantities in sales orders. It also ignores the data restriction rules at a sales person level, therefore, it is the global available stock.",
+  "expression": "[Unrestricted Stock Quantity]- [Sales Order Open Order Internal Quantity All Regions]",
+  "formatString": "#,##0.00",
+  "displayFolder": "Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

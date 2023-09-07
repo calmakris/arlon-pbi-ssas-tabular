@@ -4,6 +4,10 @@
   "isHidden": true,
   "annotations": [
     {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    },
+    {
       "name": "TabularEditor_Relationships",
       "value": "[]"
     }

@@ -20,7 +20,7 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Open Orders Report\"]"
+      "value": "[\"Finance\",\"Open Orders Report\"]"
     }
   ]
 }

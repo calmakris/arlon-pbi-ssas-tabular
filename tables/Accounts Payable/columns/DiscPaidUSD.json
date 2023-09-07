@@ -1,0 +1,14 @@
+{
+  "name": "DiscPaidUSD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "DiscPaidUSD",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Values",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

@@ -2,7 +2,6 @@
   "name": "Department",
   "dataType": "string",
   "sourceColumn": "Department",
-  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

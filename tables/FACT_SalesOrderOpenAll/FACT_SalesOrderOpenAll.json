@@ -1,0 +1,42 @@
+{
+  "name": "FACT_SalesOrderOpenAll",
+  "description": "An aggregated version of FACT_SalesOrder used to ignore the row-level security.",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_SalesOrderOpenAll\",",
+        "    \"fromColumn\": \"FirstDeliveryDateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_SalesOrderOpenAll\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_SalesOrderOpenAll\",",
+        "    \"fromColumn\": \"MaterialPlantKey\",",
+        "    \"toTable\": \"Plant Data for Material\",",
+        "    \"toColumn\": \"MaterialPlantKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_SalesOrderOpenAll\",",
+        "    \"fromColumn\": \"PlantKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

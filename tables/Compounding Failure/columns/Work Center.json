@@ -6,7 +6,9 @@
     "",
     "Use the 'Work Center' table for further details on this field."
   ],
+  "isHidden": true,
   "sourceColumn": "WorkCenter",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

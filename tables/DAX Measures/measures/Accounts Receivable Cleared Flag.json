@@ -1,0 +1,32 @@
+{
+  "name": "Accounts Receivable Cleared Flag",
+  "description": "This measure indicates whether a payment for an accounts receivable document has been cleared based on a selected date in the 'Calendar' table. If used in a summarized table, it may appear as blank, therefore, use it at a document level only.",
+  "expression": [
+    "",
+    "-- This measure indicates if the document is cleared or not at document level only",
+    "-- If the measure is used above document level, this value is blank",
+    "VAR _CheckRecord = DISTINCTCOUNT( 'Accounts Receivable'[Document Number] )",
+    "VAR _DueDate = MAX( 'Accounts Receivable'[Due Date] )",
+    "VAR _ClearDate = MAX( 'Accounts Receivable'[Cleared Date] )",
+    "VAR _Cleared = 1",
+    "VAR _Open = 0",
+    "",
+    "RETURN",
+    "IF(",
+    "    _CheckRecord = 1,",
+    "    IF(",
+    "        _ClearDate <= [Report Date],",
+    "        _Cleared,",
+    "        _Open",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Receivable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

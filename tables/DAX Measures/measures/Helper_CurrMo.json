@@ -2,5 +2,11 @@
   "name": "Helper_CurrMo",
   "expression": "YEAR([Beginning of Month]) * 100 + MONTH([Beginning of Month])",
   "isHidden": true,
-  "displayFolder": "_Helpers"
+  "displayFolder": "_Helpers",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
 }

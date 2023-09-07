@@ -3,5 +3,11 @@
   "description": "Total linear feet of the material in the billing document based on the length data in SAP’s material master",
   "expression": "SUM('Sales Invoice'[LinearFeetSold])",
   "formatString": "#,##0",
-  "displayFolder": "Sales Invoice"
+  "displayFolder": "Sales Invoice",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"QA Dashboard\"]"
+    }
+  ]
 }

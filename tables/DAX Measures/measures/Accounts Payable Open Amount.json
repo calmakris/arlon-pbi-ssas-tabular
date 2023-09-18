@@ -17,7 +17,7 @@
     "        [Accounts Payable Amount],",
     "        FILTER(",
     "            'Accounts Payable',",
-    "            'Accounts Payable'[Cleared Date] >= _MaxDate",
+    "            'Accounts Payable'[Cleared Date] > _MaxDate",
     "        )",
     "    )"
   ],

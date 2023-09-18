@@ -17,7 +17,7 @@
     "        SUM( 'Accounts Receivable'[AmountUSD] ),",
     "        FILTER(",
     "            'Accounts Receivable',",
-    "            'Accounts Receivable'[Cleared Date] >= _MaxDate",
+    "            'Accounts Receivable'[Cleared Date] > _MaxDate",
     "        )",
     "    )"
   ],

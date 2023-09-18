@@ -14,10 +14,11 @@
     "",
     "RETURN",
     "    CALCULATE(",
-    "        [Accounts Receivable Open Amount],",
+    "        [Accounts Receivable Amount],",
     "        FILTER(",
     "            'Accounts Receivable',",
-    "            'Accounts Receivable'[Due Date] < _MaxDate",
+    "            'Accounts Receivable'[Cleared Date] > _MaxDate",
+    "                && 'Accounts Receivable'[Due Date] < _MaxDate",
     "        )",
     "    )"
   ],

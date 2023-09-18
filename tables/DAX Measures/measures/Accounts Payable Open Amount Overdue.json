@@ -14,10 +14,11 @@
     "    ",
     "RETURN",
     "CALCULATE(",
-    "    [Accounts Payable Open Amount],",
+    "    [Accounts Payable Amount],",
     "    FILTER(",
     "        'Accounts Payable',",
-    "        'Accounts Payable'[Due Date] < _MaxDate",
+    "        'Accounts Payable'[Cleared Date] > _MaxDate",
+    "            && 'Accounts Payable'[Due Date] < _MaxDate",
     "    )",
     ")"
   ],

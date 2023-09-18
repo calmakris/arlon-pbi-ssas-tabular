@@ -8,7 +8,7 @@
     "        MAX( 'Calendar'[Date] ),",
     "        FILTER(",
     "            'Calendar',",
-    "            'Calendar'[Date] <= [Report Date]",
+    "            'Calendar'[Date] <= [AP & AR Key Date]",
     "        )",
     "    )",
     "    ",

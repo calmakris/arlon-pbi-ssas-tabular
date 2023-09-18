@@ -15,7 +15,7 @@
     "IF(",
     "    _CheckRecord = 1,",
     "    IF(",
-    "        _ClearDate <= [Report Date],",
+    "        _ClearDate <= [AP & AR Key Date],",
     "        _Cleared,",
     "        _Open",
     "    )",

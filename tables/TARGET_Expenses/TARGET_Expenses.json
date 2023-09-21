@@ -4,7 +4,34 @@
   "annotations": [
     {
       "name": "TabularEditor_Relationships",
-      "value": "[]"
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"TARGET_Expenses\",",
+        "    \"fromColumn\": \"CompanyCodeKey\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"TARGET_Expenses\",",
+        "    \"fromColumn\": \"CostCenterKey\",",
+        "    \"toTable\": \"Cost Center\",",
+        "    \"toColumn\": \"Cost Center\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"TARGET_Expenses\",",
+        "    \"fromColumn\": \"CostElementKey\",",
+        "    \"toTable\": \"Cost Element\",",
+        "    \"toColumn\": \"Cost Element\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"TARGET_Expenses\",",
+        "    \"fromColumn\": \"DateKey\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
     }
   ]
 }

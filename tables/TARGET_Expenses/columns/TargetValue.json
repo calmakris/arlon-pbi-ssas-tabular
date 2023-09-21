@@ -1,6 +1,6 @@
 {
   "name": "TargetValue",
-  "dataType": "decimal",
+  "dataType": "double",
   "isHidden": true,
   "sourceColumn": "TargetValue",
   "isAvailableInMdx": false

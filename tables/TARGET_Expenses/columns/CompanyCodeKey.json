@@ -2,5 +2,6 @@
   "name": "CompanyCodeKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "CompanyCodeKey"
+  "sourceColumn": "CompanyCodeKey",
+  "isAvailableInMdx": false
 }

@@ -1,8 +1,8 @@
 {
-  "name": "MRP Controller",
-  "dataType": "string",
-  "description": "Specifies the number of the MRP controller or group of MRP controllers responsible for material planning for the material.",
-  "sourceColumn": "MRPController",
+  "name": "Standard Price",
+  "dataType": "decimal",
+  "sourceColumn": "StandardPrice",
+  "formatString": "#,0.00",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

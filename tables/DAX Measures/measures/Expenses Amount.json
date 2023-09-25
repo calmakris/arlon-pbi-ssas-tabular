@@ -21,7 +21,7 @@
       "    \"Item Text\",",
       "        IF(",
       "            'Expenses'[Document Item Text] = \"\",",
-      "            RELATED( 'Purchase Order'[Material Description] )",
+      "            RELATED( 'Purchase Order'[Purchase Order Number] ) & \" \" & RELATED( 'Purchase Order'[Material Description] )",
       "        ),",
       "    \"Track No\", RELATED( 'Purchase Order'[Req Track Number]),",
       "    \"Value\", 'Expenses'[Amount],",

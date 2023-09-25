@@ -1,7 +1,8 @@
 {
-  "name": "Material Number",
+  "name": "MaterialNoKey",
   "dataType": "string",
   "description": "Material number of the line item",
+  "isHidden": true,
   "sourceColumn": "MaterialNoKey",
   "annotations": [
     {

@@ -1,0 +1,12 @@
+{
+  "name": "MaterialPlantKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialPlantKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\",\"Goods and Invoice Receipts\"]"
+    }
+  ]
+}

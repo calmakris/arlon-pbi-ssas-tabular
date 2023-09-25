@@ -1,8 +1,8 @@
 {
-  "name": "Buyer Code",
-  "dataType": "string",
-  "description": "Equivalent to the “purchasing group in SAP”",
-  "sourceColumn": "BuyerCode",
+  "name": "Price Unit",
+  "dataType": "int64",
+  "sourceColumn": "PriceUnit",
+  "formatString": "#,0",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

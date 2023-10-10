@@ -1,5 +1,5 @@
 {
-  "name": "ProcessOrderNoKey",
+  "name": "Process Order Number",
   "dataType": "string",
   "isHidden": true,
   "sourceColumn": "ProcessOrderNoKey",

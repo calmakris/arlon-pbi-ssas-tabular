@@ -1,13 +1,13 @@
 {
-  "name": "MaterialPlantKey",
+  "name": "MaterialNoKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "MaterialPlantKey",
+  "sourceColumn": "MaterialNoKey",
   "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Goods and Invoice Receipts\"]"
+      "value": "[\"Inventory\"]"
     }
   ]
 }

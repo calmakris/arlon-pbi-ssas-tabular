@@ -1,0 +1,11 @@
+{
+  "name": "Container Key",
+  "dataType": "string",
+  "sourceColumn": "ContainerKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

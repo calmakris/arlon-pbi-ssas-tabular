@@ -4,6 +4,7 @@
   "description": "Material number of the line item",
   "isHidden": true,
   "sourceColumn": "MaterialNoKey",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

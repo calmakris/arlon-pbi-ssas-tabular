@@ -1,13 +1,13 @@
 {
-  "name": "MaterialPlantKey",
+  "name": "PurchaseOrderLineKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "MaterialPlantKey",
+  "sourceColumn": "PurchaseOrderLineKey",
   "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Goods and Invoice Receipts\"]"
+      "value": "[\"Inventory\"]"
     }
   ]
 }

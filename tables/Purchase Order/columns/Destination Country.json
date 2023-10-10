@@ -1,0 +1,13 @@
+{
+  "name": "Destination Country",
+  "dataType": "string",
+  "description": "Country where the item will arrive",
+  "sourceColumn": "DestinationCountry",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Finance\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Origin Country",
+  "dataType": "string",
+  "description": "Country where the item will be shipped from",
+  "sourceColumn": "OriginCountry",
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Expenses\",\"Finance\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "name": "Count in COMP First Pass Flag",
   "dataType": "string",
-  "description": "This value is \"Yes\" if either the [Delivery Completed Flag] or [Close Flag] is \"Yes\" and the order's work center belongs to Compounding department",
+  "description": "Determines if the process order belongs to the Compounding department and has been delivered completely (as indicated by the 'Final Delivery' indicator in the 'Goods Receipt' tab in COR3 transaction code).",
   "sourceColumn": "CountForCompFPassFlag",
   "displayFolder": "_Flags",
   "annotations": [

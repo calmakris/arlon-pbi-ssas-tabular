@@ -1,7 +1,7 @@
 {
   "name": "Delivery Completed Flag",
   "dataType": "string",
-  "description": "Indicates that the item is to be regarded as closed.",
+  "description": "Indicates that the item is to be regarded as closed (see the 'Final Delivery' indicator in the 'Goods Receipt' tab in COR3 tcode).",
   "sourceColumn": "FinalDeliverFlag",
   "displayFolder": "_Flags",
   "annotations": [

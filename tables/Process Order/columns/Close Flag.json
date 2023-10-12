@@ -1,7 +1,7 @@
 {
   "name": "Close Flag",
   "dataType": "string",
-  "description": "Calculated column; Value is 'Yes' if the order has TECO, CLSD, or DLFL status.",
+  "description": "Determines if the process order has closed (CLSD) or deleted (DLFL) status.",
   "sourceColumn": "CloseFlag",
   "displayFolder": "_Flags",
   "annotations": [

@@ -1,7 +1,7 @@
 {
   "name": "Delivery Required Flag",
   "dataType": "string",
-  "description": "Specifies whether the item involves a goods receipt.",
+  "description": "Specifies whether the item involves a goods receipt (refer to the 'Goods Receipt' indicator in the 'Goods Receipt' tab in COR3 tcode).",
   "sourceColumn": "DeliverFlag",
   "displayFolder": "_Flags",
   "annotations": [

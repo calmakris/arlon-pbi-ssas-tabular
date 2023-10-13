@@ -1,0 +1,12 @@
+{
+  "name": "Batch Number",
+  "dataType": "string",
+  "description": "Batch number of the material received",
+  "sourceColumn": "BatchNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

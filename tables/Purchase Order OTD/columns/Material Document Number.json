@@ -1,0 +1,12 @@
+{
+  "name": "Material Document Number",
+  "dataType": "string",
+  "description": "Number of the material document with which a goods receipt was posted.",
+  "sourceColumn": "MaterialDocNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

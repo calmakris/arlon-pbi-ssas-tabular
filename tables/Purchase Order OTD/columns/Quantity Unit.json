@@ -1,0 +1,12 @@
+{
+  "name": "Quantity Unit",
+  "dataType": "string",
+  "description": "Specifies the unit of measure in which the goods receipt is entered.",
+  "sourceColumn": "QuantityUnit",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

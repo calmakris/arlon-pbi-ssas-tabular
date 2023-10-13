@@ -1,0 +1,29 @@
+{
+  "name": "Purchase Order OTD",
+  "description": "This measure calculates the delivery timeliness of standard purchase orders for inventory items by determining the percentage of goods receipts that were received on time. It does this by dividing the number of on-time goods receipt transactions by the total number of goods receipt transactions.",
+  "expression": [
+    "",
+    "VAR _LateCount =",
+    "    CALCULATE(",
+    "        COUNTROWS( 'Purchase Order OTD' ),",
+    "        FILTER(",
+    "            ALL( 'Purchase Order OTD'[Late Flag] ),",
+    "            'Purchase Order OTD'[Late Flag] = \"Yes\"",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    DIVIDE(",
+    "        [Purchase Order GR Transactions Count] - _LateCount,",
+    "        [Purchase Order GR Transactions Count]",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Purchase Order\\_OTD",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Finance\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

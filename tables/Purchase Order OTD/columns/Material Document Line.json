@@ -1,0 +1,12 @@
+{
+  "name": "Material Document Line",
+  "dataType": "string",
+  "description": "Specifies the number that uniquely identifies an item in of a material document.",
+  "sourceColumn": "MaterialDocLine",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

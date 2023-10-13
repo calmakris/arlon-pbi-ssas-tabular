@@ -1,0 +1,19 @@
+{
+  "name": "Purchase Order GR Transactions Count",
+  "description": "This metric simply tallies the number of goods receipt (GR) transactions associated with a specific purchase order schedule line regardless of the late status. This count is a crucial component utilized in the 'Purchase Order OTD' measure.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    COUNTROWS( 'Purchase Order OTD' ),",
+    "    ALL( 'Purchase Order OTD'[Late Flag] )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_OTD",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\",\"Inventory\",\"Open Orders Report\",\"Purchase Orders\"]"
+    }
+  ]
+}

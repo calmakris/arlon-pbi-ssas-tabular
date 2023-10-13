@@ -1,0 +1,12 @@
+{
+  "name": "Purchase Order Schedule Line",
+  "dataType": "string",
+  "description": "Schedule line item in the purchase order",
+  "sourceColumn": "ScheduleLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

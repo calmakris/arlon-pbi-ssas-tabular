@@ -1,7 +1,7 @@
 {
-  "name": "CalendarTimeKey",
+  "name": "CompanyCodeKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "CalendarTimeKey",
+  "sourceColumn": "CompanyCodeKey",
   "isAvailableInMdx": false
 }

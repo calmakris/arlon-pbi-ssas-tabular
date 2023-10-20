@@ -1,0 +1,7 @@
+{
+  "name": "DateKey",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "DateKey",
+  "isAvailableInMdx": false
+}

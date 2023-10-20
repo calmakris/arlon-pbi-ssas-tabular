@@ -1,7 +1,7 @@
 {
   "name": "Same Day Flag",
   "dataType": "string",
-  "description": "Calculated column. Value is 'Yes' if the order comment contains 'SAMEDAY' or 'SAME-DAY'.",
+  "description": "Determines if Planning sets the process order to be finished the same day.",
   "sourceColumn": "SameDayFlag",
   "displayFolder": "_Flags",
   "annotations": [

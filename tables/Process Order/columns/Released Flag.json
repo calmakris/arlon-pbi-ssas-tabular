@@ -1,0 +1,13 @@
+{
+  "name": "Released Flag",
+  "dataType": "string",
+  "description": "Determines if the process order has a released (REL) status.",
+  "sourceColumn": "ReleasedFlag",
+  "displayFolder": "_Flags",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

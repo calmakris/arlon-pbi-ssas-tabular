@@ -1,0 +1,13 @@
+{
+  "name": "Statistical Delivery Date",
+  "dataType": "dateTime",
+  "description": "The date in which the vendor acknowledges when the material is supposed to arrive. Each date corresponds to a schedule line in the purchase order.",
+  "sourceColumn": "StatDeliveryDate",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

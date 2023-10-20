@@ -3,7 +3,7 @@
   "description": "Fiscal year-to-date count of orders with the closed flag status at the same period last year",
   "expression": "CALCULATE( [Process Order Count Completed FYTD], SAMEPERIODLASTYEAR('Calendar'[Date]) )",
   "formatString": "#,0",
-  "displayFolder": "Process Order\\_Time-Based",
+  "displayFolder": "Process Order\\zTime-Based",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

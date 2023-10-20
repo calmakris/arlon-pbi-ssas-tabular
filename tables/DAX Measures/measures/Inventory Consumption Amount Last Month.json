@@ -1,0 +1,43 @@
+{
+  "name": "Inventory Consumption Amount Last Month",
+  "description": "This measure is the total quantity of inventory consumption in the previous calendar month. For example, if today is October 2023, this measure is the total consumption in September 2023.",
+  "expression": [
+    "VAR _NumOfMonths = 1",
+    "VAR _MaxDate =",
+    "    CALCULATE(",
+    "        MAX(Calendar[Start of Month]),",
+    "        FILTER(",
+    "            ALL( Calendar ),",
+    "            Calendar[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "VAR _MinDate = EDATE(_MaxDate, -_NumOfMonths)",
+    "",
+    "   ",
+    "   VAR AMU = ",
+    "        CALCULATE(",
+    "            DIVIDE( ABS( SUM( 'Inventory Consumption'[Quantity] ) + 0 ), _NumOfMonths ),",
+    "            FILTER(",
+    "                ALL( Calendar[Date] ),",
+    "                Calendar[Date] >= _MinDate",
+    "                    && Calendar[Date] < _MaxDate",
+    "            )",
+    "        )",
+    "    ",
+    "  ",
+    "RETURN",
+    "    IF(",
+    "        AMU = 0,",
+    "        BLANK(),",
+    "        AMU",
+    "    )"
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Inventory\\_Consumption",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

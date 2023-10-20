@@ -1,0 +1,12 @@
+{
+  "name": "Late Flag",
+  "dataType": "string",
+  "description": "A goods receipt is late if it is posted two days after the statistical delivery date of the schedule line, which is the vendor acknoledged delivery date.",
+  "sourceColumn": "LateFlag",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 {
-  "name": "ProcessOrderNoKey",
+  "name": "MaterialPlantKey",
   "dataType": "string",
   "isHidden": true,
-  "sourceColumn": "ProcessOrderNoKey",
+  "sourceColumn": "MaterialPlantKey",
   "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Inventory\",\"Warehouse\"]"
+      "value": "[\"Finance\",\"Goods and Invoice Receipts\"]"
     }
   ]
 }

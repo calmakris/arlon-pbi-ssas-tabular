@@ -1,0 +1,11 @@
+{
+  "name": "Delivered Quantity",
+  "expression": "SUM( 'EMEA Container'[Delivered Qty] )",
+  "formatString": "#,0.00",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\"]"
+    }
+  ]
+}

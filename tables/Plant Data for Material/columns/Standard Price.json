@@ -1,0 +1,12 @@
+{
+  "name": "Standard Price",
+  "dataType": "decimal",
+  "sourceColumn": "StandardPrice",
+  "formatString": "#,0.00",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Purchase Orders\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

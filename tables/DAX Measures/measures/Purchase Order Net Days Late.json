@@ -1,0 +1,27 @@
+{
+  "name": "Purchase Order Net Days Late",
+  "description": "This measure quantifies the timeliness of goods receipt transactions in relation to their scheduled delivery on purchase orders. It calculates the average number of days between the goods receipt posting date and the corresponding schedule line in the purchase order. Positive values greater than 1 indicate a delay, while values less than or equal to 1 signify on-time delivery.",
+  "expression": [
+    "",
+    "ROUNDUP(",
+    "    AVERAGEX(",
+    "        SUMMARIZE(",
+    "            'Purchase Order OTD',",
+    "            'Purchase Order OTD'[PurchaseOrderLineKey],",
+    "            'Purchase Order OTD'[Purchase Order Schedule Line],",
+    "            \"_AvgDaysLate\", AVERAGE( 'Purchase Order OTD'[Net Days Late] )",
+    "        ),",
+    "        [_AvgDaysLate]",
+    "    ),",
+    "    0",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Purchase Order\\_OTD",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\",\"Inventory\",\"Open Orders Report\",\"Purchase Orders\"]"
+    }
+  ]
+}

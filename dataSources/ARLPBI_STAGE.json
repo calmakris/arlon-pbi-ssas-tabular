@@ -4,8 +4,8 @@
   "connectionDetails": {
     "protocol": "tds",
     "address": {
-      "server": "ARLPBIDEV",
-      "database": "ARLPBI_STAGE"
+      "server": "ARLON-PL-PBIDEV",
+      "database": "PBI_STAGE"
     },
     "authentication": null,
     "query": null

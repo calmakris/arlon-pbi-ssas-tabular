@@ -1,15 +1,34 @@
 {
   "name": "Expenses Amount",
   "description": "Total amount posted in the expenses related cost elements per cost center",
-  "expression": [
-    "",
-    "CALCULATE(",
-    "    SUM(Expenses[Amount]) + 0,",
-    "    ALL( Plant[Plant] )",
-    ")"
-  ],
+  "expression": "SUM( 'Expenses'[Amount] )",
   "formatString": "#,0",
   "displayFolder": "Expenses",
+  "detailRowsDefinition": {
+    "expression": [
+      "SELECTCOLUMNS(",
+      "    'Expenses',",
+      "    \"Cost Center\", 'Expenses'[CostCenter],",
+      "    \"Cost Center Name\", RELATED( 'Cost Center'[Cost Center Name] ),",
+      "    \"Dept\", 'Expenses'[Department],",
+      "    \"Cost Element\", 'Expenses'[CostElement],",
+      "    \"Cost Element Name\", RELATED( 'Cost Element'[Cost Element Name] ),",
+      "    \"Is Controllable\", RELATED( 'Cost Element'[Controllable Expense Flag] ),",
+      "    \"Document #\", 'Expenses'[Document Number],",
+      "    \"Entered By\", 'Expenses'[Entered By],",
+      "    \"Posting Date\", 'Expenses'[Posting Date],",
+      "    \"Offset Acct Name\", 'Expenses'[Offset Account Name],",
+      "    \"Item Text\",",
+      "        IF(",
+      "            'Expenses'[Document Item Text] = \"\",",
+      "            RELATED( 'Purchase Order'[Purchase Order Number] ) & \" \" & RELATED( 'Purchase Order'[Material Description] )",
+      "        ),",
+      "    \"Track No\", RELATED( 'Purchase Order'[Req Track Number]),",
+      "    \"Value\", 'Expenses'[Amount],",
+      "    \"Crcy\", 'Expenses'[Currency]",
+      ")"
+    ]
+  },
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

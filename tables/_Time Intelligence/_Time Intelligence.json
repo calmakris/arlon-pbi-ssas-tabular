@@ -8,7 +8,7 @@
       {
         "name": "Current",
         "expression": "SELECTEDMEASURE()",
-        "ordinal": 1
+        "ordinal": 0
       },
       {
         "name": "MTD",
@@ -24,7 +24,7 @@
           "    )",
           ")"
         ],
-        "ordinal": 5
+        "ordinal": 4
       },
       {
         "name": "YTD",
@@ -40,12 +40,12 @@
           "    )",
           ")"
         ],
-        "ordinal": 12
+        "ordinal": 10
       },
       {
         "name": "PY",
         "expression": "CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Calendar'[Date]) )",
-        "ordinal": 18
+        "ordinal": 17
       },
       {
         "name": "PY YTD",
@@ -56,7 +56,7 @@
           "    '_Time Intelligence'[Time Calculation] = \"YTD\"",
           ")"
         ],
-        "ordinal": 13
+        "ordinal": 12
       },
       {
         "name": "PY MTD",
@@ -67,7 +67,7 @@
           "    '_Time Intelligence'[Time Calculation] = \"MTD\"",
           ")"
         ],
-        "ordinal": 7
+        "ordinal": 6
       },
       {
         "name": "FYTD",
@@ -83,7 +83,7 @@
           "    )",
           ")"
         ],
-        "ordinal": 15
+        "ordinal": 14
       },
       {
         "name": "PY FYTD",
@@ -112,7 +112,7 @@
           "    BLANK()",
           ")"
         ],
-        "ordinal": 19
+        "ordinal": 18
       },
       {
         "name": "CD",
@@ -126,7 +126,7 @@
           "    )",
           ")"
         ],
-        "ordinal": 2
+        "ordinal": 1
       },
       {
         "name": "PD",
@@ -136,7 +136,7 @@
           "    PREVIOUSDAY( 'Calendar'[Date] )",
           ")"
         ],
-        "ordinal": 4
+        "ordinal": 3
       },
       {
         "name": "MTD PY Var",
@@ -157,7 +157,7 @@
           "    BLANK()",
           ")"
         ],
-        "ordinal": 8
+        "ordinal": 7
       },
       {
         "name": "YTD PY Var",
@@ -171,7 +171,7 @@
           "    '_Time Intelligence'[Time Calculation] = \"PY YTD\"",
           ")"
         ],
-        "ordinal": 14
+        "ordinal": 13
       },
       {
         "name": "FTYD PY Var",
@@ -185,7 +185,7 @@
           "    '_Time Intelligence'[Time Calculation] = \"PY FYTD\"",
           ")"
         ],
-        "ordinal": 16
+        "ordinal": 15
       },
       {
         "name": "CD Weekday",
@@ -199,7 +199,7 @@
           "    )",
           ")"
         ],
-        "ordinal": 3
+        "ordinal": 2
       },
       {
         "name": "MTD Weekday",
@@ -215,7 +215,7 @@
           "    )",
           ")"
         ],
-        "ordinal": 6
+        "ordinal": 5
       },
       {
         "name": "MTD PY Var%",
@@ -231,7 +231,7 @@
           "    )",
           ") * 100"
         ],
-        "ordinal": 9
+        "ordinal": 8
       },
       {
         "name": "PM MTD",
@@ -247,7 +247,7 @@
           "    )",
           ")"
         ],
-        "ordinal": 11
+        "ordinal": 9
       },
       {
         "name": "MTD PM Var",
@@ -268,7 +268,7 @@
           "    BLANK()",
           ")"
         ],
-        "ordinal": 12
+        "ordinal": 11
       },
       {
         "name": "CW",
@@ -282,14 +282,14 @@
           "    )",
           ")"
         ],
-        "ordinal": 20
+        "ordinal": 19
       }
     ]
   },
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",

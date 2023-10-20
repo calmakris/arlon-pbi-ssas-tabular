@@ -1,0 +1,63 @@
+{
+  "name": "Purchase Order OTD",
+  "description": [
+    "This table tracks the delivery timeliness of standard purchase orders for inventory items. It compares scheduled delivery dates with actual receipt dates and categorizes them as on-time or late based on a specific threshold by matching the goods receipts to their corresponding scheduled lines, and calculates the on-time delivery performance. A goods receipt is on time if it is posted on or before the day after the statistical delivery date of the schedule line which is the vendor acknowledged arrival date.",
+    "",
+    "Use the 'Company Code', 'Material Master', 'Plant Data for Material', 'Plant', 'Purchase Order' and 'Vendor Master' tables for more details on this table."
+  ],
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Purchase Orders\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"CompanyCodeKey\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"MaterialPlantKey\",",
+        "    \"toTable\": \"Plant Data for Material\",",
+        "    \"toColumn\": \"MaterialPlantKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"PlantNoKey\",",
+        "    \"toTable\": \"Plant\",",
+        "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"PurchaseOrderLineKey\",",
+        "    \"toTable\": \"Purchase Order\",",
+        "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"Statistical Delivery Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Purchase Order OTD\",",
+        "    \"fromColumn\": \"VendorNoKey\",",
+        "    \"toTable\": \"Vendor Master\",",
+        "    \"toColumn\": \"Vendor Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

@@ -1,9 +1,8 @@
 {
-  "name": "Avg Monthly Inventory Consumption Quantity Last 3 Months",
-  "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 3 calendar months. Can be toggled between quantity and amount values (default = quantity).",
+  "name": "Inventory Consumption Amount Last Month",
+  "description": "This measure is the total quantity of inventory consumption in the previous calendar month. For example, if today is October 2023, this measure is the total consumption in September 2023.",
   "expression": [
-    "",
-    "VAR _NumOfMonths = 3",
+    "VAR _NumOfMonths = 1",
     "VAR _MaxDate =",
     "    CALCULATE(",
     "        MAX(Calendar[Start of Month]),",
@@ -14,10 +13,8 @@
     "    )",
     "VAR _MinDate = EDATE(_MaxDate, -_NumOfMonths)",
     "",
-    "RETURN",
-    "    IF(",
-    "        ISFILTERED(Calendar)",
-    "            && [Inventory Snapshot Quantity],",
+    "   ",
+    "   VAR AMU = ",
     "        CALCULATE(",
     "            DIVIDE( ABS( SUM( 'Inventory Consumption'[Quantity] ) + 0 ), _NumOfMonths ),",
     "            FILTER(",
@@ -26,14 +23,21 @@
     "                    && Calendar[Date] < _MaxDate",
     "            )",
     "        )",
+    "    ",
+    "  ",
+    "RETURN",
+    "    IF(",
+    "        AMU = 0,",
+    "        BLANK(),",
+    "        AMU",
     "    )"
   ],
-  "formatString": "#,0.00",
+  "formatString": "#,##0.00",
   "displayFolder": "Inventory\\_Consumption",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Inventory\",\"Operations\"]"
+      "value": "[\"Inventory\",\"Operations\"]"
     }
   ]
 }

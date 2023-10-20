@@ -1,5 +1,5 @@
 {
-  "name": "Avg Monthly Inventory Consumption Quantity Last 3 Months",
+  "name": "Avg Monthly Inventory Consumption Quantity Last 3 Months New",
   "description": "Monthly average of sum of 'Inventory Consumption'[Quantity] posted in the previous 3 calendar months. Can be toggled between quantity and amount values (default = quantity).",
   "expression": [
     "",
@@ -14,11 +14,8 @@
     "    )",
     "VAR _MinDate = EDATE(_MaxDate, -_NumOfMonths)",
     "",
-    "RETURN",
-    "    IF(",
-    "        ISFILTERED(Calendar)",
-    "            && [Inventory Snapshot Quantity],",
-    "        CALCULATE(",
+    "",
+    " VAR AMU = CALCULATE(",
     "            DIVIDE( ABS( SUM( 'Inventory Consumption'[Quantity] ) + 0 ), _NumOfMonths ),",
     "            FILTER(",
     "                ALL( Calendar[Date] ),",
@@ -26,14 +23,15 @@
     "                    && Calendar[Date] < _MaxDate",
     "            )",
     "        )",
+    "    ",
+    "  ",
+    "RETURN",
+    "    IF(",
+    "        AMU = 0,",
+    "        BLANK(),",
+    "        AMU",
     "    )"
   ],
-  "formatString": "#,0.00",
-  "displayFolder": "Inventory\\_Consumption",
-  "annotations": [
-    {
-      "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Inventory\",\"Operations\"]"
-    }
-  ]
+  "formatString": "#,##0.00",
+  "displayFolder": "Inventory\\_Consumption"
 }

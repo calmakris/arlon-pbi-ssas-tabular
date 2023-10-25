@@ -1,15 +1,11 @@
 {
-  "name": "Confirm Date",
+  "name": "Last Goods Issue Date",
   "dataType": "dateTime",
-  "description": "Date when the order quantity is delivered",
-  "sourceColumn": "ConfirmDate",
+  "description": "Date of the last goods issue transaction against the order",
+  "sourceColumn": "LastGoodsIssueDate",
   "formatString": "Short Date",
   "displayFolder": "_Dates",
   "annotations": [
-    {
-      "name": "Format",
-      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-    },
     {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\",\"Operations\",\"Planning\"]"

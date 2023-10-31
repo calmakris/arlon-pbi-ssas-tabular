@@ -1,0 +1,22 @@
+{
+  "name": "CAST Process Order First Pass Hit",
+  "description": "Number of process orders ran that impacts the overall first pass metric, according to the casting log",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'Upstream Log'[Process Order Number] ),",
+    "    KEEPFILTERS( 'Upstream Log'[Department] = \"CAST\" ),",
+    "    KEEPFILTERS( 'Upstream Log'[Process Order Number] <> \"000000000000\" ),",
+    "    KEEPFILTERS( 'Upstream Log'[Process Order Number] <> BLANK() ),",
+    "    KEEPFILTERS( 'Upstream Log'[First Pass Hit] <> BLANK() )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

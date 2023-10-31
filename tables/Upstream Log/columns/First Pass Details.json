@@ -1,0 +1,12 @@
+{
+  "name": "First Pass Details",
+  "dataType": "string",
+  "description": "Details on the first pass hit",
+  "sourceColumn": "FPDetails",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

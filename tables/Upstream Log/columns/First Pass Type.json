@@ -1,0 +1,12 @@
+{
+  "name": "First Pass Type",
+  "dataType": "string",
+  "description": "Type of first pass hit",
+  "sourceColumn": "FPType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

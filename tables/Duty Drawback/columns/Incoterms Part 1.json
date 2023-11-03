@@ -1,6 +1,7 @@
 {
   "name": "Incoterms Part 1",
   "dataType": "string",
+  "description": "First part of the inco terms",
   "sourceColumn": "Incoterms1",
   "annotations": [
     {

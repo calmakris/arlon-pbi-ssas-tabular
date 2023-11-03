@@ -1,5 +1,6 @@
 {
   "name": "Duty Drawback",
+  "description": "This table contains records of delivery notes for international shipments in the past six fiscal years. Each delivery note is linked to its corresponding purchase order by the batch number of the materials. Moreover, the purchase orders included here pertain exclusively to vendors located outside of the United States.",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

@@ -1,6 +1,7 @@
 {
   "name": "PRO Number",
   "dataType": "string",
+  "description": "PRO number according to the shipment document of the material",
   "sourceColumn": "ShipmentPRO",
   "annotations": [
     {

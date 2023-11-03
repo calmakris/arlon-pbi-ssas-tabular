@@ -1,6 +1,7 @@
 {
   "name": "Unit Price",
   "dataType": "decimal",
+  "description": "Unit price of the material according to the first purchase order referenced when the material was received in the warehouse",
   "sourceColumn": "UnitPrice",
   "formatString": "#,0.00",
   "summarizeBy": "none",

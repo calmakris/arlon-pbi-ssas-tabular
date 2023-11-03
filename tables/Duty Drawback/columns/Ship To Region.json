@@ -1,6 +1,7 @@
 {
   "name": "Ship To Region",
   "dataType": "string",
+  "description": "Region of the shipment's destination",
   "sourceColumn": "ShipToRegion",
   "displayFolder": "Ship To",
   "dataCategory": "Region",

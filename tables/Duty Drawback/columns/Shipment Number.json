@@ -1,6 +1,7 @@
 {
   "name": "Shipment Number",
   "dataType": "string",
+  "description": "Unique identifier of the shipment",
   "sourceColumn": "ShipmentNo",
   "annotations": [
     {

@@ -1,6 +1,7 @@
 {
   "name": "Referenced Document Line Number",
   "dataType": "string",
+  "description": "Line number within the referenced document in the delivery note",
   "sourceColumn": "RefDocumentLineNo",
   "annotations": [
     {

@@ -1,6 +1,7 @@
 {
   "name": "Route",
   "dataType": "string",
+  "description": "Refers to the route or carrier according to the shipment document",
   "sourceColumn": "Route",
   "annotations": [
     {

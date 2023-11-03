@@ -1,6 +1,7 @@
 {
   "name": "Delivery Line Number",
   "dataType": "string",
+  "description": "Line number within the delivery note that identifies the material",
   "sourceColumn": "DeliveryLineNo",
   "annotations": [
     {

@@ -1,6 +1,7 @@
 {
   "name": "Ship To Country",
   "dataType": "string",
+  "description": "Country of the shipment's destination",
   "sourceColumn": "ShipToCountry",
   "displayFolder": "Ship To",
   "dataCategory": "Country",

@@ -1,6 +1,7 @@
 {
   "name": "Ship To City",
   "dataType": "string",
+  "description": "City of the shipment's destination",
   "sourceColumn": "ShipToCity",
   "displayFolder": "Ship To",
   "dataCategory": "City",

@@ -1,6 +1,7 @@
 {
   "name": "Ship To Name",
   "dataType": "string",
+  "description": "Name of the account where the material is shipped",
   "sourceColumn": "ShipToName",
   "displayFolder": "Ship To",
   "dataCategory": "AccountName",

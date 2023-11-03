@@ -1,6 +1,7 @@
 {
   "name": "Delivered Date",
   "dataType": "dateTime",
+  "description": "Date when the material shipped out of the warehouse",
   "sourceColumn": "DeliveryDate",
   "formatString": "Short Date",
   "annotations": [

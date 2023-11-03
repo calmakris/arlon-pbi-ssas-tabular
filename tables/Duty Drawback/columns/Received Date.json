@@ -1,6 +1,7 @@
 {
   "name": "Received Date",
   "dataType": "dateTime",
+  "description": "First goods receipt date of the batch number according to the material's purchase order history",
   "sourceColumn": "ReceiveDate",
   "formatString": "Short Date",
   "annotations": [

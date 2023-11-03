@@ -1,0 +1,13 @@
+{
+  "name": "Ship To Account Number",
+  "dataType": "string",
+  "sourceColumn": "ShipToAcctNo",
+  "displayFolder": "Ship To",
+  "dataCategory": "AccountNumber",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

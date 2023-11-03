@@ -1,0 +1,12 @@
+{
+  "name": "Received Date",
+  "dataType": "dateTime",
+  "sourceColumn": "ReceiveDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Incoterms Part 2",
+  "dataType": "string",
+  "sourceColumn": "Incoterms2",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

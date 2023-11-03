@@ -1,0 +1,11 @@
+{
+  "name": "PRO Number",
+  "dataType": "string",
+  "sourceColumn": "ShipmentPRO",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

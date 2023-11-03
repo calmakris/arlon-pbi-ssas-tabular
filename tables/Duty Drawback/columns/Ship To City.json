@@ -1,0 +1,13 @@
+{
+  "name": "Ship To City",
+  "dataType": "string",
+  "sourceColumn": "ShipToCity",
+  "displayFolder": "Ship To",
+  "dataCategory": "City",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

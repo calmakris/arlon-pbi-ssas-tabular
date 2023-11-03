@@ -1,0 +1,11 @@
+{
+  "name": "Delivery Line Number",
+  "dataType": "string",
+  "sourceColumn": "DeliveryLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

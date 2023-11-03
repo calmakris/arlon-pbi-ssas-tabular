@@ -1,0 +1,11 @@
+{
+  "name": "Referenced Document Line Number",
+  "dataType": "string",
+  "sourceColumn": "RefDocumentLineNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

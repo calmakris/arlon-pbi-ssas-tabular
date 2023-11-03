@@ -1,0 +1,46 @@
+{
+  "name": "Duty Drawback",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Duty Drawback\",",
+        "    \"fromColumn\": \"CustomerOrgKey\",",
+        "    \"toTable\": \"Customer Master\",",
+        "    \"toColumn\": \"CustomerOrgKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Duty Drawback\",",
+        "    \"fromColumn\": \"Delivered Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Duty Drawback\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Duty Drawback\",",
+        "    \"fromColumn\": \"PurchaseOrderLineKey\",",
+        "    \"toTable\": \"Purchase Order\",",
+        "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Duty Drawback\",",
+        "    \"fromColumn\": \"VendorNoKey\",",
+        "    \"toTable\": \"Vendor Master\",",
+        "    \"toColumn\": \"Vendor Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

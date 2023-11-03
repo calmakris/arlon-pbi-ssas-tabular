@@ -1,0 +1,14 @@
+{
+  "name": "Duty Drawback",
+  "mode": "import",
+  "source": {
+    "type": "m",
+    "expression": [
+      "let",
+      "    Source = #\"ARLPBI_STAGE\",",
+      "    Data = Source{[Schema=\"dbo\",Item=\"FACT_DutyDrawback\"]}[Data]",
+      "in",
+      "    Data"
+    ]
+  }
+}

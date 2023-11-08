@@ -1,0 +1,14 @@
+{
+  "name": "Shipment",
+  "description": "Information about the shipment documents, such as tracking numbers, container IDs, and estimated dates.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\",\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
+    }
+  ]
+}

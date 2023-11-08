@@ -1,0 +1,12 @@
+{
+  "name": "Container ID",
+  "dataType": "string",
+  "description": "Trailer number according to the shipment document",
+  "sourceColumn": "ContainerID",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

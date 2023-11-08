@@ -1,0 +1,12 @@
+{
+  "name": "Shipment Number",
+  "dataType": "string",
+  "description": "Identifier of the shipment document",
+  "sourceColumn": "ShipmentNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

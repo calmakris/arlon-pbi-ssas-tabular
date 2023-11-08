@@ -1,9 +1,6 @@
 {
   "name": "EMEA Container",
   "description": "This table contains information about shipments and deliveries to warehouses in the EMEA region. It includes delivery notes for stock transfer orders and records of received goods for standard purchase orders that were sent to EMEA warehouses. For additional details about the orders and materials, you can refer to the 'Purchase Order' table for order information and the 'Material Master' table for material details.",
-  "defaultDetailRowsDefinition": {
-    "expression": "'EMEA Container'"
-  },
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
@@ -24,6 +21,12 @@
         "    \"fromColumn\": \"PurchaseOrderLineKey\",",
         "    \"toTable\": \"Purchase Order\",",
         "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"EMEA Container\",",
+        "    \"fromColumn\": \"ShipmentNoKey\",",
+        "    \"toTable\": \"Shipment\",",
+        "    \"toColumn\": \"Shipment Number\"",
         "  }",
         "]"
       ]

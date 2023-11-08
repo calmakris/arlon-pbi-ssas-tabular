@@ -2,7 +2,7 @@
   "name": "Order Number",
   "dataType": "string",
   "description": "Identifier of the sales order",
-  "sourceColumn": "OrderNoKey",
+  "sourceColumn": "SalesOrderNo",
   "displayFolder": "Header",
   "annotations": [
     {

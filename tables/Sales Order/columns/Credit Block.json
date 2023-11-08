@@ -1,9 +1,9 @@
 {
   "name": "Credit Block",
   "dataType": "string",
-  "description": "Overall status of credit checks",
+  "description": "Overall status of credit checks at the header level",
   "sourceColumn": "CreditBlock",
-  "displayFolder": "Header",
+  "displayFolder": "Status and Block",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

@@ -1,6 +1,6 @@
 {
   "name": "HasChanges_CS",
-  "dataType": "int64",
+  "dataType": "string",
   "isHidden": true,
   "sourceColumn": "HasChanges_CS",
   "isAvailableInMdx": false,

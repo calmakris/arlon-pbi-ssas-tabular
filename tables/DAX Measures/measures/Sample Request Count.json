@@ -4,10 +4,10 @@
   "expression": [
     "",
     "CALCULATE(",
-    "    DISTINCTCOUNT( 'Sales Order'[Order Number] ),",
+    "    DISTINCTCOUNT( 'FACT_SalesOrder'[OrderNoKey] ),",
     "    FILTER(",
-    "        'Sales Order',",
-    "        'Sales Order'[Sample Category] <> \"Not Applicable\"",
+    "        'FACT_SalesOrder',",
+    "        'FACT_SalesOrder'[FOCCategory] <> \"Not Applicable\"",
     "    )",
     ") +",
     "DISTINCTCOUNT( 'Odoo Sample Request'[Ticket Number] )"

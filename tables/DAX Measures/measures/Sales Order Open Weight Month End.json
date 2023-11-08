@@ -4,8 +4,8 @@
   "expression": [
     "",
     "CALCULATE(",
-    "    SUM( 'Sales Order'[CustomerOpenWeight] ),",
-    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] ),",
+    "    SUM( 'FACT_SalesOrder'[CustomerOpenWeight] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_SalesOrder'[FirstDeliveryDateKey] ),",
     "    FILTER(",
     "        ALL('Calendar'[Date]),",
     "        'Calendar'[Date] >= [Beginning of Month]",

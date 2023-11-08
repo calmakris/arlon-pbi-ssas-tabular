@@ -1,0 +1,12 @@
+{
+  "name": "Delivery Number",
+  "dataType": "string",
+  "description": "Unique identifier of the delivery note issued when shipping out the material",
+  "sourceColumn": "DeliveryNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

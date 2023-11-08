@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "City destination of the sales order",
   "sourceColumn": "ShipToCity",
-  "displayFolder": "Header",
+  "displayFolder": "Ship To",
   "dataCategory": "City",
   "annotations": [
     {

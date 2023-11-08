@@ -1,12 +1,12 @@
 {
   "name": "Vendor Name",
   "dataType": "string",
-  "description": "SAP Source: LFA1.NAME1",
+  "description": "Name of the vendor",
   "sourceColumn": "VendorName",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\"]"
+      "value": "[\"Finance\",\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\",\"Warehouse\"]"
     }
   ]
 }

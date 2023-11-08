@@ -4,12 +4,8 @@
   "description": "Date for material pricing and exchange rate",
   "sourceColumn": "PricingDate",
   "formatString": "Short Date",
-  "displayFolder": "Header",
+  "displayFolder": "Dates",
   "annotations": [
-    {
-      "name": "Format",
-      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-    },
     {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"

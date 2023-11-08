@@ -1,0 +1,14 @@
+{
+  "name": "Delivered Quantity",
+  "dataType": "decimal",
+  "description": "Quantity of material shipped from the warehouse",
+  "sourceColumn": "DeliveryQty",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

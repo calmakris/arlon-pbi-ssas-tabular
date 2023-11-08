@@ -1,14 +1,14 @@
 {
   "name": "Vendor Number",
   "dataType": "string",
-  "description": "SAP Source: LFA1.LIFNR",
+  "description": "Account number of the vendor",
   "isUnique": true,
   "isKey": true,
   "sourceColumn": "VendorNoKey",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\"]"
+      "value": "[\"Finance\",\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\",\"Warehouse\"]"
     }
   ]
 }

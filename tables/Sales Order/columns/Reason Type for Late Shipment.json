@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "1st party means the reason why the item is late is controllable by Arlon. On the other hand, 3rd party means the item is late of external reasons.",
   "sourceColumn": "LateReasonType",
-  "displayFolder": "Item",
+  "displayFolder": "OTS Related",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

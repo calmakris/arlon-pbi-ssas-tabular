@@ -4,10 +4,10 @@
   "expression": [
     "",
     "CALCULATE(",
-    "    SUM( 'Sales Order'[CostAmountUSD] ),",
+    "    SUM( 'FACT_SalesOrder'[CostAmountUSD] ),",
     "    FILTER(",
-    "        'Sales Order',",
-    "        'Sales Order'[Sample Category] <> \"Not Applicable\"",
+    "        'FACT_SalesOrder',",
+    "        'FACT_SalesOrder'[FOCCategory] <> \"Not Applicable\"",
     "    )",
     ") +",
     "SUM( 'Odoo Sample Request'[Cost Amount] )"

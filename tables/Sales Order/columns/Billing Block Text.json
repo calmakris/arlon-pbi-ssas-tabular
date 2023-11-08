@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "Indicates if the entire sales document is blocked for billing.",
   "sourceColumn": "BillingBlockText",
-  "displayFolder": "Header",
+  "displayFolder": "Status and Block",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

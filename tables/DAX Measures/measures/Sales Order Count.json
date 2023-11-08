@@ -1,7 +1,7 @@
 {
   "name": "Sales Order Count",
   "description": "Count of sales order entered (by unique order number)",
-  "expression": " DISTINCTCOUNT(  'Sales Order'[Order Number] )",
+  "expression": " DISTINCTCOUNT(  'FACT_SalesOrder'[OrderNoKey] )",
   "formatString": "#,0",
   "displayFolder": "Sales Order",
   "annotations": [

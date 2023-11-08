@@ -1,0 +1,12 @@
+{
+  "name": "Carrier",
+  "dataType": "string",
+  "description": "Shipment route or carrier in the shipment document",
+  "sourceColumn": "Carrier",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

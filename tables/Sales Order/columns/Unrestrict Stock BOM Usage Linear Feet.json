@@ -1,0 +1,14 @@
+{
+  "name": "Unrestrict Stock BOM Usage Linear Feet",
+  "dataType": "decimal",
+  "description": "Unresticted stock quantity multiplied by the BOM usage quantity based on the material and plant of the sales order line item",
+  "sourceColumn": "UnrestrictStockBOMLinearFeet",
+  "formatString": "#,0.00",
+  "displayFolder": "BOM and Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,11 +1,12 @@
 {
   "name": "Vendor Number and Name",
   "dataType": "string",
+  "description": "Combination of vendor account number and their name",
   "sourceColumn": "VendorNoName",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Finance\",\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\"]"
+      "value": "[\"Finance\",\"Goods and Invoice Receipts\",\"Open Orders Report\",\"Purchase Orders\",\"Warehouse\"]"
     }
   ]
 }

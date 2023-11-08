@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "The order-related billing status shows to what extent an item has been processed for billing.",
   "sourceColumn": "BillingStatBlock",
-  "displayFolder": "Item",
+  "displayFolder": "Status and Block",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

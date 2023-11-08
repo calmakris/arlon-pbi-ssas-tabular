@@ -1,0 +1,59 @@
+{
+  "name": "Delivery Note",
+  "description": "This table contains records of delivery notes for international shipments in the past six fiscal years. Each delivery note is linked to its corresponding purchase order by the batch number of the materials. Moreover, the purchase orders included here pertain exclusively to vendors located outside of the United States.",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"CustomerOrgKey\",",
+        "    \"toTable\": \"Customer Master\",",
+        "    \"toColumn\": \"CustomerOrgKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"Delivered Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"MaterialNoKey\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"PurchaseOrderLineKey\",",
+        "    \"toTable\": \"Purchase Order\",",
+        "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"SalesOrderLineKey\",",
+        "    \"toTable\": \"Sales Order\",",
+        "    \"toColumn\": \"SalesOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"ShipmentNoKey\",",
+        "    \"toTable\": \"Shipment\",",
+        "    \"toColumn\": \"Shipment Number\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Delivery Note\",",
+        "    \"fromColumn\": \"VendorNoKey\",",
+        "    \"toTable\": \"Vendor Master\",",
+        "    \"toColumn\": \"Vendor Number\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

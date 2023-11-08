@@ -1,0 +1,12 @@
+{
+  "name": "Weight Unit",
+  "dataType": "string",
+  "description": "Unit referring to the gross weight or net weight of the material.",
+  "sourceColumn": "WeightUnit",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Net Weight",
+  "dataType": "decimal",
+  "description": "The system calculates the net weight of each item by multiplying the delivery quantity by the net weight per unit that comes from the sales order. If there is no related sales order, the system uses the net weight from the material master record.",
+  "sourceColumn": "NetWeight",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Warehouse\"]"
+    }
+  ]
+}

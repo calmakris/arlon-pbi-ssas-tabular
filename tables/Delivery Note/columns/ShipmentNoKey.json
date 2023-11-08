@@ -1,8 +1,8 @@
 {
-  "name": "PRO Number",
+  "name": "ShipmentNoKey",
   "dataType": "string",
-  "description": "PRO number according to the shipment document of the material",
-  "sourceColumn": "ShipmentPRO",
+  "isHidden": true,
+  "sourceColumn": "ShipmentNoKey",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

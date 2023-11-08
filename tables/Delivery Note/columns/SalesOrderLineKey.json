@@ -1,8 +1,8 @@
 {
-  "name": "Shipment Number",
+  "name": "SalesOrderLineKey",
   "dataType": "string",
-  "description": "Unique identifier of the shipment",
-  "sourceColumn": "ShipmentNo",
+  "isHidden": true,
+  "sourceColumn": "SalesOrderLineKey",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

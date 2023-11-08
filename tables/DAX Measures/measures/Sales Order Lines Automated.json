@@ -1,7 +1,7 @@
 {
   "name": "Sales Order Lines Automated",
   "description": "Number of sales order line items entered by BATCHUSER",
-  "expression": " COUNTROWS( FILTER( 'Sales Order', 'Sales Order'[Entered By] = \"BATCHUSER\" ) )",
+  "expression": " COUNTROWS( FILTER( 'FACT_SalesOrder', 'FACT_SalesOrder'[EnteredBy] = \"BATCHUSER\" ) )",
   "formatString": "#,0",
   "displayFolder": "Sales Order",
   "annotations": [

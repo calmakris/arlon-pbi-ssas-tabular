@@ -1,7 +1,7 @@
 {
   "name": "Sales Order Ordered Quantity",
   "description": "Total ordered quantity in the sales order",
-  "expression": "SUM( 'Sales Order'[OrderQuantity] )",
+  "expression": "SUM( 'FACT_SalesOrder'[OrderQuantity] )",
   "formatString": "#,0.00",
   "displayFolder": "Sales Order",
   "annotations": [

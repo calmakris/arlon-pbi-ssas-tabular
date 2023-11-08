@@ -1,9 +1,9 @@
 {
-  "name": "Plant",
+  "name": "MaterialNoKey",
   "dataType": "string",
-  "description": "Plant assigned to the sales order item",
-  "sourceColumn": "PlantNoKey",
-  "isAvailableInMdx": false,
+  "description": "Material number in the sales order item",
+  "isHidden": true,
+  "sourceColumn": "MaterialNoKey",
   "displayFolder": "Item",
   "annotations": [
     {

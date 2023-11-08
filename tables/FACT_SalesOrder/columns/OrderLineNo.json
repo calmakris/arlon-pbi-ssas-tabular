@@ -1,10 +1,10 @@
 {
-  "name": "Last PGI Date",
-  "dataType": "dateTime",
-  "description": "Latest actual goods movement date in the delivery note of the sales order item.",
-  "sourceColumn": "LastPgiDate",
-  "formatString": "Short Date",
-  "displayFolder": "Dates",
+  "name": "OrderLineNo",
+  "dataType": "string",
+  "description": "Line number of the sales order item",
+  "isHidden": true,
+  "sourceColumn": "OrderLineNo",
+  "displayFolder": "Item",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

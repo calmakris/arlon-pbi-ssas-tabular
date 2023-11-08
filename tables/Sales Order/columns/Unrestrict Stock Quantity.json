@@ -1,10 +1,10 @@
 {
   "name": "Unrestrict Stock Quantity",
   "dataType": "decimal",
+  "description": "Unresticted stock quantity based on the material and plant of the sales order line item",
   "sourceColumn": "UnrestrictStockQty",
   "formatString": "#,0.00",
-  "displayFolder": "_Quantities",
-  "summarizeBy": "none",
+  "displayFolder": "BOM and Inventory",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

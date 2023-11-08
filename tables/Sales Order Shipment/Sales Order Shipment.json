@@ -15,12 +15,10 @@
       "value": [
         "[",
         "  {",
-        "    \"toCardinality\": \"many\",",
         "    \"fromTable\": \"Sales Order Shipment\",",
         "    \"fromColumn\": \"OrderNoLineKey\",",
         "    \"toTable\": \"Sales Order\",",
-        "    \"toColumn\": \"OrderNoLineKey\",",
-        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "    \"toColumn\": \"SalesOrderLineKey\"",
         "  }",
         "]"
       ]

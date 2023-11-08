@@ -4,7 +4,7 @@
   "expression": [
     "CALCULATE (",
     "    [Sales Order Lines Automated],",
-    "    'Sales Order'[HasChanges_CS] = 0",
+    "    KEEPFILTERS( 'Sales Order'[HasChanges_CS] = \"No\" )",
     ")"
   ],
   "formatString": "#,0",

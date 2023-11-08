@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "Indicates if an entire sales document (a sales order, for example) is blocked for delivery.",
   "sourceColumn": "DeliveryBlockText",
-  "displayFolder": "Header",
+  "displayFolder": "Status and Block",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

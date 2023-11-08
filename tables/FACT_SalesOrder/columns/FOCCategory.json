@@ -1,7 +1,8 @@
 {
-  "name": "Sample Category",
+  "name": "FOCCategory",
   "dataType": "string",
   "description": "Calculated column: If the order type is 'KL', then 'Full Rolls'. Else if the order type is 'ZSMP' and order reason is 'Tradeshow Requests' then 'Tradeshow'. Else if order type is 'ZSMP' and material group is 'MARKETG', then 'Literature'. Else if order type is 'ZSMP' and not a tradeshow nor literature, then 'Samples'. Otherwise, 'Not Applicable'.",
+  "isHidden": true,
   "sourceColumn": "FOCCategory",
   "displayFolder": "Item",
   "annotations": [

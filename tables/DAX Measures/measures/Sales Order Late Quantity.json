@@ -4,8 +4,8 @@
   "expression": [
     "",
     "CALCULATE(",
-    "    SUM( 'Sales Order'[LateQuantity] ),",
-    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] ),",
+    "    SUM( 'FACT_SalesOrder'[LateQuantity] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_SalesOrder'[FirstDeliveryDateKey] ),",
     "    FILTER(",
     "        'Calendar',",
     "        'Calendar'[Date] <= [Report Date]",

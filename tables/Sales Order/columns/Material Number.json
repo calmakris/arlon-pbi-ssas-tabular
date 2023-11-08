@@ -2,7 +2,7 @@
   "name": "Material Number",
   "dataType": "string",
   "description": "Material number in the sales order item",
-  "sourceColumn": "MaterialNoKey",
+  "sourceColumn": "MaterialNo",
   "displayFolder": "Item",
   "annotations": [
     {

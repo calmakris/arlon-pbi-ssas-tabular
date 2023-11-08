@@ -4,6 +4,7 @@
   "description": "First goods receipt date of the batch number according to the material's purchase order history",
   "sourceColumn": "ReceiveDate",
   "formatString": "Short Date",
+  "displayFolder": "Batch PO Info",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

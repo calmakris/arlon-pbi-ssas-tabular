@@ -2,6 +2,9 @@
   "name": "FACT_SalesOrderOpenAll",
   "description": "An aggregated version of FACT_SalesOrder used to ignore the row-level security.",
   "isHidden": true,
+  "defaultDetailRowsDefinition": {
+    "expression": "'Delivery Note'"
+  },
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

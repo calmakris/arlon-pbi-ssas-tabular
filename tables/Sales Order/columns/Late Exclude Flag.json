@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "Value is 'Yes' if this line is indicated to be excluded in On Time Shipping metrics.",
   "sourceColumn": "LateExcludeFlag",
-  "displayFolder": "Item",
+  "displayFolder": "OTS Related",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

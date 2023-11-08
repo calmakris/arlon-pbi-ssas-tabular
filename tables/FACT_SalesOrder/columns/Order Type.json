@@ -1,10 +1,10 @@
 {
-  "name": "Ship To Address",
+  "name": "Order Type",
   "dataType": "string",
-  "description": "Address of the sales order's destination",
-  "sourceColumn": "ShipToFullAddress",
+  "description": "Determines if the sales order is a standard order (TA), container (ZCON), buyout (ZDSP), etc.",
+  "isHidden": true,
+  "sourceColumn": "OrderType",
   "displayFolder": "Header",
-  "dataCategory": "Address",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

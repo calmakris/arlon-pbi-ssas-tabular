@@ -3,8 +3,7 @@
   "dataType": "string",
   "description": "Value is 'Yes' if the line item was not fully delivered on the first schedule ship date.",
   "sourceColumn": "LateFlag",
-  "displayFolder": "Item",
-  "summarizeBy": "none",
+  "displayFolder": "OTS Related",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

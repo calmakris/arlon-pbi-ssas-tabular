@@ -6,7 +6,7 @@
     "CALCULATE(",
     "    CALCULATE(",
     "        [Sales Order Line Count],",
-    "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    "        USERELATIONSHIP( 'Calendar'[Date], 'FACT_SalesOrder'[FirstDeliveryDateKey] )",
     "    ),",
     "    FILTER(",
     "        'Calendar',",

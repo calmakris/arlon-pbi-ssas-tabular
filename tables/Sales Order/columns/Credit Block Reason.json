@@ -1,16 +1,9 @@
 {
   "name": "Credit Block Reason",
   "dataType": "string",
-  "description": [
-    "This field only applies to items with credit block.",
-    "",
-    "The value is determined by the open items in customer account:",
-    "- If static credit check status is \"not OK\" and net balance is positive, then it is \"Exceeds Credit Limit / Past Due\"",
-    "- If static credit check status is \"not OK\" and net balance is 0 or negative, then value is \"Exceeds Credit Limit\"",
-    "- If there is at least one open item, then \"Past Due\"; otherwise, it's \"Exceeds Credit Limit\""
-  ],
+  "description": "This field only applies to items with credit block.",
   "sourceColumn": "CreditBlockReason",
-  "displayFolder": "Header",
+  "displayFolder": "Status and Block",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

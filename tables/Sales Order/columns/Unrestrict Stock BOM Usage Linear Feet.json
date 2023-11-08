@@ -1,8 +1,9 @@
 {
-  "name": "Coated WIP Material Number",
-  "dataType": "string",
-  "description": "The coated WIP part number of the ordered material based on the latest and unlocked product version of the BOM",
-  "sourceColumn": "CoatWIPMaterialNo",
+  "name": "Unrestrict Stock BOM Usage Linear Feet",
+  "dataType": "decimal",
+  "description": "Unresticted stock quantity multiplied by the BOM usage quantity based on the material and plant of the sales order line item",
+  "sourceColumn": "UnrestrictStockBOMLinearFeet",
+  "formatString": "#,0.00",
   "displayFolder": "BOM and Inventory",
   "annotations": [
     {

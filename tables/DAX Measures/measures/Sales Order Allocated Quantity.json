@@ -5,8 +5,8 @@
     " ",
     "VAR alloc = ",
     "    CALCULATE(",
-    "        SUM( 'Sales Order'[AllocatedQuantity] ),",
-    "        USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    "        SUM( 'FACT_SalesOrder'[AllocatedQuantity] ),",
+    "        USERELATIONSHIP( 'Calendar'[Date], 'FACT_SalesOrder'[FirstDeliveryDateKey] )",
     "    )",
     "RETURN",
     "    IF( alloc, alloc, BLANK() )"

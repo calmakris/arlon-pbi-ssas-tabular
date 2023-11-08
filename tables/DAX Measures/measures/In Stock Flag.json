@@ -1,7 +1,7 @@
 {
   "name": "In Stock Flag",
   "description": "Applies to open orders only; Indicates if an item is available in stock (FIFO by first scheduled ship date); Note that this calculation is report-side which means the material is not actually allocated to the order in SAP",
-  "expression": " PRODUCT( 'Sales Order'[InStockIndicator] )",
+  "expression": " PRODUCT( 'FACT_SalesOrder'[InStockIndicator] )",
   "formatString": "#,0",
   "displayFolder": "Sales Order",
   "annotations": [

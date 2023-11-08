@@ -4,6 +4,7 @@
   "description": "Name of person who created the sales order",
   "isHidden": true,
   "sourceColumn": "EnteredBy",
+  "isAvailableInMdx": false,
   "displayFolder": "Header",
   "annotations": [
     {

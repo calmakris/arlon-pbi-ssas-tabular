@@ -3,6 +3,7 @@
   "dataType": "string",
   "isHidden": true,
   "sourceColumn": "SalesOrderLineKey",
+  "isAvailableInMdx": false,
   "displayFolder": "Header",
   "annotations": [
     {

@@ -4,6 +4,7 @@
   "description": "Material number in the sales order item",
   "isHidden": true,
   "sourceColumn": "MaterialNoKey",
+  "isAvailableInMdx": false,
   "displayFolder": "Item",
   "annotations": [
     {

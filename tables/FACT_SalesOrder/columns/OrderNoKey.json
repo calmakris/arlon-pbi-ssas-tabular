@@ -4,6 +4,7 @@
   "description": "Identifier of the sales order",
   "isHidden": true,
   "sourceColumn": "OrderNoKey",
+  "isAvailableInMdx": false,
   "displayFolder": "Header",
   "annotations": [
     {

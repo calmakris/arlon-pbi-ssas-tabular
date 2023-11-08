@@ -5,6 +5,7 @@
   "isHidden": true,
   "sourceColumn": "LastPgiDate",
   "formatString": "Short Date",
+  "isAvailableInMdx": false,
   "displayFolder": "Item",
   "annotations": [
     {

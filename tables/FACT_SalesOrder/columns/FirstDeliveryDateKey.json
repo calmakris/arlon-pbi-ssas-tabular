@@ -5,6 +5,7 @@
   "isHidden": true,
   "sourceColumn": "FirstDeliveryDateKey",
   "formatString": "Short Date",
+  "isAvailableInMdx": false,
   "displayFolder": "Item",
   "annotations": [
     {

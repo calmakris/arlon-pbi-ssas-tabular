@@ -3,6 +3,7 @@
   "dataType": "decimal",
   "sourceColumn": "UnrestrictStockQty",
   "formatString": "#,0.00",
+  "isAvailableInMdx": false,
   "displayFolder": "_Quantities",
   "summarizeBy": "none",
   "annotations": [

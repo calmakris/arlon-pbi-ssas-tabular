@@ -5,6 +5,7 @@
   "isHidden": true,
   "sourceColumn": "EnterDateKey",
   "formatString": "Short Date",
+  "isAvailableInMdx": false,
   "displayFolder": "Header",
   "annotations": [
     {

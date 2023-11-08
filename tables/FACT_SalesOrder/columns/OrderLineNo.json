@@ -4,6 +4,7 @@
   "description": "Line number of the sales order item",
   "isHidden": true,
   "sourceColumn": "OrderLineNo",
+  "isAvailableInMdx": false,
   "displayFolder": "Item",
   "annotations": [
     {

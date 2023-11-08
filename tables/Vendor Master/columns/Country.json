@@ -1,8 +1,8 @@
 {
-  "name": "Vendor Name",
+  "name": "Country",
   "dataType": "string",
-  "description": "Name of the vendor",
-  "sourceColumn": "VendorName",
+  "description": "Specifies the country of the vendor according to their address in the account",
+  "sourceColumn": "Country",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

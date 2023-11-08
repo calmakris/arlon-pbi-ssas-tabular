@@ -1,6 +1,7 @@
 {
   "name": "Vendor Number and Name",
   "dataType": "string",
+  "description": "Combination of vendor account number and their name",
   "sourceColumn": "VendorNoName",
   "annotations": [
     {

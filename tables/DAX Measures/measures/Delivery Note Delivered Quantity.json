@@ -1,0 +1,12 @@
+{
+  "name": "Delivery Note Delivered Quantity",
+  "description": "Total quantity of material delivered/shipped according to the delivery note",
+  "formatString": "#,0.00",
+  "displayFolder": "Delivery Note",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

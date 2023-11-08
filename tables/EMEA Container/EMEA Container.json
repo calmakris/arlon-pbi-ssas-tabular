@@ -24,6 +24,12 @@
         "    \"fromColumn\": \"PurchaseOrderLineKey\",",
         "    \"toTable\": \"Purchase Order\",",
         "    \"toColumn\": \"PurchaseOrderLineKey\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"EMEA Container\",",
+        "    \"fromColumn\": \"Shipment Number\",",
+        "    \"toTable\": \"Shipment\",",
+        "    \"toColumn\": \"Shipment Number\"",
         "  }",
         "]"
       ]

@@ -5,7 +5,7 @@
     "",
     "Customer accommodation are complaints entered with reason codes marked as 'S1' (accommodation)."
   ],
-  "expression": " DIVIDE( [Customer Accommodation Complaint Amount], [Gross Sales], 0 )",
+  "expression": " DIVIDE( [Customer Accommodation Complaint Amount] + 0, [Gross Sales], 0 )",
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "displayFolder": "Complaints\\_Customer Accommodation",
   "annotations": [

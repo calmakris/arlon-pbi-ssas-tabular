@@ -1,0 +1,12 @@
+{
+  "name": "PlantNoKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "PlantNoKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

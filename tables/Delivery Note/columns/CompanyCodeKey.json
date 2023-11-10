@@ -1,0 +1,12 @@
+{
+  "name": "CompanyCodeKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "CompanyCodeKey",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

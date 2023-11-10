@@ -3,6 +3,7 @@
   "dataType": "string",
   "isHidden": true,
   "sourceColumn": "CompanyCodeKey",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

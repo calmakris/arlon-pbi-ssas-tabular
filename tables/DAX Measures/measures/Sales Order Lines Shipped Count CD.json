@@ -6,8 +6,8 @@
     "CALCULATE(",
     "    DISTINCTCOUNT( 'Delivery Note'[SalesOrderLineKey] ),",
     "    FILTER(",
-    "        ALL( 'Delivery Note' ),",
-    "        'Delivery Note'[Delivered Date] = [Last Working Day]",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Date] = [Last Working Day]",
     "    )",
     ")"
   ],

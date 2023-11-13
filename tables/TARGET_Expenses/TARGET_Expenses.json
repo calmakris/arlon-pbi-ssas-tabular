@@ -32,6 +32,10 @@
         "  }",
         "]"
       ]
+    },
+    {
+      "name": "TabularEditor_TableGroup",
+      "value": "Target Tables"
     }
   ]
 }

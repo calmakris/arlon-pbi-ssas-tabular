@@ -37,6 +37,10 @@
         "  }",
         "]"
       ]
+    },
+    {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
     }
   ]
 }

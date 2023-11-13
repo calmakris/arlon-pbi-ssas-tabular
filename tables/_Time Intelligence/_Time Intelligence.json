@@ -294,6 +294,10 @@
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
+    },
+    {
+      "name": "TabularEditor_TableGroup",
+      "value": "Special Tables"
     }
   ]
 }

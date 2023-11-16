@@ -5,6 +5,7 @@
   "sourceColumn": "POUnitPrice",
   "formatString": "#,0.00",
   "displayFolder": "Batch PO Info",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

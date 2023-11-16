@@ -5,6 +5,7 @@
   "sourceColumn": "UnrestrictStockBOMLinearFeet",
   "formatString": "#,0.00",
   "displayFolder": "BOM and Inventory",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

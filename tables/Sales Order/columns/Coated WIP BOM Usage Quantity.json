@@ -4,6 +4,7 @@
   "description": "Quantity needed to fulfill one unit of the ordered material based on the latest and unlocked product version of the BOM",
   "sourceColumn": "BOMUsageQty",
   "displayFolder": "BOM and Inventory",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

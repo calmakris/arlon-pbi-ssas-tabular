@@ -5,6 +5,7 @@
   "sourceColumn": "OrderedAmt",
   "formatString": "#,0",
   "displayFolder": "_Values (Not for Aggregation)",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

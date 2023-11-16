@@ -4,6 +4,7 @@
   "description": "Exchange rate to convert the value to USD.",
   "sourceColumn": "ExchangeRate",
   "displayFolder": "Item",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

@@ -3,6 +3,7 @@
   "dataType": "decimal",
   "sourceColumn": "StandardPrice",
   "formatString": "#,0.00",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

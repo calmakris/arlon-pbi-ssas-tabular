@@ -1,5 +1,5 @@
 {
-  "name": "Adhesive Future Available Stock.",
+  "name": "Adhesive Future Available Stock",
   "description": "This measure represents the available stock from the previous day and subtracting the quantity required for the current day.",
   "expression": [
     "",
@@ -16,7 +16,7 @@
     " VAR PrevDayCummReqQty = CummQtyReq - [Planning Schedule Adhesive Needed Quantity]",
     "",
     "RETURN",
-    "    IF(  MAX( Calendar[Date] ) = MinSelectedDate , [Unrestricted Stock Quantity], [Unrestricted Stock Quantity] - PrevDayCummReqQty ) "
+    "    IF(  MAX( Calendar[Date] ) = MinSelectedDate , [Unrestricted Stock Quantity] + 0, [Unrestricted Stock Quantity] - PrevDayCummReqQty ) "
   ],
   "formatString": "#,##0.00",
   "displayFolder": "Planning Schedule\\_Adhesives Required",

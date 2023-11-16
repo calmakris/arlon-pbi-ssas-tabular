@@ -2,7 +2,7 @@
   "name": "Order Line Number",
   "dataType": "string",
   "description": "Line number of the sales order item",
-  "sourceColumn": "OrderLineNo",
+  "sourceColumn": "SalesOrderLine",
   "displayFolder": "Item",
   "annotations": [
     {

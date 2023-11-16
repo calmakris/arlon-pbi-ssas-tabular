@@ -4,12 +4,8 @@
   "description": "Date on which the sales order was created.",
   "sourceColumn": "EnterDateKey",
   "formatString": "Short Date",
-  "displayFolder": "Header",
+  "displayFolder": "Dates",
   "annotations": [
-    {
-      "name": "Format",
-      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-    },
     {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"

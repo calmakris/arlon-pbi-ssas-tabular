@@ -1,0 +1,14 @@
+{
+  "name": "MaterialNoKey",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "MaterialNoKey",
+  "isAvailableInMdx": false,
+  "displayFolder": "_Hidden Keys",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

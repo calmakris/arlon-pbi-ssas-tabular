@@ -1,0 +1,13 @@
+{
+  "name": "Delivery Note Delivered Quantity",
+  "description": "Total quantity of material delivered/shipped according to the delivery note",
+  "expression": "SUM( 'Delivery Note'[Delivered Quantity] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Delivery Note",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

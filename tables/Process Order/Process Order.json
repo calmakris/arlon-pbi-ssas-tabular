@@ -3,6 +3,10 @@
   "description": "Contains general information of all process orders entered in SAP in the last few fiscal years",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
     },

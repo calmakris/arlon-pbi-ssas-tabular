@@ -3,7 +3,6 @@
   "dataType": "decimal",
   "description": "Exchange rate to convert the value to USD.",
   "sourceColumn": "ExchangeRate",
-  "formatString": "0.00",
   "displayFolder": "Item",
   "summarizeBy": "none",
   "annotations": [

@@ -3,7 +3,8 @@
   "dataType": "string",
   "description": "Account number of the destination of the sales order",
   "sourceColumn": "ShipToAcctNo",
-  "displayFolder": "Header",
+  "displayFolder": "Ship To",
+  "dataCategory": "AccountNumber",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

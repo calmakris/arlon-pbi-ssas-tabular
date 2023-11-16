@@ -1,0 +1,12 @@
+{
+  "name": "Delivery Type",
+  "dataType": "string",
+  "description": "A classification that distinguishes between different types of delivery.",
+  "sourceColumn": "DeliveryType",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -5,10 +5,11 @@
   "sourceColumn": "OrderedAmt",
   "formatString": "#,0",
   "displayFolder": "_Values (Not for Aggregation)",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Expenses\",\"Finance\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\"]"
+      "value": "[\"Expenses\",\"Finance\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Planning\",\"Purchase Orders\",\"Warehouse\"]"
     }
   ]
 }

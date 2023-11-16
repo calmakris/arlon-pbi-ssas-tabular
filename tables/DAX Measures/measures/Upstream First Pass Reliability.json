@@ -1,7 +1,24 @@
 {
   "name": "Upstream First Pass Reliability",
-  "description": "Number of planned clean ups divided by the total planned and unplanned clean ups",
-  "expression": " DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
+  "description": [
+    "Casting: Number of process orders without first pass hit divided by the number of process orders ran, according to the casting log.",
+    "",
+    "Coating: Number of planned clean ups divided by the total planned and unplanned clean ups, according to the coating log."
+  ],
+  "expression": [
+    " ",
+    "VAR _MinVisibleDate = MIN( 'Calendar'[Date] )",
+    "VAR CAST = DIVIDE( [CAST Process Order Ran] - [CAST Process Order First Pass Hit], [CAST Process Order Ran] ) -- Applicable >= FY24 only",
+    "VAR COAT = DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
+    "",
+    "RETURN",
+    "SWITCH(TRUE(),",
+    "    \"CAST\" IN ALLSELECTED(Department[Department]), IF( _MinVisibleDate >= DATE( 2023, 10, 1 ), CAST ),",
+    "    \"COAT\" IN ALLSELECTED(Department[Department]), COAT,",
+    "    DIVIDE( [Upstream Planned CU Count], [Upstream Planned CU Count] + [Upstream Unplanned CU Count] )",
+    ")",
+    ""
+  ],
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "displayFolder": "Upstream Log",
   "annotations": [

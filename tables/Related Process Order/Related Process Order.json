@@ -13,7 +13,7 @@
         "  {",
         "    \"fromTable\": \"Related Process Order\",",
         "    \"fromColumn\": \"SalesOrderNoKey\",",
-        "    \"toTable\": \"Sales Order\",",
+        "    \"toTable\": \"FACT_SalesOrder\",",
         "    \"toColumn\": \"OrderNoLineKey\"",
         "  }",
         "]"

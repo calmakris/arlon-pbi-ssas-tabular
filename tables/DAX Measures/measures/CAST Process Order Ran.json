@@ -1,0 +1,21 @@
+{
+  "name": "CAST Process Order Ran",
+  "description": "Number of process orders ran, according to the casting log",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    DISTINCTCOUNT( 'Upstream Log'[Process Order Number] ),",
+    "    KEEPFILTERS( 'Upstream Log'[Department] = \"CAST\" ),",
+    "    KEEPFILTERS( 'Upstream Log'[Process Order Number] <> \"000000000000\" ),",
+    "    KEEPFILTERS( 'Upstream Log'[Process Order Number] <> BLANK() )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Upstream Log",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

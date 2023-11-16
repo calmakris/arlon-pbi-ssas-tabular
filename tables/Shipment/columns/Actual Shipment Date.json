@@ -1,0 +1,13 @@
+{
+  "name": "Actual Shipment Date",
+  "dataType": "string",
+  "description": "Date when the shipment actually departed. This field refers to the 'Loading start' date in the shipment document in VT03N SAP transaction code.",
+  "sourceColumn": "ActualShipmentDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

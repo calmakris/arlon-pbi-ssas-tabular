@@ -1,0 +1,15 @@
+{
+  "name": "PO Unit Price",
+  "dataType": "decimal",
+  "description": "Unit price of the material according to the first purchase order referenced when the material was received in the warehouse",
+  "sourceColumn": "POUnitPrice",
+  "formatString": "#,0.00",
+  "displayFolder": "Batch PO Info",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

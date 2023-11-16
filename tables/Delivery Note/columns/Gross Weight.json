@@ -1,0 +1,14 @@
+{
+  "name": "Gross Weight",
+  "dataType": "decimal",
+  "description": "The total gross weight of all items in the delivery. The gross weight represents the net weight plus the weight of packaging.",
+  "sourceColumn": "GrossWeight",
+  "formatString": "#,0.00",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

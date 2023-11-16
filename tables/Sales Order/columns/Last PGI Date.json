@@ -4,12 +4,8 @@
   "description": "Latest actual goods movement date in the delivery note of the sales order item.",
   "sourceColumn": "LastPgiDate",
   "formatString": "Short Date",
-  "displayFolder": "Item",
+  "displayFolder": "Dates",
   "annotations": [
-    {
-      "name": "Format",
-      "value": "<Format Format=\"DateTimeShortDatePattern\" />"
-    },
     {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"

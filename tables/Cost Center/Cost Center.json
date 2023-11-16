@@ -3,6 +3,10 @@
   "description": "List of cost centers in SAP with custom categories manually in a Sharepoint List",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"Expenses\",\"Finance\",\"Operations\",\"Planning\",\"Warehouse\"]"
     },

@@ -4,8 +4,8 @@
   "expression": [
     " ",
     "CALCULATE(",
-    "    SUM( 'Sales Order'[InternalOpenQuantity] ),",
-    "    USERELATIONSHIP( 'Calendar'[Date], 'Sales Order'[First Scheduled Ship Date] )",
+    "    SUM( 'FACT_SalesOrder'[InternalOpenQuantity] ),",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'FACT_SalesOrder'[FirstDeliveryDateKey] )",
     ")"
   ],
   "formatString": "#,0.00",

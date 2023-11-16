@@ -1,0 +1,15 @@
+{
+  "name": "Internal Open Quantity",
+  "dataType": "decimal",
+  "description": "This value represents the difference of ordered, allocated, and shipped quantities. It is used for display only and not for aggregation.",
+  "sourceColumn": "InternalOpenQuantity",
+  "formatString": "#,0.00",
+  "displayFolder": "Values (Not for Aggregation)",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "name": "Sales Order Line Count",
   "description": "Count of sales order line items entered",
-  "expression": " COUNTROWS( 'Sales Order' )",
+  "expression": " COUNTROWS( 'FACT_SalesOrder' )",
   "formatString": "#,0",
   "displayFolder": "Sales Order",
   "annotations": [

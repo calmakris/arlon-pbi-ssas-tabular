@@ -3,6 +3,10 @@
   "description": "Contains machine names used to filter related tables with 'Machine Name' fields. This table is generally related to PLC data in Engineering.",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\",\"Planning\"]"
     },

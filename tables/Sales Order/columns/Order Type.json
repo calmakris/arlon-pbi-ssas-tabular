@@ -2,7 +2,7 @@
   "name": "Order Type",
   "dataType": "string",
   "description": "Determines if the sales order is a standard order (TA), container (ZCON), buyout (ZDSP), etc.",
-  "sourceColumn": "OrderType",
+  "sourceColumn": "SalesOrderType",
   "displayFolder": "Header",
   "annotations": [
     {

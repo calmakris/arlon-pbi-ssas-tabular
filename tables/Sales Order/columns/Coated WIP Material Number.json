@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "The coated WIP part number of the ordered material based on the latest and unlocked product version of the BOM",
   "sourceColumn": "CoatWIPMaterialNo",
-  "displayFolder": "Item",
+  "displayFolder": "BOM and Inventory",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

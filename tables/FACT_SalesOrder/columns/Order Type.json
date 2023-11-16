@@ -1,0 +1,15 @@
+{
+  "name": "Order Type",
+  "dataType": "string",
+  "description": "Determines if the sales order is a standard order (TA), container (ZCON), buyout (ZDSP), etc.",
+  "isHidden": true,
+  "sourceColumn": "OrderType",
+  "isAvailableInMdx": false,
+  "displayFolder": "Header",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

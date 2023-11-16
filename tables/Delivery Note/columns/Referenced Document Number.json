@@ -1,0 +1,12 @@
+{
+  "name": "Referenced Document Number",
+  "dataType": "string",
+  "description": "Document referenced in the delivery note",
+  "sourceColumn": "RefDocumentNo",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Open Orders Report\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

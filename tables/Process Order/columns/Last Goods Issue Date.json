@@ -1,0 +1,14 @@
+{
+  "name": "Last Goods Issue Date",
+  "dataType": "dateTime",
+  "description": "Date of the last goods issue transaction against the order",
+  "sourceColumn": "LastGoodsIssueDate",
+  "formatString": "Short Date",
+  "displayFolder": "_Dates",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\",\"Planning\"]"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
     "Service are complaints entered with reason codes marked as 'S' (service).",
     ""
   ],
-  "expression": " DIVIDE( [Service Quality Complaint Amount], [Gross Sales], 0 )",
+  "expression": " DIVIDE( [Service Quality Complaint Amount] + 0, [Gross Sales], 0 )",
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
   "displayFolder": "Complaints\\_Service Quality",
   "annotations": [

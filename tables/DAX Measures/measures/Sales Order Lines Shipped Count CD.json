@@ -4,10 +4,10 @@
   "expression": [
     "",
     "CALCULATE(",
-    "    DISTINCTCOUNT( 'Sales Order Shipment'[OrderNoLineKey] ),",
+    "    DISTINCTCOUNT( 'Delivery Note'[SalesOrderLineKey] ),",
     "    FILTER(",
-    "        ALL( 'Sales Order Shipment' ),",
-    "        'Sales Order Shipment'[Actual Goods Movement Date] = [Last Working Day]",
+    "        ALL( 'Calendar' ),",
+    "        'Calendar'[Date] = [Last Working Day]",
     "    )",
     ")"
   ],

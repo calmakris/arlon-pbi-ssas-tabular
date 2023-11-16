@@ -3,8 +3,7 @@
   "dataType": "decimal",
   "description": "Quantity needed to fulfill one unit of the ordered material based on the latest and unlocked product version of the BOM",
   "sourceColumn": "BOMUsageQty",
-  "formatString": "#,##0.00",
-  "displayFolder": "Item",
+  "displayFolder": "BOM and Inventory",
   "summarizeBy": "none",
   "annotations": [
     {

@@ -21,8 +21,7 @@
         "    \"fromTable\": \"Sales Order Changelog\",",
         "    \"fromColumn\": \"OrderNoKey\",",
         "    \"toTable\": \"Sales Order\",",
-        "    \"toColumn\": \"Order Number\",",
-        "    \"crossFilteringBehavior\": \"bothDirections\"",
+        "    \"toColumn\": \"Order Number\"",
         "  }",
         "]"
       ]

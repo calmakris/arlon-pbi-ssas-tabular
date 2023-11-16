@@ -3,7 +3,7 @@
   "dataType": "string",
   "description": "Overall processing status of the sales order item",
   "sourceColumn": "ProcessingBlock",
-  "displayFolder": "Item",
+  "displayFolder": "Status and Block",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

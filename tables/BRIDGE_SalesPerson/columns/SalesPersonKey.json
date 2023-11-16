@@ -1,6 +1,7 @@
 {
   "name": "SalesPersonKey",
   "dataType": "string",
+  "isHidden": true,
   "isUnique": true,
   "isKey": true,
   "sourceColumn": "SalesPersonKey",

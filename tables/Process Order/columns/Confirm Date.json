@@ -1,7 +1,7 @@
 {
   "name": "Confirm Date",
   "dataType": "dateTime",
-  "description": "Date when the process order's cost is confirmed by the supervisor",
+  "description": "Date when the order quantity is delivered",
   "sourceColumn": "ConfirmDate",
   "formatString": "Short Date",
   "displayFolder": "_Dates",

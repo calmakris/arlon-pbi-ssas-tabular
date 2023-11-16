@@ -1,6 +1,7 @@
 {
   "name": "Unrestrict Stock Quantity",
   "dataType": "decimal",
+  "isHidden": true,
   "sourceColumn": "UnrestrictStockQty",
   "formatString": "#,0.00",
   "isAvailableInMdx": false,

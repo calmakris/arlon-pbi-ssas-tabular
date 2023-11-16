@@ -4,16 +4,16 @@
   "isHidden": true,
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Finance\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

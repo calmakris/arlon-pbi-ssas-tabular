@@ -3,16 +3,16 @@
   "description": "List of company codes in SAP",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Expenses\",\"Finance\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Marketing\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

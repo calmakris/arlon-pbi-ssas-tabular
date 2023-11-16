@@ -3,16 +3,16 @@
   "description": "List of cost elements (G/L accounts) with custom categories and indicators manually assigned in a Sharepoint list",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"Engineering\",\"Expenses\",\"Finance\",\"Operations\",\"Planning\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

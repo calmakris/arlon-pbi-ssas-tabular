@@ -3,16 +3,16 @@
   "description": "Standard, container, buyout, free-of-charge, sample, and consignment fillup sales orders entered in SAP in the last few fiscal years",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

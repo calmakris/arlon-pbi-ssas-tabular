@@ -3,6 +3,10 @@
   "description": "This table contains everything there is to know about materials in SAP.",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Goods and Invoice Receipts\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"Purchase Orders\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
     },
@@ -36,10 +40,6 @@
         "  }",
         "]"
       ]
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

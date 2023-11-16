@@ -3,6 +3,10 @@
   "description": "This table contains information about Sold/Bill To customers in SAP. Refer to other fact/transactional tables for the Ship To information.",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Open Orders Report\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
     },
@@ -37,10 +41,6 @@
         "  }",
         "]"
       ]
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

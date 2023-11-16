@@ -3,16 +3,16 @@
   "description": "Contains manually assigned categories given the [ScrapID] - mainly the cost element except for goods issues where it uses the movement types.",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\",\"Operations\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

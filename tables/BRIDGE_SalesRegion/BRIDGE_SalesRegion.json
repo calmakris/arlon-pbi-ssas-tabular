@@ -3,16 +3,16 @@
   "isHidden": true,
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Bridge Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"CS Dashboard\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Bridge Tables"
     }
   ]
 }

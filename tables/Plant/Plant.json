@@ -3,16 +3,16 @@
   "description": "List of warehouse numbers in SAP (best used for filtering/grouping by plant across multiple fact tables)",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"CS Dashboard\",\"Engineering\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Operations\",\"Planning\",\"Product Management\",\"QA Dashboard\",\"Sales Orders\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

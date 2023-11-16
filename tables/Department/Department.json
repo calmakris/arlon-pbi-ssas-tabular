@@ -3,16 +3,16 @@
   "description": "Department assigned to the records in the transaction tables (if applicable)",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\",\"Expenses\",\"Finance\",\"Inventory\",\"Operations\",\"Planning\",\"Warehouse\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": "[]"
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

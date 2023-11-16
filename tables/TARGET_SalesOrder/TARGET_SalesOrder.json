@@ -3,12 +3,12 @@
   "isHidden": true,
   "annotations": [
     {
-      "name": "TabularEditor_Relationships",
-      "value": "[]"
-    },
-    {
       "name": "TabularEditor_TableGroup",
       "value": "Target Tables"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": "[]"
     }
   ]
 }

@@ -3,6 +3,10 @@
   "description": "Contains the purchasing group and vendor assigned per material and plant",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Inventory\",\"Planning\",\"Purchase Orders\"]"
     },
@@ -20,10 +24,6 @@
         "  }",
         "]"
       ]
-    },
-    {
-      "name": "TabularEditor_TableGroup",
-      "value": "Dimension Tables"
     }
   ]
 }

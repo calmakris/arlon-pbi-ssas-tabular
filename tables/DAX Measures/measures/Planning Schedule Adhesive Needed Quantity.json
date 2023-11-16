@@ -1,0 +1,16 @@
+{
+  "name": "Planning Schedule Adhesive Needed Quantity",
+  "description": "This measure quantifies the adhesive quantity required in alignment with the latest schedule created by the Planning department.",
+  "expression": [
+    "CALCULATE(SUM('Planning Schedule'[Adhesive Quantity]),USERELATIONSHIP('Planning Schedule'[Plan Finish Date Key],Calendar[Date]), FILTER('Planning Schedule', 'Planning Schedule'[Ranking Desc] = 1))",
+    ""
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Planning Schedule\\_Adhesives Required",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

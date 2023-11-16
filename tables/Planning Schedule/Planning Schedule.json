@@ -4,12 +4,18 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": [
         "[",
+        "  {",
+        "    \"fromTable\": \"Planning Schedule\",",
+        "    \"fromColumn\": \"Adhesive Component\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
         "  {",
         "    \"fromTable\": \"Planning Schedule\",",
         "    \"fromColumn\": \"Department\",",
@@ -21,6 +27,13 @@
         "    \"fromColumn\": \"Machine\",",
         "    \"toTable\": \"Machine\",",
         "    \"toColumn\": \"Machine\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Planning Schedule\",",
+        "    \"fromColumn\": \"Plan Finish Date Key\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\",",
+        "    \"isActive\": false",
         "  },",
         "  {",
         "    \"fromTable\": \"Planning Schedule\",",

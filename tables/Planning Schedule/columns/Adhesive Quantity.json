@@ -1,13 +1,14 @@
 {
   "name": "Adhesive Quantity",
   "dataType": "int64",
+  "description": "Adhesive quantity needed to meet the target quantity of the process order according to the planning schedule.",
   "sourceColumn": "AdhesiveQuantity",
   "formatString": "#,0",
   "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
     }
   ]
 }

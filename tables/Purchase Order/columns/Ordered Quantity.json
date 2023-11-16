@@ -5,6 +5,7 @@
   "sourceColumn": "OrderedQty",
   "formatString": "#,0.00",
   "displayFolder": "_Values (Not for Aggregation)",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

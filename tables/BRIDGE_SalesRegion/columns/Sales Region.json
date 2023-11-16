@@ -1,6 +1,7 @@
 {
   "name": "Sales Region",
   "dataType": "string",
+  "isHidden": true,
   "isUnique": true,
   "isKey": true,
   "sourceColumn": "SalesDistrictKey",

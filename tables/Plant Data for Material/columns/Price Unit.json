@@ -3,6 +3,7 @@
   "dataType": "int64",
   "sourceColumn": "PriceUnit",
   "formatString": "#,0",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

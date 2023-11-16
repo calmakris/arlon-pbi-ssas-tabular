@@ -46,6 +46,10 @@
   },
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Special Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Expenses\"]"
     },

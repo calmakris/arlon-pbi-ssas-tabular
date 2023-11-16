@@ -3,6 +3,10 @@
   "isHidden": true,
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Bridge Tables"
+    },
+    {
       "name": "TabularEditor_Relationships",
       "value": "[]"
     }

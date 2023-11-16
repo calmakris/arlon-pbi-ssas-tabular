@@ -3,6 +3,7 @@
   "dataType": "string",
   "description": "Specifies the country of the vendor according to their address in the account",
   "sourceColumn": "Country",
+  "dataCategory": "Country",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

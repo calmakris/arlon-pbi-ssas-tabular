@@ -3,6 +3,10 @@
   "description": "Contains shift that conforms with production schedule that starts at 6 AM",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\"]"
     },

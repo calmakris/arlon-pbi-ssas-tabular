@@ -3,6 +3,10 @@
   "description": "Contains PLC tags. This table contains tags as specified by the Engineering department. Not all PLC tags are in this table.",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Engineering\"]"
     },

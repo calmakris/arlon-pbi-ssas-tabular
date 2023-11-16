@@ -4,6 +4,7 @@
   "description": "Country where the item will be shipped from",
   "sourceColumn": "OriginCountry",
   "displayFolder": "Header",
+  "dataCategory": "Country",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

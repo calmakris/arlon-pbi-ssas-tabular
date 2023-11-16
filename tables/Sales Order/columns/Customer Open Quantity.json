@@ -1,9 +1,10 @@
 {
-  "name": "Exchange Rate",
+  "name": "Customer Open Quantity",
   "dataType": "decimal",
-  "description": "Exchange rate to convert the value to USD.",
-  "sourceColumn": "ExchangeRate",
-  "displayFolder": "Item",
+  "description": "This value represents the difference of ordered and shipped quantities. It is used for display only and not for aggregation.",
+  "sourceColumn": "CustomerOpenQuantity",
+  "formatString": "#,0.00",
+  "displayFolder": "Values (Not for Aggregation)",
   "summarizeBy": "none",
   "annotations": [
     {

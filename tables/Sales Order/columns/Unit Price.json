@@ -5,6 +5,7 @@
   "sourceColumn": "UnitPrice",
   "formatString": "#,0.00",
   "displayFolder": "Item",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

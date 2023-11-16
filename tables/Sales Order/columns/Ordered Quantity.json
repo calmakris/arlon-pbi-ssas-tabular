@@ -1,9 +1,10 @@
 {
-  "name": "Exchange Rate",
+  "name": "Ordered Quantity",
   "dataType": "decimal",
-  "description": "Exchange rate to convert the value to USD.",
-  "sourceColumn": "ExchangeRate",
-  "displayFolder": "Item",
+  "description": "This value represents the quantity of materials ordered. It is used for display only and not for aggregation.",
+  "sourceColumn": "OrderQuantity",
+  "formatString": "#,0.00",
+  "displayFolder": "Values (Not for Aggregation)",
   "summarizeBy": "none",
   "annotations": [
     {

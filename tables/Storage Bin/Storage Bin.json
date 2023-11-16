@@ -3,6 +3,10 @@
   "description": "Contains storage bins available in SAP",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"Inventory\",\"QA Dashboard\",\"Warehouse\"]"
     },

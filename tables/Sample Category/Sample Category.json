@@ -3,6 +3,10 @@
   "description": "A table used to filter sample requests entered in SAP and Odoo by category such as full rolls, sample rolls, literature, and tradeshow requests.",
   "annotations": [
     {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
       "name": "TabularEditor_InPerspective",
       "value": "[\"CS Dashboard\"]"
     },

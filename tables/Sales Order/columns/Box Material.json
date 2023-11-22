@@ -1,0 +1,13 @@
+{
+  "name": "Box Material",
+  "dataType": "string",
+  "description": "Packaging box material based on the latest bill of material by material and plant.",
+  "sourceColumn": "BoxMaterial",
+  "displayFolder": "BOM and Inventory",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"CS Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

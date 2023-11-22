@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Gross Weight",
+  "description": "Total gross weight in the sales order",
+  "expression": "SUM( 'FACT_SalesOrder'[GrossWeight] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Finance\",\"Generic Sales\",\"Inventory\",\"Open Orders Report\",\"Product Management\",\"Sales Orders\",\"Warehouse\"]"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "expression": [
     "",
     "VAR _MinSelectedDate = CALCULATE(MIN('Calendar'[Date]), ALLSELECTED('Calendar'))",
-    "VAR _MaxSelectedDate = CALCULATE(MAX('Calendar'[Date]), ALLSELECTED('Calendar'))",
+    "",
     "VAR _CurrentDate = MAX('Calendar'[Date])",
     "VAR _CummReqQty =",
     "    CALCULATE(",
@@ -21,7 +21,8 @@
     "        _CurrentDate = _MinSelectedDate,",
     "        [Unrestricted Stock Quantity] + 0,",
     "        [Unrestricted Stock Quantity] - _CummReqQty + 0",
-    "    )"
+    "    )",
+    "   "
   ],
   "formatString": "#,##0.00",
   "displayFolder": "Planning Schedule\\_Adhesives Required",

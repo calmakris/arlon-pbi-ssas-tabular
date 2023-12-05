@@ -1,0 +1,24 @@
+{
+  "name": "CONV RS Count",
+  "description": "This measure tallies the number of transactions in the Converting department, considering the negative impact of transaction reversals in the overall count, specifically records marked with movement type 532.",
+  "expression": [
+    "",
+    "CALCULATE( COUNTROWS( 'Goods Movement' ), FILTER('Goods Movement', 'Goods Movement'[Movement Type] = \"531\" )) -",
+    "CALCULATE( COUNTROWS( 'Goods Movement' ), FILTER( 'Goods Movement', 'Goods Movement'[Movement Type] = \"532\" ))",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "formatString": "#,##0",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Rs Batch Flag",
+  "dataType": "string",
+  "description": "Extracted from Document Header Text",
+  "sourceColumn": "Rs_Batch_Flag",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

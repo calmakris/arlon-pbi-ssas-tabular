@@ -4,7 +4,10 @@
   "expression": [
     "CALCULATE(",
     "    SUM( 'Goods Movement'[Amount] ),",
-    "    'Goods Movement'[Movement Type] =  \"531\" ||  'Goods Movement'[Movement Type] =  \"532\" ",
+    "    FILTER(",
+    "        ALL( 'Goods Movement'[Movement Type] ),",
+    "        'Goods Movement'[Movement Type] IN {\"531\", \"532\"}",
+    "    )",
     " )",
     "    ",
     "    "

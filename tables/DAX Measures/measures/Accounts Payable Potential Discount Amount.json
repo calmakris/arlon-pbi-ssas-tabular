@@ -8,7 +8,7 @@
     "    KEEPFILTERS( 'Accounts Payable'[AmountUSD] < 0 ),   -- excludes refunds",
     "    FILTER(",
     "        'Accounts Payable',",
-    "        'Accounts Payable'[Cleared Date] > [AP & AR Key Date]     -- not cleared by report date",
+    "        'Accounts Payable'[Cleared Date] > [Report Date]     -- not cleared by report date",
     "    )",
     ")"
   ],

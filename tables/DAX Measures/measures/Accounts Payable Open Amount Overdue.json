@@ -5,10 +5,11 @@
     "",
     "CALCULATE(",
     "    [Accounts Payable Amount],",
+    "    REMOVEFILTERS( 'Calendar' ),",
     "    FILTER(",
     "        'Accounts Payable',",
-    "        'Accounts Payable'[Cleared Date] > [AP & AR Key Date]",
-    "            && 'Accounts Payable'[Due Date] < [AP & AR Key Date]",
+    "        'Accounts Payable'[Cleared Date] > [Report Date]",
+    "            && 'Accounts Payable'[Due Date] < [Report Date]",
     "    )",
     ")"
   ],

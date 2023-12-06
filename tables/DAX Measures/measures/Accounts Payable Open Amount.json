@@ -7,7 +7,7 @@
     "    [Accounts Payable Amount],",
     "    FILTER(",
     "        'Accounts Payable',",
-    "        'Accounts Payable'[Cleared Date] > [AP & AR Key Date]",
+    "        'Accounts Payable'[Cleared Date] > [Report Date]",
     "    )",
     ")"
   ],

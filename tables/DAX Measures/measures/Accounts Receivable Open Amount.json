@@ -7,7 +7,7 @@
     "    SUM( 'Accounts Receivable'[AmountUSD] ),",
     "    FILTER(",
     "        'Accounts Receivable',",
-    "        'Accounts Receivable'[Cleared Date] > [AP & AR Key Date]",
+    "        'Accounts Receivable'[Cleared Date] > [Report Date]",
     "    )",
     ")"
   ],

@@ -5,10 +5,11 @@
     "",
     "CALCULATE(",
     "    [Accounts Receivable Amount],",
+    "    REMOVEFILTERS( 'Calendar' ),",
     "    FILTER(",
     "        'Accounts Receivable',",
-    "        'Accounts Receivable'[Cleared Date] > [AP & AR Key Date]",
-    "            && 'Accounts Receivable'[Due Date] < [AP & AR Key Date]",
+    "        'Accounts Receivable'[Cleared Date] > [Report Date]",
+    "            && 'Accounts Receivable'[Due Date] < [Report Date]",
     "    )",
     ")"
   ],

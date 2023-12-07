@@ -5,7 +5,7 @@
     "",
     "CALCULATE(",
     "    SUM( 'Accounts Payable'[DiscAmountUSD] ) * -1,",
-    "    KEEPFILTERS( 'Accounts Payable'[AmountUSD] < 0 ),   -- excludes refunds",
+    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KR\", \"KA\" } ), -- vendor invoice and document",
     "    FILTER(",
     "        'Accounts Payable',",
     "        'Accounts Payable'[Cleared Date] > [Report Date]     -- not cleared by report date",

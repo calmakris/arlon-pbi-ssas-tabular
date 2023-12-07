@@ -1,0 +1,40 @@
+{
+  "name": "Accounts Payable Potential Discount Amount Due This Month",
+  "description": "This measure calculates the total potential amount of discounts available this month based on the first cash discount terms for accounts payable documents that are still pending clearance as of a chosen date. By default, it calculates the total potential discounts that remain uncleared before yesterday. Filter the [Date] field in the 'Calendar' table to change this key date.",
+  "expression": [
+    "",
+    "VAR _RefDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "VAR _BegMonth = EOMONTH( _RefDate, -1 ) + 1",
+    "VAR _EndMonth = EOMONTH( _RefDate, 0 )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        [Accounts Payable Potential Discount Amount],",
+    "        FILTER(",
+    "            ALL( 'Accounts Payable'[Cleared Date] ),",
+    "            'Accounts Payable'[Cleared Date] > _RefDate",
+    "        ),",
+    "        FILTER(",
+    "            ALL( 'Accounts Payable'[Due Date] ),",
+    "            'Accounts Payable'[Due Date] >= _BegMonth",
+    "                && 'Accounts Payable'[Due Date] <= _EndMonth",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\zTime-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

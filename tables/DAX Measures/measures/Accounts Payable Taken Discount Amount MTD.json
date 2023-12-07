@@ -1,0 +1,25 @@
+{
+  "name": "Accounts Payable Taken Discount Amount MTD",
+  "description": "This measure calculates the amount of discounts that the company received for the month when paying accounts payable documents (types \"KZ\" and \"ZP\") with a clearing date on or before yesterday. Filter the [Date] field in the 'Calendar' table to change this key date.",
+  "expression": [
+    "",
+    "CALCULATE(",
+    "    CALCULATE(",
+    "        [Accounts Payable Paid Discount Amount],",
+    "        DATESMTD( 'Calendar'[Date] )",
+    "    ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\zTime-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

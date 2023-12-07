@@ -6,7 +6,7 @@
     "CALCULATE(",
     "    SUM( 'Accounts Receivable'[AmountUSD] ),",
     "    FILTER(",
-    "        'Accounts Receivable',",
+    "        ALL( 'Accounts Receivable'[Cleared Date] ) ,",
     "        'Accounts Receivable'[Cleared Date] > [Report Date]",
     "    )",
     ")"

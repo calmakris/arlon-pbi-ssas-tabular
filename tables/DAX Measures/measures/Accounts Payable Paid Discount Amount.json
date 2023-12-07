@@ -7,7 +7,7 @@
     "    SUM( 'Accounts Payable'[DiscPaidUSD] ),",
     "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KZ\", \"ZP\" } ),",
     "    FILTER(",
-    "        'Accounts Payable',",
+    "        ALL( 'Accounts Payable'[Cleared Date] ),",
     "        'Accounts Payable'[Cleared Date] <= [Report Date]    -- cleared by set report date",
     "    )",
     ")"

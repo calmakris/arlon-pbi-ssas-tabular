@@ -6,7 +6,7 @@
     "CALCULATE(",
     "    [Accounts Payable Amount],",
     "    FILTER(",
-    "        'Accounts Payable',",
+    "        ALL( 'Accounts Payable'[Cleared Date] ),",
     "        'Accounts Payable'[Cleared Date] > [Report Date]",
     "    )",
     ")"

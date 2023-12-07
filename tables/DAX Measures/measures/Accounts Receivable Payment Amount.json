@@ -7,7 +7,7 @@
     "    [Accounts Receivable Amount],",
     "    KEEPFILTERS( 'Accounts Receivable'[Document Type] = \"RV\" ),",
     "    FILTER(",
-    "        'Accounts Receivable',",
+    "        ALL( 'Accounts Receivable'[Cleared Date] ),",
     "        'Accounts Receivable'[Cleared Date] <= [Report Date]    -- cleared by set report date",
     "    )",
     ")"

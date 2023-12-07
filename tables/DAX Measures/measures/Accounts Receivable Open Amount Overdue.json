@@ -11,7 +11,7 @@
     "    ),",
     "    FILTER(",
     "        ALL( 'Accounts Receivable'[Due Date] ),",
-    "        'Accounts Receivable'[Due Date] < [Report Date]",
+    "        'Accounts Receivable'[Due Date] <= [Report Date]",
     "    )",
     ")"
   ],

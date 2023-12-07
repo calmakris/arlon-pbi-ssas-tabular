@@ -11,7 +11,7 @@
     "    ),",
     "    FILTER(",
     "        ALL( 'Accounts Payable'[Due Date] ),",
-    "        'Accounts Payable'[Due Date] < [Report Date]",
+    "        'Accounts Payable'[Due Date] <= [Report Date]",
     "    )",
     ")"
   ],

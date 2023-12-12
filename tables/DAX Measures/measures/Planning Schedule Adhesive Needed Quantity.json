@@ -5,7 +5,7 @@
     "CALCULATE (",
     "    SUM ( 'Planning Schedule'[Adhesive Quantity] ),",
     "    USERELATIONSHIP ( 'Planning Schedule'[PlanFinishDateAltKey], 'Calendar'[Date] ),",
-    "    FILTER ( 'Planning Schedule', 'Planning Schedule'[Ranking Desc] = 1 )",
+    "    KEEPFILTERS( 'Planning Schedule'[Ranking Desc] = 1 )",
     ")"
   ],
   "formatString": "#,##0.00",

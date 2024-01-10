@@ -32,6 +32,12 @@
         "    \"fromColumn\": \"PlantNoKey\",",
         "    \"toTable\": \"Plant\",",
         "    \"toColumn\": \"Plant\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_MonthlyConsumption\",",
+        "    \"fromColumn\": \"ValuationClass\",",
+        "    \"toTable\": \"Valuation Class\",",
+        "    \"toColumn\": \"Valuation Class\"",
         "  }",
         "]"
       ]

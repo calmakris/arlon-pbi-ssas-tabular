@@ -1,0 +1,7 @@
+{
+  "name": "ValuationClass",
+  "dataType": "string",
+  "isHidden": true,
+  "sourceColumn": "ValuationClass",
+  "isAvailableInMdx": false
+}

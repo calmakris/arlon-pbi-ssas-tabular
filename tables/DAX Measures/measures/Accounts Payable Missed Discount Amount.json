@@ -8,7 +8,7 @@
     "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KZ\", \"ZP\" } ),      -- payments only",
     "    KEEPFILTERS( 'Accounts Payable'[DiscPaidUSD] = 0 ),                      -- actual discount paid is 0",
     "    FILTER(",
-    "        'Accounts Payable',",
+    "        ALL( 'Accounts Payable'[Cleared Date] ),",
     "        'Accounts Payable'[Cleared Date] <= [Report Date]                    -- cleared by set report date",
     "    )",
     ")"

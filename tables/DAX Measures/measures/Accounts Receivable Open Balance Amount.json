@@ -1,0 +1,33 @@
+{
+  "name": "Accounts Receivable Open Balance Amount",
+  "description": "This measure gives the outstanding balance from customers so far as of a chosen date in the 'Calendar' table. Normally, this calculation includes uncleared amounts due before yesterday. Filter the [Date] field in the 'Calendar' table to change this key date.",
+  "expression": [
+    "",
+    "VAR _RefDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    CALCULATE(",
+    "        [Accounts Receivable Open Amount],",
+    "        KEEPFILTERS( 'Cost Element'[Cost Element] = \"0011211000\" ),    -- AR trade G/L acct",
+    "        FILTER(",
+    "            ALL( 'Calendar'[Date] ),",
+    "            'Calendar'[Date] <= _RefDate",
+    "        )",
+    "    )"
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Finance\\_Receivable",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

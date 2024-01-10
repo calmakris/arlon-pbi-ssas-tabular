@@ -1,0 +1,13 @@
+{
+  "name": "COMP Casting Hours",
+  "description": "Total casting hours based on the current Compounding schedule.",
+  "expression": "SUM( 'FACT_CompoundingCastingHours'[HourValue] )",
+  "formatString": "#,0.00",
+  "displayFolder": "Compounding",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\"]"
+    }
+  ]
+}

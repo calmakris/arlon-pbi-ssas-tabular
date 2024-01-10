@@ -6,14 +6,17 @@
     "CALCULATE(",
     "    [Accounts Receivable Amount],",
     "    FILTER(",
-    "        'Accounts Receivable',",
-    "        'Accounts Receivable'[Cleared Date] > [AP & AR Key Date]",
-    "            && 'Accounts Receivable'[Due Date] < [AP & AR Key Date]",
+    "        ALL( 'Accounts Receivable'[Cleared Date] ),",
+    "        'Accounts Receivable'[Cleared Date] > [Report Date]",
+    "    ),",
+    "    FILTER(",
+    "        ALL( 'Accounts Receivable'[Due Date] ),",
+    "        'Accounts Receivable'[Due Date] <= [Report Date]",
     "    )",
     ")"
   ],
   "formatString": "#,0",
-  "displayFolder": "Finance\\zTime-Based",
+  "displayFolder": "Finance\\_Time-Based",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

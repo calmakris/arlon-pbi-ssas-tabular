@@ -1,0 +1,25 @@
+{
+  "name": "FACT_CompoundingCastingHours",
+  "isHidden": true,
+  "annotations": [
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"FACT_CompoundingCastingHours\",",
+        "    \"fromColumn\": \"Department\",",
+        "    \"toTable\": \"Department\",",
+        "    \"toColumn\": \"Department\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"FACT_CompoundingCastingHours\",",
+        "    \"fromColumn\": \"Machine\",",
+        "    \"toTable\": \"Machine\",",
+        "    \"toColumn\": \"Machine\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

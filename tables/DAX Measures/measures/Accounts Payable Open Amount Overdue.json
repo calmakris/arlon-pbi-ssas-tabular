@@ -6,14 +6,17 @@
     "CALCULATE(",
     "    [Accounts Payable Amount],",
     "    FILTER(",
-    "        'Accounts Payable',",
-    "        'Accounts Payable'[Cleared Date] > [AP & AR Key Date]",
-    "            && 'Accounts Payable'[Due Date] < [AP & AR Key Date]",
+    "        ALL( 'Accounts Payable'[Cleared Date] ),",
+    "        'Accounts Payable'[Cleared Date] > [Report Date]",
+    "    ),",
+    "    FILTER(",
+    "        ALL( 'Accounts Payable'[Due Date] ),",
+    "        'Accounts Payable'[Due Date] <= [Report Date]",
     "    )",
     ")"
   ],
   "formatString": "#,0",
-  "displayFolder": "Finance\\zTime-Based",
+  "displayFolder": "Finance\\_Time-Based",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

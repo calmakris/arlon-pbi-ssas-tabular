@@ -1,0 +1,13 @@
+{
+  "name": "Completion Date",
+  "dataType": "dateTime",
+  "description": "Date when the hold tag is completed/closed.",
+  "sourceColumn": "CompletionDate",
+  "formatString": "Short Date",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Planning\",\"QA Dashboard\"]"
+    }
+  ]
+}

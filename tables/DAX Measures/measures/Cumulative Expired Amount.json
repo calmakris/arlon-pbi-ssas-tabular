@@ -11,7 +11,7 @@
     "",
     "CALCULATE(",
     "    SUM( 'Inventory'[AmountUSD] ),",
-    "    KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
+    "    KEEPFILTERS( 'Inventory'[Batch Managed Flag] = \"Yes\" ),",
     "    USERELATIONSHIP( 'Calendar'[Date], 'Inventory'[Expiration Date] ),",
     "    FILTER(",
     "        ALL( 'Calendar'[Date] ),",

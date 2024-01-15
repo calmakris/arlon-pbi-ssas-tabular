@@ -1,5 +1,5 @@
 {
-  "name": "Accounts Payable Open Balance Amount Overdue% ",
+  "name": "Accounts Payable Open Balance Amount Overdue%",
   "description": "This measure gives the percentage of outstanding balance to pay the company’s vendors and suppliers so far as of a key date and with due dates on or before the key date. If used with a date context, the key date is the latest date within that context.",
   "expression": [
     "VAR _RefDate =",

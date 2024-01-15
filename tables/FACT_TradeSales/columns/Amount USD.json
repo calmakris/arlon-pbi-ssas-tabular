@@ -1,0 +1,8 @@
+{
+  "name": "Amount USD",
+  "dataType": "decimal",
+  "isHidden": true,
+  "isKey": true,
+  "sourceColumn": "AmountUSD",
+  "isAvailableInMdx": false
+}

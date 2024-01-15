@@ -15,14 +15,14 @@
     "RETURN",
     "    CALCULATE(",
     "        [Accounts Receivable Open Amount],",
-    "        KEEPFILTERS( 'Cost Element'[Cost Element] = \"0011211000\" ),    -- AR trade G/L acct",
+    "        KEEPFILTERS('Cost Element'[Cost Element] = \"0011211000\" ),    -- AR trade G/L acct",
     "        FILTER(",
     "            ALL( 'Calendar'[Date] ),",
     "            'Calendar'[Date] <= _RefDate",
     "        )",
     "    )"
   ],
-  "formatString": "#,0",
+  "formatString": "#,##0",
   "displayFolder": "Finance\\_Receivable",
   "annotations": [
     {

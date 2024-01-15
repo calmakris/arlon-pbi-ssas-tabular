@@ -1,7 +1,9 @@
 {
   "name": "Company Code",
   "dataType": "string",
+  "isHidden": true,
   "sourceColumn": "CompanyCode",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

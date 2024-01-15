@@ -1,7 +1,9 @@
 {
   "name": "Posting Date",
   "dataType": "dateTime",
+  "isHidden": true,
   "sourceColumn": "PostingDate",
+  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

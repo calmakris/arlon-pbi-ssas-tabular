@@ -1,6 +1,6 @@
 {
   "name": "Days Receivable Outstanding",
-  "description": "This metric is the total value of cleared and uncleared G/L account items posted under 0040000000 G/L account in SAP.",
+  "description": "This calculates average number of days it takes to collect receivables based on the previous 12 calendar months. It is calculated by taking the closing balance of Accounts Receivable (items posted under 0011211000 G/L account) divided by the total trade sales in the last 12 months (items posted under 0040000000 G/L account) mul􀆟plied by 365. A high days figure can indicate that the company is taking too long to collect money, and the company is extending too lenient credit terms to customers.",
   "expression": [
     "VAR _MinVisibleDate =",
     "    MIN( 'Calendar'[Date] )",
@@ -21,7 +21,7 @@
     "    EOMONTH(_Ref,-12) + 1",
     "     ",
     "VAR  _Tradesalesin12Months = ",
-    "    CALCULATE([ Trade Sales Amount],",
+    "    CALCULATE([Trade Sales Amount],",
     "        FILTER(",
     "            ALL( Calendar[Date]),",
     "            Calendar[Date] >= _MinDate &&",

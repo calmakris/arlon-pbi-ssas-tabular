@@ -1,0 +1,11 @@
+{
+  "name": "Posting Date",
+  "dataType": "dateTime",
+  "sourceColumn": "PostingDate",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

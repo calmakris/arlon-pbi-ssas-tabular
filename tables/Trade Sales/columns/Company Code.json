@@ -1,0 +1,11 @@
+{
+  "name": "Company Code",
+  "dataType": "string",
+  "sourceColumn": "CompanyCode",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

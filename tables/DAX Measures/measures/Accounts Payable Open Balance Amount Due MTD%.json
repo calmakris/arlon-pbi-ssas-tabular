@@ -1,0 +1,45 @@
+{
+  "name": "Accounts Payable Open Balance Amount Due MTD%",
+  "description": "This measure gives the percentage of outstanding balance to pay the company’s vendors and suppliers so far as of a key date and with due dates on or before the key date. If used with a date context, the key date is the latest date within that context.",
+  "expression": [
+    "VAR _MaxRefDate =",
+    "    CALCULATE(",
+    "        MAX('Calendar'[Date]),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "VAR _MinRefDate =",
+    "    CALCULATE(",
+    "        MIN('Calendar'[Date]),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "",
+    "VAR _OpenBalanceForTheMonthInContext =",
+    "    CALCULATE(",
+    "        [Accounts Payable Open Balance Amount],",
+    "        FILTER(",
+    "            ALL('Accounts Payable'[Due Date]),",
+    "            'Accounts Payable'[Due Date] >= _MinRefDate &&",
+    "            'Accounts Payable'[Due Date] <= _MaxRefDate",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    DIVIDE(_OpenBalanceForTheMonthInContext, [Accounts Payable Open Balance Amount], 0)",
+    ""
+  ],
+  "formatString": "#,##0.00 %",
+  "displayFolder": "Finance\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

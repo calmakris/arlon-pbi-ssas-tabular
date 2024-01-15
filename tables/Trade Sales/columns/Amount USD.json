@@ -1,0 +1,6 @@
+{
+  "name": "Amount USD",
+  "dataType": "decimal",
+  "isKey": true,
+  "sourceColumn": "AmountUSD"
+}

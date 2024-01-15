@@ -1,0 +1,32 @@
+{
+  "name": "Trade Sales",
+  "annotations": [
+    {
+      "name": "TabularEditor_TableGroup",
+      "value": "Dimension Tables"
+    },
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    },
+    {
+      "name": "TabularEditor_Relationships",
+      "value": [
+        "[",
+        "  {",
+        "    \"fromTable\": \"Trade Sales\",",
+        "    \"fromColumn\": \"Company Code\",",
+        "    \"toTable\": \"Company Code\",",
+        "    \"toColumn\": \"Company Code\"",
+        "  },",
+        "  {",
+        "    \"fromTable\": \"Trade Sales\",",
+        "    \"fromColumn\": \"Posting Date\",",
+        "    \"toTable\": \"Calendar\",",
+        "    \"toColumn\": \"Date\"",
+        "  }",
+        "]"
+      ]
+    }
+  ]
+}

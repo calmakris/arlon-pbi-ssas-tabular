@@ -1,0 +1,18 @@
+{
+  "name": " Trade Sales Amount",
+  "description": "This metric is the total value of cleared and uncleared G/L account items posted under 0040000000 G/L account in SAP.",
+  "expression": [
+    "SUM('Trade Sales'[Amount USD])*-1",
+    "   ",
+    "",
+    ""
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Finance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

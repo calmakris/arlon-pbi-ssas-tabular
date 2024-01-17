@@ -1,0 +1,13 @@
+{
+  "name": "Sales Order Open Margin%",
+  "description": "Total gross margin percentage of items in the sales order that is not yet shipped to the customer. Allocated items are also counted as open.",
+  "expression": " DIVIDE( [Sales Order Open Margin], [Sales Order Open Amount] )",
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Sales Order",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"BI Morning Dashboard\",\"Finance\",\"Generic Sales\",\"Open Orders Report\",\"Sales Orders\"]"
+    }
+  ]
+}

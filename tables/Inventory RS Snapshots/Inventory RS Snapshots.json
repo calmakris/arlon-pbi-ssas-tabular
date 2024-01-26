@@ -7,6 +7,10 @@
   ],
   "annotations": [
     {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    },
+    {
       "name": "TabularEditor_Relationships",
       "value": [
         "[",
@@ -42,10 +46,6 @@
         "  }",
         "]"
       ]
-    },
-    {
-      "name": "TabularEditor_InPerspective",
-      "value": "[\"Engineering\",\"Operations\"]"
     }
   ]
 }

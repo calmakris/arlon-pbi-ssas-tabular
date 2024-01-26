@@ -4,12 +4,18 @@
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",
-      "value": "[\"Planning\"]"
+      "value": "[\"Inventory\",\"Operations\",\"Planning\"]"
     },
     {
       "name": "TabularEditor_Relationships",
       "value": [
         "[",
+        "  {",
+        "    \"fromTable\": \"Planning Schedule\",",
+        "    \"fromColumn\": \"Adhesive Component\",",
+        "    \"toTable\": \"Material Master\",",
+        "    \"toColumn\": \"Material Number\"",
+        "  },",
         "  {",
         "    \"fromTable\": \"Planning Schedule\",",
         "    \"fromColumn\": \"Department\",",

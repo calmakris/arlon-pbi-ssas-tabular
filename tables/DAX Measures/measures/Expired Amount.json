@@ -9,7 +9,7 @@
     "",
     "CALCULATE(",
     "    SUM( 'Inventory'[AmountUSD] ),",
-    "    KEEPFILTERS( 'Inventory'[BatchManagedFlag] = \"Yes\" ),",
+    "    KEEPFILTERS( 'Inventory'[Batch Managed Flag] = \"Yes\" ),",
     "    FILTER(",
     "        ALL( 'Inventory'[Expiration Date] ),",
     "        'Inventory'[Expiration Date] <= [Report Date]",

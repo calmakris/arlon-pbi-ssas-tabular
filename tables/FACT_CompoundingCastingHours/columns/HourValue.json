@@ -1,0 +1,7 @@
+{
+  "name": "HourValue",
+  "dataType": "decimal",
+  "isHidden": true,
+  "sourceColumn": "HourValue",
+  "isAvailableInMdx": false
+}

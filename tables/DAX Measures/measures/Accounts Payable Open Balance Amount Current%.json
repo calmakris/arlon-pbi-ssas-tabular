@@ -1,0 +1,13 @@
+{
+  "name": "Accounts Payable Open Balance Amount Current%",
+  "description": "This measure gives the percentage of outstanding balance to pay the company’s vendors and suppliers so far as of a key date and with due dates after the key date. If used with a date context, the key date is the latest date within that context.",
+  "expression": "1 - [Accounts Payable Open Balance Amount Overdue%]",
+  "formatString": "#,##0.00 %",
+  "displayFolder": "Finance\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

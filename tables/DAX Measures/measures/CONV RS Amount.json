@@ -1,0 +1,23 @@
+{
+  "name": "CONV RS Amount",
+  "description": "This measure represents the monetary value of RS transactions originating from the Converting department.",
+  "expression": [
+    "CALCULATE(",
+    "    SUM( 'Goods Movement'[Amount] ),",
+    "    FILTER(",
+    "        ALL( 'Goods Movement'[Movement Type] ),",
+    "        'Goods Movement'[Movement Type] IN {\"531\", \"532\"}",
+    "    )",
+    " )",
+    "    ",
+    "    "
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Converting",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

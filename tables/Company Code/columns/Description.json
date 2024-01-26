@@ -1,17 +1,7 @@
 {
-  "name": "AP & AR Key Date",
-  "expression": [
-    "",
-    "CALCULATE(",
-    "    MAX( 'Calendar'[Date] ),",
-    "    FILTER(",
-    "        ALL( 'Calendar' ),",
-    "        'Calendar'[Date] <= [Report Date]",
-    "    )",
-    ")"
-  ],
-  "isHidden": true,
-  "displayFolder": "Finance",
+  "name": "Description",
+  "dataType": "string",
+  "sourceColumn": "Description",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

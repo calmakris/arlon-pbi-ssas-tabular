@@ -1,9 +1,8 @@
 {
-  "name": "Last12MoConsumeQty",
-  "dataType": "decimal",
-  "isHidden": true,
-  "sourceColumn": "Last12MoConsumeQty",
-  "isAvailableInMdx": false,
+  "name": "Batch Number",
+  "dataType": "string",
+  "description": "Batch number of the material in inventory",
+  "sourceColumn": "BatchNo",
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

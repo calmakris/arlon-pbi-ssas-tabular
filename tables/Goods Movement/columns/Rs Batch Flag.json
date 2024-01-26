@@ -1,0 +1,13 @@
+{
+  "name": "RS Batch Flag",
+  "dataType": "string",
+  "description": "Determines if the batch in this transaction was created as a result of a receipt substitution",
+  "sourceColumn": "Rs_Batch_Flag",
+  "displayFolder": "Item",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Engineering\",\"Operations\"]"
+    }
+  ]
+}

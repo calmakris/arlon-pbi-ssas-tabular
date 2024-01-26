@@ -1,6 +1,6 @@
 {
   "name": "Actual Shipment Date",
-  "dataType": "string",
+  "dataType": "dateTime",
   "description": "Date when the shipment actually departed. This field refers to the 'Loading start' date in the shipment document in VT03N SAP transaction code.",
   "sourceColumn": "ActualShipmentDate",
   "formatString": "Short Date",

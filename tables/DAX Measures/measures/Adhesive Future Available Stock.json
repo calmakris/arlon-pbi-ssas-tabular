@@ -1,0 +1,35 @@
+{
+  "name": "Adhesive Future Available Stock",
+  "description": "This measure represents the available stock from the previous day and subtracting the quantity required for the current day.",
+  "expression": [
+    "",
+    "VAR _MinSelectedDate = CALCULATE(MIN('Calendar'[Date]), ALLSELECTED('Calendar'))",
+    "",
+    "VAR _CurrentDate = MAX('Calendar'[Date])",
+    "VAR _CummReqQty =",
+    "    CALCULATE(",
+    "        [Planning Schedule Adhesive Needed Quantity],",
+    "        FILTER(",
+    "            ALL( 'Calendar' ),",
+    "            'Calendar'[Date] >= _MinSelectedDate",
+    "                && 'Calendar'[Date] <= _CurrentDate",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    IF(",
+    "        _CurrentDate = _MinSelectedDate,",
+    "        [Unrestricted Stock Quantity] + 0,",
+    "        [Unrestricted Stock Quantity] - _CummReqQty + 0",
+    "    )",
+    "   "
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Planning Schedule\\_Adhesives Required",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Inventory\",\"Operations\"]"
+    }
+  ]
+}

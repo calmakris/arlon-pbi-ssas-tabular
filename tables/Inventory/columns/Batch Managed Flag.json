@@ -1,9 +1,8 @@
 {
-  "name": "BatchManagedFlag",
+  "name": "Batch Managed Flag",
   "dataType": "string",
-  "isHidden": true,
+  "description": "Indicates if the material is batched managed. This is essential when determining the expiry where only batch managed materials are included.",
   "sourceColumn": "BatchManagedFlag",
-  "isAvailableInMdx": false,
   "annotations": [
     {
       "name": "TabularEditor_InPerspective",

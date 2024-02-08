@@ -1,0 +1,45 @@
+{
+  "name": "Inventory Turnover Ratio",
+  "description": "This measure is the total cost of goods sold in the last 12 months divided by the accumulated inventory balance.",
+  "expression": [
+    "",
+    "VAR _Ref =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date]),",
+    "        FILTER (",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "VAR _MaxDate =",
+    "    EOMONTH(_Ref,0)",
+    "    ",
+    "VAR _MinDate =",
+    "    EOMONTH(_Ref,-12) + 1",
+    "     ",
+    "VAR _COGSInLast12Months = ",
+    "    CALCULATE(",
+    "        [Cost of Goods Sold],",
+    "        FILTER(",
+    "            ALL( 'Calendar'[Date]),",
+    "            'Calendar'[Date] >= _MinDate &&",
+    "            'Calendar'[Date] <= _MaxDate",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    DIVIDE(",
+    "        _COGSInLast12Months,",
+    "        [Accumulated Inventory Balance MTD]",
+    "    )"
+  ],
+  "formatString": "#,##0.00",
+  "displayFolder": "Finance",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\"]"
+    }
+  ]
+}

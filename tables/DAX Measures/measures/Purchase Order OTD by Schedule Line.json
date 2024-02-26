@@ -1,14 +1,25 @@
 {
-  "name": "Purchase Order OTD",
+  "name": "Purchase Order OTD by Schedule Line",
   "description": "This measure calculates the delivery timeliness of standard purchase orders for inventory items by determining the percentage of goods receipts that were received on time. It does this by dividing the number of on-time goods receipt transactions by the total number of goods receipt transactions.",
   "expression": [
     "",
-    "AVERAGEX(",
-    "    VALUES( 'Purchase Order'[PurchaseOrderLineKey] ),",
-    "    [Purchase Order OTD by PO Line]",
-    ")"
+    "VAR _LateCount =",
+    "    CALCULATE(",
+    "        COUNTROWS( 'Purchase Order OTD' ),",
+    "        FILTER(",
+    "            ALL( 'Purchase Order OTD'[Late Flag] ),",
+    "            'Purchase Order OTD'[Late Flag] = \"Yes\"",
+    "        )",
+    "    )",
+    "",
+    "RETURN",
+    "    DIVIDE(",
+    "        [Purchase Order GR Transactions Count] - _LateCount,",
+    "        [Purchase Order GR Transactions Count]",
+    "    )"
   ],
   "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "isHidden": true,
   "displayFolder": "Purchase Order\\_OTD",
   "annotations": [
     {

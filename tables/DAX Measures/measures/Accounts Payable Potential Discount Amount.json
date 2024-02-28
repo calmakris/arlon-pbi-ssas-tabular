@@ -5,12 +5,14 @@
     "",
     "CALCULATE(",
     "    SUM( 'Accounts Payable'[DiscAmountUSD] ) * -1,",
-    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KR\", \"KA\", \"RE\" } ), -- vendor invoice and document, and invoice",
+    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"RE\", \"KR\" } ), -- vendor invoice and document, and invoice",
     "    FILTER(",
     "        ALL( 'Accounts Payable'[Cleared Date] ),",
     "        'Accounts Payable'[Cleared Date] > [Report Date]     -- not cleared by report date",
     "    )",
-    ")"
+    ")",
+    "",
+    ""
   ],
   "formatString": "#,0",
   "displayFolder": "Finance\\_Payable",

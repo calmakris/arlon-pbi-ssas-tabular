@@ -12,7 +12,7 @@
     "        )",
     "    )",
     "    ",
-    "VAR _BegMonth = EOMONTH( _RefDate, -1 ) + 1",
+    "//VAR _BegMonth = EOMONTH( _RefDate, -1 ) + 1",
     "VAR _EndMonth = EOMONTH( _RefDate, 0 )",
     "",
     "RETURN",
@@ -24,8 +24,7 @@
     "        ),",
     "        FILTER(",
     "            ALL( 'Accounts Payable'[Due Date] ),",
-    "            'Accounts Payable'[Due Date] >= _BegMonth",
-    "                && 'Accounts Payable'[Due Date] <= _EndMonth",
+    "                 'Accounts Payable'[Due Date] <= _EndMonth",
     "        )",
     "    )"
   ],

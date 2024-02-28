@@ -4,13 +4,18 @@
   "expression": [
     "",
     "CALCULATE(",
-    "    SUM( 'Accounts Payable'[DiscPaidUSD] ),",
-    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"KZ\", \"ZP\" } ),",
+    "    SUM( 'Accounts Payable'[DiscPaidUSD] ) * -1,",
+    "    USERELATIONSHIP( 'Calendar'[Date], 'Accounts Payable'[Cleared Date] ),",
+    "    KEEPFILTERS( 'Accounts Payable'[Document Type] IN { \"RE\", \"KR\" } ),",
+    "    ",
     "    FILTER(",
     "        ALL( 'Accounts Payable'[Cleared Date] ),",
-    "        'Accounts Payable'[Cleared Date] <= [Report Date]    -- cleared by set report date",
+    "        'Accounts Payable'[Cleared Date] <= [Report Date]",
     "    )",
-    ")"
+    ")",
+    "",
+    "",
+    ""
   ],
   "formatString": "#,0",
   "displayFolder": "Finance\\_Payable",

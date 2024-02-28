@@ -1,0 +1,21 @@
+{
+  "name": "Operations Scrap Amount MTD",
+  "expression": [
+    "CALCULATE(",
+    "    CALCULATE( [Operations Scrap Amount], DATESMTD( 'Calendar'[Date] ) ),",
+    "    FILTER(",
+    "        'Calendar',",
+    "        'Calendar'[Date] <= [Report Date]",
+    "    )",
+    ")",
+    ""
+  ],
+  "formatString": "#,0",
+  "displayFolder": "Operations Scrap",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\",\"Operations\"]"
+    }
+  ]
+}

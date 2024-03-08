@@ -1,0 +1,43 @@
+{
+  "name": "Operations Scrap as % of GR PFY Monthly Avg",
+  "description": "Prior fiscal year's monthly average of scrap as % of goods receipt.",
+  "expression": [
+    "",
+    "VAR _RefDate =",
+    "    CALCULATE(",
+    "        MAX( 'Calendar'[Date] ),",
+    "        FILTER(",
+    "            'Calendar',",
+    "            'Calendar'[Date] <= [Report Date]",
+    "        )",
+    "    )",
+    "    ",
+    "VAR _UpperLim = ",
+    "    DATE( YEAR(_RefDate) - IF(MONTH(_RefDate)>=10, 0, 1) , 10, 1 )",
+    "    ",
+    "VAR _LowerLim =",
+    "    EOMONTH( _UpperLim, -12 )",
+    "    ",
+    "RETURN",
+    "    AVERAGEX(",
+    "        SUMMARIZE(",
+    "            FILTER(",
+    "                ALL( 'Calendar' ),",
+    "                'Calendar'[Date] >= _LowerLim",
+    "                    && 'Calendar'[Date] < _UpperLim",
+    "            ),",
+    "            'Calendar'[Year_Month_Sort_Key],",
+    "            \"ScrapPerc\", [Operations Scrap as % of GR]",
+    "        ),",
+    "        [ScrapPerc]",
+    "    )"
+  ],
+  "formatString": "#,0.0%;-#,0.0%;#,0.0%",
+  "displayFolder": "Operations Scrap\\_Time-Based",
+  "annotations": [
+    {
+      "name": "TabularEditor_InPerspective",
+      "value": "[\"Finance\",\"Operations\"]"
+    }
+  ]
+}

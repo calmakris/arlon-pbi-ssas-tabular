@@ -1,5 +1,6 @@
 {
   "name": "Operations Scrap Amount MTD PY Var",
+  "description": "The difference between current year's MTD and prior year's MTD scrap amount.",
   "expression": [
     "[Operations Scrap Amount MTD] - [Operations Scrap Amount MTD PY]",
     ""

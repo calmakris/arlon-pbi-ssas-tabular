@@ -1,5 +1,6 @@
 {
   "name": "Operations Scrap Amount MTD",
+  "description": "Month-to-date total of non process order scrap from accounting documents, scrap confirmation from process orders, process order scrap from goods issue material document transactions, and inventory reserve from material document transactions.",
   "expression": [
     "CALCULATE(",
     "    CALCULATE( [Operations Scrap Amount], DATESMTD( 'Calendar'[Date] ) ),",

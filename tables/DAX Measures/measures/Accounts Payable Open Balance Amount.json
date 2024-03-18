@@ -15,7 +15,7 @@
     "RETURN",
     "    CALCULATE(",
     "        [Accounts Payable Open Amount],",
-    "        KEEPFILTERS( 'Cost Element'[Cost Element] IN {\"0021510000\", \"0021512000\"} ),   -- AP inventory and non-inventory G/L acct",
+    "        KEEPFILTERS( 'Cost Element'[Cost Element] IN {\"0021510000\", \"0021512000\", \"0022877000\", \"0021513000\"} ),   -- AP inventory and non-inventory G/L acct, GRIR, and AP Trade accrued",
     "        FILTER(",
     "            ALL( 'Calendar'[Date] ),",
     "            'Calendar'[Date] <= _RefDate",
